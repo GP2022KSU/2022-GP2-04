@@ -1,33 +1,43 @@
+#include <ArduinoJson.h>
 #include <LiquidCrystal_I2C.h>
 #include <Wire.h>
 #include <SoftwareSerial.h>
-#include <Arduino.h>
 #if defined(ESP32)
 #include <WiFi.h>
+#include <FirebaseESP32.h>
 #elif defined(ESP8266)
 #include <ESP8266WiFi.h>
+#include <FirebaseESP8266.h>
 #endif
-#include <Firebase_ESP_Client.h>
-
 
 //Provide the token generation process info.
-#include "addons/TokenHelper.h"
-//Provide the RTDB payload printing info and other helper functions.
-#include "addons/RTDBHelper.h"
+#include <addons/TokenHelper.h>
 
-// Insert Firebase project API Key
+//Provide the RTDB payload printing info and other helper functions.
+#include <addons/RTDBHelper.h>
+
+/* 1. Define the WiFi credentials */
+#define WIFI_SSID "Haya"
+#define WIFI_PASSWORD "Haya0409"
+
+//For the following credentials, see examples/Authentications/SignInAsUser/EmailPassword/EmailPassword.ino
+
+/* 2. Define the API Key */
 #define API_KEY "AIzaSyCFoxsSG6CUrgi5DuiFz6Ph1v2kjdoDbcg"
 
-// Insert Authorized Email and Corresponding Password
-#define DATABASE_URL "carttogo-411c2-default-rtdb.europe-west1.firebasedatabase.app/"
+/* 3. Define the RTDB URL */
+#define DATABASE_URL "carttogo-411c2-default-rtdb.europe-west1.firebasedatabase.app/" //<databaseName>.firebaseio.com or <databaseName>.<region>.firebasedatabase.app
+
+/* 4. Define the user Email and password that alreadey registerd or added in your project */
+#define USER_EMAIL "reemaazaid@gmail.com"
+#define USER_PASSWORD "112233"
 
 //Define Firebase Data object
 FirebaseData fbdo;
+
 FirebaseAuth auth;
 FirebaseConfig config;
 unsigned long sendDataPrevMillis = 0;
-int count = 0;
-bool signupOK = false;
 SoftwareSerial mySerial(14, 12); // RX, TX
 LiquidCrystal_I2C lcd(0x27, 16, 2);
 void setup() {
@@ -35,90 +45,85 @@ void setup() {
   mySerial.begin(9600);
   Wire.begin(D2, D1);
   lcd.begin();
-  // Connect to WiFi
-  WiFi.begin(".", "11223344");
-  // while wifi not connected yet, print '.'
-  // then after it connected, get out of the loop
-  while (WiFi.status() != WL_CONNECTED) {
-    delay(500);
+  lcd.clear();
+  WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
+  Serial.print("Connecting to Wi-Fi");
+  while (WiFi.status() != WL_CONNECTED)
+  {
     Serial.print(".");
+    delay(300);
   }
-  //print a new line, then print WiFi connected and the IP address
-  Serial.println("");
-  Serial.println("WiFi connected");
-  // Print the IP address
+  Serial.println();
+  Serial.print("Connected with IP: ");
   Serial.println(WiFi.localIP());
+  Serial.println();
+
+  Serial.printf("Firebase Client v%s\n\n", FIREBASE_CLIENT_VERSION);
 
   /* Assign the api key (required) */
   config.api_key = API_KEY;
 
+  /* Assign the user sign in credentials */
+  auth.user.email = USER_EMAIL;
+  auth.user.password = USER_PASSWORD;
+
   /* Assign the RTDB URL (required) */
   config.database_url = DATABASE_URL;
 
-  /* Sign up */
-  if (Firebase.signUp(&config, &auth, "reemaazaid@gmail.com", "112233")) {
-    Serial.println("ok");
-    signupOK = true;
-  }
-  else {
-    Serial.printf("%s\n", config.signer.signupError.message.c_str());
-  }
-
-  // Assign the callback function for the long running token generation task
+  /* Assign the callback function for the long running token generation task */
   config.token_status_callback = tokenStatusCallback; //see addons/TokenHelper.h
 
-  // Initialize the library with the Firebase authen and config
+  //Or use legacy authenticate method
+  //config.database_url = DATABASE_URL;
+  //config.signer.tokens.legacy_token = "<database secret>";
+
   Firebase.begin(&config, &auth);
+
+  //Comment or pass false value when WiFi reconnection will control by your code or third party library
   Firebase.reconnectWiFi(true);
 }
-
-void loop() {
-
-  if (Firebase.ready() && signupOK && (millis() - sendDataPrevMillis > 15000 || sendDataPrevMillis == 0)) {
-    sendDataPrevMillis = millis();
-    if (mySerial.available()) { //Check if there is Incoming Data in the Serial Buffer
-      while (mySerial.available()) {  //Keep reading Byte by Byte from the Buffer till the Buffer is empty
-        int readBarcode = mySerial.read(); //Read 1 Byte of data and store it in a character variable
-        String itemName = " ";
-        //String barcode = " "+readBarcode;
-        if (itemName = Firebase.RTDB.getString(&fbdo, "barcode/6251001213010/name")) {
-          Serial.println("PASSED");
-          Serial.println("PATH: " + fbdo.dataPath());
-          Serial.println("TYPE: " + fbdo.dataType());
-        }
-        else {
-          Serial.println("FAILED");
-          Serial.println("REASON: " + fbdo.errorReason());
-        }
-        lcd.print(itemName);// Print the stored character variable
-        Serial.print(itemName);
-        delay(5); // A small delay
+int total = 0;
+void loop()
+{ String barcode = "";
+  char readBarcode;
+  FirebaseJson json;
+  FirebaseJsonData price;
+  FirebaseJsonData name1;
+  if (mySerial.available()) { //Check if there is Incoming Data in the Serial Buffer
+    while (mySerial.available()) {  //Keep reading Byte by Byte from the Buffer till the Buffer is empty
+      readBarcode = mySerial.read(); //Read 1 Byte of data and store it in a character variable
+      barcode = barcode + readBarcode;
+      delay(5); // A small delay
+    }
+    String barcode1 = "/barcode/" + barcode;
+    Serial.println("Path barcode: " + barcode1);
+    if (Firebase.RTDB.getJSON(&fbdo, barcode1)) {
+      Serial.println("Json for " + barcode + " : " + fbdo.to<FirebaseJson>().raw());
+      json = fbdo.to<FirebaseJson>().raw();
+      json.get(price, "/price");
+      json.get(name1, "/name");
+      if (price.success && name1.success)
+      { lcd.clear();
+        total = total + price.to<int>();
+        Serial.println("Item: " + name1.to<String>() + " Price: " + price.to<int>() + " Total: " + String(total));
+        lcd.setCursor(0, 0);
+        lcd.print(name1.to<String>());
+        lcd.setCursor(0, 1);
+        lcd.print("Price:" + price.to<String>());
+        lcd.setCursor(8, 1);
+        lcd.print("Total:" + String(total));
       }
+    }
+    else {
+      Serial.println(fbdo.errorReason().c_str());
+      lcd.clear();
       lcd.setCursor(0, 0);
-      Serial.println();
+      lcd.print("This product is");
+      lcd.setCursor(1, 1);
+      lcd.print("not registered");
     }
-    // Write an Float number on the database path test/float
-    // Write an Int number on the database path test/int
-    if (Firebase.RTDB.setInt(&fbdo, "test/int", count)) {
-      Serial.println("PASSED");
-      Serial.println("PATH: " + fbdo.dataPath());
-      Serial.println("TYPE: " + fbdo.dataType());
-    }
-    else {
-      Serial.println("FAILED");
-      Serial.println("REASON: " + fbdo.errorReason());
-    }
-    count++;
-
-    // Write an Float number on the database path test/float
-    if (Firebase.RTDB.setFloat(&fbdo, "test/float", 0.01 + random(0, 100))) {
-      Serial.println("PASSED");
-      Serial.println("PATH: " + fbdo.dataPath());
-      Serial.println("TYPE: " + fbdo.dataType());
-    }
-    else {
-      Serial.println("FAILED");
-      Serial.println("REASON: " + fbdo.errorReason());
-    }
+    lcd.setCursor(0, 0);
+    Serial.println();
   }
+
 }
