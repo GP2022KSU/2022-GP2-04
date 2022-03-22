@@ -95,13 +95,13 @@ void loop()
       barcode = barcode + readBarcode;
       delay(5); // A small delay
     }
-    String barcode1 = "/barcode/" + barcode;
+    String barcode1 = "/Products/" + barcode;
     Serial.println("Path barcode: " + barcode1);
     if (Firebase.RTDB.getJSON(&fbdo, barcode1)) {
       Serial.println("Json for " + barcode + " : " + fbdo.to<FirebaseJson>().raw());
       json = fbdo.to<FirebaseJson>().raw();
-      json.get(price, "/price");
-      json.get(name1, "/name");
+      json.get(price, "/Price");
+      json.get(name1, "/Name");
       if (price.success && name1.success)
       { lcd.clear();
         total = total + price.to<int>();
