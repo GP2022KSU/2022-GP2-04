@@ -13,8 +13,8 @@
 
 #include <addons/RTDBHelper.h>
 
-#define WIFI_SSID "RZ New"
-#define WIFI_PASSWORD "11223344"
+#define WIFI_SSID "Alhomaidhi"
+#define WIFI_PASSWORD "0504356565"
 
 //For the following credentials, see examples/Authentications/SignInAsUser/EmailPassword/EmailPassword.ino
 
@@ -78,7 +78,10 @@ void setup() {
   lcd.print("Connected");
   delay(3000);
   lcd.setCursor(0, 0);
-  lcd.print("Scan an Item");
+  lcd.print("Start by scan");
+  lcd.setCursor(0, 1);
+ lcd.print("a product");
+
 }
 float total = 0;
 void loop()
@@ -106,12 +109,12 @@ void loop()
         { lcd.clear();
           total = total + price.to<float>();
           Serial.println("Item: " + name1.to<String>() + " Price: " + price.to<int>() + " Total: " + String(total));
-          lcd.setCursor(3, 0);
+          lcd.setCursor(0, 0);
           lcd.print("Price:" + price.to<String>());
           //lcd.print(name1.to<String>());
           //lcd.setCursor(1, 1);
           //lcd.print("Price:" + price.to<String>());
-          lcd.setCursor(1, 1);
+          lcd.setCursor(0, 1);
           lcd.print("Total:" + String(total));
         }
       }
