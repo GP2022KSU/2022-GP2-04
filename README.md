@@ -35,7 +35,7 @@
  ### Needed dependencies for IOS mobile application
  - [Flutter](https://docs.flutter.dev/get-started/install) Version `2.10`
  - [Visual Studio Code](https://code.visualstudio.com/download) OR [Android Studio](https://developer.android.com/studio)
- - then install the flutter extinction in `Extinction` for Visual, and for Android in `File > Settings > Plugins`
+ - then install the flutter extension in `Extensions` for Visual, and for Android in `File > Settings > Plugins`
  
  ### Usage for NodeMCU ESP8266 Microcontroller
  1- First copy or download the `ProductScanner.ino` file
