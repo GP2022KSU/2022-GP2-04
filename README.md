@@ -35,7 +35,7 @@
  ### Needed dependencies for IOS mobile application
  - [Flutter](https://docs.flutter.dev/get-started/install) Version `2.10`
  - [Visual Studio Code](https://code.visualstudio.com/download) OR [Android Studio](https://developer.android.com/studio)
- - then install the flutter extintion in `Extintion` for Visual, and for Android in `File > Settings > Plugins`
+ - then install the flutter extinction in `Extinction` for Visual, and for Android in `File > Settings > Plugins`
  
  ### Usage for NodeMCU ESP8266 Microcontroller
  1- First copy or download the `ProductScanner.ino` file
@@ -43,7 +43,7 @@
    https://github.com/GP2022KSU/2022-GP1-04/blob/main/NodeMCU/ProductsScanner/ProductsScanner.ino
    ```
    
- 2- Then open the code in Arduino and install the required libraries as mentioned in dependencies [above](#%EF%B8%8F-dependencies-and-usage)  
+ 2- Then open the code in Arduino and install the required libraries as mentioned in the dependencies [above](#%EF%B8%8F-dependencies-and-usage)  
  
  3- After that adjust the RX and TX for the Scanner that is connected to the breadboard
   ```
@@ -74,7 +74,7 @@ flutter run
 
 * **A complete IoT smart system that includes hardware and an application connected to it**
 
-* **Realtime database for fast retrieval of the scanned productsr**
+* **Realtime database for fast retrieval of the scanned products**
 
 * **An interface for 3 users, Cashier - Shopper - Admin**
 
@@ -84,7 +84,7 @@ flutter run
 
 * **Display the product location**
 
-* **Supports Recommender system (An AI algorithm) for products with the same category with less price and products that have offers based on previous purchases**
+* **Supports Recommender system (An AI algorithm) for products with the same category with less prices and products that have offers based on previous purchases**
 
 ## 👩‍💻 Contributors
 <div align="center">
