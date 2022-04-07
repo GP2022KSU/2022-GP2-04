@@ -19,7 +19,7 @@
 - <img width=32px src="https://user-images.githubusercontent.com/80041251/161459767-fb4ea2cd-3965-438a-820c-52923e9fef61.png">&nbsp; <b>Dart</b>
 -   <img width=35px src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/python/python.png">&nbsp; <b>Python</b>
 
-## ⚙️ Dependencies and Usage 
+## ⚙️ Dependencies
 
 
 ### Needed dependencies for NodeMCU ESP8266 Microcontroller
@@ -37,13 +37,15 @@
  - [Visual Studio Code](https://code.visualstudio.com/download) OR [Android Studio](https://developer.android.com/studio)
  - then install the flutter extension in `Extensions` for Visual, and for Android in `File > Settings > Plugins`
  
+ ## ▶️ Usage
+ 
  ### Usage for NodeMCU ESP8266 Microcontroller
  1- First copy or download the `ProductScanner.ino` file
    ```
    https://github.com/GP2022KSU/2022-GP1-04/blob/main/NodeMCU/ProductsScanner/ProductsScanner.ino
    ```
    
- 2- Then open the code in Arduino and install the required libraries as mentioned in the dependencies [above](#%EF%B8%8F-dependencies-and-usage)  
+ 2- Then open the code in Arduino and install the required libraries as mentioned in the dependencies [above](#%EF%B8%8F-dependencies)  
  
  3- After that adjust the RX and TX for the Scanner that is connected to the breadboard
   ```
@@ -54,7 +56,7 @@
   ![image](https://user-images.githubusercontent.com/80041251/161467132-43f86722-b242-4a0a-916c-bc46d328f866.png)
 
  ### Usage for IOS mobile application
- 1- Install the dependencies mentioned [above](#%EF%B8%8F-dependencies-and-usage) 
+ 1- Install the dependencies mentioned [above](#%EF%B8%8F-dependencies) 
  
  2- Fetch latest source code from main branch then go to `CartToGo` folder
  ```
