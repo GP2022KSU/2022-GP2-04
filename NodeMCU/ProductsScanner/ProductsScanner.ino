@@ -27,6 +27,7 @@ byte t1 [8] = {6, 0, 2, 2, 30, 0, 0, 0}; //ت
 byte s1 [8] = {0, 0, 7, 21, 31, 0, 0, 0}; //ص
 byte al1 [8] = {5, 5, 21, 21, 29, 0, 0, 0};  //ال
 
+boolean CartConnection = false;
 FirebaseData fbdo;
 FirebaseAuth auth;
 FirebaseConfig config;
@@ -44,7 +45,16 @@ void setup() {
   lcd.begin();
   lcd.clear();
   WiFiConnection(); //Begin WiFi Connection
-  FirebaseConnection(); //Connect and authorize to access firebase
+  FirebaseConnection();//Connect and authorize to access firebase
+  CartConnection = LoyaltyCardConnection();
+  lcd.clear();
+  if (CartConnection != false) {
+    DisplayStartScanning();
+    Serial.println("\nConnection: " + CartConnection);
+  }
+} //end setup
+
+void DisplayStartScanning() {
   lcd.clear();
   //طباعة عبارة "ابدا المسح" قبل البدأ بمسح أي منتج على شاشاة LCD
   byte al [8] = {5, 5, 5, 5, 29, 0, 0, 0}; //ال
@@ -73,9 +83,10 @@ void setup() {
   lcd.write(4);
   lcd.write(5);
   lcd.write(6);
-} //end setup
+}
 
 void WiFiConnection() {
+  lcd.clear();
   WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
   Serial.print("Connecting to Wi-Fi");
   lcd.createChar(0, a1);
@@ -90,7 +101,7 @@ void WiFiConnection() {
   lcd.write(2);
   lcd.write(3);
   int dots = 16;
-  Serial.print("Connecting");
+  Serial.println("Connecting");
   while (WiFi.status() != WL_CONNECTED)
   {
     dots--;
@@ -130,9 +141,9 @@ void FirebaseConnection() {
   else {
     Serial.printf("%s\n", config.signer.signupError.message.c_str());
   }
-  
+
   config.service_account.json.path = "/carttogo-411c2-default-rtdb-export.json"; //Json File
-  
+
   config.token_status_callback = tokenStatusCallback; //TokenHelper.h
 
   config.max_token_generation_retry = 5;
@@ -142,6 +153,74 @@ void FirebaseConnection() {
   Firebase.reconnectWiFi(true);
 
 } //end FirebaseConnection
+
+String LoyaltyCard = "";
+boolean LoyaltyCardConnection() {
+  char ID;
+  boolean con = false;
+  lcd.clear();
+  lcd.print("Scan your QR");
+  while (con == false) {
+    while (mySerial.available()) {
+      ID = mySerial.read(); //Read 1 Byte of data and store it in a character variable
+      LoyaltyCard = LoyaltyCard + ID;
+      delay(5); // A small delay
+    }
+    if (!(LoyaltyCard.equals(""))) {
+      if (LoyaltyCardConnectionFirebase(LoyaltyCard) == true) {
+        con = true;
+      }
+      else {
+        lcd.clear();
+        lcd.setCursor(0, 0);
+        lcd.print("LoyaltyCard not");
+        lcd.setCursor(0, 1);
+        lcd.print("found,TryAgain");
+        LoyaltyCard = "";
+        con = false;
+      }
+    }
+  }
+  lcd.clear();
+  lcd.print("Connected");
+  return true;
+}
+FirebaseJsonData Carts;
+FirebaseJsonData CartNumber;
+FirebaseJsonData UID;
+boolean LoyaltyCardConnectionFirebase(String QRid) {
+  FirebaseJson json;
+  FirebaseJson json1;
+  FirebaseJsonArray arr;
+  String QRPath = "/QRUidFinder/" + QRid ; //get the UID of the user
+  Serial.println("---------Scanned QR---------");
+  Serial.println("Path QRPath: " + QRPath);
+  if (Firebase.RTDB.getJSON(&fbdo, QRPath)) { //if LoyaltyCard id is avaliable
+    Serial.println("Json for " + QRPath + " : " + fbdo.to<FirebaseJson>().raw());
+    json = fbdo.to<FirebaseJson>().raw(); //store Json of the scanned LoyaltyCardID
+    json.get(UID, "/UID");
+    if (UID.success) //if fetched database for UID success
+    {
+      String GetUid = "/Carts/" + UID.to<String>();
+      Serial.println("Path GetUID: " + GetUid);
+      if (Firebase.RTDB.getJSON(&fbdo, GetUid)) { //if UID is avaliable
+        json1 = fbdo.to<FirebaseJson>().raw();
+        Serial.print(fbdo.to<FirebaseJson>().raw());
+        json1.get(CartNumber, "/LastCartNumber");
+        Serial.println(CartNumber.to<int>());
+        GetUid = "/Carts/" + UID.to<String>() + "/" + CartNumber.to<int>();
+        Serial.print("Add Cart: " + GetUid);
+        if (Firebase.setBoolAsync(fbdo, GetUid + "/ConnectedToCart", true)) {//Create a new ShoppingCart and set the ConnectionCart to true
+          Firebase.setIntAsync(fbdo, "/Carts/" + UID.to<String>() + "/LastCartNumber", CartNumber.to<int>() + 1);
+          if (Firebase.setIntAsync(fbdo, GetUid + "/Total", 0.0)) { //Set a new total variable for the cart
+            return true;
+          }
+        }
+      }
+    }
+  }
+  return false;
+}
 
 float total = 0.0;
 int count = 0;
@@ -153,12 +232,14 @@ void loop()
   FirebaseJsonData price;
   FirebaseJsonData name1;
   if (WiFi.status() != 3) { //If WiFi Disconnected
-    setup();
+    WiFiConnection(); //Begin WiFi Connection
+    FirebaseConnection();//Connect and authorize to access firebase
+    DisplayStartScanning();
   }
   if (Firebase.ready() == 1 && signupOK && WiFi.status() == 3) {
-    if (mySerial.available()) { //Check if there is Incoming Data in the Serial Buffer
+    if (mySerial.available() && CartConnection != false) { //Check if there is Incoming Data in the Serial Buffer
 
-      while (mySerial.available()) {  //Keep reading Byte by Byte from the Buffer till the Buffer is empty
+      while (mySerial.available() && CartConnection != false) {  //Keep reading Byte by Byte from the Buffer till the Buffer is empty
 
         readBarcode = mySerial.read(); //Read 1 Byte of data and store it in a character variable
         barcode = barcode + readBarcode;
@@ -177,12 +258,11 @@ void loop()
         if (price.success && name1.success) //if fetched database for price and name is available
         {
           lcd.clear();
-          total = total +price.to<float>();
+          total = total + price.to<float>();
           Serial.println(
             "Product: " + name1.to<String>()
             + " Price: " + price.to<float>()
             + " Total: " + String(total));
-          
           //طباعة السعر واجمالي السعر على شاشة LCD
           byte al [8] = {5, 5, 5, 5, 29, 0, 0, 0}; //ال
           byte s [8] = {0, 21, 21, 21, 31, 0, 0, 0}; //س
@@ -227,8 +307,12 @@ void loop()
           lcd.print(":");
           lcd.setCursor(0, 1);
           lcd.print(String(total));
+          String GetUid1 = "/Carts/" + UID.to<String>() + "/" + CartNumber.to<int>() + "/Total";
+          Serial.println("ShopperID: " + GetUid1);
+          Firebase.setIntAsync(fbdo, GetUid1, total);
         }
       }
+
       else { //If barcode that is scanned is not available in the database
 
         //اذا المنتج غير مسجل تظهر عبارة "غير مسجل" على شاشاة LCD
