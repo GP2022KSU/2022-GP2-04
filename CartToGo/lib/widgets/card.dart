@@ -36,7 +36,7 @@ class CardWidgetState extends State<CardWidget> {
   Widget build(BuildContext context) {
     return Container(
       width: MediaQuery.of(context).size.width * 0.94,
-      height: MediaQuery.of(context).size.height * 0.27,
+      height: MediaQuery.of(context).size.height * 0.25,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15),
         gradient: LinearGradient(
@@ -149,7 +149,7 @@ class CardWidgetState extends State<CardWidget> {
                       borderRadius: BorderRadius.circular(10)),
                   child: Container(
                       width: MediaQuery.of(context).size.width * 0.35,
-                      height: MediaQuery.of(context).size.height * 0.205,
+                      height: MediaQuery.of(context).size.height * 0.2,
                       decoration: BoxDecoration(
                         color: Color.fromRGBO(255, 255, 255, 1),
                       )))),
