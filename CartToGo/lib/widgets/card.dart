@@ -3,13 +3,14 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:carttogo/Users/user.dart' as user;
+import 'package:carttogo/Pages/LoyaltyCard.dart';
 
 class CardWidget extends StatefulWidget {
   @override
-  _CardWidgetState createState() => _CardWidgetState();
+  CardWidgetState createState() => CardWidgetState();
 }
 
-class _CardWidgetState extends State<CardWidget> {
+class CardWidgetState extends State<CardWidget> {
   int points = 0;
   String userid = "Stu2LFiw98aJfRWU445Tw73oYnD3";
   String pointtext = "نقطة";
@@ -35,7 +36,7 @@ class _CardWidgetState extends State<CardWidget> {
   Widget build(BuildContext context) {
     return Container(
       width: MediaQuery.of(context).size.width * 0.94,
-      height: MediaQuery.of(context).size.height * 0.25,
+      height: MediaQuery.of(context).size.height * 0.27,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15),
         gradient: LinearGradient(
@@ -66,7 +67,7 @@ class _CardWidgetState extends State<CardWidget> {
               left: 26,
               child: Container(
                   width: MediaQuery.of(context).size.width * 0.27,
-                  height: 36.0905647277832,
+                  height: 37,
                   child: Stack(children: <Widget>[
                     Positioned(
                         top: 0,
@@ -113,7 +114,7 @@ class _CardWidgetState extends State<CardWidget> {
                         top: 10,
                         left: 13,
                         child: Text(
-                          pointtext,
+                          LoyaltyCard().checkPointText(),
                           textAlign: TextAlign.left,
                           style: TextStyle(
                               color: Colors.white,
@@ -148,7 +149,7 @@ class _CardWidgetState extends State<CardWidget> {
                       borderRadius: BorderRadius.circular(10)),
                   child: Container(
                       width: MediaQuery.of(context).size.width * 0.35,
-                      height: MediaQuery.of(context).size.height * 0.20,
+                      height: MediaQuery.of(context).size.height * 0.205,
                       decoration: BoxDecoration(
                         color: Color.fromRGBO(255, 255, 255, 1),
                       )))),

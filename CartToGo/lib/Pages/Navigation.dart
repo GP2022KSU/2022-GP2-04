@@ -48,7 +48,7 @@ class _NaviState extends State<Navi> {
           ],
           backgroundColor: Colors.white24,
           buttonBackgroundColor: Colors.white24,
-          height: 44.8,
+          height: 50,
           onTap: (index) {
             setState(() {
               Myindex = index;
