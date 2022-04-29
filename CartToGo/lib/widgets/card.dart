@@ -152,28 +152,27 @@ class CardWidgetState extends State<CardWidget> {
                       height: MediaQuery.of(context).size.height * 0.2,
                       decoration: BoxDecoration(
                         color: Color.fromRGBO(255, 255, 255, 1),
-                      )))),
-          Positioned(
-              top: 170,
-              left: 224,
-              child: Text(
-                user.getLoyaltyCardID(), //text
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                    color: Color.fromARGB(255, 0, 0, 0),
-                    shadows: <Shadow>[
-                      Shadow(
-                        offset: Offset(0.5, 0.5),
-                        blurRadius: 1,
-                        color: Color.fromARGB(162, 63, 63, 63),
-                      )
-                    ],
-                    fontFamily: 'CartToGo',
-                    fontSize: 20,
-                    letterSpacing: -0.5,
-                    fontWeight: FontWeight.w500,
-                    height: 1),
-              )),
+                      ),
+                          child: Align(
+                              alignment: Alignment.bottomCenter,
+                              child: Text(
+                                user.getLoyaltyCardID(), //text
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    color: Color.fromARGB(255, 0, 0, 0),
+                                    shadows: <Shadow>[
+                                      Shadow(
+                                        offset: Offset(0.5, 0.5),
+                                        blurRadius: 1,
+                                        color: Color.fromARGB(162, 63, 63, 63),
+                                      )
+                                    ],
+                                    fontFamily: 'CartToGo',
+                                    fontSize: 20,
+                                    letterSpacing: -0.5,
+                                    fontWeight: FontWeight.w500,
+                                    height: 1),
+                              ))))),
           Positioned(
             top: 16,
             left: 199,
