@@ -12,8 +12,7 @@ class CardWidget extends StatefulWidget {
 
 class CardWidgetState extends State<CardWidget> {
   int points = 0;
-  String userid = "Stu2LFiw98aJfRWU445Tw73oYnD3";
-  String pointtext = "نقطة";
+  String userid = "Stu2LFiw98aJfRWU445Tw73oYnD3"; //Change to real id
   final _database = FirebaseDatabase.instance.ref();
   late StreamSubscription _streamSubscription;
   @override
@@ -153,26 +152,26 @@ class CardWidgetState extends State<CardWidget> {
                       decoration: BoxDecoration(
                         color: Color.fromRGBO(255, 255, 255, 1),
                       ),
-                          child: Align(
-                              alignment: Alignment.bottomCenter,
-                              child: Text(
-                                user.getLoyaltyCardID(), //text
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    color: Color.fromARGB(255, 0, 0, 0),
-                                    shadows: <Shadow>[
-                                      Shadow(
-                                        offset: Offset(0.5, 0.5),
-                                        blurRadius: 1,
-                                        color: Color.fromARGB(162, 63, 63, 63),
-                                      )
-                                    ],
-                                    fontFamily: 'CartToGo',
-                                    fontSize: 20,
-                                    letterSpacing: -0.5,
-                                    fontWeight: FontWeight.w500,
-                                    height: 1),
-                              ))))),
+                      child: Align(
+                          alignment: Alignment.bottomCenter,
+                          child: Text(
+                            user.getLoyaltyCardID(), //text
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                color: Color.fromARGB(255, 0, 0, 0),
+                                shadows: <Shadow>[
+                                  Shadow(
+                                    offset: Offset(0.5, 0.5),
+                                    blurRadius: 1,
+                                    color: Color.fromARGB(162, 63, 63, 63),
+                                  )
+                                ],
+                                fontFamily: 'CartToGo',
+                                fontSize: 20,
+                                letterSpacing: -0.5,
+                                fontWeight: FontWeight.w500,
+                                height: 1),
+                          ))))),
           Positioned(
             top: 16,
             left: 199,

@@ -11,22 +11,25 @@ void main() async {
   await Firebase.initializeApp();
   runApp(MaterialApp(
     debugShowCheckedModeBanner: false,
-    home: Navi(),
+    //home: Navi(),
   ));
 }
 
 class Navi extends StatefulWidget {
   const Navi({Key? key}) : super(key: key);
   @override
-  _NaviState createState() => _NaviState();
+  NaviState createState() => NaviState();
 }
 
-class _NaviState extends State<Navi> {
+class NaviState extends State<Navi> {
+  NaviState({Key? key, this.Myindex = 1});
+  int Myindex = 0;
   GlobalKey<CurvedNavigationBarState> _NavKey = GlobalKey();
   var Pages = [ShoppingCart(), LoyaltyCard()];
-  var Myindex = 0;
+
   @override
   Widget build(BuildContext context) {
+    print("Navi: $Myindex");
     return SafeArea(
       top: false,
       child: Scaffold(
