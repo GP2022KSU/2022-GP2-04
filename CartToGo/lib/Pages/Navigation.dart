@@ -6,15 +6,6 @@ import 'package:carttogo/Pages/ShoppingCart.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:carttogo/Users/user.dart' as user;
 
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-  runApp(MaterialApp(
-    debugShowCheckedModeBanner: false,
-    //home: Navi(),
-  ));
-}
-
 class Navi extends StatefulWidget {
   const Navi({Key? key}) : super(key: key);
   @override
@@ -22,14 +13,33 @@ class Navi extends StatefulWidget {
 }
 
 class NaviState extends State<Navi> {
-  NaviState({Key? key, this.Myindex = 1});
   int Myindex = 0;
   GlobalKey<CurvedNavigationBarState> _NavKey = GlobalKey();
-  var Pages = [ShoppingCart(), LoyaltyCard()];
+  //var Pages = [ShoppingCart(), LoyaltyCard()];
+  late ShoppingCart tab1;
+  void setPage(index) {
+    final CurvedNavigationBarState? navigationBarState = _NavKey.currentState;
+    navigationBarState?.setPage(index);
+  }
+
+  void initState() {
+    tab1 = ShoppingCart(setPage);
+    super.initState();
+  }
+
+  Widget pageChooser(int page) {
+    
+    switch (page) {
+      case 0:
+        return tab1;
+      case 1:
+        return LoyaltyCard();
+    }
+    return LoyaltyCard();
+  }
 
   @override
   Widget build(BuildContext context) {
-    print("Navi: $Myindex");
     return SafeArea(
       top: false,
       child: Scaffold(
@@ -61,7 +71,7 @@ class NaviState extends State<Navi> {
           animationDuration: Duration(milliseconds: 400),
           color: Color.fromARGB(255, 35, 61, 255),
         ),
-        body: Pages[Myindex],
+        body: pageChooser(Myindex),
       ),
     );
   }
