@@ -205,7 +205,7 @@ boolean LoyaltyCardConnectionFirebase(String QRid) {
         CartNumber=fbdo.to<int>();
         //json1.get(CartNumber, "/LastCartNumber");
         Serial.println("Cart Number: "+CartNumber);
-        String GetUid = "/Shopper/" + UID.to<String>() + "/Carts/" + CartNumber;
+        String GetUid = "/Shopper/" + UID.to<String>() + "/Carts";
         Serial.print("Add Cart: " + GetUid);
         if (Firebase.setBool(fbdo, GetUid + "/ConnectedToCart", true)) {//Create a new ShoppingCart and set the ConnectionCart to true
           Firebase.setInt(fbdo, "/Shopper/" + UID.to<String>() + "/Carts/LastCartNumber", CartNumber + 1);
@@ -323,7 +323,7 @@ void loop()
           }
           */
           String PathCart = "/Shopper/" + UID.to<String>() + "/Carts/" + CartNumber + "/" + countProducts;
-          String GetUid1 = "/Shopper/" + UID.to<String>() + "/Carts/" + CartNumber + "/Total";
+          String GetUid1 = "/Shopper/" + UID.to<String>() + "/Carts/Total";
           Serial.println("ShopperID: " + GetUid1);
           Firebase.setInt(fbdo, GetUid1, total);
           Firebase.setJSON(fbdo, PathCart, json);
