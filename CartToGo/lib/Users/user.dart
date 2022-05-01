@@ -44,6 +44,16 @@ Future<int> _BringPoints(String userID) async {
   return points = int.parse(snapshot.value.toString());
 }
 
+Future<int> _BringLastCartNumber(String userID) async {
+  final ref = FirebaseDatabase.instance.ref();
+  final snapshot =
+      await ref.child("Shopper/$userID/Carts/LastCartNumber").get();
+  print("Last Cart Number: $LastCartNumber");
+  LastCartNumber = await (int.parse(snapshot.value.toString()) - 1);
+  return LastCartNumber;
+  //return data;
+}
+
 String getLoyaltyCardID() {
   if (_L1 == 0) {
     _BringLoyaltyCardID(userid);
@@ -68,9 +78,20 @@ int getPoints() {
   return points;
 }
 
+int getLastCartNumber() {
+  if (_C1 == 0) {
+    _BringLastCartNumber(userid);
+    print("heresss: $LastCartNumber");
+    _C1++;
+  }
+  return LastCartNumber;
+}
+
 int _L1 = 0;
 int _U1 = 0;
 int _P1 = 0;
- int points = 0;
- String Username = "";
- String LoyaltyCardID = "";
+int _C1 = 0;
+int points = 0;
+int LastCartNumber = 0;
+String Username = "";
+String LoyaltyCardID = "";
