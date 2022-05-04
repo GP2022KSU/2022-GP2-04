@@ -62,7 +62,7 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
         .listen((event) {
       final data = event.snapshot.value;
       setState(() {
-              numOfProducts = (int.parse(data.toString()));
+        numOfProducts = (int.parse(data.toString()));
       });
     });
     print("NumOfProducts: $numOfProducts");
@@ -76,9 +76,7 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
     //_performSingleFetch();
     //_activateListeners();
     print(ConnectedToCart);
-    return Scaffold(
-        body:  Con()
-    );
+    return Scaffold(body: Con());
   }
 
   Widget Cart() {
@@ -192,7 +190,7 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
                                                                 children: <
                                                                     Widget>[
                                                                   Text(
-                                                                    l[4], //Product name
+                                                                    l[1], //Product name
                                                                     textAlign:
                                                                         TextAlign
                                                                             .center,
@@ -256,7 +254,7 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
                                                         MainAxisSize.min,
                                                     children: <Widget>[
                                                       Text(
-                                                        l[2], //Product Price
+                                                        l[4], //Product Price
                                                         textAlign:
                                                             TextAlign.center,
                                                         style: TextStyle(
@@ -313,10 +311,9 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
   }
 
   Widget Con() {
-    if(numOfProducts==0 && ConnectedToCart==true){
+    if (numOfProducts == 0 && ConnectedToCart == true) {
       return CartEmpty();
-    }
-    else if(ConnectedToCart==true){
+    } else if (ConnectedToCart == true) {
       return Cart();
     }
     return Container();

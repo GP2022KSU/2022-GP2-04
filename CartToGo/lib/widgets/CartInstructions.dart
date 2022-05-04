@@ -80,6 +80,7 @@ class _CartInstructionsState extends State<CartInstructions> {
                       ),
                       Divider(
                         color: Colors.black12,
+                        endIndent: 20,
                       ),
                       Text(
                         "مرر بطاقة الولاء",
