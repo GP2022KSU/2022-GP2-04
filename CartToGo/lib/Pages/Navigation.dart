@@ -4,7 +4,6 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:carttogo/Pages/LoyaltyCard.dart';
 import 'package:carttogo/Pages/ShoppingCart.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:carttogo/Users/user.dart' as user;
 
 class Navi extends StatefulWidget {
   const Navi({Key? key}) : super(key: key);

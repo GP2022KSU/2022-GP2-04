@@ -22,11 +22,12 @@ class _ShoppingCartState extends State<ShoppingCart> {
   late StreamSubscription _streamSubscription;
   @override
   void initState() {
+    //ShoppingCartWidget();
     super.initState();
     _activateListeners();
   }
 
-  void _activateListeners() {
+  bool _activateListeners() {
     _streamSubscription = _database
         .child("Shopper/$userid/Carts/ConnectedToCart")
         .onValue
@@ -43,6 +44,7 @@ class _ShoppingCartState extends State<ShoppingCart> {
         }
       });
     });
+    return ConnectedToCart;
   }
 
   @override
@@ -63,8 +65,11 @@ class _ShoppingCartState extends State<ShoppingCart> {
           elevation: 0,
         ),
         body: Center(
-            heightFactor: 1.6,
-            child: ConnectedToCart ? ShoppingCartWidget() : Instructions()));
+          heightFactor: 1.6,
+          child: ConnectedToCart
+              ? ShoppingCartWidget(ConnectedToCart)
+              : Instructions(),
+        ));
   }
 
   Widget Instructions() {
@@ -125,7 +130,7 @@ class _ShoppingCartState extends State<ShoppingCart> {
               child: Align(
                 alignment: Alignment.topRight,
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
@@ -200,5 +205,11 @@ class _ShoppingCartState extends State<ShoppingCart> {
                 color: Color.fromARGB(255, 35, 61, 255),
               ))),
         ]));
+  }
+
+  @override
+  void deactivate() {
+    _streamSubscription.cancel();
+    super.deactivate();
   }
 }

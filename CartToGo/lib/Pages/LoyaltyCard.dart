@@ -7,6 +7,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:carttogo/Users/user.dart' as user;
 
 class LoyaltyCard extends StatelessWidget {
+  
   String checkPointText() {
     if (user.getPoints() == 2) {
       return "نقطتان";

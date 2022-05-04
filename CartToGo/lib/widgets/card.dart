@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:carttogo/Users/user.dart' as user;
 import 'package:carttogo/Pages/LoyaltyCard.dart';
+import 'package:carttogo/Users/userData.dart';
 
 class CardWidget extends StatefulWidget {
   @override
@@ -11,7 +12,7 @@ class CardWidget extends StatefulWidget {
 }
 
 class CardWidgetState extends State<CardWidget> {
-  int points = 0;
+   int points=0;
   String userid = "Stu2LFiw98aJfRWU445Tw73oYnD3"; //Change to real id
   final _database = FirebaseDatabase.instance.ref();
   late StreamSubscription _streamSubscription;
@@ -19,8 +20,19 @@ class CardWidgetState extends State<CardWidget> {
   void initState() {
     super.initState();
     _activateListeners();
+    //_performSingleFetch();
   }
-
+  void _performSingleFetch() {
+    _database.child("Shopper/$userid").once().then((snap) {
+      Map<String, dynamic> data = snap.snapshot.value as Map<String, dynamic>;
+      final dataUser = userData.fromRTDB(data);
+      setState(() {
+        //points=dataUser.Points;
+        final CardID= dataUser.CardID;
+        final name=dataUser.Username;
+      });
+    });
+  }
   void _activateListeners() {
     _streamSubscription =
         _database.child("Shopper/$userid/Points").onValue.listen((event) {
