@@ -21,12 +21,11 @@ class _ShoppingCartState extends State<ShoppingCart> {
   late bool _isLoading1;
   String userid = "Stu2LFiw98aJfRWU445Tw73oYnD3"; //Change to real id
   final _database = FirebaseDatabase.instance.ref();
-  late StreamSubscription _streamSubscription;
+  late StreamSubscription _streamSubscription4;
   @override
   void initState() {
-    //ShoppingCartWidget();
     _isLoading1 = true;
-    Future.delayed(const Duration(milliseconds: 50), () {
+    Future.delayed(const Duration(milliseconds: 100), () {
       if (mounted) {
         setState(() {
           _isLoading1 = false;
@@ -38,7 +37,7 @@ class _ShoppingCartState extends State<ShoppingCart> {
   }
 
   bool _activateListeners() {
-    _streamSubscription = _database
+    _streamSubscription4 = _database
         .child("Shopper/$userid/Carts/ConnectedToCart")
         .onValue
         .listen((event) {
@@ -76,9 +75,7 @@ class _ShoppingCartState extends State<ShoppingCart> {
         ),
         body: Center(
           heightFactor: 1.6,
-          child: ConnectedToCart
-              ? ShoppingCartWidget(ConnectedToCart)
-              : Instructions(),
+          child: ConnectedToCart ? ShoppingCartWidget() : Instructions(),
         ));
   }
 
@@ -224,7 +221,7 @@ class _ShoppingCartState extends State<ShoppingCart> {
 
   @override
   void deactivate() {
-    _streamSubscription.cancel();
+    _streamSubscription4.cancel();
     super.deactivate();
   }
 }

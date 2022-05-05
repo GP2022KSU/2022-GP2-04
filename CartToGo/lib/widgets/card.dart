@@ -17,36 +17,6 @@ class CardWidgetState extends State<CardWidget> {
   int points = 0;
   String userid = "Stu2LFiw98aJfRWU445Tw73oYnD3"; //Change to real id
   final _database = FirebaseDatabase.instance.ref();
-  late StreamSubscription _streamSubscription;
-  @override
-  void initState() {
-    //super.initState();
-    //_activateListeners();
-    //_performSingleFetch();
-  }
-
-  void _performSingleFetch() {
-    _database.child("Shopper/$userid").once().then((snap) {
-      Map<String, dynamic> data = snap.snapshot.value as Map<String, dynamic>;
-      final dataUser = userData.fromRTDB(data);
-      setState(() {
-        //points=dataUser.Points;
-        final CardID = dataUser.CardID;
-        final name = dataUser.Username;
-      });
-    });
-  }
-
-  void _activateListeners() {
-    _streamSubscription =
-        _database.child("Shopper/$userid/Points").onValue.listen((event) {
-      final point = event.snapshot.value;
-      setState(() {
-        points = int.parse(point.toString());
-      });
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -277,11 +247,5 @@ class CardWidgetState extends State<CardWidget> {
         ],
       ),
     );
-  }
-
-  @override
-  void deactivate() {
-    //_streamSubscription.cancel();
-    super.deactivate();
   }
 }

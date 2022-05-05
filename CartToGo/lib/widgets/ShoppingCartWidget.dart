@@ -11,16 +11,12 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
 class ShoppingCartWidget extends StatefulWidget {
-  //const ShoppingCartWidget({Key? key}) : super(key: key);
-  bool callback;
-  ShoppingCartWidget(this.callback);
+  const ShoppingCartWidget({Key? key}) : super(key: key);
   @override
-  State<ShoppingCartWidget> createState() => ShoppingCartWidgetState(callback);
+  State<ShoppingCartWidget> createState() => ShoppingCartWidgetState();
 }
 
 class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
-  bool callback;
-  ShoppingCartWidgetState(this.callback);
   late double total = 0.0;
   late int numOfProducts = 0;
   double totalCart = 0;
@@ -37,7 +33,7 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
   @override
   void initState() {
     _isLoading = true;
-    Future.delayed(const Duration(milliseconds: 150), () {
+    Future.delayed(const Duration(milliseconds: 250), () {
       if (mounted) {
         setState(() {
           _isLoading = false;
