@@ -3,7 +3,7 @@ library carttogo.globals;
 import 'package:firebase_database/firebase_database.dart';
 
 String userid = "Stu2LFiw98aJfRWU445Tw73oYnD3";
-final bool check=false;
+final bool check = false;
 void main() {
   DatabaseReference starCountRef =
       FirebaseDatabase.instance.ref("Shopper/$userid/LoyaltyCardID");
@@ -24,23 +24,23 @@ void main() {
   });
 }
 
-Future<String> _BringLoyaltyCardID(String userID) async {
+Future<String> BringLoyaltyCardID() async {
   final ref = FirebaseDatabase.instance.ref();
-  final snapshot = await ref.child("Shopper/$userID/LoyaltyCardID").get();
+  final snapshot = await ref.child("Shopper/$userid/LoyaltyCardID").get();
   final data = await snapshot.value.toString();
   LoyaltyCardID = await data;
   return data;
 }
 
-Future<String> _BirngUsername(String userID) async {
+Future<String> BirngUsername() async {
   final ref = FirebaseDatabase.instance.ref();
-  final snapshot = await ref.child("Shopper/$userID/Username").get();
+  final snapshot = await ref.child("Shopper/$userid/Username").get();
   return Username = snapshot.value.toString();
 }
 
-Future<int> _BringPoints(String userID) async {
+Future<int> BringPoints() async {
   final ref = FirebaseDatabase.instance.ref();
-  final snapshot = await ref.child("Shopper/$userID/Points").get();
+  final snapshot = await ref.child("Shopper/$userid/Points").get();
   return points = int.parse(snapshot.value.toString());
 }
 
@@ -49,20 +49,21 @@ Future<int> BringLastCartNumber() async {
   final snapshot =
       await ref.child("Shopper/$userid/Carts/LastCartNumber").get();
   print("Last Cart Number: $LastCartNumber");
-   LastCartNumber = await (int.parse(snapshot.value.toString())) - 1;
+  LastCartNumber = await (int.parse(snapshot.value.toString())) - 1;
   return LastCartNumber;
 }
+
 Future<int> BringNumOfProducts() async {
   final ref = FirebaseDatabase.instance.ref();
-  final snapshot =
-      await ref.child("Shopper/$userid/Carts/numOfProducts").get();
+  final snapshot = await ref.child("Shopper/$userid/Carts/numOfProducts").get();
   print("Last Cart Number: $LastCartNumber");
-   numOfProducts = await (int.parse(snapshot.value.toString()));
+  numOfProducts = await (int.parse(snapshot.value.toString()));
   return numOfProducts;
 }
+
 String getLoyaltyCardID() {
   if (_L1 == 0) {
-    _BringLoyaltyCardID(userid);
+    BringLoyaltyCardID();
     _L1++;
   }
   return LoyaltyCardID;
@@ -70,7 +71,7 @@ String getLoyaltyCardID() {
 
 String getUsername() {
   if (_U1 == 0) {
-    _BirngUsername(userid);
+    BirngUsername();
     _U1++;
   }
   return Username;
@@ -78,15 +79,17 @@ String getUsername() {
 
 int getPoints() {
   if (_P1 == 0) {
-    _BringPoints(userid);
+    BringPoints();
     _P1++;
   }
   return points;
 }
+
 int getnumOfProducts() {
   BringNumOfProducts();
   return numOfProducts;
 }
+
 /*
 int getLastCartNumber() {
   if (_C1 == 0) {
@@ -105,4 +108,4 @@ int points = 0;
 int LastCartNumber = 0;
 String Username = "";
 String LoyaltyCardID = "";
-int numOfProducts=0;
+int numOfProducts = 0;

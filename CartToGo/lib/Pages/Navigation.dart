@@ -27,7 +27,6 @@ class NaviState extends State<Navi> {
   }
 
   Widget pageChooser(int page) {
-    
     switch (page) {
       case 0:
         return tab1;

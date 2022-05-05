@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, unnecessary_new
+
 import 'dart:async';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -12,27 +14,29 @@ class CardWidget extends StatefulWidget {
 }
 
 class CardWidgetState extends State<CardWidget> {
-   int points=0;
+  int points = 0;
   String userid = "Stu2LFiw98aJfRWU445Tw73oYnD3"; //Change to real id
   final _database = FirebaseDatabase.instance.ref();
   late StreamSubscription _streamSubscription;
   @override
   void initState() {
-    super.initState();
-    _activateListeners();
+    //super.initState();
+    //_activateListeners();
     //_performSingleFetch();
   }
+
   void _performSingleFetch() {
     _database.child("Shopper/$userid").once().then((snap) {
       Map<String, dynamic> data = snap.snapshot.value as Map<String, dynamic>;
       final dataUser = userData.fromRTDB(data);
       setState(() {
         //points=dataUser.Points;
-        final CardID= dataUser.CardID;
-        final name=dataUser.Username;
+        final CardID = dataUser.CardID;
+        final name = dataUser.Username;
       });
     });
   }
+
   void _activateListeners() {
     _streamSubscription =
         _database.child("Shopper/$userid/Points").onValue.listen((event) {
@@ -111,16 +115,33 @@ class CardWidgetState extends State<CardWidget> {
                     Positioned(
                         top: 10.025157928466797,
                         left: 80.0571403503418,
-                        child: Text(
-                          user.getPoints().toString(), //points text
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontFamily: 'Inter',
-                              fontSize: 20,
-                              fontWeight: FontWeight.w500,
-                              height: 0.9),
-                        )),
+                        child: FutureBuilder<int>(
+                            future: user.BringPoints(),
+                            builder: (BuildContext context,
+                                AsyncSnapshot<int> asyn) {
+                              if (asyn.hasData) {
+                                return Text(
+                                  asyn.data.toString(), //points text
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontFamily: 'Inter',
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w500,
+                                      height: 0.9),
+                                );
+                              }
+                              return Text(
+                                user.getPoints().toString(),
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontFamily: 'Inter',
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w500,
+                                    height: 0.9),
+                              );
+                            })),
                     Positioned(
                         top: 10,
                         left: 13,
@@ -138,16 +159,32 @@ class CardWidgetState extends State<CardWidget> {
           Positioned(
               top: 57,
               left: 36,
-              child: Text(
-                user.getUsername(), //text username
-                textAlign: TextAlign.left,
-                style: TextStyle(
-                    color: Colors.white,
-                    fontFamily: 'CartToGo',
-                    fontSize: 19,
-                    fontWeight: FontWeight.w600,
-                    height: 0.9),
-              )),
+              child: FutureBuilder<String>(
+                  future: user.BirngUsername(),
+                  builder: (BuildContext context, AsyncSnapshot<String> asyn) {
+                    if (asyn.hasData) {
+                      return Text(
+                        user.getUsername(), //text username
+                        textAlign: TextAlign.left,
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontFamily: 'CartToGo',
+                            fontSize: 19,
+                            fontWeight: FontWeight.w600,
+                            height: 0.9),
+                      );
+                    }
+                    return Text(
+                      user.getUsername().toString(),
+                      textAlign: TextAlign.left,
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontFamily: 'CartToGo',
+                          fontSize: 19,
+                          fontWeight: FontWeight.w600,
+                          height: 0.9),
+                    );
+                  })),
           Positioned(
               top: 15,
               left: 200,
@@ -166,36 +203,77 @@ class CardWidgetState extends State<CardWidget> {
                       ),
                       child: Align(
                           alignment: Alignment.bottomCenter,
-                          child: Text(
-                            user.getLoyaltyCardID(), //text
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                color: Color.fromARGB(255, 0, 0, 0),
-                                shadows: <Shadow>[
-                                  Shadow(
-                                    offset: Offset(0.5, 0.5),
-                                    blurRadius: 1,
-                                    color: Color.fromARGB(162, 63, 63, 63),
-                                  )
-                                ],
-                                fontFamily: 'CartToGo',
-                                fontSize: 20,
-                                letterSpacing: -0.5,
-                                fontWeight: FontWeight.w500,
-                                height: 1),
-                          ))))),
+                          child: FutureBuilder<String>(
+                              future: user.BringLoyaltyCardID(),
+                              builder: (BuildContext context,
+                                  AsyncSnapshot<String> asyn) {
+                                if (asyn.hasData) {
+                                  return Text(
+                                    asyn.data.toString(), //text
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: Color.fromARGB(255, 0, 0, 0),
+                                        shadows: <Shadow>[
+                                          Shadow(
+                                            offset: Offset(0.5, 0.5),
+                                            blurRadius: 1,
+                                            color:
+                                                Color.fromARGB(162, 63, 63, 63),
+                                          )
+                                        ],
+                                        fontFamily: 'CartToGo',
+                                        fontSize: 20,
+                                        letterSpacing: -0.5,
+                                        fontWeight: FontWeight.w500,
+                                        height: 1),
+                                  );
+                                }
+                                return Text(
+                                  user.getLoyaltyCardID(),
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      color: Color.fromARGB(255, 0, 0, 0),
+                                      shadows: <Shadow>[
+                                        Shadow(
+                                          offset: Offset(0.5, 0.5),
+                                          blurRadius: 1,
+                                          color:
+                                              Color.fromARGB(162, 63, 63, 63),
+                                        )
+                                      ],
+                                      fontFamily: 'CartToGo',
+                                      fontSize: 20,
+                                      letterSpacing: -0.5,
+                                      fontWeight: FontWeight.w500,
+                                      height: 1),
+                                );
+                              }))))),
           Positioned(
-            top: 16,
-            left: 199,
-            child: QrImage(
-              foregroundColor: Colors.black,
-              gapless: true,
-              embeddedImage: AssetImage('assets/images/logomini.png'),
-              data: user.getLoyaltyCardID(), //ID for the card
-              version: QrVersions.auto,
-              size: MediaQuery.of(context).size.width * 0.37,
-            ),
-          ),
+              top: 16,
+              left: 199,
+              child: FutureBuilder<String>(
+                future: user.BringLoyaltyCardID(),
+                builder: (BuildContext context, AsyncSnapshot<String> asyn) {
+                  if (asyn.hasData) {
+                    return QrImage(
+                      foregroundColor: Colors.black,
+                      gapless: true,
+                      embeddedImage: AssetImage('assets/images/logomini.png'),
+                      data: asyn.data.toString(), //ID for the card
+                      version: QrVersions.auto,
+                      size: MediaQuery.of(context).size.width * 0.37,
+                    );
+                  }
+                  return QrImage(
+                    foregroundColor: Colors.black,
+                    gapless: true,
+                    embeddedImage: AssetImage('assets/images/logomini.png'),
+                    data: user.getLoyaltyCardID(), //ID for the card
+                    version: QrVersions.auto,
+                    size: MediaQuery.of(context).size.width * 0.37,
+                  );
+                },
+              )),
         ],
       ),
     );
@@ -203,7 +281,7 @@ class CardWidgetState extends State<CardWidget> {
 
   @override
   void deactivate() {
-    _streamSubscription.cancel();
+    //_streamSubscription.cancel();
     super.deactivate();
   }
 }
