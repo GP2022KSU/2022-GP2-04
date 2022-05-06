@@ -141,9 +141,21 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
                           double.parse(l[4]); //price for IOS 4 android 2
                       total = total - price;
                       numOfProducts--;
-                      await Carts.update(
-                          {'Total': total, 'numOfProducts': numOfProducts});
+                      await Carts.update({
+                        'Total': total,
+                        'numOfProducts': numOfProducts,
+                      });
                       ref.child(snapshot.key!).remove();
+                      await Carts.update({
+                        'Deleting': true,
+                      });
+
+                      Future.delayed(const Duration(milliseconds: 500),
+                          () async {
+                        await Carts.update({
+                          'Deleting': false,
+                        });
+                      });
                       print("Total after $total numOfProducts");
                     }
 
