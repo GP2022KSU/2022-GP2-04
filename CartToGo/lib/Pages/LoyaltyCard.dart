@@ -13,7 +13,7 @@ class LoyaltyCard extends StatelessWidget {
         backgroundColor: Colors.white24,
         appBar: AppBar(
           backgroundColor: Colors.white24,
-          title: Text(
+          title: const Text(
             "بطاقة الولاء",
             style: TextStyle(
               color: Colors.black,
@@ -28,17 +28,16 @@ class LoyaltyCard extends StatelessWidget {
           elevation: 0,
         ),
         body: ListView(children: <Widget>[
-          Container(
-              child: Column(children: <Widget>[
+          Column(children: <Widget>[
             Center(
-              heightFactor: 1,
-              child: CardWidget(),
+          heightFactor: 1,
+          child: CardWidget(),
             ),
             Center(
-              heightFactor: 1.04,
-              child: Cardhistory(),
+          heightFactor: 1.04,
+          child: Cardhistory(),
             ),
-          ]))
+          ])
         ]));
   }
 }
