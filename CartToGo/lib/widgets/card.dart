@@ -1,36 +1,22 @@
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, unnecessary_new
+
 import 'dart:async';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:carttogo/Users/user.dart' as user;
+import 'package:carttogo/Pages/LoyaltyCard.dart';
+import 'package:carttogo/Users/userData.dart';
 
 class CardWidget extends StatefulWidget {
   @override
-  _CardWidgetState createState() => _CardWidgetState();
+  CardWidgetState createState() => CardWidgetState();
 }
 
-class _CardWidgetState extends State<CardWidget> {
+class CardWidgetState extends State<CardWidget> {
   int points = 0;
-  String userid = "Stu2LFiw98aJfRWU445Tw73oYnD3";
-  String pointtext = "نقطة";
+  String userid = "Stu2LFiw98aJfRWU445Tw73oYnD3"; //Change to real id
   final _database = FirebaseDatabase.instance.ref();
-  late StreamSubscription _streamSubscription;
-  @override
-  void initState() {
-    super.initState();
-    _activateListeners();
-  }
-
-  void _activateListeners() {
-    _streamSubscription =
-        _database.child("Shopper/$userid/Points").onValue.listen((event) {
-      final point = event.snapshot.value;
-      setState(() {
-        points = int.parse(point.toString());
-      });
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -66,7 +52,7 @@ class _CardWidgetState extends State<CardWidget> {
               left: 26,
               child: Container(
                   width: MediaQuery.of(context).size.width * 0.27,
-                  height: 36.0905647277832,
+                  height: 37,
                   child: Stack(children: <Widget>[
                     Positioned(
                         top: 0,
@@ -99,21 +85,38 @@ class _CardWidgetState extends State<CardWidget> {
                     Positioned(
                         top: 10.025157928466797,
                         left: 80.0571403503418,
-                        child: Text(
-                          user.getPoints().toString(), //points text
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontFamily: 'Inter',
-                              fontSize: 20,
-                              fontWeight: FontWeight.w500,
-                              height: 0.9),
-                        )),
+                        child: FutureBuilder<int>(
+                            future: user.BringPoints(),
+                            builder: (BuildContext context,
+                                AsyncSnapshot<int> asyn) {
+                              if (asyn.hasData) {
+                                return Text(
+                                  asyn.data.toString(), //points text
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontFamily: 'Inter',
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w500,
+                                      height: 0.9),
+                                );
+                              }
+                              return Text(
+                                user.getPoints().toString(),
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontFamily: 'Inter',
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w500,
+                                    height: 0.9),
+                              );
+                            })),
                     Positioned(
                         top: 10,
                         left: 13,
                         child: Text(
-                          pointtext,
+                          LoyaltyCard().checkPointText(),
                           textAlign: TextAlign.left,
                           style: TextStyle(
                               color: Colors.white,
@@ -126,16 +129,32 @@ class _CardWidgetState extends State<CardWidget> {
           Positioned(
               top: 57,
               left: 36,
-              child: Text(
-                user.getUsername(), //text username
-                textAlign: TextAlign.left,
-                style: TextStyle(
-                    color: Colors.white,
-                    fontFamily: 'CartToGo',
-                    fontSize: 19,
-                    fontWeight: FontWeight.w600,
-                    height: 0.9),
-              )),
+              child: FutureBuilder<String>(
+                  future: user.BirngUsername(),
+                  builder: (BuildContext context, AsyncSnapshot<String> asyn) {
+                    if (asyn.hasData) {
+                      return Text(
+                        user.getUsername(), //text username
+                        textAlign: TextAlign.left,
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontFamily: 'CartToGo',
+                            fontSize: 19,
+                            fontWeight: FontWeight.w600,
+                            height: 0.9),
+                      );
+                    }
+                    return Text(
+                      user.getUsername().toString(),
+                      textAlign: TextAlign.left,
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontFamily: 'CartToGo',
+                          fontSize: 19,
+                          fontWeight: FontWeight.w600,
+                          height: 0.9),
+                    );
+                  })),
           Positioned(
               top: 15,
               left: 200,
@@ -148,51 +167,85 @@ class _CardWidgetState extends State<CardWidget> {
                       borderRadius: BorderRadius.circular(10)),
                   child: Container(
                       width: MediaQuery.of(context).size.width * 0.35,
-                      height: MediaQuery.of(context).size.height * 0.20,
+                      height: MediaQuery.of(context).size.height * 0.2,
                       decoration: BoxDecoration(
                         color: Color.fromRGBO(255, 255, 255, 1),
-                      )))),
+                      ),
+                      child: Align(
+                          alignment: Alignment.bottomCenter,
+                          child: FutureBuilder<String>(
+                              future: user.BringLoyaltyCardID(),
+                              builder: (BuildContext context,
+                                  AsyncSnapshot<String> asyn) {
+                                if (asyn.hasData) {
+                                  return Text(
+                                    asyn.data.toString(), //text
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: Color.fromARGB(255, 0, 0, 0),
+                                        shadows: <Shadow>[
+                                          Shadow(
+                                            offset: Offset(0.5, 0.5),
+                                            blurRadius: 1,
+                                            color:
+                                                Color.fromARGB(162, 63, 63, 63),
+                                          )
+                                        ],
+                                        fontFamily: 'CartToGo',
+                                        fontSize: 20,
+                                        letterSpacing: -0.5,
+                                        fontWeight: FontWeight.w500,
+                                        height: 1),
+                                  );
+                                }
+                                return Text(
+                                  user.getLoyaltyCardID(),
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      color: Color.fromARGB(255, 0, 0, 0),
+                                      shadows: <Shadow>[
+                                        Shadow(
+                                          offset: Offset(0.5, 0.5),
+                                          blurRadius: 1,
+                                          color:
+                                              Color.fromARGB(162, 63, 63, 63),
+                                        )
+                                      ],
+                                      fontFamily: 'CartToGo',
+                                      fontSize: 20,
+                                      letterSpacing: -0.5,
+                                      fontWeight: FontWeight.w500,
+                                      height: 1),
+                                );
+                              }))))),
           Positioned(
-              top: 170,
-              left: 224,
-              child: Text(
-                user.getLoyaltyCardID(), //text
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                    color: Color.fromARGB(255, 0, 0, 0),
-                    shadows: <Shadow>[
-                      Shadow(
-                        offset: Offset(0.5, 0.5),
-                        blurRadius: 1,
-                        color: Color.fromARGB(162, 63, 63, 63),
-                      )
-                    ],
-                    fontFamily: 'CartToGo',
-                    fontSize: 20,
-                    letterSpacing: -0.5,
-                    fontWeight: FontWeight.w500,
-                    height: 1),
+              top: 16,
+              left: 199,
+              child: FutureBuilder<String>(
+                future: user.BringLoyaltyCardID(),
+                builder: (BuildContext context, AsyncSnapshot<String> asyn) {
+                  if (asyn.hasData) {
+                    return QrImage(
+                      foregroundColor: Colors.black,
+                      gapless: true,
+                      embeddedImage: AssetImage('assets/images/logomini.png'),
+                      data: asyn.data.toString(), //ID for the card
+                      version: QrVersions.auto,
+                      size: MediaQuery.of(context).size.width * 0.37,
+                    );
+                  }
+                  return QrImage(
+                    foregroundColor: Colors.black,
+                    gapless: true,
+                    embeddedImage: AssetImage('assets/images/logomini.png'),
+                    data: user.getLoyaltyCardID(), //ID for the card
+                    version: QrVersions.auto,
+                    size: MediaQuery.of(context).size.width * 0.37,
+                  );
+                },
               )),
-          Positioned(
-            top: 16,
-            left: 199,
-            child: QrImage(
-              foregroundColor: Colors.black,
-              gapless: true,
-              embeddedImage: AssetImage('assets/images/logomini.png'),
-              data: user.getLoyaltyCardID(), //ID for the card
-              version: QrVersions.auto,
-              size: MediaQuery.of(context).size.width * 0.37,
-            ),
-          ),
         ],
       ),
     );
-  }
-
-  @override
-  void deactivate() {
-    _streamSubscription.cancel();
-    super.deactivate();
   }
 }

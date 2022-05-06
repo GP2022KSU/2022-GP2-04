@@ -7,6 +7,19 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:carttogo/Users/user.dart' as user;
 
 class LoyaltyCard extends StatelessWidget {
+  
+  String checkPointText() {
+    if (user.getPoints() == 2) {
+      return "نقطتان";
+    }
+    if (user.getPoints() >= 3 && CardWidgetState().points < 10) {
+      print("Here");
+      return "نقاط";
+    }
+    print(user.getPoints());
+    return "نقطة";
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,9 +32,6 @@ class LoyaltyCard extends StatelessWidget {
               color: Colors.black,
               fontWeight: FontWeight.bold,
               fontFamily: 'CartToGo',
-              //Directionality(
-              //textDirection: Text.Direction.rtl,
-              //),//Directionality
             ),
           ),
           centerTitle: true,
