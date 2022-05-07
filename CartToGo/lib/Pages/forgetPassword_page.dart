@@ -3,7 +3,14 @@ import 'package:carttogo/Pages/welcome_page.dart';
 import 'package:carttogo/main.dart';
 import 'package:flutter/material.dart';
 
-class ForgetPassword extends StatelessWidget {
+class ForgetPassword extends StatefulWidget {
+  @override
+  State<ForgetPassword> createState() => _ForgetPasswordState();
+}
+
+class _ForgetPasswordState extends State<ForgetPassword> {
+  String password = '';
+  String reEnterPassword = '';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -16,44 +23,49 @@ class ForgetPassword extends StatelessWidget {
                   children: <Widget>[
                     const Image(
                         image: AssetImage('assets/images/blueCart.png')),
-                    const Directionality(
+                    Directionality(
                       textDirection: TextDirection.rtl,
-                      child: TextField(
-                        
-                        keyboardType: TextInputType.visiblePassword,
-                        obscureText: true,
-                        decoration: InputDecoration(
-                            labelText: "كلمة المرور الجديدة",
-                            labelStyle:
-                                TextStyle(fontSize: 20, color: Colors.black),
-                            hintText: "أدخل كلمة المرور الجديدة",
-                            hintStyle: TextStyle(fontSize: 18),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(20.0)),
-                              borderSide: BorderSide(width: 2, color: appColor),
-                            ),
-                            suffixIcon: Icon(Icons.lock_outline_rounded,
-                                color: appColor)),
-                      ),
+                      child: TextFormField(
+                          keyboardType: TextInputType.visiblePassword,
+                          obscureText: true,
+                          decoration: const InputDecoration(
+                              labelText: "كلمة المرور الجديدة",
+                              labelStyle:
+                                  TextStyle(fontSize: 20, color: Colors.black),
+                              hintText: "أدخل كلمة المرور الجديدة",
+                              hintStyle: TextStyle(fontSize: 18),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(20.0)),
+                                borderSide:
+                                    BorderSide(width: 2, color: appColor),
+                              ),
+                              suffixIcon: Icon(Icons.lock_outline_rounded,
+                                  color: appColor)),
+                          onChanged: (value) {
+                            setState(() => password = value);
+                          }),
                     ),
                     const SizedBox(height: 10.0),
-                    const Directionality(
+                    Directionality(
                       textDirection: TextDirection.rtl,
-                      child: TextField(
-                        keyboardType: TextInputType.visiblePassword,
-                        decoration: InputDecoration(
-                            labelText: "أعد ادخال كلمة المرور",
-                            labelStyle:
-                                TextStyle(fontSize: 20, color: Colors.black),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(20.0)),
-                              borderSide: BorderSide(width: 2, color: appColor),
-                            ),
-                            suffixIcon: Icon(Icons.lock_outline_rounded,
-                                color: appColor)),
-                      ),
+                      child: TextFormField(
+                          keyboardType: TextInputType.visiblePassword,
+                          decoration: const InputDecoration(
+                              labelText: "أعد ادخال كلمة المرور",
+                              labelStyle:
+                                  TextStyle(fontSize: 20, color: Colors.black),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(20.0)),
+                                borderSide:
+                                    BorderSide(width: 2, color: appColor),
+                              ),
+                              suffixIcon: Icon(Icons.lock_outline_rounded,
+                                  color: appColor)),
+                          onChanged: (value) {
+                            setState(() => reEnterPassword = value);
+                          }),
                     ),
                     const SizedBox(height: 40.0),
                     ElevatedButton(

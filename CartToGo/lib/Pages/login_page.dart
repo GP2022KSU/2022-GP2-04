@@ -5,7 +5,14 @@ import 'package:carttogo/Pages/forgetPassword_page.dart';
 import 'package:carttogo/main.dart';
 import 'package:flutter/material.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  String email = '';
+  String password = '';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,47 +27,52 @@ class LoginPage extends StatelessWidget {
                     const Image(
                         image: AssetImage('assets/images/blueCart.png')),
                     //email felid
-                    const Directionality(
+                    Directionality(
                       textDirection: TextDirection.rtl,
-                      child: TextField(
-                        keyboardType: TextInputType.emailAddress,
-                        decoration: InputDecoration(
-                            labelText: "البريد الالكتروني",
-                            labelStyle:
-                                TextStyle(fontSize: 20, color: Colors.black),
-                            hintText: "أدخل بريدك الالكتروني",
-                            hintStyle: TextStyle(fontSize: 18),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(20.0)),
-                              borderSide: BorderSide(width: 2, color: appColor),
-                            ),
-                            suffixIcon:
-                                Icon(Icons.email_outlined, color: appColor)),
-                      ),
+                      child: TextFormField(
+                          keyboardType: TextInputType.emailAddress,
+                          decoration: const InputDecoration(
+                              labelText: "البريد الالكتروني",
+                              labelStyle:
+                                  TextStyle(fontSize: 20, color: Colors.black),
+                              hintText: "أدخل بريدك الالكتروني",
+                              hintStyle: TextStyle(fontSize: 18),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(20.0)),
+                                borderSide:
+                                    BorderSide(width: 2, color: appColor),
+                              ),
+                              suffixIcon:
+                                  Icon(Icons.email_outlined, color: appColor)),
+                          onChanged: (value) {
+                            setState(() => email = value);
+                          }),
                     ),
                     const SizedBox(height: 10.0),
                     //password felid
-                    const Directionality(
+                    Directionality(
                       textDirection: TextDirection.rtl,
-                      child: TextField(
-                        keyboardType: TextInputType.visiblePassword,
-                        obscureText: true,
-                        decoration: InputDecoration(
-                          labelText: "كلمة المرور",
-                          labelStyle:
-                              TextStyle(fontSize: 20, color: Colors.black),
-                          hintText: "أدخل كلمة المرور",
-                          hintStyle: TextStyle(fontSize: 18),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(20.0)),
-                            borderSide: BorderSide(width: 2, color: appColor),
-                          ),
-                          suffixIcon:
-                              Icon(Icons.lock_outline_rounded, color: appColor),
-                        ),
-                      ),
+                      child: TextFormField(
+                          keyboardType: TextInputType.visiblePassword,
+                          obscureText: true,
+                          decoration: const InputDecoration(
+                              labelText: "كلمة المرور",
+                              labelStyle:
+                                  TextStyle(fontSize: 20, color: Colors.black),
+                              hintText: "أدخل كلمة المرور",
+                              hintStyle: TextStyle(fontSize: 18),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(20.0)),
+                                borderSide:
+                                    BorderSide(width: 2, color: appColor),
+                              ),
+                              suffixIcon: Icon(Icons.lock_outline_rounded,
+                                  color: appColor)),
+                          onChanged: (value) {
+                            setState(() => password = value);
+                          }),
                     ),
                     TextButton(
                         onPressed: () {
