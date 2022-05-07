@@ -4,6 +4,7 @@ import 'package:carttogo/Pages/welcome_page.dart';
 import 'package:carttogo/Pages/forgetPassword_page.dart';
 import 'package:carttogo/main.dart';
 import 'package:flutter/material.dart';
+import 'package:carttogo/Services/auth.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -11,6 +12,8 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final AuthServices _auth = AuthServices();
+
   String email = '';
   String password = '';
   @override
@@ -45,6 +48,18 @@ class _LoginPageState extends State<LoginPage> {
                               ),
                               suffixIcon:
                                   Icon(Icons.email_outlined, color: appColor)),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'الرجاء ادخال البريد الالكتروني';
+                            }
+                            if (!RegExp(
+                                    "^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]")
+                                .hasMatch(value)) {
+                              return ("أدخل بريد الكتروني صحيح");
+                            } else {
+                              return null;
+                            }
+                          },
                           onChanged: (value) {
                             setState(() => email = value);
                           }),
@@ -70,6 +85,16 @@ class _LoginPageState extends State<LoginPage> {
                               ),
                               suffixIcon: Icon(Icons.lock_outline_rounded,
                                   color: appColor)),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'الرجاء ادخال كلمة المرور';
+                            }
+                            if (value.length < 8) {
+                              return ("كلمة المرور يجب أن تتكون من 8 خانات فأعلى");
+                            } else {
+                              return null;
+                            }
+                          },
                           onChanged: (value) {
                             setState(() => password = value);
                           }),
