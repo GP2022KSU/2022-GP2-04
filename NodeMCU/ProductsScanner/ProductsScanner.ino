@@ -193,24 +193,28 @@ boolean LoyaltyCardConnectionFirebase(String QRid) {
   String QRPath = "/QRUidFinder/" + QRid ; //get the UID of the user
   Serial.println("---------Scanned QR---------");
   Serial.println("Path QRPath: " + QRPath);
-  if (Firebase.RTDB.getJSON(&fbdo, QRPath)) { //if LoyaltyCard id is avaliable
+  if (Firebase.getJSON(fbdo, QRPath) == 1) { //if LoyaltyCard id is avaliable
     Serial.println("Json for " + QRPath + " : " + fbdo.to<FirebaseJson>().raw());
     json = fbdo.to<FirebaseJson>().raw(); //store Json of the scanned LoyaltyCardID
     json.get(UID, "/UID");
     if (UID.success) //if fetched database for UID success
     {
-      String LastCartNumber = "/Shopper/" + UID.to<String>()+"/Carts/LastCartNumber";
+      String LastCartNumber = "/Shopper/" + UID.to<String>() + "/Carts/LastCartNumber";
       Serial.println("Path LastCartNumber: " + LastCartNumber);
       if (Firebase.getInt(fbdo, LastCartNumber)) { //if UID is avaliable
-        CartNumber=fbdo.to<int>();
-        //json1.get(CartNumber, "/LastCartNumber");
-        Serial.println("Cart Number: "+CartNumber);
+        CartNumber = fbdo.to<int>();
+        Serial.println("Cart Number: " + CartNumber);
         String GetUid = "/Shopper/" + UID.to<String>() + "/Carts";
+        Firebase.setInt(fbdo, "/Shopper/" + UID.to<String>() + "/Carts/LastCartNumber", CartNumber + 1);
+        delay(200);
         Serial.print("Add Cart: " + GetUid);
-        if (Firebase.setBool(fbdo, GetUid + "/ConnectedToCart", true)) {//Create a new ShoppingCart and set the ConnectionCart to true
-          Firebase.setInt(fbdo, "/Shopper/" + UID.to<String>() + "/Carts/LastCartNumber", CartNumber + 1);
-          if (Firebase.setInt(fbdo, GetUid + "/Total", 0.0)) { //Set a new total variable for the cart
-            return true;
+        if (Firebase.setInt(fbdo, GetUid + "/" + CartNumber + "/0", 0)) {
+          if (Firebase.setBool(fbdo, GetUid + "/ConnectedToCart", true)) {
+            if(Firebase.setBool(fbdo, GetUid + "/Deleting", false));
+            if(Firebase.setInt(fbdo, GetUid + "/numOfProducts", 0 ));
+            if (Firebase.setInt(fbdo, GetUid + "/Total", 0.0)) { //Set a new total variable for the cart
+              return true;
+            }
           }
         }
       }
@@ -221,9 +225,13 @@ boolean LoyaltyCardConnectionFirebase(String QRid) {
 
 float total = 0.0;
 int count = 0;
-int countProducts=0;
+int countProducts = 0;
+int numOfProducts = 0;
+bool checkDelete=false;
+float lastPrice=0.0;
 void loop()
 {
+  String cartsPath = "/Shopper/" + UID.to<String>() + "/Carts";
   String barcode = "";
   char readBarcode;
   FirebaseJson json;
@@ -235,6 +243,14 @@ void loop()
     DisplayStartScanning();
   }
   if (Firebase.ready() == 1 && signupOK && WiFi.status() == 3) {
+    String cartsPath = "/Shopper/" + UID.to<String>() + "/Carts";
+    if (Firebase.getBool(fbdo, cartsPath+"/Deleting")) checkDelete = fbdo.to<bool>();
+    if (countProducts >= 1 && CartConnection != false && checkDelete==true) {
+        if (Firebase.getFloat(fbdo, cartsPath+"/Total")) total = fbdo.to<float>();
+        if (Firebase.getInt(fbdo, cartsPath+"/numOfProducts")) numOfProducts = fbdo.to<int>();
+        //if (Firebase.getFloat(fbdo, cartsPath+"/lastPrice")) lastPrice = fbdo.to<float>();
+        checkTotalAndCount(total);
+    }
     if (mySerial.available() && CartConnection != false) { //Check if there is Incoming Data in the Serial Buffer
 
       while (mySerial.available() && CartConnection != false) {  //Keep reading Byte by Byte from the Buffer till the Buffer is empty
@@ -256,14 +272,15 @@ void loop()
         json.get(getQuan, "/Quantity");
         json.remove("/Quantity");
         /*
-        if (getQuan.to<int>() != 1 && (Firebase.RTDB.getJSON(&fbdo, PathCart))==false) {
+          if (getQuan.to<int>() != 1 && (Firebase.RTDB.getJSON(&fbdo, PathCart))==false) {
           json.set("/Quantity", 1);
-        }
+          }
         */
         Serial.println("Json for " + barcode + " : " + fbdo.to<FirebaseJson>().raw());
         if (price.success && name1.success) //if fetched database for price and name is available
         {
           countProducts++;
+          numOfProducts++;
           lcd.clear();
           total = total + price.to<float>();
           Serial.println(
@@ -315,17 +332,17 @@ void loop()
           lcd.setCursor(0, 1);
           lcd.print(String(total));
           /*
-          if (Firebase.RTDB.getJSON(&fbdo, PathCart)==1) { //if there is a duplicate item then "true"
+            if (Firebase.RTDB.getJSON(&fbdo, PathCart)==1) { //if there is a duplicate item then "true"
             FirebaseJsonData quan;
             json.get(quan, "/Quantity");
             Serial.println(quan.to<int>());
             json.set("/Quantity", quan.to<int>() + 1);
-          }
+            }
           */
           String PathCart = "/Shopper/" + UID.to<String>() + "/Carts/" + CartNumber + "/" + countProducts;
-          String GetUid1 = "/Shopper/" + UID.to<String>() + "/Carts/Total";
-          Serial.println("ShopperID: " + GetUid1);
-          Firebase.setInt(fbdo, GetUid1, total);
+          Serial.println("ShopperID: " + cartsPath);
+          Firebase.setInt(fbdo, cartsPath + "/Total", total);
+          Firebase.setInt(fbdo, cartsPath + "/numOfProducts", numOfProducts );
           Firebase.setJSON(fbdo, PathCart, json);
         }
       }
@@ -368,3 +385,36 @@ void loop()
     }// end Scanner Available
   }// end firebase ready
 }//end loop
+
+void checkTotalAndCount(float totalPrice) {
+  lcd.clear();
+  //طباعة السعر واجمالي السعر على شاشة LCD
+  byte al [8] = {5, 5, 5, 5, 29, 0, 0, 0}; //ال
+  byte a [8] = {4, 4, 4, 4, 7, 0, 0, 0};  //أ`
+  byte jem [8] = {0, 0, 12, 3, 30, 0, 4, 0}; //جـ
+  byte m [8] = {0, 0, 0, 0, 31, 10, 10, 14}; //م
+  byte ly [8] = {1, 1, 1, 1, 23, 28, 0, 12}; //لي
+
+  lcd.createChar(0, al);
+  lcd.createChar(4, a);
+  lcd.createChar(5, jem);
+  lcd.createChar(6, m);
+  lcd.createChar(7, ly);
+
+  lcd.home();
+  lcd.rightToLeft();
+
+  lcd.setCursor(15, 1);
+  lcd.write(0);
+  lcd.write(4);
+  lcd.write(5);
+  lcd.write(6);
+  lcd.write(4);
+  lcd.write(7);
+  lcd.leftToRight();
+  lcd.setCursor(9, 1);
+  lcd.print(":");
+  lcd.setCursor(0, 1);
+  lcd.print(String(totalPrice));
+
+}

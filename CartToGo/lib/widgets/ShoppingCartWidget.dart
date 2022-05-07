@@ -180,7 +180,6 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
                       });
                       ref.child(snapshot.key!).remove();
                       await Carts.update({
-                        'lastPrice': l[4],
                         'Deleting': true,
                       });
                       Future.delayed(const Duration(milliseconds: 500),
