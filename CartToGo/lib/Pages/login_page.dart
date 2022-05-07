@@ -113,7 +113,7 @@ class _LoginPageState extends State<LoginPage> {
 
                       const SizedBox(height: 80.0),
                       //login button
-                      TextButton(
+                      ElevatedButton(
                           style: ButtonStyle(
                               elevation: MaterialStateProperty.all(8.0),
                               textStyle: MaterialStateProperty.all(
@@ -131,17 +131,6 @@ class _LoginPageState extends State<LoginPage> {
                               foregroundColor:
                                   MaterialStateProperty.all(Colors.white)),
                           onPressed: () {
-                            Navigator.push(context,
-                                MaterialPageRoute(builder: (context) {
-                              return const Navi();
-                            }));
-                          },
-                          child: const Text('تسجيل الدخول')),
-                      const SizedBox(height: 15.0),
-
-                      const Text('متسوق جديد؟'),
-                      TextButton(
-                          onPressed: () {
                             if (_formKey.currentState!.validate()) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
@@ -151,8 +140,19 @@ class _LoginPageState extends State<LoginPage> {
 
                             // Navigator.push(context,
                             //     MaterialPageRoute(builder: (context) {
-                            //   return RegisterPage();
+                            //   return const Navi();
                             // }));
+                          },
+                          child: const Text('تسجيل الدخول')),
+                      const SizedBox(height: 15.0),
+
+                      const Text('متسوق جديد؟'),
+                      TextButton(
+                          onPressed: () {
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (context) {
+                              return RegisterPage();
+                            }));
                           },
                           child: const Text(
                             'قم بإنشاء حساب',
