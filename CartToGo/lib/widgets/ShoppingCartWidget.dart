@@ -2,6 +2,7 @@
 
 import 'dart:async';
 
+import 'package:carttogo/Pages/Navigation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
@@ -9,6 +10,7 @@ import 'package:carttogo/Users/user.dart' as user;
 import 'package:carttogo/Users/Products.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:flutter_scrolling_fab_animated/flutter_scrolling_fab_animated.dart';
 
 class ShoppingCartWidget extends StatefulWidget {
   const ShoppingCartWidget({Key? key}) : super(key: key);
@@ -17,6 +19,9 @@ class ShoppingCartWidget extends StatefulWidget {
 }
 
 class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
+  ScrollController _scrollController = ScrollController();
+  double indicator = 10.0;
+  bool onTop = true;
   late double total = 0.0;
   late int numOfProducts = 0;
   double totalCart = 0;
@@ -105,6 +110,34 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        bottomNavigationBar: new BottomAppBar(
+          color: Colors.white,
+        ),
+        floatingActionButtonLocation:
+            FloatingActionButtonLocation.centerFloat,
+        floatingActionButton:
+            ConnectedToCart == true && numOfProducts != 0 && _isLoading == false
+                ? Center(
+                  heightFactor: 2.5,
+                   child: ScrollingFabAnimated(
+                     width:MediaQuery.of(context).size.width * 0.9,
+                    icon: Text(
+                      "${total.toString()}",
+                      style: TextStyle(color: Colors.white, fontSize: 16.0),
+                      textDirection: TextDirection.ltr,
+                    ),
+                    text: Text(
+                      '   الأجمالي:',
+                      style: TextStyle(color: Colors.white, fontSize: 16.0),
+                      textDirection: TextDirection.rtl,
+                    ),
+                    onPress: () {},
+                    scrollController: _scrollController,
+                    animateIcon: false,
+                    inverted: false,
+                    radius: 10.0,
+                  ))
+                : Container(),
         body: _isLoading
             ? Center(
                 child: SpinKitWave(
@@ -149,7 +182,6 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
                       await Carts.update({
                         'Deleting': true,
                       });
-
                       Future.delayed(const Duration(milliseconds: 500),
                           () async {
                         await Carts.update({
@@ -431,7 +463,7 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
                   return Container();
                 });
           }
-          return Container(); //If not there is no LastCartNumber
+          return Container();
         });
   }
 
