@@ -43,13 +43,15 @@ class NaviState extends State<Navi> {
     bool v2 = false;
     double s2 = 0;
     Myindex == 1 ? v2 = false : v2 = true;
-    Myindex == 01 ? s2 = 0.037 : s2 = 0.066;
+    Myindex == 01 ? s2 = 0.04 : s2 = 0.066;
     Myindex == 0 ? v1 = false : v1 = true;
-    Myindex == 0 ? s1 = 0.037 : s1 = 0.066;
+    Myindex == 0 ? s1 = 0.04 : s1 = 0.066;
 
     return SafeArea(
-      //top: false,
+      top: false,
+      bottom: false,
       child: Scaffold(
+        //backgroundColor: Colors.white,
         extendBody: true,
         extendBodyBehindAppBar: true,
         bottomNavigationBar: CurvedNavigationBar(
@@ -59,6 +61,9 @@ class NaviState extends State<Navi> {
               height: MediaQuery.of(context).size.height * s1,
               child: Column(
                 children: [
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.0049,
+                  ),
                   Icon(Icons.shopping_cart_outlined,
                       size: 30,
                       color: Myindex == 0
@@ -78,6 +83,9 @@ class NaviState extends State<Navi> {
               height: MediaQuery.of(context).size.height * s2,
               child: Column(
                 children: [
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.0049,
+                  ),
                   Icon(Icons.credit_card,
                       size: 30,
                       color: Myindex == 1
@@ -96,7 +104,7 @@ class NaviState extends State<Navi> {
           ],
           backgroundColor: Colors.white24,
           buttonBackgroundColor: Colors.white24,
-          height: 55,
+          height: 75,
           onTap: (index) {
             setState(() {
               Myindex = index;
