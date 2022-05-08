@@ -4,7 +4,9 @@ import 'package:carttogo/Pages/welcome_page.dart';
 import 'package:carttogo/Pages/forgetPassword_page.dart';
 import 'package:carttogo/main.dart';
 import 'package:flutter/material.dart';
-import 'package:carttogo/Services/auth.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
+import 'LoyaltyCard.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -12,11 +14,10 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final AuthServices _auth = AuthServices();
   final _formKey = GlobalKey<FormState>();
 
-  String email = '';
-  String password = '';
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,9 +62,7 @@ class _LoginPageState extends State<LoginPage> {
                                   return null;
                                 }
                               },
-                              onChanged: (value) {
-                                setState(() => email = value);
-                              })),
+                              onChanged: (value) {})),
                       const SizedBox(height: 10.0),
                       //password felid
                       Directionality(
@@ -95,9 +94,7 @@ class _LoginPageState extends State<LoginPage> {
                                   return null;
                                 }
                               },
-                              onChanged: (value) {
-                                setState(() => password = value);
-                              })),
+                              onChanged: (value) {})),
                       TextButton(
                           onPressed: () {
                             Navigator.push(context,
@@ -131,13 +128,19 @@ class _LoginPageState extends State<LoginPage> {
                               foregroundColor:
                                   MaterialStateProperty.all(Colors.white)),
                           onPressed: () {
-                            if (_formKey.currentState!.validate()) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                    content: Text('Processing Data')),
-                              );
-                            }
-
+                            FirebaseAuth.instance
+                                .createUserWithEmailAndPassword(
+                                    email: _emailController.text,
+                                    password: _passwordController.text)
+                                .then((value) {
+                              print("Created New Account");
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => LoyaltyCard()));
+                            }).onError((error, stackTrace) {
+                              print("Error ${error.toString()}");
+                            });
                             // Navigator.push(context,
                             //     MaterialPageRoute(builder: (context) {
                             //   return const Navi();
