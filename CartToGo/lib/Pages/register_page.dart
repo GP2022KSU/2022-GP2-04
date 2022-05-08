@@ -1,9 +1,11 @@
+import 'package:carttogo/Pages/LoyaltyCard.dart';
+import 'package:carttogo/Pages/ShoppingCart.dart';
+import 'package:carttogo/Pages/welcome_page.dart';
 import 'package:flutter/material.dart';
 import 'package:carttogo/main.dart';
-import 'package:carttogo/Pages/Navigation.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'login_page.dart';
-import 'package:carttogo/Services/auth.dart';
+import 'package:carttogo/Pages/Shoppingcart.dart';
 
 class RegisterPage extends StatefulWidget {
   @override
@@ -11,13 +13,16 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-  final AuthServices _auth = AuthServices();
   final _formKey = GlobalKey<FormState>();
 
-  String userName = '';
-  String email = '';
-  String password = '';
-  String reEnterPassword = '';
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _userNameController = TextEditingController();
+
+  // String userName = '';
+  // String email = '';
+  // String password = '';
+  // String reEnterPassword = '';
 
   @override
   Widget build(BuildContext context) {
@@ -31,12 +36,12 @@ class _RegisterPageState extends State<RegisterPage> {
               child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    //background lines
                     const Image(
                         image: AssetImage('assets/images/blueCart.png')),
                     Directionality(
                         textDirection: TextDirection.rtl,
                         child: TextFormField(
+                            controller: _userNameController,
                             keyboardType: TextInputType.text,
                             decoration: const InputDecoration(
                                 labelText: "اسم المستخدم",
@@ -57,14 +62,13 @@ class _RegisterPageState extends State<RegisterPage> {
                               }
                               return null;
                             },
-                            onChanged: (value) {
-                              setState(() => userName = value);
-                            })),
+                            onChanged: (value) {})),
                     const SizedBox(height: 10.0),
                     //email felid
                     Directionality(
                         textDirection: TextDirection.rtl,
                         child: TextFormField(
+                            controller: _emailController,
                             keyboardType: TextInputType.emailAddress,
                             decoration: const InputDecoration(
                                 labelText: "البريد الالكتروني",
@@ -91,14 +95,13 @@ class _RegisterPageState extends State<RegisterPage> {
                                 return null;
                               }
                             },
-                            onChanged: (value) {
-                              setState(() => email = value);
-                            })),
+                            onChanged: (value) {})),
                     const SizedBox(height: 10.0),
                     //password felid
                     Directionality(
                         textDirection: TextDirection.rtl,
                         child: TextFormField(
+                            controller: _passwordController,
                             keyboardType: TextInputType.visiblePassword,
                             obscureText: true,
                             decoration: const InputDecoration(
@@ -124,9 +127,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                 return null;
                               }
                             },
-                            onChanged: (value) {
-                              setState(() => password = value);
-                            })),
+                            onChanged: (value) {})),
                     const SizedBox(height: 10.0),
                     Directionality(
                         textDirection: TextDirection.rtl,
@@ -143,6 +144,12 @@ class _RegisterPageState extends State<RegisterPage> {
                                         BorderSide(width: 2, color: appColor)),
                                 suffixIcon: Icon(Icons.lock_outline_rounded,
                                     color: appColor)),
+                                    validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'الرجاء اعادة ادخال كلمة المرور';
+                              }
+                              return null;
+                            },
                             // validator: (value) {
                             //if (confirmpassController.text !=
                             //    passwordController.text) {
@@ -151,9 +158,7 @@ class _RegisterPageState extends State<RegisterPage> {
                             //    return null;
                             //   }
                             // },
-                            onChanged: (value) {
-                              setState(() => reEnterPassword = value);
-                            })),
+                            onChanged: (value) {})),
 
                     const SizedBox(height: 40.0),
                     //login button
@@ -174,6 +179,20 @@ class _RegisterPageState extends State<RegisterPage> {
                             foregroundColor:
                                 MaterialStateProperty.all(Colors.white)),
                         onPressed: () {
+                          FirebaseAuth.instance
+                              .createUserWithEmailAndPassword(
+                                  email: _emailController.text,
+                                  password: _passwordController.text)
+                              .then((value) {
+                            print("Created New Account");
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => LoyaltyCard()));
+                          }).onError((error, stackTrace) {
+                            print("Error ${error.toString()}");
+                          });
+                         // الي تحت يمكن احذفه
                           if (_formKey.currentState!.validate()) {
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(content: Text('Processing Data')),
@@ -184,7 +203,22 @@ class _RegisterPageState extends State<RegisterPage> {
                           //   return Navi();
                           // }));
                         },
-                        child: const Text('تسجيل '))
+                        child: const Text('تسجيل ')),
+                    const SizedBox(height: 15.0),
+
+                    const Text('لديك حساب بالفعل؟'),
+                    TextButton(
+                        onPressed: () {
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (context) {
+                            return LoginPage();
+                          }));
+                        },
+                        child: const Text(
+                          'قم بتسجيل الدخول',
+                          style: TextStyle(
+                              color: appColor, fontWeight: FontWeight.bold),
+                        ))
                   ]),
             ),
           ),
