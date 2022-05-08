@@ -38,28 +38,65 @@ class NaviState extends State<Navi> {
 
   @override
   Widget build(BuildContext context) {
+    bool v1 = false;
+    double s1 = 0;
+    bool v2 = false;
+    double s2 = 0;
+    Myindex == 1 ? v2 = false : v2 = true;
+    Myindex == 01 ? s2 = 0.037 : s2 = 0.066;
+    Myindex == 0 ? v1 = false : v1 = true;
+    Myindex == 0 ? s1 = 0.037 : s1 = 0.066;
+
     return SafeArea(
-      top: false,
+      //top: false,
       child: Scaffold(
         extendBody: true,
         extendBodyBehindAppBar: true,
         bottomNavigationBar: CurvedNavigationBar(
           key: _NavKey,
-          items: [
-            Icon(Icons.shopping_cart_outlined,
-                size: 30,
-                color: Myindex == 0
-                    ? Color.fromARGB(255, 35, 61, 255)
-                    : Colors.white),
-            Icon(Icons.credit_card,
-                size: 30,
-                color: Myindex == 1
-                    ? Color.fromARGB(255, 35, 61, 255)
-                    : Colors.white)
+          items: <Widget>[
+            Container(
+              height: MediaQuery.of(context).size.height * s1,
+              child: Column(
+                children: [
+                  Icon(Icons.shopping_cart_outlined,
+                      size: 30,
+                      color: Myindex == 0
+                          ? Color.fromARGB(255, 35, 61, 255)
+                          : Colors.white),
+                  Visibility(
+                    child: Text(
+                      "سلة التسوق",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    visible: v1,
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              height: MediaQuery.of(context).size.height * s2,
+              child: Column(
+                children: [
+                  Icon(Icons.credit_card,
+                      size: 30,
+                      color: Myindex == 1
+                          ? Color.fromARGB(255, 35, 61, 255)
+                          : Colors.white),
+                  Visibility(
+                    child: Text(
+                      "بطاقة الولاء",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    visible: v2,
+                  ),
+                ],
+              ),
+            ),
           ],
           backgroundColor: Colors.white24,
           buttonBackgroundColor: Colors.white24,
-          height: 50,
+          height: 55,
           onTap: (index) {
             setState(() {
               Myindex = index;
