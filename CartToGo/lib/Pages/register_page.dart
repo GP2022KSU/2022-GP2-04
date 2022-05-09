@@ -18,11 +18,7 @@ class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _userNameController = TextEditingController();
-
-  // String userName = '';
-  // String email = '';
-  // String password = '';
-  // String reEnterPassword = '';
+  final TextEditingController _confirmPasswordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -87,13 +83,12 @@ class _RegisterPageState extends State<RegisterPage> {
                               if (value == null || value.isEmpty) {
                                 return 'الرجاء ادخال البريد الالكتروني';
                               }
+
                               if (!RegExp(
                                       "^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]")
                                   .hasMatch(value)) {
                                 return ("أدخل بريد الكتروني صحيح");
-                              } else {
-                                return null;
-                              }
+                              } 
                             },
                             onChanged: (value) {})),
                     const SizedBox(height: 10.0),
@@ -123,8 +118,11 @@ class _RegisterPageState extends State<RegisterPage> {
                               }
                               if (value.length < 8) {
                                 return ("كلمة المرور يجب أن تتكون من 8 خانات فأعلى");
-                              } else {
-                                return null;
+                              }
+                              if (!(value.contains(RegExp(r'[A-Z]'), 0) ||
+                                  value.contains(RegExp(r'[a-z]'), 0) ||
+                                  value.contains(RegExp(r'[0-9]'), 0))) {
+                                return "كلمة المرور يجب زن تحتوي على حرف كبير وحرف صغير ورقم";
                               }
                             },
                             onChanged: (value) {})),
@@ -132,6 +130,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     Directionality(
                         textDirection: TextDirection.rtl,
                         child: TextFormField(
+                          controller: _confirmPasswordController,
                             keyboardType: TextInputType.visiblePassword,
                             decoration: const InputDecoration(
                                 labelText: "أعد ادخال كلمة المرور",
@@ -144,20 +143,16 @@ class _RegisterPageState extends State<RegisterPage> {
                                         BorderSide(width: 2, color: appColor)),
                                 suffixIcon: Icon(Icons.lock_outline_rounded,
                                     color: appColor)),
-                                    validator: (value) {
+                            validator: (value) {
                               if (value == null || value.isEmpty) {
                                 return 'الرجاء اعادة ادخال كلمة المرور';
                               }
-                              return null;
+                              if (confirmpassController.text !=
+                               _passwordController.text) {
+                              return "يجب أن تتطابق كلمتا المرور";
+                             }
                             },
-                            // validator: (value) {
-                            //if (confirmpassController.text !=
-                            //    passwordController.text) {
-                            //   return "يجب أن تتطابق كلمتا المرور";
-                            //  } else {
-                            //    return null;
-                            //   }
-                            // },
+                            
                             onChanged: (value) {})),
 
                     const SizedBox(height: 40.0),
@@ -192,7 +187,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           }).onError((error, stackTrace) {
                             print("Error ${error.toString()}");
                           });
-                         // الي تحت يمكن احذفه
+                          // الي تحت يمكن احذفه
                           if (_formKey.currentState!.validate()) {
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(content: Text('Processing Data')),

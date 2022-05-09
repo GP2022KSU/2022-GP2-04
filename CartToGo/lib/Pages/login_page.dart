@@ -58,9 +58,7 @@ class _LoginPageState extends State<LoginPage> {
                                         "^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]")
                                     .hasMatch(value)) {
                                   return ("أدخل بريد الكتروني صحيح");
-                                } else {
-                                  return null;
-                                }
+                                } 
                               },
                               onChanged: (value) {})),
                       const SizedBox(height: 10.0),
