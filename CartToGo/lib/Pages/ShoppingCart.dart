@@ -149,7 +149,9 @@ class _ShoppingCartState extends State<ShoppingCart> {
                           ),
                         ),
                         Divider(
-                          color: Color.fromARGB(255, 0, 0, 0),
+                          indent: MediaQuery.of(context).size.height * 0.001,
+                          endIndent: MediaQuery.of(context).size.height * 0.07,
+                          color: Color.fromARGB(125, 0, 0, 0),
                         ),
                         Text(
                           "مرر بطاقة الولاء",
