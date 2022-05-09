@@ -1,10 +1,11 @@
 import 'package:carttogo/Pages/Navigation.dart';
 import 'package:carttogo/Pages/register_page.dart';
-import 'package:carttogo/Pages/welcome_page.dart';
 import 'package:carttogo/Pages/forgetPassword_page.dart';
 import 'package:carttogo/main.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'Navigation.dart';
+
 
 import 'LoyaltyCard.dart';
 
@@ -135,7 +136,7 @@ class _LoginPageState extends State<LoginPage> {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => LoyaltyCard()));
+                                      builder: (context) => Navi()));
                             }).onError((error, stackTrace) {
                               print("Error ${error.toString()}");
                             });

@@ -1,11 +1,8 @@
-import 'package:carttogo/Pages/LoyaltyCard.dart';
-import 'package:carttogo/Pages/ShoppingCart.dart';
-import 'package:carttogo/Pages/welcome_page.dart';
 import 'package:flutter/material.dart';
 import 'package:carttogo/main.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'login_page.dart';
-import 'package:carttogo/Pages/Shoppingcart.dart';
+import 'Navigation.dart';
 
 class RegisterPage extends StatefulWidget {
   @override
@@ -53,10 +50,10 @@ class _RegisterPageState extends State<RegisterPage> {
                                 suffixIcon: Icon(Icons.account_box_outlined,
                                     color: appColor)),
                             validator: (value) {
-                              if (value == null || value.isEmpty) {
+                              if (value!.isEmpty) {
                                 return 'الرجاء كتاتبة اسم المستخدم';
                               }
-                              return null;
+
                             },
                             onChanged: (value) {})),
                     const SizedBox(height: 10.0),
@@ -80,7 +77,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                 suffixIcon: Icon(Icons.email_outlined,
                                     color: appColor)),
                             validator: (value) {
-                              if (value == null || value.isEmpty) {
+                              if ( value!.isEmpty) {
                                 return 'الرجاء ادخال البريد الالكتروني';
                               }
 
@@ -113,7 +110,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                 suffixIcon: Icon(Icons.lock_outline_rounded,
                                     color: appColor)),
                             validator: (value) {
-                              if (value == null || value.isEmpty) {
+                              if (value!.isEmpty) {
                                 return 'الرجاء ادخال كلمة المرور';
                               }
                               if (value.length < 8) {
@@ -122,7 +119,7 @@ class _RegisterPageState extends State<RegisterPage> {
                               if (!(value.contains(RegExp(r'[A-Z]'), 0) ||
                                   value.contains(RegExp(r'[a-z]'), 0) ||
                                   value.contains(RegExp(r'[0-9]'), 0))) {
-                                return "كلمة المرور يجب زن تحتوي على حرف كبير وحرف صغير ورقم";
+                                return "كلمة المرور يجب ان تحتوي على حرف كبير وحرف صغير ورقم";
                               }
                             },
                             onChanged: (value) {})),
@@ -132,6 +129,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         child: TextFormField(
                           controller: _confirmPasswordController,
                             keyboardType: TextInputType.visiblePassword,
+                            obscureText: true,
                             decoration: const InputDecoration(
                                 labelText: "أعد ادخال كلمة المرور",
                                 labelStyle: TextStyle(
@@ -144,15 +142,14 @@ class _RegisterPageState extends State<RegisterPage> {
                                 suffixIcon: Icon(Icons.lock_outline_rounded,
                                     color: appColor)),
                             validator: (value) {
-                              if (value == null || value.isEmpty) {
+                              if (value!.isEmpty) {
                                 return 'الرجاء اعادة ادخال كلمة المرور';
                               }
-                              if (confirmpassController.text !=
+                              if (_confirmPasswordController.text !=
                                _passwordController.text) {
                               return "يجب أن تتطابق كلمتا المرور";
                              }
                             },
-                            
                             onChanged: (value) {})),
 
                     const SizedBox(height: 40.0),
@@ -183,7 +180,7 @@ class _RegisterPageState extends State<RegisterPage> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => LoyaltyCard()));
+                                    builder: (context) => Navi()));
                           }).onError((error, stackTrace) {
                             print("Error ${error.toString()}");
                           });
@@ -193,10 +190,6 @@ class _RegisterPageState extends State<RegisterPage> {
                               const SnackBar(content: Text('Processing Data')),
                             );
                           }
-                          // Navigator.push(context,
-                          //     MaterialPageRoute(builder: (context) {
-                          //   return Navi();
-                          // }));
                         },
                         child: const Text('تسجيل ')),
                     const SizedBox(height: 15.0),
