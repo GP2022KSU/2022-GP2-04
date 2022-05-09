@@ -125,7 +125,7 @@ class _LoginPageState extends State<LoginPage> {
                                   MaterialStateProperty.all(Colors.white)),
                           onPressed: () {
                             FirebaseAuth.instance
-                                .createUserWithEmailAndPassword(
+                                .signInWithEmailAndPassword(
                                     email: _emailController.text,
                                     password: _passwordController.text)
                                 .then((value) {
