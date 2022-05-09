@@ -15,7 +15,8 @@ class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _userNameController = TextEditingController();
-  final TextEditingController _confirmPasswordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -50,10 +51,9 @@ class _RegisterPageState extends State<RegisterPage> {
                                 suffixIcon: Icon(Icons.account_box_outlined,
                                     color: appColor)),
                             validator: (value) {
-                              if (value!.isEmpty) {
+                              if (value!.length == 0) {
                                 return 'الرجاء كتاتبة اسم المستخدم';
                               }
-
                             },
                             onChanged: (value) {})),
                     const SizedBox(height: 10.0),
@@ -77,15 +77,16 @@ class _RegisterPageState extends State<RegisterPage> {
                                 suffixIcon: Icon(Icons.email_outlined,
                                     color: appColor)),
                             validator: (value) {
-                              if ( value!.isEmpty) {
+                              if (value!.length == 0) {
                                 return 'الرجاء ادخال البريد الالكتروني';
                               }
-
                               if (!RegExp(
                                       "^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]")
                                   .hasMatch(value)) {
                                 return ("أدخل بريد الكتروني صحيح");
-                              } 
+                              } else {
+                                return null;
+                              }
                             },
                             onChanged: (value) {})),
                     const SizedBox(height: 10.0),
@@ -110,7 +111,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                 suffixIcon: Icon(Icons.lock_outline_rounded,
                                     color: appColor)),
                             validator: (value) {
-                              if (value!.isEmpty) {
+                              if (value!.length == 0) {
                                 return 'الرجاء ادخال كلمة المرور';
                               }
                               if (value.length < 8) {
@@ -127,7 +128,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     Directionality(
                         textDirection: TextDirection.rtl,
                         child: TextFormField(
-                          controller: _confirmPasswordController,
+                            controller: _confirmPasswordController,
                             keyboardType: TextInputType.visiblePassword,
                             obscureText: true,
                             decoration: const InputDecoration(
@@ -142,13 +143,13 @@ class _RegisterPageState extends State<RegisterPage> {
                                 suffixIcon: Icon(Icons.lock_outline_rounded,
                                     color: appColor)),
                             validator: (value) {
-                              if (value!.isEmpty) {
+                              if (value!.length == 0) {
                                 return 'الرجاء اعادة ادخال كلمة المرور';
                               }
                               if (_confirmPasswordController.text !=
-                               _passwordController.text) {
-                              return "يجب أن تتطابق كلمتا المرور";
-                             }
+                                  _passwordController.text) {
+                                return "يجب أن تتطابق كلمتا المرور";
+                              }
                             },
                             onChanged: (value) {})),
 
