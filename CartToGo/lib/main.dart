@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:carttogo/Pages/welcome_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'Pages/Navigation.dart';
+import 'package:carttogo/Pages/Navigation.dart';
 
 const appColor = Color.fromARGB(255, 20, 77, 220);
 

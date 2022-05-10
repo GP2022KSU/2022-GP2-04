@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:carttogo/main.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'login_page.dart';
-import 'Navigation.dart';
+import 'package:carttogo/Pages/login_page.dart';
+import 'package:carttogo/Pages/Navigation.dart';
+
 
 class RegisterPage extends StatefulWidget {
   @override
