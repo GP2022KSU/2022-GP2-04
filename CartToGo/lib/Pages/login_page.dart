@@ -3,7 +3,6 @@ import 'package:carttogo/Pages/register_page.dart';
 import 'package:carttogo/Pages/forgetPassword_page.dart';
 import 'package:carttogo/main.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/gestures.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import '../utils.dart';

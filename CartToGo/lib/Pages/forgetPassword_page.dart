@@ -1,7 +1,8 @@
 import 'package:carttogo/Pages/welcome_page.dart';
-
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:carttogo/main.dart';
 import 'package:flutter/material.dart';
+import 'package:carttogo/utils.dart';
 
 class ForgetPassword extends StatefulWidget {
   @override
@@ -76,11 +77,29 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                                   MaterialStateProperty.all(appColor),
                               foregroundColor:
                                   MaterialStateProperty.all(Colors.white)),
-                          onPressed: () {
-                            Navigator.push(context,
-                                MaterialPageRoute(builder: (context) {
-                              return const WelcomePage();
-                            }));
+                          onPressed: () async {
+                            showDialog(
+                              context: context,
+                              barrierDismissible: false,
+                              builder: (context) =>
+                                  Center(child: CircularProgressIndicator()),
+                            );
+
+                            try {
+                              await FirebaseAuth.instance
+                                  .sendPasswordResetEmail(
+                                      email: _emailController.text);
+
+                              Utils.showSnackBar(
+                                  'تم ارسال بريد الكتروني لإعادة تعيين كلمة المرور');
+                              Navigator.of(context)
+                                  .popUntil((route) => route.isFirst);
+                            } on FirebaseAuthException catch (e) {
+                              print(e);
+
+                              Utils.showSnackBar(e.message);
+                              Navigator.of(context).pop();
+                            }
                           },
                           child: const Text('إعادة تعيين كلمة المرور')),
                       const SizedBox(height: 15.0),
