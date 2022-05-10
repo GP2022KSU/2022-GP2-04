@@ -22,11 +22,10 @@ class RegisterPage extends StatefulWidget {
 class _RegisterPageState extends State<RegisterPage> {
   final _formKey = GlobalKey<FormState>();
 
-  final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _userNameController = TextEditingController();
-  final TextEditingController _confirmPasswordController =
-      TextEditingController();
+  final _passwordController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _userNameController = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -87,7 +86,6 @@ class _RegisterPageState extends State<RegisterPage> {
                                 suffixIcon: Icon(Icons.email_outlined,
                                     color: appColor)),
                             validator: (value) {
-                              
                               if (value!.length == 0) {
                                 return 'الرجاء ادخال البريد الالكتروني';
                               }
@@ -161,7 +159,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                   _passwordController.text) {
                                 return "يجب أن تتطابق كلمتا المرور";
                               }
-                             return null;
+                              return null;
                             },
                             onChanged: (value) {})),
 

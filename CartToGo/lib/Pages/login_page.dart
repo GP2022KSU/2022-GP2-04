@@ -23,8 +23,8 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
 
-  final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _emailController = TextEditingController();
+  final  _passwordController = TextEditingController();
+  final  _emailController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -100,18 +100,34 @@ class _LoginPageState extends State<LoginPage> {
                                 }
                               },
                               onChanged: (value) {})),
-                      TextButton(
-                          onPressed: () {
-                            Navigator.push(context,
-                                MaterialPageRoute(builder: (context) {
-                              return ForgetPassword();
-                            }));
-                          },
-                          child: const Text(
-                            'نسيت كلمة المرور؟',
-                            style: TextStyle(
-                                color: appColor, fontWeight: FontWeight.bold),
-                          )),
+
+                      GestureDetector(
+                        child: Text(
+                          'نسيت كلمة المرور؟?',
+                          style: TextStyle(
+                            decoration: TextDecoration.underline,
+                            color: appColor,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                          ),
+                        ),
+                        onTap: () =>
+                            Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => ForgetPassword(),
+                        )),
+                      ),
+                      // TextButton(
+                      //     onPressed: () {
+                      //       Navigator.push(context,
+                      //           MaterialPageRoute(builder: (context) {
+                      //         return ForgetPassword();
+                      //       }));
+                      //     },
+                      //     child: const Text(
+                      //       'نسيت كلمة المرور؟',
+                      //       style: TextStyle(
+                      //           color: appColor, fontWeight: FontWeight.bold),
+                      //     )),
 
                       const SizedBox(height: 80.0),
                       //login button
