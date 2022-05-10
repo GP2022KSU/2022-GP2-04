@@ -4,6 +4,8 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:carttogo/Pages/LoyaltyCard.dart';
 import 'package:carttogo/Pages/ShoppingCart.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
 
 class Navi extends StatefulWidget {
   const Navi({Key? key}) : super(key: key);
@@ -38,6 +40,8 @@ class NaviState extends State<Navi> {
 
   @override
   Widget build(BuildContext context) {
+  //  هياءfinal user = FirebaseAuth.instance.currentUser!;
+
     bool v1 = false;
     double s1 = 0;
     bool v2 = false;
@@ -115,6 +119,7 @@ class NaviState extends State<Navi> {
           color: Color.fromARGB(255, 35, 61, 255),
         ),
         body: pageChooser(Myindex),
+        
       ),
     );
   }

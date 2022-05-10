@@ -3,9 +3,19 @@ import 'package:carttogo/Pages/register_page.dart';
 import 'package:carttogo/Pages/forgetPassword_page.dart';
 import 'package:carttogo/main.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/gestures.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+import '../utils.dart';
+
 class LoginPage extends StatefulWidget {
+  // final VoidCallback onClickedSignUp;
+
+  // const LoginPage({
+  //   Key? key,
+  //   required this.onClickedSignUp,
+  // }) : super(key: key);
+
   @override
   State<LoginPage> createState() => _LoginPageState();
 }
@@ -55,7 +65,7 @@ class _LoginPageState extends State<LoginPage> {
                                         "^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]")
                                     .hasMatch(value)) {
                                   return ("أدخل بريد الكتروني صحيح");
-                                } 
+                                }
                               },
                               onChanged: (value) {})),
                       const SizedBox(height: 10.0),
@@ -123,27 +133,53 @@ class _LoginPageState extends State<LoginPage> {
                               foregroundColor:
                                   MaterialStateProperty.all(Colors.white)),
                           onPressed: () {
-                            FirebaseAuth.instance
-                                .signInWithEmailAndPassword(
-                                    email: _emailController.text,
-                                    password: _passwordController.text)
-                                .then((value) {
-                              print("Created New Account");
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => Navi()));
-                            }).onError((error, stackTrace) {
-                              print("Error ${error.toString()}");
-                            });
-                            // Navigator.push(context,
-                            //     MaterialPageRoute(builder: (context) {
-                            //   return const Navi();
-                            // }));
+                            showDialog(
+                              context: context,
+                              barrierDismissible: false,
+                              builder: (context) =>
+                                  Center(child: CircularProgressIndicator()),
+                            );
+                            try {
+                              FirebaseAuth.instance
+                                  .signInWithEmailAndPassword(
+                                      email: _emailController.text,
+                                      password: _passwordController.text)
+                                  .then((value) {
+                                print("Created New Account");
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => Navi()));
+                              }).onError((error, stackTrace) {
+                                print("Error ${error.toString()}");
+                              });
+                            } on FirebaseAuthException catch (e) {
+                              print(e);
+                              Utils.showSnackBar(e.message);
+
+                              navigatorKey.currentState!
+                                  .popUntil((route) => route.isFirst);
+                            }
                           },
                           child: const Text('تسجيل الدخول')),
                       const SizedBox(height: 15.0),
-
+                      // RichText(
+                      //   text: TextSpan(
+                      //     style: TextStyle(color: Colors.white, fontSize: 20),
+                      //     text: 'متسوق جديد؟',
+                      //     children: [
+                      //       TextSpan(
+                      //         recognizer: TapGestureRecognizer()
+                      //           ..onTap = widget.onClickedSignUp,
+                      //         text: 'قم بإنشاء حساب',
+                      //         style: TextStyle(
+                      //           decoration: TextDecoration.underline,
+                      //           color: Theme.of(context).colorScheme.secondary,
+                      //         ),
+                      //       ),
+                      //     ],
+                      //   ),
+                      // )
                       const Text('متسوق جديد؟'),
                       TextButton(
                           onPressed: () {

@@ -3,9 +3,18 @@ import 'package:carttogo/main.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:carttogo/Pages/login_page.dart';
 import 'package:carttogo/Pages/Navigation.dart';
+import 'package:flutter/gestures.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
+import '../utils.dart';
 
 class RegisterPage extends StatefulWidget {
+  // final Function() onClickedSignIn;
+
+  // const RegisterPage({
+  //   Key? key,
+  //   required this.onClickedSignIn,
+  // }) : super(key: key);
   @override
   State<RegisterPage> createState() => _RegisterPageState();
 }
@@ -78,6 +87,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                 suffixIcon: Icon(Icons.email_outlined,
                                     color: appColor)),
                             validator: (value) {
+                              
                               if (value!.length == 0) {
                                 return 'الرجاء ادخال البريد الالكتروني';
                               }
@@ -151,6 +161,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                   _passwordController.text) {
                                 return "يجب أن تتطابق كلمتا المرور";
                               }
+                             return null;
                             },
                             onChanged: (value) {})),
 
@@ -173,19 +184,32 @@ class _RegisterPageState extends State<RegisterPage> {
                             foregroundColor:
                                 MaterialStateProperty.all(Colors.white)),
                         onPressed: () {
-                          FirebaseAuth.instance
-                              .createUserWithEmailAndPassword(
-                                  email: _emailController.text,
-                                  password: _passwordController.text)
-                              .then((value) {
-                            print("Created New Account");
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => Navi()));
-                          }).onError((error, stackTrace) {
-                            print("Error ${error.toString()}");
-                          });
+                          showDialog(
+                            context: context,
+                            barrierDismissible: false,
+                            builder: (context) =>
+                                Center(child: CircularProgressIndicator()),
+                          );
+                          try {
+                            FirebaseAuth.instance
+                                .createUserWithEmailAndPassword(
+                                    email: _emailController.text,
+                                    password: _passwordController.text)
+                                .then((value) {
+                              print("Created New Account");
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => Navi()));
+                            }).onError((error, stackTrace) {
+                              print("Error ${error.toString()}");
+                            });
+                          } on FirebaseAuthException catch (e) {
+                            print(e);
+                            Utils.showSnackBar(e.message);
+                            navigatorKey.currentState!
+                                .popUntil((route) => route.isFirst);
+                          }
                           // الي تحت يمكن احذفه
                           if (_formKey.currentState!.validate()) {
                             ScaffoldMessenger.of(context).showSnackBar(
@@ -195,6 +219,23 @@ class _RegisterPageState extends State<RegisterPage> {
                         },
                         child: const Text('تسجيل ')),
                     const SizedBox(height: 15.0),
+                    // RichText(
+                    //   text: TextSpan(
+                    //     style: TextStyle(color: Colors.white, fontSize: 20),
+                    //     text: 'لديك حساب بالفعل؟',
+                    //     children: [
+                    //       TextSpan(
+                    //         recognizer: TapGestureRecognizer()
+                    //           ..onTap = widget.onClickedSignIn,
+                    //         text: 'قم بتسجيل الدخول',
+                    //         style: TextStyle(
+                    //           decoration: TextDecoration.underline,
+                    //           color: Theme.of(context).colorScheme.secondary,
+                    //         ),
+                    //       ),
+                    //     ],
+                    //   ),
+                    // )
 
                     const Text('لديك حساب بالفعل؟'),
                     TextButton(

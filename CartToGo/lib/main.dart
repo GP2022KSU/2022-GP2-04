@@ -1,3 +1,4 @@
+import 'package:carttogo/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:carttogo/Pages/welcome_page.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -6,33 +7,44 @@ import 'package:carttogo/Pages/Navigation.dart';
 
 const appColor = Color.fromARGB(255, 20, 77, 220);
 
-void main() async {
+Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(MaterialApp(
-    debugShowCheckedModeBanner: false,
-    home: MyApp(),
-  ));
+  runApp(MyApp());
 }
+
+final navigatorKey = GlobalKey<NavigatorState>();
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Cart To Go',
-        theme: ThemeData(fontFamily: 'CartToGo', primaryColor: appColor),
-        home: const WelcomePage(),
-        );
+      scaffoldMessengerKey: Utils.messengerKey,
+      navigatorKey: navigatorKey,
+      debugShowCheckedModeBanner: false,
+      title: 'Cart To Go',
+      theme: ThemeData(fontFamily: 'CartToGo', primaryColor: appColor),
+      home: MainPage(),
+    );
   }
 }
 
-// body: StreamBuilder<User?>(
-//             stream: FirebaseAuth.instance.authStateChanges(),
-//             builder: (context, snapshot) {
-//               if (snapshot.hasData) {
-//                 return Navi();
-//               } else {
-//                 return WelcomePage();
-//               }
-//             })
+class MainPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) => Scaffold(
+        body: StreamBuilder<User?>(
+          stream: FirebaseAuth.instance.authStateChanges(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(child: CircularProgressIndicator());
+            } else if (snapshot.hasError) {
+              return Center(child: Text('! مشكلة ما قد حدثت'));
+            } else if (snapshot.hasData) {
+              return Navi();
+            } else {
+              return WelcomePage();
+            }
+          },
+        ),
+      );
+}
