@@ -11,6 +11,7 @@ import 'package:carttogo/Users/Products.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_scrolling_fab_animated/flutter_scrolling_fab_animated.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class ShoppingCartWidget extends StatefulWidget {
   const ShoppingCartWidget({Key? key}) : super(key: key);
@@ -30,7 +31,6 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
   late bool checkDelete;
   final _fb = FirebaseDatabase.instance;
   final _database = FirebaseDatabase.instance.ref();
-  String userid = "Stu2LFiw98aJfRWU445Tw73oYnD3"; //Change to real id
   late StreamSubscription _streamSubscription;
   late StreamSubscription _streamSubscription1;
   late StreamSubscription _streamSubscription2;
@@ -54,59 +54,76 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
   }
 
   void _activateListeners() {
-    _streamSubscription = _database
-        .child("Shopper/$userid/Carts/ConnectedToCart")
-        .onValue
-        .listen((event) {
-      final data = event.snapshot.value;
-      print("Data $data");
-      setState(() {
-        String Fornow = "false";
-        Fornow = data.toString();
-        if (Fornow.toLowerCase() == 'true') {
-          ConnectedToCart = true;
-        } else if (Fornow.toLowerCase() == 'false') {
-          ConnectedToCart = false;
-        }
+    if (FirebaseAuth.instance.currentUser != null) {
+      _streamSubscription = _database
+          .child(
+              "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts/ConnectedToCart")
+          .onValue
+          .listen((event) {
+        final data = event.snapshot.value;
+        print("Data $data");
+        setState(() {
+          String Fornow = "false";
+          Fornow = data.toString();
+          if (Fornow.toLowerCase() == 'true') {
+            ConnectedToCart = true;
+          } else if (Fornow.toLowerCase() == 'false') {
+            ConnectedToCart = false;
+          }
+        });
       });
-    });
+    }
   }
 
   Future<int> _CheckLastnumOfProd() async {
-    _streamSubscription1 = _database
-        .child("Shopper/$userid/Carts/numOfProducts")
-        .onValue
-        .listen((event) {
-      final data = event.snapshot.value;
-      setState(() {
-        numOfProducts = (int.parse(data.toString()));
+    if (FirebaseAuth.instance.currentUser != null) {
+      _streamSubscription1 = _database
+          .child(
+              "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts/numOfProducts")
+          .onValue
+          .listen((event) {
+        final data = event.snapshot.value;
+        setState(() {
+          numOfProducts = (int.parse(data.toString()));
+        });
       });
-    });
-    print("NumOfProducts: $numOfProducts");
+      print("NumOfProducts: $numOfProducts");
+      return numOfProducts;
+    }
     return numOfProducts;
   }
 
   Future<double> _getTotal() async {
-    _streamSubscription2 =
-        _database.child("Shopper/$userid/Carts/Total").onValue.listen((event) {
-      final data = event.snapshot.value;
-      setState(() {
-        double hea = double.parse(data.toString());
-        total = (double.parse(hea.toStringAsFixed(2)));
+    if (FirebaseAuth.instance.currentUser != null) {
+      _streamSubscription2 = _database
+          .child(
+              "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts/Total")
+          .onValue
+          .listen((event) {
+        final data = event.snapshot.value;
+        setState(() {
+          double hea = double.parse(data.toString());
+          total = (double.parse(hea.toStringAsFixed(2)));
+        });
       });
-    });
-    print("total: $total");
+      print("total: $total");
+      return total;
+    }
     return total;
   }
 
   Future<int> BringLastCartNumber() async {
-    _streamSubscription1 = _database
-        .child("Shopper/$userid/Carts/LastCartNumber")
-        .onValue
-        .listen((event) {
-      final data = event.snapshot.value;
-      LastCartNumber = (int.parse(data.toString())) - 1;
-    });
+    if (FirebaseAuth.instance.currentUser != null) {
+      _streamSubscription1 = _database
+          .child(
+              "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts/LastCartNumber")
+          .onValue
+          .listen((event) {
+        final data = event.snapshot.value;
+        LastCartNumber = (int.parse(data.toString())) - 1;
+      });
+      return LastCartNumber;
+    }
     return LastCartNumber;
   }
 
@@ -149,328 +166,349 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
     return FutureBuilder<int>(
         future: user.BringLastCartNumber(),
         builder: (BuildContext context, AsyncSnapshot<int> asyn) {
-          final ref = _fb.ref().child("Shopper/$userid/Carts/${asyn.data}");
-          print("Successful ${asyn.data}");
-          String a = asyn.data.toString();
-          if (asyn.hasData) {
-            return Container(
-              height: MediaQuery.of(context).size.height * 0.713,
-              child: FirebaseAnimatedList(
-                  query: _fb.ref().child("Shopper/$userid/Carts/${asyn.data}"),
-                  duration: Duration(milliseconds: 500),
-                  itemBuilder: (BuildContext context, DataSnapshot snapshot,
-                      Animation<double> animation, int index) {
-                    numOfProducts = user.getnumOfProducts();
-                    var v = snapshot.value.toString();
-                    var g = v.replaceAll(
-                        RegExp(
-                            "{|}|Name: |Price: |Size: |0: |Category: |Brand:"),
-                        "");
-                    g.trim();
-                    var l = g.split(',');
-                    print("s" + l.toString());
-                    if (!(l[0] == "0")) {
-                      void deleteProduct() async {
-                        final Carts = _fb.ref().child("Shopper/$userid/Carts");
-                        double price =
-                            double.parse(l[4]); //price for IOS 4 android 2
-                        total = total - price;
-                        numOfProducts--;
-                        await Carts.update({
-                          'Total': total,
-                          'numOfProducts': numOfProducts,
-                        });
-                        ref.child(snapshot.key!).remove();
-                        await Carts.update({
-                          'Deleting': true,
-                        });
-                        Future.delayed(const Duration(milliseconds: 500),
-                            () async {
+          if (FirebaseAuth.instance.currentUser != null) {
+            final ref = _fb.ref().child(
+                "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts/${asyn.data}");
+            print("Successful ${asyn.data}");
+            String a = asyn.data.toString();
+            if (asyn.hasData) {
+              return Container(
+                height: MediaQuery.of(context).size.height * 0.713,
+                child: FirebaseAnimatedList(
+                    query: _fb.ref().child(
+                        "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts/${asyn.data}"),
+                    duration: Duration(milliseconds: 500),
+                    itemBuilder: (BuildContext context, DataSnapshot snapshot,
+                        Animation<double> animation, int index) {
+                      numOfProducts = user.getnumOfProducts();
+                      var v = snapshot.value.toString();
+                      var g = v.replaceAll(
+                          RegExp(
+                              "{|}|Name: |Price: |Size: |0: |Category: |Brand:"),
+                          "");
+                      g.trim();
+                      var l = g.split(',');
+                      print("s" + l.toString());
+                      if (!(l[0] == "0")) {
+                        void deleteProduct() async {
+                          final Carts = _fb.ref().child(
+                              "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts");
+                          double price =
+                              double.parse(l[4]); //price for IOS 4 android 2
+                          total = total - price;
+                          numOfProducts--;
                           await Carts.update({
-                            'Deleting': false,
+                            'Total': total,
+                            'numOfProducts': numOfProducts,
                           });
-                        });
-                        print("Total after $total numOfProducts");
-                      }
-
-                      void _showMyDialog(BuildContext context) async {
-                        return showDialog<void>(
-                            context: context,
-                            // user must tap button!
-                            builder: (BuildContext context) {
-                              return Directionality(
-                                  textDirection: TextDirection.rtl,
-                                  child: Dialog(
-                                    elevation: 0,
-                                    backgroundColor: Color(0xffffffff),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(15.0),
-                                    ),
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        SizedBox(height: 15),
-                                        Text(
-                                          "حذف المنتج",
-                                          style: TextStyle(
-                                            fontSize: 19,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                        SizedBox(height: 15),
-                                        Text(
-                                          "هل تريد حذف${l[1]} ؟", //Product name for IOS 1 android 4
-                                          style: TextStyle(
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.w400,
-                                          ),
-                                        ),
-                                        SizedBox(height: 20),
-                                        Divider(
-                                          height: 1,
-                                        ),
-                                        Container(
-                                          width:
-                                              MediaQuery.of(context).size.width,
-                                          height: 50,
-                                          child: InkWell(
-                                            highlightColor: Colors.grey[200],
-                                            onTap: () {
-                                              Navigator.of(context).pop();
-                                              deleteProduct();
-                                            },
-                                            child: Center(
-                                              child: Text(
-                                                "حذف",
-                                                style: TextStyle(
-                                                  fontSize: 18.0,
-                                                  color: Color(0xFFFE4A49),
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        Divider(
-                                          height: 1,
-                                        ),
-                                        Container(
-                                          width:
-                                              MediaQuery.of(context).size.width,
-                                          height: 50,
-                                          child: InkWell(
-                                            borderRadius: BorderRadius.only(
-                                              bottomLeft: Radius.circular(15.0),
-                                              bottomRight:
-                                                  Radius.circular(15.0),
-                                            ),
-                                            highlightColor: Colors.grey[200],
-                                            onTap: () {
-                                              Navigator.of(context).pop();
-                                            },
-                                            child: Center(
-                                              child: Text(
-                                                "إالغاء",
-                                                style: TextStyle(
-                                                  fontSize: 16.0,
-                                                  fontWeight: FontWeight.w400,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ));
+                          ref.child(snapshot.key!).remove();
+                          await Carts.update({
+                            'Deleting': true,
+                          });
+                          Future.delayed(const Duration(milliseconds: 500),
+                              () async {
+                            await Carts.update({
+                              'Deleting': false,
                             });
-                      }
+                          });
+                          print("Total after $total numOfProducts");
+                        }
 
-                      return SlideTransition(
-                          position: Tween<Offset>(
-                            begin: Offset(1, 0),
-                            end: Offset(0, 0),
-                          ).animate(CurvedAnimation(
-                              parent: animation,
-                              curve: Curves.ease,
-                              reverseCurve: Curves.ease)),
-                          child: Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Directionality(
-                                textDirection: TextDirection.rtl,
-                                child: Container(
-                                    width:
-                                        MediaQuery.of(context).size.width * 0.2,
-                                    height: MediaQuery.of(context).size.height *
-                                        0.1,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.only(
-                                        topLeft: Radius.circular(10),
-                                        topRight: Radius.circular(10),
-                                        bottomLeft: Radius.circular(10),
-                                        bottomRight: Radius.circular(10),
+                        void _showMyDialog(BuildContext context) async {
+                          return showDialog<void>(
+                              context: context,
+                              // user must tap button!
+                              builder: (BuildContext context) {
+                                return Directionality(
+                                    textDirection: TextDirection.rtl,
+                                    child: Dialog(
+                                      elevation: 0,
+                                      backgroundColor: Color(0xffffffff),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(15.0),
                                       ),
-                                      boxShadow: [
-                                        BoxShadow(
-                                            color: Color.fromRGBO(
-                                                0, 0, 0, 0.05000000074505806),
-                                            offset: Offset(0, 20),
-                                            blurRadius: 35)
-                                      ],
-                                      color: Color.fromRGBO(255, 255, 255, 1),
-                                    ),
-                                    child: Slidable(
-                                        key: ValueKey(numOfProducts),
-                                        closeOnScroll: false,
-                                        endActionPane: ActionPane(
-                                            motion: ScrollMotion(),
-                                            children: [
-                                              SlidableAction(
-                                                onPressed: _showMyDialog,
-                                                backgroundColor:
-                                                    Color(0xFFFE4A49),
-                                                foregroundColor: Colors.white,
-                                                icon: Icons.delete,
-                                                label: 'حذف المنتج',
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          SizedBox(height: 15),
+                                          Text(
+                                            "حذف المنتج",
+                                            style: TextStyle(
+                                              fontSize: 19,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          SizedBox(height: 15),
+                                          Text(
+                                            "هل تريد حذف${l[1]} ؟", //Product name for IOS 1 android 4
+                                            style: TextStyle(
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.w400,
+                                            ),
+                                          ),
+                                          SizedBox(height: 20),
+                                          Divider(
+                                            height: 1,
+                                          ),
+                                          Container(
+                                            width: MediaQuery.of(context)
+                                                .size
+                                                .width,
+                                            height: 50,
+                                            child: InkWell(
+                                              highlightColor: Colors.grey[200],
+                                              onTap: () {
+                                                Navigator.of(context).pop();
+                                                deleteProduct();
+                                              },
+                                              child: Center(
+                                                child: Text(
+                                                  "حذف",
+                                                  style: TextStyle(
+                                                    fontSize: 18.0,
+                                                    color: Color(0xFFFE4A49),
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
                                               ),
-                                            ]),
-                                        child: Stack(children: <Widget>[
-                                          Align(
-                                              alignment: Alignment.centerRight,
-                                              child: Container(
-                                                decoration: BoxDecoration(),
-                                                padding: EdgeInsets.symmetric(
-                                                  horizontal: 20,
+                                            ),
+                                          ),
+                                          Divider(
+                                            height: 1,
+                                          ),
+                                          Container(
+                                            width: MediaQuery.of(context)
+                                                .size
+                                                .width,
+                                            height: 50,
+                                            child: InkWell(
+                                              borderRadius: BorderRadius.only(
+                                                bottomLeft:
+                                                    Radius.circular(15.0),
+                                                bottomRight:
+                                                    Radius.circular(15.0),
+                                              ),
+                                              highlightColor: Colors.grey[200],
+                                              onTap: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                              child: Center(
+                                                child: Text(
+                                                  "إالغاء",
+                                                  style: TextStyle(
+                                                    fontSize: 16.0,
+                                                    fontWeight: FontWeight.w400,
+                                                  ),
                                                 ),
-                                                child: Row(
-                                                  children: <Widget>[
-                                                    Container(
-                                                      decoration:
-                                                          BoxDecoration(),
-                                                      padding:
-                                                          EdgeInsets.symmetric(
-                                                              horizontal: 0,
-                                                              vertical: 0),
-                                                      child: Row(
-                                                        mainAxisSize:
-                                                            MainAxisSize.min,
-                                                        children: <Widget>[
-                                                          Container(
-                                                            decoration:
-                                                                BoxDecoration(),
-                                                            padding: EdgeInsets
-                                                                .symmetric(
-                                                                    horizontal:
-                                                                        0,
-                                                                    vertical:
-                                                                        0),
-                                                            child: Column(
-                                                              mainAxisSize:
-                                                                  MainAxisSize
-                                                                      .min,
-                                                              children: <
-                                                                  Widget>[
-                                                                Text(
-                                                                  l[1], //Product name
-                                                                  textAlign:
-                                                                      TextAlign
-                                                                          .center,
-                                                                  style: TextStyle(
-                                                                      color: Color.fromRGBO(
-                                                                          32,
-                                                                          26,
-                                                                          37,
-                                                                          1),
-                                                                      fontSize:
-                                                                          20,
-                                                                      letterSpacing:
-                                                                          0 /*percentages not used in flutter. defaulting to zero*/,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w700,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ));
+                              });
+                        }
+
+                        return SlideTransition(
+                            position: Tween<Offset>(
+                              begin: Offset(1, 0),
+                              end: Offset(0, 0),
+                            ).animate(CurvedAnimation(
+                                parent: animation,
+                                curve: Curves.ease,
+                                reverseCurve: Curves.ease)),
+                            child: Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: Directionality(
+                                  textDirection: TextDirection.rtl,
+                                  child: Container(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.2,
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              0.1,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(10),
+                                          topRight: Radius.circular(10),
+                                          bottomLeft: Radius.circular(10),
+                                          bottomRight: Radius.circular(10),
+                                        ),
+                                        boxShadow: [
+                                          BoxShadow(
+                                              color: Color.fromRGBO(
+                                                  0, 0, 0, 0.05000000074505806),
+                                              offset: Offset(0, 20),
+                                              blurRadius: 35)
+                                        ],
+                                        color: Color.fromRGBO(255, 255, 255, 1),
+                                      ),
+                                      child: Slidable(
+                                          key: ValueKey(numOfProducts),
+                                          closeOnScroll: false,
+                                          endActionPane: ActionPane(
+                                              motion: ScrollMotion(),
+                                              children: [
+                                                SlidableAction(
+                                                  onPressed: _showMyDialog,
+                                                  backgroundColor:
+                                                      Color(0xFFFE4A49),
+                                                  foregroundColor: Colors.white,
+                                                  icon: Icons.delete,
+                                                  label: 'حذف المنتج',
+                                                ),
+                                              ]),
+                                          child: Stack(children: <Widget>[
+                                            Align(
+                                                alignment:
+                                                    Alignment.centerRight,
+                                                child: Container(
+                                                  decoration: BoxDecoration(),
+                                                  padding: EdgeInsets.symmetric(
+                                                    horizontal: 20,
+                                                  ),
+                                                  child: Row(
+                                                    children: <Widget>[
+                                                      Container(
+                                                        decoration:
+                                                            BoxDecoration(),
+                                                        padding: EdgeInsets
+                                                            .symmetric(
+                                                                horizontal: 0,
+                                                                vertical: 0),
+                                                        child: Row(
+                                                          mainAxisSize:
+                                                              MainAxisSize.min,
+                                                          children: <Widget>[
+                                                            Container(
+                                                              decoration:
+                                                                  BoxDecoration(),
+                                                              padding: EdgeInsets
+                                                                  .symmetric(
+                                                                      horizontal:
+                                                                          0,
+                                                                      vertical:
+                                                                          0),
+                                                              child: Column(
+                                                                mainAxisSize:
+                                                                    MainAxisSize
+                                                                        .min,
+                                                                children: <
+                                                                    Widget>[
+                                                                  Text(
+                                                                    l[1], //Product name
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .center,
+                                                                    style: TextStyle(
+                                                                        color: Color.fromRGBO(
+                                                                            32,
+                                                                            26,
+                                                                            37,
+                                                                            1),
+                                                                        fontSize:
+                                                                            20,
+                                                                        letterSpacing:
+                                                                            0 /*percentages not used in flutter. defaulting to zero*/,
+                                                                        fontWeight:
+                                                                            FontWeight
+                                                                                .w700,
+                                                                        height:
+                                                                            0.9),
+                                                                  ),
+                                                                  SizedBox(
                                                                       height:
-                                                                          0.9),
-                                                                ),
-                                                                SizedBox(
-                                                                    height: 10),
-                                                                Text(
-                                                                  l[3], //Product Size
-                                                                  textAlign:
-                                                                      TextAlign
-                                                                          .right,
-                                                                  style: TextStyle(
-                                                                      color: Color.fromRGBO(
-                                                                          195,
-                                                                          198,
-                                                                          201,
-                                                                          1),
-                                                                      fontSize:
-                                                                          16,
-                                                                      letterSpacing:
-                                                                          0 /*percentages not used in flutter. defaulting to zero*/,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w700,
-                                                                      height:
-                                                                          1.1538461538461537),
-                                                                ),
-                                                              ],
+                                                                          10),
+                                                                  Text(
+                                                                    l[3], //Product Size
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .right,
+                                                                    style: TextStyle(
+                                                                        color: Color.fromRGBO(
+                                                                            195,
+                                                                            198,
+                                                                            201,
+                                                                            1),
+                                                                        fontSize:
+                                                                            16,
+                                                                        letterSpacing:
+                                                                            0 /*percentages not used in flutter. defaulting to zero*/,
+                                                                        fontWeight:
+                                                                            FontWeight
+                                                                                .w700,
+                                                                        height:
+                                                                            1.1538461538461537),
+                                                                  ),
+                                                                ],
+                                                              ),
                                                             ),
-                                                          ),
-                                                        ],
+                                                          ],
+                                                        ),
                                                       ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              )),
-                                          Align(
-                                              alignment: Alignment.centerLeft,
-                                              child: Container(
-                                                decoration: BoxDecoration(),
-                                                padding: EdgeInsets.symmetric(
-                                                    horizontal: 20),
-                                                child: Row(
-                                                  mainAxisSize:
-                                                      MainAxisSize.min,
-                                                  children: <Widget>[
-                                                    Text(
-                                                      l[4], //Product Price
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      style: TextStyle(
-                                                          color: Color.fromRGBO(
-                                                              32, 26, 37, 1),
-                                                          fontSize: 20,
-                                                          letterSpacing:
-                                                              0 /*percentages not used in flutter. defaulting to zero*/,
-                                                          fontWeight:
-                                                              FontWeight.w700,
-                                                          height:
-                                                              0.8181818181818182),
-                                                    ),
-                                                    SizedBox(width: 4),
-                                                    Text(
-                                                      'ريال',
-                                                      textAlign:
-                                                          TextAlign.right,
-                                                      style: TextStyle(
-                                                          color: Color.fromRGBO(
-                                                              91, 90, 91, 1),
-                                                          fontSize: 15,
-                                                          letterSpacing:
-                                                              0 /*percentages not used in flutter. defaulting to zero*/,
-                                                          fontWeight:
-                                                              FontWeight.w600,
-                                                          height: 1.2),
-                                                    ),
-                                                  ],
-                                                ),
-                                              )),
-                                        ])))),
-                          ));
-                    }
-                    return Container();
-                  }),
-            );
+                                                    ],
+                                                  ),
+                                                )),
+                                            Align(
+                                                alignment: Alignment.centerLeft,
+                                                child: Container(
+                                                  decoration: BoxDecoration(),
+                                                  padding: EdgeInsets.symmetric(
+                                                      horizontal: 20),
+                                                  child: Row(
+                                                    mainAxisSize:
+                                                        MainAxisSize.min,
+                                                    children: <Widget>[
+                                                      Text(
+                                                        l[4], //Product Price
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                        style: TextStyle(
+                                                            color:
+                                                                Color.fromRGBO(
+                                                                    32,
+                                                                    26,
+                                                                    37,
+                                                                    1),
+                                                            fontSize: 20,
+                                                            letterSpacing:
+                                                                0 /*percentages not used in flutter. defaulting to zero*/,
+                                                            fontWeight:
+                                                                FontWeight.w700,
+                                                            height:
+                                                                0.8181818181818182),
+                                                      ),
+                                                      SizedBox(width: 4),
+                                                      Text(
+                                                        'ريال',
+                                                        textAlign:
+                                                            TextAlign.right,
+                                                        style: TextStyle(
+                                                            color:
+                                                                Color.fromRGBO(
+                                                                    91,
+                                                                    90,
+                                                                    91,
+                                                                    1),
+                                                            fontSize: 15,
+                                                            letterSpacing:
+                                                                0 /*percentages not used in flutter. defaulting to zero*/,
+                                                            fontWeight:
+                                                                FontWeight.w600,
+                                                            height: 1.2),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                )),
+                                          ])))),
+                            ));
+                      }
+                      return Container();
+                    }),
+              );
+            }
+            return Container();
           }
           return Container();
         });

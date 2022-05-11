@@ -15,7 +15,6 @@ class CardWidget extends StatefulWidget {
 
 class CardWidgetState extends State<CardWidget> {
   int points = 0;
-  String userid = "Stu2LFiw98aJfRWU445Tw73oYnD3"; //Change to real id
   final _database = FirebaseDatabase.instance.ref();
   @override
   Widget build(BuildContext context) {

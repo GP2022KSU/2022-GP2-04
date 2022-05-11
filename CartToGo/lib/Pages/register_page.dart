@@ -1,21 +1,11 @@
-import 'package:carttogo/Pages/AdminAddProduct.dart';
 import 'package:flutter/material.dart';
 import 'package:carttogo/main.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:carttogo/Pages/login_page.dart';
 import 'package:carttogo/Pages/Navigation.dart';
-import 'package:flutter/gestures.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
-import '../utils.dart';
 
 class RegisterPage extends StatefulWidget {
-  // final Function() onClickedSignIn;
-
-  // const RegisterPage({
-  //   Key? key,
-  //   required this.onClickedSignIn,
-  // }) : super(key: key);
   @override
   State<RegisterPage> createState() => _RegisterPageState();
 }
@@ -193,9 +183,6 @@ class _RegisterPageState extends State<RegisterPage> {
                               )
                                   .then((value) {
                                 print("Created New Account");
-                                //Add realtime data
-                                //Generate loyaltyCard 10
-                                //"Shopper/FirebaseAuth.instance.currentUser?.uid/Loyalty" = UID root
                                 String? UID =
                                     FirebaseAuth.instance.currentUser?.uid;
                                 AddShopper(UID.toString());
@@ -218,24 +205,6 @@ class _RegisterPageState extends State<RegisterPage> {
                         },
                         child: const Text('تسجيل ')),
                     const SizedBox(height: 15.0),
-                    // RichText(
-                    //   text: TextSpan(
-                    //     style: TextStyle(color: Colors.white, fontSize: 20),
-                    //     text: 'لديك حساب بالفعل؟',
-                    //     children: [
-                    //       TextSpan(
-                    //         recognizer: TapGestureRecognizer()
-                    //           ..onTap = widget.onClickedSignIn,
-                    //         text: 'قم بتسجيل الدخول',
-                    //         style: TextStyle(
-                    //           decoration: TextDecoration.underline,
-                    //           color: Theme.of(context).colorScheme.secondary,
-                    //         ),
-                    //       ),
-                    //     ],
-                    //   ),
-                    // )
-
                     const Text('لديك حساب بالفعل؟'),
                     TextButton(
                         onPressed: () {

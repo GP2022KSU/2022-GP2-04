@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
 
+import 'package:carttogo/Pages/welcome_page.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -8,6 +9,7 @@ import 'package:carttogo/widgets/CartInstructions.dart';
 import 'package:carttogo/widgets/ShoppingCartWidget.dart';
 import 'package:animated_button/animated_button.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class ShoppingCart extends StatefulWidget {
   Function callback;
@@ -19,7 +21,6 @@ class ShoppingCart extends StatefulWidget {
 class _ShoppingCartState extends State<ShoppingCart> {
   late bool ConnectedToCart = true;
   late bool _isLoading1;
-  String userid = "0Ia9xaePdnO5OFIVWok3STqznAI2"; //Change to real id
   final _database = FirebaseDatabase.instance.ref();
   late StreamSubscription _streamSubscription4;
   @override
@@ -37,22 +38,26 @@ class _ShoppingCartState extends State<ShoppingCart> {
   }
 
   bool _activateListeners() {
-    _streamSubscription4 = _database
-        .child("Shopper/$userid/Carts/ConnectedToCart")
-        .onValue
-        .listen((event) {
-      final data = event.snapshot.value;
+    if (FirebaseAuth.instance.currentUser != null) {
+      _streamSubscription4 = _database
+          .child(
+              "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts/ConnectedToCart")
+          .onValue
+          .listen((event) {
+        final data = event.snapshot.value;
 
-      setState(() {
-        String Fornow = "false";
-        Fornow = data.toString();
-        if (Fornow.toLowerCase() == 'true') {
-          ConnectedToCart = true;
-        } else if (Fornow.toLowerCase() == 'false') {
-          ConnectedToCart = false;
-        }
+        setState(() {
+          String Fornow = "false";
+          Fornow = data.toString();
+          if (Fornow.toLowerCase() == 'true') {
+            ConnectedToCart = true;
+          } else if (Fornow.toLowerCase() == 'false') {
+            ConnectedToCart = false;
+          }
+        });
       });
-    });
+      return ConnectedToCart;
+    }
     return ConnectedToCart;
   }
 
@@ -70,7 +75,33 @@ class _ShoppingCartState extends State<ShoppingCart> {
               fontFamily: 'CartToGo',
             ),
           ),
-          leading: Text("sss"),
+          actions: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ElevatedButton(
+                  style: ButtonStyle(
+                      elevation: MaterialStateProperty.all(3),
+                      textStyle: MaterialStateProperty.all(const TextStyle(
+                          fontSize: 17,
+                          fontFamily: 'CartToGo',
+                          fontWeight: FontWeight.bold)),
+                      fixedSize: MaterialStateProperty.all(const Size(70, 10)),
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30.0))),
+                      backgroundColor: MaterialStateProperty.all(Colors.red),
+                      foregroundColor: MaterialStateProperty.all(Colors.white)),
+                  onPressed: () async {
+                    await FirebaseAuth.instance.signOut();
+
+                    print("UID: ${FirebaseAuth.instance.currentUser?.uid}");
+
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => WelcomePage()));
+                  },
+                  child: const Text('خروج')),
+            ),
+          ],
           centerTitle: true,
           elevation: 0,
         ),

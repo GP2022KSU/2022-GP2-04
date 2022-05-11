@@ -1,25 +1,14 @@
 // ignore_for_file: prefer_const_constructors
 
-import 'dart:math';
-
-import 'package:carttogo/Pages/AdminAddProduct.dart';
 import 'package:carttogo/Pages/Navigation.dart';
+import 'package:carttogo/Pages/Products_List_Admin.dart';
 import 'package:carttogo/Pages/register_page.dart';
 import 'package:carttogo/Pages/forgetPassword_page.dart';
 import 'package:carttogo/main.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-import '../utils.dart';
-
 class LoginPage extends StatefulWidget {
-  // final VoidCallback onClickedSignUp;
-
-  // const LoginPage({
-  //   Key? key,
-  //   required this.onClickedSignUp,
-  // }) : super(key: key);
-
   @override
   State<LoginPage> createState() => _LoginPageState();
 }
@@ -106,15 +95,13 @@ class _LoginPageState extends State<LoginPage> {
                                   }
                                 },
                                 onChanged: (value) {})),
-
                         GestureDetector(
                           child: Text(
-                            'نسيت كلمة المرور؟?',
+                            ' نسيت كلمة المرور؟ اضغط هنا',
                             style: TextStyle(
-                              decoration: TextDecoration.underline,
                               color: appColor,
                               fontWeight: FontWeight.bold,
-                              fontSize: 20,
+                              fontSize: 17,
                             ),
                           ),
                           onTap: () =>
@@ -122,18 +109,6 @@ class _LoginPageState extends State<LoginPage> {
                             builder: (context) => ForgetPassword(),
                           )),
                         ),
-                        // TextButton(
-                        //     onPressed: () {
-                        //       Navigator.push(context,
-                        //           MaterialPageRoute(builder: (context) {
-                        //         return ForgetPassword();
-                        //       }));
-                        //     },
-                        //     child: const Text(
-                        //       'نسيت كلمة المرور؟',
-                        //       style: TextStyle(
-                        //           color: appColor, fontWeight: FontWeight.bold),
-                        //     )),
 
                         const SizedBox(height: 80.0),
                         //login button
@@ -171,7 +146,7 @@ class _LoginPageState extends State<LoginPage> {
                                           context,
                                           MaterialPageRoute(
                                               builder: (context) =>
-                                                  AdminAddProduct()));
+                                                  Products_List_Admin()));
                                     } else {
                                       print("Shopper Logged in");
                                       Navigator.push(
@@ -195,23 +170,6 @@ class _LoginPageState extends State<LoginPage> {
                             },
                             child: const Text('تسجيل الدخول')),
                         const SizedBox(height: 15.0),
-                        // RichText(
-                        //   text: TextSpan(
-                        //     style: TextStyle(color: Colors.white, fontSize: 20),
-                        //     text: 'متسوق جديد؟',
-                        //     children: [
-                        //       TextSpan(
-                        //         recognizer: TapGestureRecognizer()
-                        //           ..onTap = widget.onClickedSignUp,
-                        //         text: 'قم بإنشاء حساب',
-                        //         style: TextStyle(
-                        //           decoration: TextDecoration.underline,
-                        //           color: Theme.of(context).colorScheme.secondary,
-                        //         ),
-                        //       ),
-                        //     ],
-                        //   ),
-                        // )
                         const Text('متسوق جديد؟'),
                         TextButton(
                             onPressed: () {
