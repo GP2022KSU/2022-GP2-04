@@ -1,3 +1,4 @@
+import 'package:carttogo/Pages/AdminAddProduct.dart';
 import 'package:flutter/material.dart';
 import 'package:carttogo/main.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -5,7 +6,7 @@ import 'package:carttogo/Pages/login_page.dart';
 import 'package:carttogo/Pages/Navigation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
+import 'package:firebase_database/firebase_database.dart';
 import '../utils.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -61,7 +62,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                     color: appColor)),
                             validator: (value) {
                               if (value!.length == 0) {
-                                return 'الرجاء كتاتبة اسم المستخدم';
+                                return 'الرجاء كتابة اسم المستخدم';
                               }
                             },
                             onChanged: (value) {})),
@@ -126,11 +127,12 @@ class _RegisterPageState extends State<RegisterPage> {
                               if (value.length < 8) {
                                 return ("كلمة المرور يجب أن تتكون من 8 خانات فأعلى");
                               }
-                              if (!(value.contains(RegExp(r'[A-Z]'), 0) ||
-                                  value.contains(RegExp(r'[a-z]'), 0) ||
-                                  value.contains(RegExp(r'[0-9]'), 0))) {
+                              if (!(value.contains(RegExp(r'[A-Z]')) &&
+                                  value.contains(RegExp(r'[a-z]')) &&
+                                  value.contains(RegExp(r'[0-9]')))) {
                                 return "كلمة المرور يجب ان تحتوي على حرف كبير وحرف صغير ورقم";
                               }
+                              return null;
                             },
                             onChanged: (value) {})),
                     const SizedBox(height: 10.0),
@@ -181,38 +183,37 @@ class _RegisterPageState extends State<RegisterPage> {
                                 MaterialStateProperty.all(appColor),
                             foregroundColor:
                                 MaterialStateProperty.all(Colors.white)),
-                        onPressed: () {
-                          showDialog(
-                            context: context,
-                            barrierDismissible: false,
-                            builder: (context) =>
-                                Center(child: CircularProgressIndicator()),
-                          );
-                          try {
-                            FirebaseAuth.instance
-                                .createUserWithEmailAndPassword(
-                                    email: _emailController.text,
-                                    password: _passwordController.text)
-                                .then((value) {
-                              print("Created New Account");
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => Navi()));
-                            }).onError((error, stackTrace) {
-                              print("Error ${error.toString()}");
-                            });
-                          } on FirebaseAuthException catch (e) {
-                            print(e);
-                            Utils.showSnackBar(e.message);
-                            navigatorKey.currentState!
-                                .popUntil((route) => route.isFirst);
-                          }
-                          // الي تحت يمكن احذفه
+                        onPressed: () async {
                           if (_formKey.currentState!.validate()) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('Processing Data')),
-                            );
+                            try {
+                              await FirebaseAuth.instance
+                                  .createUserWithEmailAndPassword(
+                                email: _emailController.text,
+                                password: _passwordController.text,
+                              )
+                                  .then((value) {
+                                print("Created New Account");
+                                //Add realtime data
+                                //Generate loyaltyCard 10
+                                //"Shopper/FirebaseAuth.instance.currentUser?.uid/Loyalty" = UID root
+                                String? UID =
+                                    FirebaseAuth.instance.currentUser?.uid;
+                                AddShopper(UID.toString());
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => Navi()));
+                              });
+                            } on FirebaseAuthException catch (e) {
+                              if (e.code == 'weak-password') {
+                                _showMyDialog("كلمة المرور ضعيفة");
+                              } else if (e.code == 'email-already-in-use') {
+                                _showMyDialog(
+                                    "البريد الالكتروني مستخدم من قبل متسوق اخر");
+                              }
+                              print(e);
+                            }
+                            CircularProgressIndicator();
                           }
                         },
                         child: const Text('تسجيل ')),
@@ -252,5 +253,71 @@ class _RegisterPageState extends State<RegisterPage> {
             ),
           ),
         ));
+  }
+
+  void AddShopper(String uid) async {
+    DatabaseReference ref = FirebaseDatabase.instance.ref("Shopper/$uid");
+    //Generate loyaltycard id 10 QRUidFinder unique id
+    await ref.set({
+      "LoyaltyCardID": "7824JS8D9F", //need loyaltycard id
+      "Points": 0,
+      "Username": _userNameController.text,
+      "email": _emailController.text,
+      "Carts": {
+        "ConnectedToCart": false, //always false
+        "Deleting": false, //always false
+        "LastCartNumber": 1, //always 1
+        "Total": 0, //always 0
+        "numOfProducts": 0, //always 0
+      }
+    });
+    DatabaseReference QRUid = FirebaseDatabase.instance
+        .ref("QRUidFinder/7824JS8D9F"); //need loyaltycard id
+    await QRUid.set({
+      //need loyaltycard id
+      "UID": uid,
+    });
+  }
+
+  void _showMyDialog(String error) async {
+    return showDialog<void>(
+        context: context,
+        // user must tap button!
+        builder: (BuildContext context) {
+          return Directionality(
+              textDirection: TextDirection.rtl,
+              child: Dialog(
+                elevation: 0,
+                backgroundColor: Color(0xffffffff),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15.0),
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SizedBox(height: 15),
+                    Text(
+                      "حدث خطأ",
+                      style: TextStyle(
+                          fontSize: 19,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.red),
+                    ),
+                    SizedBox(height: 15),
+                    Text(
+                      error, //Product name for IOS 1 android 4
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                    SizedBox(height: 20),
+                    Divider(
+                      height: 1,
+                    ),
+                  ],
+                ),
+              ));
+        });
   }
 }

@@ -39,9 +39,11 @@ class MainPage extends StatelessWidget {
               return Center(child: CircularProgressIndicator());
             } else if (snapshot.hasError) {
               return Center(child: Text('! مشكلة ما قد حدثت'));
-            } else if (snapshot.hasData) {
+            }
+            /* else if (snapshot.hasData) {
               return Navi();
-            } else {
+            }*/
+            else {
               return WelcomePage();
             }
           },

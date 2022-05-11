@@ -1,64 +1,93 @@
 library carttogo.globals;
 
 import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
-String userid = "Stu2LFiw98aJfRWU445Tw73oYnD3";
 final bool check = false;
 void main() {
-  DatabaseReference starCountRef =
-      FirebaseDatabase.instance.ref("Shopper/$userid/LoyaltyCardID");
+  DatabaseReference starCountRef = FirebaseDatabase.instance
+      .ref("Shopper/${FirebaseAuth.instance.currentUser?.uid}/LoyaltyCardID");
   starCountRef.onValue.listen((DatabaseEvent event) {
     final LoyaltyCardID = event.snapshot.value;
   });
 
-  DatabaseReference starCountRef1 =
-      FirebaseDatabase.instance.ref("Shopper/$userid/Username");
+  DatabaseReference starCountRef1 = FirebaseDatabase.instance
+      .ref("Shopper/${FirebaseAuth.instance.currentUser?.uid}/Username");
   starCountRef1.onValue.listen((DatabaseEvent event) {
     final Username = event.snapshot.value;
   });
 
-  DatabaseReference starCountRef2 =
-      FirebaseDatabase.instance.ref("Shopper/$userid/Points");
+  DatabaseReference starCountRef2 = FirebaseDatabase.instance
+      .ref("Shopper/${FirebaseAuth.instance.currentUser?.uid}/Points");
   starCountRef2.onValue.listen((DatabaseEvent event) {
     final points = event.snapshot.value;
   });
 }
 
 Future<String> BringLoyaltyCardID() async {
-  final ref = FirebaseDatabase.instance.ref();
-  final snapshot = await ref.child("Shopper/$userid/LoyaltyCardID").get();
-  final data = await snapshot.value.toString();
-  LoyaltyCardID = await data;
-  return data;
+  if (FirebaseAuth.instance.currentUser != null) {
+    print(FirebaseAuth.instance.currentUser?.uid);
+
+    final ref = FirebaseDatabase.instance.ref();
+    final snapshot = await ref
+        .child(
+            "Shopper/${FirebaseAuth.instance.currentUser?.uid}/LoyaltyCardID")
+        .get();
+    final data = await snapshot.value.toString();
+    LoyaltyCardID = await data;
+    return data;
+  }
+  return "";
 }
 
 Future<String> BirngUsername() async {
-  final ref = FirebaseDatabase.instance.ref();
-  final snapshot = await ref.child("Shopper/$userid/Username").get();
-  return Username = snapshot.value.toString();
+  if (FirebaseAuth.instance.currentUser != null) {
+    final ref = FirebaseDatabase.instance.ref();
+    final snapshot = await ref
+        .child("Shopper/${FirebaseAuth.instance.currentUser?.uid}/Username")
+        .get();
+    return Username = snapshot.value.toString();
+  }
+  return "";
 }
 
 Future<int> BringPoints() async {
-  final ref = FirebaseDatabase.instance.ref();
-  final snapshot = await ref.child("Shopper/$userid/Points").get();
-  return points = int.parse(snapshot.value.toString());
+  if (FirebaseAuth.instance.currentUser != null) {
+    final ref = FirebaseDatabase.instance.ref();
+    final snapshot = await ref
+        .child("Shopper/${FirebaseAuth.instance.currentUser?.uid}/Points")
+        .get();
+    return points = int.parse(snapshot.value.toString());
+  }
+  return 0;
 }
 
 Future<int> BringLastCartNumber() async {
-  final ref = FirebaseDatabase.instance.ref();
-  final snapshot =
-      await ref.child("Shopper/$userid/Carts/LastCartNumber").get();
-  print("Last Cart Number: $LastCartNumber");
-  LastCartNumber = await (int.parse(snapshot.value.toString())) - 1;
-  return LastCartNumber;
+  if (FirebaseAuth.instance.currentUser != null) {
+    final ref = FirebaseDatabase.instance.ref();
+    final snapshot = await ref
+        .child(
+            "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts/LastCartNumber")
+        .get();
+    print("Last Cart Number: $LastCartNumber");
+    LastCartNumber = await (int.parse(snapshot.value.toString())) - 1;
+    return LastCartNumber;
+  }
+  return 0;
 }
 
 Future<int> BringNumOfProducts() async {
-  final ref = FirebaseDatabase.instance.ref();
-  final snapshot = await ref.child("Shopper/$userid/Carts/numOfProducts").get();
-  print("Last Cart Number: $LastCartNumber");
-  numOfProducts = await (int.parse(snapshot.value.toString()));
-  return numOfProducts;
+  if (FirebaseAuth.instance.currentUser != null) {
+    final ref = FirebaseDatabase.instance.ref();
+    final snapshot = await ref
+        .child(
+            "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts/numOfProducts")
+        .get();
+    print("Last Cart Number: $LastCartNumber");
+    numOfProducts = await (int.parse(snapshot.value.toString()));
+    return numOfProducts;
+  }
+  return 0;
 }
 
 String getLoyaltyCardID() {

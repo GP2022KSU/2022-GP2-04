@@ -2,13 +2,14 @@ class Product {
   final String name;
   final String size;
   final String price;
-
-  Product(
-      {required this.name,
-      required this.size,
-      required this.price,
-      String quantity});
-
+  String quantity;
+  Product({
+    required this.name,
+    required this.size,
+    required this.price,
+    required this.quantity,
+  });
+/*
   factory Product.fromRTDB(Map<String, dynamic> data) {
     return Product(
       name: data['Name'] ?? 'null',
@@ -16,4 +17,5 @@ class Product {
       price: data["Price"] ?? "0.0",
     );
   }
+  */
 }

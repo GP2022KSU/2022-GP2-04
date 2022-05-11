@@ -19,7 +19,7 @@ class ShoppingCart extends StatefulWidget {
 class _ShoppingCartState extends State<ShoppingCart> {
   late bool ConnectedToCart = true;
   late bool _isLoading1;
-  String userid = "Stu2LFiw98aJfRWU445Tw73oYnD3"; //Change to real id
+  String userid = "0Ia9xaePdnO5OFIVWok3STqznAI2"; //Change to real id
   final _database = FirebaseDatabase.instance.ref();
   late StreamSubscription _streamSubscription4;
   @override
@@ -70,6 +70,7 @@ class _ShoppingCartState extends State<ShoppingCart> {
               fontFamily: 'CartToGo',
             ),
           ),
+          leading: Text("sss"),
           centerTitle: true,
           elevation: 0,
         ),
