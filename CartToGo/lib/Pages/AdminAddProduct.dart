@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:carttogo/main.dart';
@@ -53,7 +52,7 @@ class RealtimeDatabaseInsertState extends State<RealtimeDatabaseInsert> {
 
         body: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.all(20.0),
+            padding: const EdgeInsets.all(30.0),
             child:
             Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -63,7 +62,7 @@ class RealtimeDatabaseInsertState extends State<RealtimeDatabaseInsert> {
                   Directionality(
                     textDirection: TextDirection.rtl,
                     child: TextFormField(
-                      keyboardType: TextInputType.text,
+                        keyboardType: TextInputType.text,
                       controller: pNameController,
                       decoration: const InputDecoration(
                         labelText: "الإسم",
@@ -79,12 +78,15 @@ class RealtimeDatabaseInsertState extends State<RealtimeDatabaseInsert> {
                           if (value == null || value.isEmpty) {
                             return 'الرجاء كتابة إسم المنتج';
                           }
+                          if (value.contains(RegExp(r'[0-9]'))) {
+                            return 'اسم المنتج يجب ان لا يحتوي على ارقام';
+                        }
                           return null;
                         },
                         onChanged: (value) {}
                     ),
                   ),
-                  const SizedBox(height: 15),
+                  const SizedBox(height: 14),
 
               // الباركود نمبر
                   Directionality(
@@ -111,12 +113,16 @@ class RealtimeDatabaseInsertState extends State<RealtimeDatabaseInsert> {
                           if (value == null || value.isEmpty) {
                             return 'الرجاء كتابة الرمز الشريطي للمنتج';
                           }
+                          if (value.contains(RegExp(r'[A-Z]')) &&
+                              value.contains(RegExp(r'[a-z]'))){
+                            return 'الرمز الشريطي للمنتج يجب ان لا يحتوي على احرف';
+                          }
                           return null;
                         },
                         onChanged: (value) {}
                     ),
                   ),
-                  const SizedBox(height: 15),
+                  const SizedBox(height: 14),
 
               //العلامة التجارية
                   Directionality(
@@ -138,12 +144,15 @@ class RealtimeDatabaseInsertState extends State<RealtimeDatabaseInsert> {
                           if (value == null || value.isEmpty) {
                             return 'الرجاء كتابة العلامة التجارية المنتج';
                           }
+                          if (value.contains(RegExp(r'[0-9]'))) {
+                            return 'العلامة التجارية للمنتج يجب ان لا تحتوي على ارقام';
+                          }
                           return null;
                         },
                         onChanged: (value) {}
                     ),
                   ),
-                  const SizedBox(height: 15),
+                  const SizedBox(height: 14),
 
               //الفئة
                   Directionality(
@@ -165,13 +174,16 @@ class RealtimeDatabaseInsertState extends State<RealtimeDatabaseInsert> {
                           if (value == null || value.isEmpty) {
                             return 'الرجاء كتابة فئة المنتج';
                           }
+                          if (value.contains(RegExp(r'[0-9]'))) {
+                            return 'فئة المنتج يجب ان لا تحتوي على ارقام';
+                          }
                           return null;
                         },
                         onChanged: (value) {}
                     ),
                   ),
 
-                  const SizedBox(height: 15),
+                  const SizedBox(height: 14),
 
               //السعر
                   Directionality(
@@ -197,12 +209,16 @@ class RealtimeDatabaseInsertState extends State<RealtimeDatabaseInsert> {
                           if (value == null || value.isEmpty) {
                             return 'الرجاء كتابة سعر المنتج';
                           }
+                          if (value.contains(RegExp(r'[A-Z]')) &&
+                              value.contains(RegExp(r'[a-z]'))){
+                            return 'سعر المنتج يجب ان لا يحتوي على احرف';
+                          }
                           return null;
                         },
                         onChanged: (value) {}
                     ),
                   ),
-                  const SizedBox(height: 15),
+                  const SizedBox(height: 14),
 
               //الكمية
                   Directionality(
@@ -228,12 +244,16 @@ class RealtimeDatabaseInsertState extends State<RealtimeDatabaseInsert> {
                           if (value == null || value.isEmpty) {
                             return 'الرجاء كتابة كمية المنتج';
                           }
+                          if (value.contains(RegExp(r'[A-Z]')) &&
+                              value.contains(RegExp(r'[a-z]'))){
+                            return 'الرمز الشريطي للمنتج يجب ان لا يحتوي على احرف';
+                          }
                           return null;
                         },
                         onChanged: (value) {}
                     ),
                   ),
-                  const SizedBox(height: 15),
+                  const SizedBox(height: 14),
 
               // الحجم
                   Directionality(
@@ -255,12 +275,15 @@ class RealtimeDatabaseInsertState extends State<RealtimeDatabaseInsert> {
                           if (value == null || value.isEmpty) {
                             return 'الرجاء كتابة حجم المنتج';
                           }
+                          if (value.contains(RegExp(r'[0-9]'))) {
+                            return 'حجم المنتج يجب ان لا يحتوي على ارقام';
+                          }
                           return null;
                         },
                         onChanged: (value) {}
                     ),
                   ),
-                  const SizedBox(height: 15),
+                  const SizedBox(height: 14),
 
                   // الموقع
                   Directionality(
@@ -282,14 +305,17 @@ class RealtimeDatabaseInsertState extends State<RealtimeDatabaseInsert> {
                           if (value == null || value.isEmpty) {
                             return 'الرجاء كتابة موقع المنتج';
                           }
+                          if (value.contains(RegExp(r'[0-9]'))) {
+                            return 'موقع المنتج يجب ان لا تحتوي على ارقام';
+                          }
                           return null;
                         },
                         onChanged: (value) {}
                     ),
                   ),
-                  const SizedBox(height: 15),
+                  const SizedBox(height: 14),
 
-                  SizedBox(height: 20,
+                  SizedBox(height: 11,
                   ),
                   ElevatedButton(
                       style: ButtonStyle(
@@ -299,7 +325,7 @@ class RealtimeDatabaseInsertState extends State<RealtimeDatabaseInsert> {
                           fixedSize: MaterialStateProperty.all(const Size(270, 50)),
                           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                               RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(30.0))),
+                                  borderRadius: BorderRadius.circular(90.0))),
                           backgroundColor: MaterialStateProperty.all(appColor),
                           foregroundColor: MaterialStateProperty.all(Colors.white)),
                       onPressed: () {
@@ -328,14 +354,16 @@ class RealtimeDatabaseInsertState extends State<RealtimeDatabaseInsert> {
 void insertData(String name, String barcode, String brand, String category , String price, String quantity, String size , String location){
   // String key = databaseRef.child("Products").push().key;
   //databaseRef.child("Products").child(key).set({//product as parent
-  databaseRef.child("Products").child("$barcode").set({//product as parent
+  var intBarcode = int.tryParse(barcode);
+
+  databaseRef.child("Products").child("$intBarcode").set({//product as parent
     //  'ID' : key,//uni ID
       'Name': name,
-      'barcodeNumber' : barcode,
+      //'barcodeNumber' : int.tryParse(barcode),
       'Brand' : brand,
       'Category' :category,
-      'Price' : price,
-      'Quantity' :quantity,
+      'Price' : int.tryParse(price),
+      'Quantity' :int.tryParse(quantity),
       'Size' : size,
       'Location': location,
     });
