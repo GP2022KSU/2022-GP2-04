@@ -36,12 +36,15 @@ class _CardhistoryState extends State<Cardhistory> {
                   ),
                 ),
               ),
+              SizedBox(
+                height: 20,
+              ),
               Center(
                   child: Container(
                       child: Transform.rotate(
                 angle: -1.2492672422141295e-13 * (math.pi / 180),
                 child: Text(
-                  'لا يوجد سجل',
+                  'لا يوجد سجل للنقاط',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                       color: Color.fromARGB(219, 100, 98, 98),

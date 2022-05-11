@@ -138,13 +138,19 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
                     child: ScrollingFabAnimated(
                       width: MediaQuery.of(context).size.width * 0.9,
                       icon: Text(
-                        "${total.toString()}",
-                        style: TextStyle(color: Colors.white, fontSize: 16.0),
-                        textDirection: TextDirection.ltr,
+                        "${total.toString()} ريال ",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.bold),
+                        textDirection: TextDirection.rtl,
                       ),
                       text: Text(
-                        '   الأجمالي:',
-                        style: TextStyle(color: Colors.white, fontSize: 16.0),
+                        '   الإجمالي:',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.bold),
                         textDirection: TextDirection.rtl,
                       ),
                       onPress: () {},
@@ -295,7 +301,7 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
                                               },
                                               child: Center(
                                                 child: Text(
-                                                  "إالغاء",
+                                                  "إلغاء",
                                                   style: TextStyle(
                                                     fontSize: 16.0,
                                                     fontWeight: FontWeight.w400,
