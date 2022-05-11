@@ -5,7 +5,7 @@ import 'package:carttogo/main.dart';
 import 'package:carttogo/Pages/Navigation.dart';
 import 'dart:async';
 import 'package:flutter/services.dart';
-
+import 'package:carttogo/Pages/Products_List_Admin.dart';
 
 class RealtimeDatabaseInsert extends StatefulWidget {
   RealtimeDatabaseInsert({Key? key}) : super(key: key);
@@ -275,9 +275,6 @@ class RealtimeDatabaseInsertState extends State<RealtimeDatabaseInsert> {
                           if (value == null || value.isEmpty) {
                             return 'الرجاء كتابة حجم المنتج';
                           }
-                          if (value.contains(RegExp(r'[0-9]'))) {
-                            return 'حجم المنتج يجب ان لا يحتوي على ارقام';
-                          }
                           return null;
                         },
                         onChanged: (value) {}
@@ -343,6 +340,11 @@ class RealtimeDatabaseInsertState extends State<RealtimeDatabaseInsert> {
                        pPriceController.text,  pQuantityController.text,
                          pSizeController.text,pLocationController.text);
                    }
+
+                       Navigator.push(context, MaterialPageRoute(builder: (context) {
+                         return Products_List_Admin();
+                       }));
+
                       },
                       child: const Text('إضافة المنتج')),
 
