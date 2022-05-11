@@ -30,7 +30,11 @@ class Admin_Products_Widgets extends StatelessWidget {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(18.0),
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+
+                      // Delete prodect method
+
+                    },
                     color: Color.fromARGB(215, 215, 59, 48),
                   ),
                   SizedBox(
@@ -38,7 +42,13 @@ class Admin_Products_Widgets extends StatelessWidget {
                   ),
                   IconButton(
                       padding: EdgeInsets.all(11.0),
-                      onPressed: () {},
+                      onPressed: () {
+
+
+                        // Modify prodect method
+
+
+                      },
                       icon: Icon(Icons.edit))
                 ]),
           ),
@@ -138,6 +148,12 @@ class Admin_Products_Widgets extends StatelessWidget {
       ),
     );
   }
+
+
+
+
+
+
 }
 
 // Container(
