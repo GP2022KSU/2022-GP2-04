@@ -237,7 +237,7 @@ class _RegisterPageState extends State<RegisterPage> {
       "Carts": {
         "ConnectedToCart": false, //always false
         "DeletingProduct": false, //always false
-        "FutrueCartNumber": 1, //always 1
+        "FutureCartNumber": 1, //always 1
         "Total": 0, //always 0
         "NumOfProducts": 0, //always 0
       }
