@@ -1,4 +1,5 @@
 
+
 #include <LiquidCrystal_I2C.h>
 #include <Wire.h>
 #include <SoftwareSerial.h>
@@ -13,8 +14,8 @@
 #include <addons/RTDBHelper.h>
 
 //WiFi info to authenticate
-#define WIFI_SSID "CartToGo"
-#define WIFI_PASSWORD "11223344"
+#define WIFI_SSID "Alhomaidhi"
+#define WIFI_PASSWORD "0504356565"
 
 //Firebase info to authenticate
 #define API_KEY "AIzaSyCFoxsSG6CUrgi5DuiFz6Ph1v2kjdoDbcg"
@@ -158,8 +159,40 @@ String LoyaltyCard = "";
 boolean LoyaltyCardConnection() {
   char ID;
   boolean con = false;
+
+
   lcd.clear();
-  lcd.print("Scan your QR");
+//طباعة عبارة "امسح الQR على الشاشة
+byte al [8] = {5, 5, 5, 5, 29, 0, 0, 0}; //ال
+  byte s [8] = {0, 0, 21, 21, 31, 0, 0, 0};      //س
+  byte a [8] = {4, 4, 4, 4, 4, 4, 0, 0}; //ا
+  byte h [8] = {0, 0, 12, 4, 7, 12, 8, 12};    //ح
+  byte m [8] = {0, 0, 0, 0, 31, 10, 14, 0}; //م
+  byte Q [8] = {12, 18, 18, 18, 18, 26, 22, 15};     //Q
+  byte R [8] = {30,18,18,30,20,20,20,20};   //R
+
+  lcd.createChar(0, a);
+  lcd.createChar(1, m);
+  lcd.createChar(2, s);
+  lcd.createChar(3, h);
+  lcd.createChar(4, al);
+  lcd.createChar(5, Q);
+    lcd.createChar(6, R);
+ 
+
+  lcd.home();
+  lcd.setCursor(15, 0);
+  lcd.rightToLeft();
+  lcd.write(0);
+  lcd.write(1);
+  lcd.write(2);
+  lcd.write(3);
+  lcd.setCursor(11, 0);
+  lcd.write(4);
+  lcd.write(6);
+  lcd.write(5);
+
+  //lcd.print("Scan your QR");
   while (con == false) {
     while (mySerial.available()) {
       ID = mySerial.read(); //Read 1 Byte of data and store it in a character variable
@@ -171,11 +204,45 @@ boolean LoyaltyCardConnection() {
         con = true;
       }
       else {
-        lcd.clear();
-        lcd.setCursor(0, 0);
-        lcd.print("LoyaltyCard not");
-        lcd.setCursor(0, 1);
-        lcd.print("found,TryAgain");
+
+//طباعة عبارة "غير مسجلة"
+ lcd.clear();
+        byte g [8] = {4, 0, 7, 4, 4, 31, 0, 0}; //غ
+        byte y [8] = {0, 0, 0, 4, 4, 31, 0, 6};  //ي
+        byte r [8] = {0, 0, 0, 0, 4, 7, 8, 16}; //ر
+        byte m [8] = {0, 0, 0, 0, 0, 31, 5, 7}; //م
+        byte s [8] = {0, 0, 21, 21, 21, 31, 0, 0};  //س
+        byte gg [8] = {0, 0, 14, 2, 2, 31, 0, 4};   //ج
+        byte t [8] = {13,1,29,21,29,7,0,0};                //لة
+
+         lcd.createChar(0, g);
+  lcd.createChar(1, y);
+  lcd.createChar(2, r);
+  lcd.createChar(3, m);
+  lcd.createChar(4, s);
+  lcd.createChar(5, gg);
+  lcd.createChar(6, t);
+
+  lcd.home();
+  lcd.setCursor(15, 0);
+  lcd.rightToLeft();
+  lcd.write(0);
+  lcd.write(1);
+  lcd.write(2);
+   lcd.setCursor(11, 0);
+  lcd.write(3);
+  lcd.write(4);
+  lcd.write(5);
+  lcd.write(6);
+  
+        
+        
+//        lcd.clear();
+//        lcd.setCursor(0, 0);
+//        lcd.print("LoyaltyCard not");
+//        lcd.setCursor(0, 1);
+//        lcd.print("found,TryAgain");
+        
         LoyaltyCard = "";
         con = false;
       }
@@ -210,8 +277,8 @@ boolean LoyaltyCardConnectionFirebase(String QRid) {
         Serial.print("Add Cart: " + GetUid);
         if (Firebase.setInt(fbdo, GetUid + "/" + CartNumber + "/0", 0)) {
           if (Firebase.setBool(fbdo, GetUid + "/ConnectedToCart", true)) {
-            if(Firebase.setBool(fbdo, GetUid + "/DeletingProduct", false));
-            if(Firebase.setInt(fbdo, GetUid + "/numOfProducts", 0 ));
+            if (Firebase.setBool(fbdo, GetUid + "/DeletingProduct", false));
+            if (Firebase.setInt(fbdo, GetUid + "/numOfProducts", 0 ));
             if (Firebase.setInt(fbdo, GetUid + "/Total", 0.0)) { //Set a new total variable for the cart
               return true;
             }
@@ -227,8 +294,8 @@ float total = 0.0;
 int count = 0;
 int countProducts = 0;
 int numOfProducts = 0;
-bool checkDelete=false;
-float lastPrice=0.0;
+bool checkDelete = false;
+float lastPrice = 0.0;
 void loop()
 {
   String cartsPath = "/Shopper/" + UID.to<String>() + "/Carts";
@@ -244,12 +311,12 @@ void loop()
   }
   if (Firebase.ready() == 1 && signupOK && WiFi.status() == 3) {
     String cartsPath = "/Shopper/" + UID.to<String>() + "/Carts";
-    if (Firebase.getBool(fbdo, cartsPath+"/DeletingProduct")) checkDelete = fbdo.to<bool>();
-    if (countProducts >= 1 && CartConnection != false && checkDelete==true) {
-        if (Firebase.getFloat(fbdo, cartsPath+"/Total")) total = fbdo.to<float>();
-        if (Firebase.getInt(fbdo, cartsPath+"/numOfProducts")) numOfProducts = fbdo.to<int>();
-        //if (Firebase.getFloat(fbdo, cartsPath+"/lastPrice")) lastPrice = fbdo.to<float>();
-        checkTotalAndCount(total);
+    if (Firebase.getBool(fbdo, cartsPath + "/DeletingProduct")) checkDelete = fbdo.to<bool>();
+    if (countProducts >= 1 && CartConnection != false && checkDelete == true) {
+      if (Firebase.getFloat(fbdo, cartsPath + "/Total")) total = fbdo.to<float>();
+      if (Firebase.getInt(fbdo, cartsPath + "/numOfProducts")) numOfProducts = fbdo.to<int>();
+      //if (Firebase.getFloat(fbdo, cartsPath+"/lastPrice")) lastPrice = fbdo.to<float>();
+      checkTotalAndCount(total);
     }
     if (mySerial.available() && CartConnection != false) { //Check if there is Incoming Data in the Serial Buffer
 
@@ -267,14 +334,14 @@ void loop()
       if (Firebase.RTDB.getJSON(&fbdo, barcode1)) { //if barcode that is scanned is available in the database
         json = fbdo.to<FirebaseJson>().raw(); //store Json of the scanned barcode
         FirebaseJsonData getQuan;
-        int Qunatity=0;
+        int Qunatity = 0;
         json.get(price, "/Price");
         json.get(name1, "/Name");
         json.get(getQuan, "/Quantity");
-        Qunatity=getQuan.to<int>();
+        Qunatity = getQuan.to<int>();
         Qunatity--;
         Firebase.setInt(fbdo, barcode1 + "/Quantity", Qunatity);
-        json.set("/Barcode",barcode);
+        json.set("/Barcode", barcode);
         json.remove("/Quantity");
         /*
           if (getQuan.to<int>() != 1 && (Firebase.RTDB.getJSON(&fbdo, PathCart))==false) {
