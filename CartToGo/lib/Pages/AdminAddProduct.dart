@@ -37,6 +37,26 @@ class RealtimeDatabaseInsertState extends State<RealtimeDatabaseInsert> {
         backgroundColor: Colors.white,
 
         appBar: AppBar(
+
+          actions: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: IconButton(
+                iconSize: 44,
+                alignment: Alignment.topRight ,
+                color: appColor,
+                  onPressed: (){
+                    Navigator.push(context, MaterialPageRoute(builder: (context) {
+                      return Products_List_Admin();
+                    }));
+                    },
+                icon: Icon(Icons.keyboard_arrow_right),
+                //backgroundColor: appColor,
+              ),
+            ),
+          ],
+
+
           backgroundColor: Colors.white24,
           title: Text(
             "إضافة منتج جديد",
@@ -282,36 +302,6 @@ class RealtimeDatabaseInsertState extends State<RealtimeDatabaseInsert> {
                   ),
                   const SizedBox(height: 14),
 
-                  // الموقع
-                  Directionality(
-                    textDirection: TextDirection.rtl,
-                    child: TextFormField(
-                      keyboardType: TextInputType.text,
-                      controller: pLocationController,
-                      decoration: const InputDecoration(
-                        labelText: "الموقع",
-                        labelStyle: TextStyle(fontSize: 20, color: Colors.black),
-                        hintText: "أدخل موقع المنتج ",
-                        hintStyle: TextStyle(fontSize: 18),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                          borderSide: BorderSide(width: 2, color: appColor),
-                        ),
-                      ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'الرجاء كتابة موقع المنتج';
-                          }
-                          if (value.contains(RegExp(r'[0-9]'))) {
-                            return 'موقع المنتج يجب ان لا تحتوي على ارقام';
-                          }
-                          return null;
-                        },
-                        onChanged: (value) {}
-                    ),
-                  ),
-                  const SizedBox(height: 14),
-
                   SizedBox(height: 11,
                   ),
                   ElevatedButton(
@@ -325,26 +315,26 @@ class RealtimeDatabaseInsertState extends State<RealtimeDatabaseInsert> {
                                   borderRadius: BorderRadius.circular(90.0))),
                           backgroundColor: MaterialStateProperty.all(appColor),
                           foregroundColor: MaterialStateProperty.all(Colors.white)),
-                      onPressed: () {
+                      onPressed: ()  {
+
                        if(pNameController.text.isNotEmpty &&
-                            pbarcodeController.text.isNotEmpty && //number?
+                            pbarcodeController.text.isNotEmpty &&
                             pBrandController.text.isNotEmpty &&
                             pCategoryController.text.isNotEmpty &&
-                            pPriceController.text.isNotEmpty && //number?
-                            pQuantityController.text.isNotEmpty && //number?
-                            pSizeController.text.isNotEmpty &&
-                            pLocationController.text.isNotEmpty){
+                            pPriceController.text.isNotEmpty &&
+                            pQuantityController.text.isNotEmpty &&
+                            pSizeController.text.isNotEmpty)
+                       {
 
-                     insertData(pNameController.text, pbarcodeController.text,
+                         insertData(pNameController.text, pbarcodeController.text,
                          pBrandController.text, pCategoryController.text,
                        pPriceController.text,  pQuantityController.text,
-                         pSizeController.text,pLocationController.text);
+                         pSizeController.text);
+
+                     Navigator.push(context, MaterialPageRoute(builder: (context) {
+                       return Products_List_Admin();
+                     }));
                    }
-
-                       Navigator.push(context, MaterialPageRoute(builder: (context) {
-                         return Products_List_Admin();
-                       }));
-
                       },
                       child: const Text('إضافة المنتج')),
 
@@ -353,7 +343,7 @@ class RealtimeDatabaseInsertState extends State<RealtimeDatabaseInsert> {
           ),)
     );
   }
-void insertData(String name, String barcode, String brand, String category , String price, String quantity, String size , String location){
+void insertData(String name, String barcode, String brand, String category , String price, String quantity, String size ){
   // String key = databaseRef.child("Products").push().key;
   //databaseRef.child("Products").child(key).set({//product as parent
   var intBarcode = int.tryParse(barcode);
@@ -367,7 +357,6 @@ void insertData(String name, String barcode, String brand, String category , Str
       'Price' : int.tryParse(price),
       'Quantity' :int.tryParse(quantity),
       'Size' : size,
-      'Location': location,
     });
    pNameController.clear();
    pbarcodeController.clear();
@@ -376,8 +365,6 @@ void insertData(String name, String barcode, String brand, String category , Str
    pPriceController.clear();
    pQuantityController.clear();
    pSizeController.clear();
-   pLocationController.clear();
 }
 }
-
 

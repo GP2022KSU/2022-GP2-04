@@ -13,19 +13,38 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:carttogo/Pages/welcome_page.dart';
 import 'package:google_fonts/google_fonts.dart';
-
+import 'package:carttogo/Pages//AdminAddProduct.dart';
 
 class Products_List_Admin extends StatefulWidget {
-
   @override
   State<Products_List_Admin> createState() => _Products_List_Admin();
 }
 
 class _Products_List_Admin extends State<Products_List_Admin> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      //بتن يوديه لصفحة الاد
+        floatingActionButton: FloatingActionButton.extended(
+          onPressed: (){
+        Navigator.push(context, MaterialPageRoute(builder: (context) {
+        return RealtimeDatabaseInsert();
+        }));
+        },
+          icon: Icon(Icons.add),
+          label: Text(
+            "إضافة منتج جديد",
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'CartToGo',
+                fontSize: 17,
+            ),
+          ),
+            backgroundColor: appColor,
+        ),
+      //------------------------------------------------------------
+
         backgroundColor: Colors.white,
 
         appBar: AppBar(
@@ -38,6 +57,8 @@ class _Products_List_Admin extends State<Products_List_Admin> {
                 fontFamily: 'CartToGo',
               ),
             ),
+
+          //بتن الخروج
           actions: <Widget>[
             Padding(
               padding: const EdgeInsets.all(8.0),
@@ -58,28 +79,34 @@ class _Products_List_Admin extends State<Products_List_Admin> {
                     _showMyDialog();
                   },
                   child: const Text('خروج')),
+
             ),
           ],
           centerTitle: true,
           elevation: 0,
         ),
 
-        body: SingleChildScrollView(
-         // child: Padding(
-           // padding: const EdgeInsets.all(30.0),
-             child:
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                 children:
-                products.map((e) {
-                 return Admin_Products_Widgets(e);
-                 }).toList(),
 
-             )
-      // )
-         ,)
+        //جاري التعديل
+        body: SingleChildScrollView(
+    // child: Padding(
+    // padding: const EdgeInsets.all(30.0),
+    child:
+    Column(
+    mainAxisAlignment: MainAxisAlignment.center,
+      children:
+      products.map((e) {
+        return Admin_Products_Widgets(e);
+      }).toList(),
+    )
+    //)
+    ,)
+      //------------------------------------------------------------
+
     );
   }
+
+  //ميثود للخروج
   void _showMyDialog() async {
     return showDialog<void>(
         context: context,
@@ -167,3 +194,6 @@ class _Products_List_Admin extends State<Products_List_Admin> {
         });
   }
 }
+
+
+
