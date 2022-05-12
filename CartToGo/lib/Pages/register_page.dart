@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:carttogo/Pages/login_page.dart';
 import 'package:carttogo/Pages/Navigation.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'dart:math' as math;
 
 class RegisterPage extends StatefulWidget {
   @override
@@ -200,6 +201,7 @@ class _RegisterPageState extends State<RegisterPage> {
                               }
                               print(e);
                             }
+                            generateLoyaltyCardID();
                             CircularProgressIndicator();
                           }
                         },
@@ -235,7 +237,7 @@ class _RegisterPageState extends State<RegisterPage> {
       "Carts": {
         "ConnectedToCart": false, //always false
         "Deleting": false, //always false
-        "LastCartNumber": 1, //always 1
+        "FutrueCartNumber": 1, //always 1
         "Total": 0, //always 0
         "numOfProducts": 0, //always 0
       }
@@ -313,4 +315,12 @@ class _RegisterPageState extends State<RegisterPage> {
               ));
         });
   }
+}
+
+String generateLoyaltyCardID(String loyaltyCardID) {
+  // dart unique string generator
+  String _randomString = loyaltyCardID.toString() +
+      math.Random().nextInt(9999).toString() +
+      math.Random().nextInt(9999).toString();
+  return _randomString;
 }
