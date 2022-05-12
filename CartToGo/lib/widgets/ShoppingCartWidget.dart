@@ -116,7 +116,7 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
     if (FirebaseAuth.instance.currentUser != null) {
       _streamSubscription1 = _database
           .child(
-              "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts/LastCartNumber")
+              "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts/FutureCartNumber")
           .onValue
           .listen((event) {
         final data = event.snapshot.value;
@@ -207,14 +207,16 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
                             'Total': total,
                             'numOfProducts': numOfProducts,
                           });
+                                                  //  final barcodePath = _fb.ref().child(
+                              //"Products/${FirebaseAuth.instance.currentUser?.uid}/Carts");
                           ref.child(snapshot.key!).remove();
                           await Carts.update({
-                            'Deleting': true,
+                            'DeletingProduct': true,
                           });
                           Future.delayed(const Duration(milliseconds: 500),
                               () async {
                             await Carts.update({
-                              'Deleting': false,
+                              'DeletingProduct': false,
                             });
                           });
                           print("Total after $total numOfProducts");

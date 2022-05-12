@@ -201,7 +201,6 @@ class _RegisterPageState extends State<RegisterPage> {
                               }
                               print(e);
                             }
-                            //generateLoyaltyCardID();
                             CircularProgressIndicator();
                           }
                         },
@@ -227,26 +226,25 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   void AddShopper(String uid) async {
+    String LoyaltyCardID=await generateLoyaltyCardID(uid);
     DatabaseReference ref = FirebaseDatabase.instance.ref("Shopper/$uid");
     //Generate loyaltycard id 10 QRUidFinder unique id
     await ref.set({
-      "LoyaltyCardID": "7824JS8D9F", //need loyaltycard id
+      "LoyaltyCardID": LoyaltyCardID.toString(), //need loyaltycard id
       "Points": 0,
       "Username": _userNameController.text,
       "email": _emailController.text,
       "Carts": {
         "ConnectedToCart": false, //always false
-        "Deleting": false, //always false
+        "DeletingProduct": false, //always false
         "FutrueCartNumber": 1, //always 1
         "Total": 0, //always 0
         "numOfProducts": 0, //always 0
       }
     });
-    DatabaseReference QRUid = FirebaseDatabase.instance
-        .ref("QRUidFinder/7824JS8D9F"); //need loyaltycard id
-    await QRUid.set({
-      //need loyaltycard id
-      "UID": uid,
+    final databaseRef= FirebaseDatabase.instance.ref();
+       databaseRef.child("QRUidFinder").child("$LoyaltyCardID").set({
+      "shopperID": uid,
     });
   }
 
@@ -317,10 +315,32 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 }
 
-String generateLoyaltyCardID(String loyaltyCardID) {
-  // dart unique string generator
-  String _randomString = loyaltyCardID.toString() +
-      math.Random().nextInt(9999).toString() +
-      math.Random().nextInt(9999).toString();
-  return _randomString;
+Future<String> generateLoyaltyCardID(String id) async{
+  // dart unique string generatofinal ref = FirebaseDatabase.instance.ref();
+  bool check = true;
+  String string1="";
+  late String _LoyaltyCardID;
+  while(check){
+    _LoyaltyCardID = string1.toString() +
+        math.Random().nextInt(9).toString() +
+        math.Random().nextInt(9999).toString() +
+        math.Random().nextInt(9999).toString()+"S";
+        check=await bringLoyaltyCard(_LoyaltyCardID);
+  }
+  return _LoyaltyCardID;
+  
 }
+
+Future<bool> bringLoyaltyCard(String random) async {
+  final ref = FirebaseDatabase.instance.ref();
+  final snapshot = await ref.child("QRUidFinder/$random").get();
+  print("Check: "+snapshot.value.toString());
+
+  if (snapshot.value == null) {
+    
+    return false;
+  }
+  return true;
+
+}
+

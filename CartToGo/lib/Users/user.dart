@@ -67,7 +67,7 @@ Future<int> BringLastCartNumber() async {
     final ref = FirebaseDatabase.instance.ref();
     final snapshot = await ref
         .child(
-            "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts/LastCartNumber")
+            "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts/FutureCartNumber")
         .get();
     print("Last Cart Number: $LastCartNumber");
     LastCartNumber = await (int.parse(snapshot.value.toString())) - 1;
@@ -89,7 +89,6 @@ Future<int> BringNumOfProducts() async {
   }
   return 0;
 }
-
 String getLoyaltyCardID() {
   if (_L1 == 0) {
     BringLoyaltyCardID();
