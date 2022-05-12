@@ -103,6 +103,23 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                           },
                           child: const Text('إعادة تعيين كلمة المرور')),
                       const SizedBox(height: 15.0),
+                      ElevatedButton(
+              style: ButtonStyle(
+                  elevation: MaterialStateProperty.all(8.0),
+                  textStyle: MaterialStateProperty.all(
+                      const TextStyle(fontSize: 25, fontFamily: 'CartToGo')),
+                  fixedSize: MaterialStateProperty.all(const Size(270, 45)),
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                      RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30.0))),
+                  backgroundColor: MaterialStateProperty.all(Colors.white),
+                  foregroundColor: MaterialStateProperty.all(Colors.black)),
+              onPressed: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  return WelcomePage();
+                }));
+              },
+              child: const Text('عودة')),
                     ]),
               )),
         ));
