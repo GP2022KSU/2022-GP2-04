@@ -112,8 +112,8 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                       RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(30.0))),
-                  backgroundColor: MaterialStateProperty.all(Colors.white),
-                  foregroundColor: MaterialStateProperty.all(Colors.black)),
+                  backgroundColor: MaterialStateProperty.all(appColor),
+                  foregroundColor: MaterialStateProperty.all(Colors.white)),
               onPressed: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) {
                   return WelcomePage();
