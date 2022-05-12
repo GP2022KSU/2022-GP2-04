@@ -196,21 +196,21 @@ boolean LoyaltyCardConnectionFirebase(String QRid) {
   if (Firebase.getJSON(fbdo, QRPath) == 1) { //if LoyaltyCard id is avaliable
     Serial.println("Json for " + QRPath + " : " + fbdo.to<FirebaseJson>().raw());
     json = fbdo.to<FirebaseJson>().raw(); //store Json of the scanned LoyaltyCardID
-    json.get(UID, "/UID");
+    json.get(UID, "/shopperID");
     if (UID.success) //if fetched database for UID success
     {
-      String LastCartNumber = "/Shopper/" + UID.to<String>() + "/Carts/LastCartNumber";
-      Serial.println("Path LastCartNumber: " + LastCartNumber);
-      if (Firebase.getInt(fbdo, LastCartNumber)) { //if UID is avaliable
+      String FutureCartNumber = "/Shopper/" + UID.to<String>() + "/Carts/FutureCartNumber";
+      Serial.println("Path FutureCartNumber: " + FutureCartNumber);
+      if (Firebase.getInt(fbdo, FutureCartNumber)) { //if UID is avaliable
         CartNumber = fbdo.to<int>();
         Serial.println("Cart Number: " + CartNumber);
         String GetUid = "/Shopper/" + UID.to<String>() + "/Carts";
-        Firebase.setInt(fbdo, "/Shopper/" + UID.to<String>() + "/Carts/LastCartNumber", CartNumber + 1);
+        Firebase.setInt(fbdo, "/Shopper/" + UID.to<String>() + "/Carts/FutureCartNumber", CartNumber + 1);
         delay(200);
         Serial.print("Add Cart: " + GetUid);
         if (Firebase.setInt(fbdo, GetUid + "/" + CartNumber + "/0", 0)) {
           if (Firebase.setBool(fbdo, GetUid + "/ConnectedToCart", true)) {
-            if(Firebase.setBool(fbdo, GetUid + "/Deleting", false));
+            if(Firebase.setBool(fbdo, GetUid + "/DeletingProduct", false));
             if(Firebase.setInt(fbdo, GetUid + "/numOfProducts", 0 ));
             if (Firebase.setInt(fbdo, GetUid + "/Total", 0.0)) { //Set a new total variable for the cart
               return true;
@@ -244,7 +244,7 @@ void loop()
   }
   if (Firebase.ready() == 1 && signupOK && WiFi.status() == 3) {
     String cartsPath = "/Shopper/" + UID.to<String>() + "/Carts";
-    if (Firebase.getBool(fbdo, cartsPath+"/Deleting")) checkDelete = fbdo.to<bool>();
+    if (Firebase.getBool(fbdo, cartsPath+"/DeletingProduct")) checkDelete = fbdo.to<bool>();
     if (countProducts >= 1 && CartConnection != false && checkDelete==true) {
         if (Firebase.getFloat(fbdo, cartsPath+"/Total")) total = fbdo.to<float>();
         if (Firebase.getInt(fbdo, cartsPath+"/numOfProducts")) numOfProducts = fbdo.to<int>();
@@ -267,9 +267,14 @@ void loop()
       if (Firebase.RTDB.getJSON(&fbdo, barcode1)) { //if barcode that is scanned is available in the database
         json = fbdo.to<FirebaseJson>().raw(); //store Json of the scanned barcode
         FirebaseJsonData getQuan;
+        int Qunatity=0;
         json.get(price, "/Price");
         json.get(name1, "/Name");
         json.get(getQuan, "/Quantity");
+        Qunatity=getQuan.to<int>();
+        Qunatity--;
+        Firebase.setInt(fbdo, barcode1 + "/Quantity", Qunatity);
+        json.set("/Barcode",barcode);
         json.remove("/Quantity");
         /*
           if (getQuan.to<int>() != 1 && (Firebase.RTDB.getJSON(&fbdo, PathCart))==false) {
