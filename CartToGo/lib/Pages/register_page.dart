@@ -233,13 +233,13 @@ class _RegisterPageState extends State<RegisterPage> {
       "LoyaltyCardID": LoyaltyCardID.toString(), //need loyaltycard id
       "Points": 0,
       "Username": _userNameController.text,
-      "email": _emailController.text,
+      "Email": _emailController.text,
       "Carts": {
         "ConnectedToCart": false, //always false
         "DeletingProduct": false, //always false
         "FutrueCartNumber": 1, //always 1
         "Total": 0, //always 0
-        "numOfProducts": 0, //always 0
+        "NumOfProducts": 0, //always 0
       }
     });
     final databaseRef= FirebaseDatabase.instance.ref();
