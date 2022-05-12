@@ -64,8 +64,11 @@ class NaviState extends State<Navi> {
               height: MediaQuery.of(context).size.height * s1,
               child: Column(
                 children: [
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.0049,
+                  Visibility(
+                    child: SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.0049,
+                    ),
+                    visible: v1,
                   ),
                   Icon(Icons.shopping_cart_outlined,
                       size: 30,
@@ -75,7 +78,7 @@ class NaviState extends State<Navi> {
                   Visibility(
                     child: Text(
                       "سلة التسوق",
-                      style: TextStyle(color: Colors.white),
+                      style: TextStyle(color: Colors.white,fontSize: 12),
                     ),
                     visible: v1,
                   ),
@@ -86,8 +89,11 @@ class NaviState extends State<Navi> {
               height: MediaQuery.of(context).size.height * s2,
               child: Column(
                 children: [
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.0049,
+                  Visibility(
+                    child: SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.0049,
+                    ),
+                    visible: v2,
                   ),
                   Icon(Icons.credit_card,
                       size: 30,
@@ -97,7 +103,7 @@ class NaviState extends State<Navi> {
                   Visibility(
                     child: Text(
                       "بطاقة الولاء",
-                      style: TextStyle(color: Colors.white),
+                      style: TextStyle(color: Colors.white,fontSize: 12),
                     ),
                     visible: v2,
                   ),
