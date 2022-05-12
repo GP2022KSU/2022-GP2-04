@@ -315,28 +315,32 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 }
 
-String generateLoyaltyCardID(String id)  {
+Future<String> generateLoyaltyCardID(String id) async{
   // dart unique string generatofinal ref = FirebaseDatabase.instance.ref();
   bool check = true;
   String string1="";
-  String _LoyaltyCardID="";
+  late String _LoyaltyCardID;
+  while(check){
     _LoyaltyCardID = string1.toString() +
         math.Random().nextInt(9).toString() +
         math.Random().nextInt(9999).toString() +
         math.Random().nextInt(9999).toString()+"S";
-        return _LoyaltyCardID;
+        check=await bringLoyaltyCard(_LoyaltyCardID);
+  }
+  return _LoyaltyCardID;
   
 }
-/*
+
 Future<bool> bringLoyaltyCard(String random) async {
   final ref = FirebaseDatabase.instance.ref();
   final snapshot = await ref.child("QRUidFinder/$random").get();
   print("Check: "+snapshot.value.toString());
-  if (snapshot.value == null) {
 
+  if (snapshot.value == null) {
+    
     return false;
   }
   return true;
 
-*/
+}
 
