@@ -40,7 +40,6 @@ class NaviState extends State<Navi> {
 
   @override
   Widget build(BuildContext context) {
-  //  هياءfinal user = FirebaseAuth.instance.currentUser!;
 
     bool v1 = false;
     double s1 = 0;

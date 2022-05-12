@@ -35,7 +35,7 @@ class WelcomePage extends StatelessWidget {
               style: ButtonStyle(
                   elevation: MaterialStateProperty.all(8.0),
                   textStyle: MaterialStateProperty.all(
-                      const TextStyle(fontSize: 25, fontFamily: 'CartToGo')),
+                      const TextStyle(fontSize: 23, fontFamily: 'CartToGo')),
                   fixedSize: MaterialStateProperty.all(const Size(270, 45)),
                   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                       RoundedRectangleBorder(
@@ -54,7 +54,7 @@ class WelcomePage extends StatelessWidget {
               style: ButtonStyle(
                   elevation: MaterialStateProperty.all(8.0),
                   textStyle: MaterialStateProperty.all(
-                      const TextStyle(fontSize: 25, fontFamily: 'CartToGo')),
+                      const TextStyle(fontSize: 23, fontFamily: 'CartToGo')),
                   fixedSize: MaterialStateProperty.all(const Size(270, 45)),
                   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                       RoundedRectangleBorder(

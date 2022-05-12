@@ -82,7 +82,7 @@ class _ShoppingCartState extends State<ShoppingCart> {
                   style: ButtonStyle(
                       elevation: MaterialStateProperty.all(3),
                       textStyle: MaterialStateProperty.all(const TextStyle(
-                          fontSize: 17,
+                          fontSize: 14,
                           fontFamily: 'CartToGo',
                           fontWeight: FontWeight.bold)),
                       fixedSize: MaterialStateProperty.all(const Size(70, 10)),

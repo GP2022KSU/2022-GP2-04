@@ -70,7 +70,7 @@ class LoyaltyCard extends StatelessWidget {
                             child: Text(
                               "خروج",
                               style: TextStyle(
-                                fontSize: 18.0,
+                                fontSize: 14.0,
                                 color: Color(0xFFFE4A49),
                                 fontWeight: FontWeight.bold,
                               ),
