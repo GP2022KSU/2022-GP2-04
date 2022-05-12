@@ -176,8 +176,8 @@ byte al [8] = {5, 5, 5, 5, 29, 0, 0, 0}; //ال
   lcd.createChar(2, s);
   lcd.createChar(3, h);
   lcd.createChar(4, al);
-  lcd.createChar(6, R);
   lcd.createChar(5, Q);
+    lcd.createChar(6, R);
  
 
   lcd.home();
@@ -189,8 +189,8 @@ byte al [8] = {5, 5, 5, 5, 29, 0, 0, 0}; //ال
   lcd.write(3);
   lcd.setCursor(11, 0);
   lcd.write(4);
-  lcd.write(5);
   lcd.write(6);
+  lcd.write(5);
 
   //lcd.print("Scan your QR");
   while (con == false) {
@@ -213,7 +213,7 @@ byte al [8] = {5, 5, 5, 5, 29, 0, 0, 0}; //ال
         byte m [8] = {0, 0, 0, 0, 0, 31, 5, 7}; //م
         byte s [8] = {0, 0, 21, 21, 21, 31, 0, 0};  //س
         byte gg [8] = {0, 0, 14, 2, 2, 31, 0, 4};   //ج
-        byte t [8] = {0, 0, 14, 2, 2, 31, 0, 4};   //لة
+        byte t [8] = {13,1,29,21,29,7,0,0};                //لة
 
          lcd.createChar(0, g);
   lcd.createChar(1, y);
