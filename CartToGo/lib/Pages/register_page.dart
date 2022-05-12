@@ -201,7 +201,7 @@ class _RegisterPageState extends State<RegisterPage> {
                               }
                               print(e);
                             }
-                            generateLoyaltyCardID();
+                            //generateLoyaltyCardID();
                             CircularProgressIndicator();
                           }
                         },
