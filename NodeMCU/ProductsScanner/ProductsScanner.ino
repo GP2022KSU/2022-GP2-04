@@ -14,7 +14,7 @@
 #include <addons/RTDBHelper.h>
 
 //WiFi info to authenticate
-#define WIFI_SSID "Alhomaidhi"
+#define WIFI_SSID "Haya"
 #define WIFI_PASSWORD "0504356565"
 
 //Firebase info to authenticate
@@ -205,43 +205,43 @@ byte al [8] = {5, 5, 5, 5, 29, 0, 0, 0}; //ال
       }
       else {
 
-//طباعة عبارة "غير مسجلة"
- lcd.clear();
-        byte g [8] = {4, 0, 7, 4, 4, 31, 0, 0}; //غ
-        byte y [8] = {0, 0, 0, 4, 4, 31, 0, 6};  //ي
-        byte r [8] = {0, 0, 0, 0, 4, 7, 8, 16}; //ر
-        byte m [8] = {0, 0, 0, 0, 0, 31, 5, 7}; //م
-        byte s [8] = {0, 0, 21, 21, 21, 31, 0, 0};  //س
-        byte gg [8] = {0, 0, 14, 2, 2, 31, 0, 4};   //ج
-        byte t [8] = {13,1,29,21,29,7,0,0};                //لة
-
-         lcd.createChar(0, g);
-  lcd.createChar(1, y);
-  lcd.createChar(2, r);
-  lcd.createChar(3, m);
-  lcd.createChar(4, s);
-  lcd.createChar(5, gg);
-  lcd.createChar(6, t);
-
-  lcd.home();
-  lcd.setCursor(15, 0);
-  lcd.rightToLeft();
-  lcd.write(0);
-  lcd.write(1);
-  lcd.write(2);
-   lcd.setCursor(11, 0);
-  lcd.write(3);
-  lcd.write(4);
-  lcd.write(5);
-  lcd.write(6);
-  
+////طباعة عبارة "غير مسجلة"
+// lcd.clear();
+//        byte g [8] = {4, 0, 7, 4, 4, 31, 0, 0}; //غ
+//        byte y [8] = {0, 0, 0, 4, 4, 31, 0, 6};  //ي
+//        byte r [8] = {0, 0, 0, 0, 4, 7, 8, 16}; //ر
+//        byte m [8] = {0, 0, 0, 0, 0, 31, 5, 7}; //م
+//        byte s [8] = {0, 0, 21, 21, 21, 31, 0, 0};  //س
+//        byte gg [8] = {0, 0, 14, 2, 2, 31, 0, 4};   //ج
+//        byte t [8] = {13,1,29,21,29,7,0,0};                //لة
+//
+//         lcd.createChar(0, g);
+//  lcd.createChar(1, y);
+//  lcd.createChar(2, r);
+//  lcd.createChar(3, m);
+//  lcd.createChar(4, s);
+//  lcd.createChar(5, gg);
+//  lcd.createChar(6, t);
+//
+//  lcd.home();
+//  lcd.setCursor(15, 0);
+//  lcd.rightToLeft();
+//  lcd.write(0);
+//  lcd.write(1);
+//  lcd.write(2);
+//   lcd.setCursor(11, 0);
+//  lcd.write(3);
+//  lcd.write(4);
+//  lcd.write(5);
+//  lcd.write(6);
+//  
         
         
-//        lcd.clear();
-//        lcd.setCursor(0, 0);
-//        lcd.print("LoyaltyCard not");
-//        lcd.setCursor(0, 1);
-//        lcd.print("found,TryAgain");
+        lcd.clear();
+        lcd.setCursor(0, 0);
+        lcd.print("LoyaltyCard not");
+        lcd.setCursor(0, 1);
+        lcd.print("found,TryAgain");
         
         LoyaltyCard = "";
         con = false;
@@ -278,7 +278,7 @@ boolean LoyaltyCardConnectionFirebase(String QRid) {
         if (Firebase.setInt(fbdo, GetUid + "/" + CartNumber + "/0", 0)) {
           if (Firebase.setBool(fbdo, GetUid + "/ConnectedToCart", true)) {
             if (Firebase.setBool(fbdo, GetUid + "/DeletingProduct", false));
-            if (Firebase.setInt(fbdo, GetUid + "/numOfProducts", 0 ));
+            if (Firebase.setInt(fbdo, GetUid + "/NumOfProducts", 0 ));
             if (Firebase.setInt(fbdo, GetUid + "/Total", 0.0)) { //Set a new total variable for the cart
               return true;
             }
@@ -293,7 +293,7 @@ boolean LoyaltyCardConnectionFirebase(String QRid) {
 float total = 0.0;
 int count = 0;
 int countProducts = 0;
-int numOfProducts = 0;
+int NumOfProducts = 0;
 bool checkDelete = false;
 float lastPrice = 0.0;
 void loop()
@@ -314,7 +314,7 @@ void loop()
     if (Firebase.getBool(fbdo, cartsPath + "/DeletingProduct")) checkDelete = fbdo.to<bool>();
     if (countProducts >= 1 && CartConnection != false && checkDelete == true) {
       if (Firebase.getFloat(fbdo, cartsPath + "/Total")) total = fbdo.to<float>();
-      if (Firebase.getInt(fbdo, cartsPath + "/numOfProducts")) numOfProducts = fbdo.to<int>();
+      if (Firebase.getInt(fbdo, cartsPath + "/NumOfProducts")) NumOfProducts = fbdo.to<int>();
       //if (Firebase.getFloat(fbdo, cartsPath+"/lastPrice")) lastPrice = fbdo.to<float>();
       checkTotalAndCount(total);
     }
@@ -352,7 +352,7 @@ void loop()
         if (price.success && name1.success) //if fetched database for price and name is available
         {
           countProducts++;
-          numOfProducts++;
+          NumOfProducts++;
           lcd.clear();
           total = total + price.to<float>();
           Serial.println(
@@ -414,7 +414,7 @@ void loop()
           String PathCart = "/Shopper/" + UID.to<String>() + "/Carts/" + CartNumber + "/" + countProducts;
           Serial.println("ShopperID: " + cartsPath);
           Firebase.setInt(fbdo, cartsPath + "/Total", total);
-          Firebase.setInt(fbdo, cartsPath + "/numOfProducts", numOfProducts );
+          Firebase.setInt(fbdo, cartsPath + "/NumOfProducts", NumOfProducts );
           Firebase.setJSON(fbdo, PathCart, json);
         }
       }
