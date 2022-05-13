@@ -1,3 +1,5 @@
+
+
 #include <LiquidCrystal_I2C.h>
 #include <Wire.h>
 #include <SoftwareSerial.h>
@@ -13,7 +15,7 @@
 
 //WiFi info to authenticate
 #define WIFI_SSID "CartToGo"
-#define WIFI_PASSWORD "...."
+#define WIFI_PASSWORD "11223344"
 
 //Firebase info to authenticate
 #define API_KEY "AIzaSyCFoxsSG6CUrgi5DuiFz6Ph1v2kjdoDbcg"
@@ -24,7 +26,7 @@
 byte a1 [8] = {4, 4, 4, 4, 4, 0, 0, 0}; //ا
 byte t1 [8] = {6, 0, 2, 2, 30, 0, 0, 0}; //ت
 byte s1 [8] = {0, 0, 7, 21, 31, 0, 0, 0}; //ص
-byte al1 [8] = {5, 5, 21, 21, 29, 0, 0, 0}; //ال
+byte al1 [8] = {5, 5, 21, 21, 29, 0, 0, 0};  //ال
 
 boolean CartConnection = false;
 FirebaseData fbdo;
@@ -57,11 +59,11 @@ void DisplayStartScanning() {
   lcd.clear();
   //طباعة عبارة "ابدا المسح" قبل البدأ بمسح أي منتج على شاشاة LCD
   byte al [8] = {5, 5, 5, 5, 29, 0, 0, 0}; //ال
-  byte s [8] = {0, 0, 21, 21, 31, 0, 0, 0}; //س
+  byte s [8] = {0, 0, 21, 21, 31, 0, 0, 0};      //س
   byte b [8] = {0, 0, 0, 1, 15, 0, 2, 0}; //ب
   byte a [8] = {4, 4, 4, 4, 4, 0, 0, 0}; //ا
   byte d [8] = {0, 0, 14, 2, 3, 14, 0, 0}; //د
-  byte h [8] = {0, 0, 12, 4, 7, 12, 8, 12}; //ح
+  byte h [8] = {0, 0, 12, 4, 7, 12, 8, 12};             //ح
   byte m [8] = {0, 0, 0, 0, 31, 10, 14, 0}; //م
   lcd.createChar(0, a);
   lcd.createChar(1, b);
@@ -158,14 +160,15 @@ boolean LoyaltyCardConnection() {
   char ID;
   boolean con = false;
 
+
   lcd.clear();
   //طباعة عبارة "امسح الQR على الشاشة
   byte al [8] = {5, 5, 5, 5, 29, 0, 0, 0}; //ال
-  byte s [8] = {0, 0, 21, 21, 31, 0, 0, 0}; //س
+  byte s [8] = {0, 0, 21, 21, 31, 0, 0, 0};      //س
   byte a [8] = {4, 4, 4, 4, 4, 4, 0, 0}; //ا
-  byte h [8] = {0, 0, 12, 4, 7, 12, 8, 12}; //ح
+  byte h [8] = {0, 0, 12, 4, 7, 12, 8, 12};    //ح
   byte m [8] = {0, 0, 0, 0, 31, 10, 14, 0}; //م
-  byte Q [8] = {12, 18, 18, 18, 18, 26, 22, 15}; //Q
+  byte Q [8] = {12, 18, 18, 18, 18, 26, 22, 15};     //Q
   byte R [8] = {30, 18, 18, 30, 20, 20, 20, 20}; //R
 
   lcd.createChar(0, a);
@@ -175,6 +178,7 @@ boolean LoyaltyCardConnection() {
   lcd.createChar(4, al);
   lcd.createChar(5, Q);
   lcd.createChar(6, R);
+
 
   lcd.home();
   lcd.setCursor(15, 0);
@@ -188,7 +192,7 @@ boolean LoyaltyCardConnection() {
   lcd.write(6);
   lcd.write(5);
 
-
+  //lcd.print("Scan your QR");
   while (con == false) {
     while (mySerial.available()) {
       ID = mySerial.read(); //Read 1 Byte of data and store it in a character variable
@@ -202,35 +206,43 @@ boolean LoyaltyCardConnection() {
       else {
 
         //طباعة عبارة "غير مسجلة"
-        lcd.clear();
-        byte g [8] = {4, 0, 7, 4, 4, 31, 0, 0}; //غ
-        byte y [8] = {0, 0, 0, 4, 4, 31, 0, 6}; //ي
-        byte r [8] = {0, 0, 0, 0, 4, 7, 8, 16}; //ر
-        byte m [8] = {0, 0, 0, 0, 0, 31, 5, 7}; //م
-        byte s [8] = {0, 0, 21, 21, 21, 31, 0, 0}; //س
-        byte gg [8] = {0, 0, 14, 2, 2, 31, 0, 4}; //ج
-        byte t [8] = {13,1,29,21,29,7,0,0}; //لة
+         lcd.clear();
+                byte g [8] = {4, 0, 7, 4, 4, 31, 0, 0}; //غ
+                byte y [8] = {0, 0, 0, 4, 4, 31, 0, 6};  //ي
+                byte r [8] = {0, 0, 0, 0, 4, 7, 8, 16}; //ر
+                byte m [8] = {0, 0, 0, 0, 0, 31, 5, 7}; //م
+                byte s [8] = {0, 0, 21, 21, 21, 31, 0, 0};  //س
+                byte gg [8] = {0, 0, 14, 2, 2, 31, 0, 4};   //ج
+                byte t [8] = {13,1,29,21,29,7,0,0};                //لة
         
-        lcd.createChar(0, g);
-        lcd.createChar(1, y);
-        lcd.createChar(2, r);
-        lcd.createChar(3, m);
-        lcd.createChar(4, s);
-        lcd.createChar(5, gg);
-        lcd.createChar(6, t);
+                 lcd.createChar(0, g);
+          lcd.createChar(1, y);
+          lcd.createChar(2, r);
+          lcd.createChar(3, m);
+          lcd.createChar(4, s);
+          lcd.createChar(5, gg);
+          lcd.createChar(6, t);
         
-        lcd.home();
-        lcd.setCursor(15, 0);
-        lcd.rightToLeft();
-        lcd.write(0);
-        lcd.write(1);
-        lcd.write(2);
-        lcd.setCursor(11, 0);
-        lcd.write(3);
-        lcd.write(4);
-        lcd.write(5);
-        lcd.write(6);
-      
+          lcd.home();
+          lcd.setCursor(15, 0);
+          lcd.rightToLeft();
+          lcd.write(0);
+          lcd.write(1);
+          lcd.write(2);
+           lcd.setCursor(11, 0);
+          lcd.write(3);
+          lcd.write(4);
+          lcd.write(5);
+          lcd.write(6);
+        
+
+
+        //lcd.clear();
+        //lcd.setCursor(0, 0);
+        //lcd.print("LoyaltyCard not");
+        //lcd.setCursor(0, 1);
+        //lcd.print("found,TryAgain");
+
         LoyaltyCard = "";
         con = false;
       }
@@ -308,7 +320,7 @@ void loop()
     }
     if (mySerial.available() && CartConnection != false) { //Check if there is Incoming Data in the Serial Buffer
 
-      while (mySerial.available() && CartConnection != false) { //Keep reading Byte by Byte from the Buffer till the Buffer is empty
+      while (mySerial.available() && CartConnection != false) {  //Keep reading Byte by Byte from the Buffer till the Buffer is empty
 
         readBarcode = mySerial.read(); //Read 1 Byte of data and store it in a character variable
         barcode = barcode + readBarcode;
@@ -328,7 +340,7 @@ void loop()
         json.get(name1, "/Name");
         json.get(getQuan, "/Quantity");
         Qunatity = getQuan.to<int>();
-
+        
         /*
           if (getQuan.to<int>() != 1 && (Firebase.RTDB.getJSON(&fbdo, PathCart))==false) {
           json.set("/Quantity", 1);
@@ -338,11 +350,11 @@ void loop()
         if (price.success && name1.success && Qunatity > 0) //if fetched database for price and name is available
         {
           Qunatity--;
-          json.remove("/Quantity");
           json.set("/Quantity", Qunatity);
           Firebase.setJSON(fbdo, "Products/" + barcode, json);
           json.set("/Barcode", barcode);
           json.remove("/Quantity");
+          
           countProducts++;
           NumOfProducts++;
           lcd.clear();
@@ -356,10 +368,11 @@ void loop()
           byte s [8] = {0, 21, 21, 21, 31, 0, 0, 0}; //س
           byte aen [8] = {0, 0, 14, 14, 31, 0, 0, 0}; //ع
           byte r [8] = {0, 0, 0, 0, 3, 4, 8, 0}; //ر
-          byte a [8] = {4, 4, 4, 4, 7, 0, 0, 0}; //أ`
+          byte a [8] = {4, 4, 4, 4, 7, 0, 0, 0};  //أ`
           byte jem [8] = {0, 0, 12, 3, 30, 0, 4, 0}; //جـ
           byte m [8] = {0, 0, 0, 0, 31, 10, 10, 14}; //م
           byte ly [8] = {1, 1, 1, 1, 23, 28, 0, 12}; //لي
+
 
           lcd.createChar(0, al);
           lcd.createChar(1, s);
@@ -409,6 +422,7 @@ void loop()
           Firebase.setInt(fbdo, cartsPath + "/NumOfProducts", NumOfProducts );
           Firebase.setJSON(fbdo, PathCart, json);
 
+
         }
       }
 
@@ -418,12 +432,13 @@ void loop()
         Serial.println(fbdo.errorReason().c_str());
         lcd.clear();
         byte g [8] = {4, 0, 7, 4, 4, 31, 0, 0}; //غ
-        byte y [8] = {0, 0, 0, 4, 4, 31, 0, 6}; //ي
+        byte y [8] = {0, 0, 0, 4, 4, 31, 0, 6};  //ي
         byte r [8] = {0, 0, 0, 0, 4, 7, 8, 16}; //ر
         byte m [8] = {0, 0, 0, 0, 0, 31, 5, 7}; //م
-        byte s [8] = {0, 0, 21, 21, 21, 31, 0, 0}; //س
-        byte gg [8] = {0, 0, 14, 2, 2, 31, 0, 4}; //ج
+        byte s [8] = {0, 0, 21, 21, 21, 31, 0, 0};  //س
+        byte gg [8] = {0, 0, 14, 2, 2, 31, 0, 4};   //ج
         byte l [8] = {4, 4, 4, 4, 4, 23, 20, 28}; //ل
+
 
         lcd.createChar(0, g);
         lcd.createChar(1, y);
@@ -453,7 +468,7 @@ void checkTotalAndCount(float totalPrice) {
   lcd.clear();
   //طباعة السعر واجمالي السعر على شاشة LCD
   byte al [8] = {5, 5, 5, 5, 29, 0, 0, 0}; //ال
-  byte a [8] = {4, 4, 4, 4, 7, 0, 0, 0}; //أ`
+  byte a [8] = {4, 4, 4, 4, 7, 0, 0, 0};  //أ`
   byte jem [8] = {0, 0, 12, 3, 30, 0, 4, 0}; //جـ
   byte m [8] = {0, 0, 0, 0, 31, 10, 10, 14}; //م
   byte ly [8] = {1, 1, 1, 1, 23, 28, 0, 12}; //لي
