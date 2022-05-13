@@ -1,18 +1,14 @@
 // ignore_for_file: prefer_const_constructors, unnecessary_new, prefer_const_literals_to_create_immutables
 
 import 'dart:async';
-
-import 'package:carttogo/Pages/Navigation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:carttogo/Users/user.dart' as user;
-import 'package:carttogo/Users/Products.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_scrolling_fab_animated/flutter_scrolling_fab_animated.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
 class ShoppingCartWidget extends StatefulWidget {
   const ShoppingCartWidget({Key? key}) : super(key: key);
   @override
@@ -21,8 +17,6 @@ class ShoppingCartWidget extends StatefulWidget {
 
 class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
   ScrollController _scrollController = ScrollController();
-  double indicator = 10.0;
-  bool onTop = true;
   late double total = 0.0;
   late int numOfProducts = 0;
   double totalCart = 0;
@@ -34,6 +28,7 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
   late StreamSubscription _streamSubscription;
   late StreamSubscription _streamSubscription1;
   late StreamSubscription _streamSubscription2;
+
   late bool _isLoading;
   @override
   void initState() {
@@ -127,15 +122,16 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
     return LastCartNumber;
   }
 
-  Future<int> BringProductQuantity(String barcode) async {
-    int quan = 0;
-      _streamSubscription1 =
-          _database.child("Products/$barcode/Quantity").onValue.listen((event) {
-        final data = event.snapshot.value;
-        quan = (int.parse(data.toString()));
-      });
-      return quan;
+  Future<int> BringProductQuantity(int barcode) async {
+  final _quanData = FirebaseDatabase.instance.ref("Products/${barcode.toString()}/Quantity");
+  final snapshot = await _quanData.get();
+  if (snapshot.exists) {
+    return (int.parse(snapshot.value.toString()));
+  } else {
+    print('No data available.');
   }
+  return 0;
+}
 
   @override
   Widget build(BuildContext context) {
@@ -217,20 +213,20 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
                           numOfProducts--;
                           await Carts.update({
                             'Total': total,
-                            'numOfProducts': numOfProducts,
+                            'NumOfProducts': numOfProducts,
                           });
-                          String barcode = l[3].toString();
-                                                barcode.replaceAll(' ', "");
+                          l[3].replaceAll(' ', "");
+                          int barcode = (int.parse(l[3].toString())); 
                           print("Barcode:$barcode");
-                          final barcodePath =
-                              _fb.ref().child("Products/$barcode");
-                              int newQuantity = await BringProductQuantity(barcode) + 1;
-                              print("Quan: $newQuantity");
-                            
-                              //_database.child("Products").child("$barcode").set(2);
-                          await barcodePath.update({
-                            'Quantity': newQuantity,
-                          });
+                          int newQuantity = 
+                              await BringProductQuantity(barcode) + 1;
+                          print("Quan: $newQuantity");
+                          if (FirebaseAuth.instance.currentUser != null) {
+                            final quannn = _fb.ref().child("Products/${barcode.toString()}");
+                            await quannn.update({
+                              "Quantity": newQuantity,
+                            });
+                          }
                           ref.child(snapshot.key!).remove();
                           await Carts.update({
                             'DeletingProduct': true,

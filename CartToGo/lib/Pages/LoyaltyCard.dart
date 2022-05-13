@@ -58,6 +58,12 @@ class LoyaltyCard extends StatelessWidget {
                         child: InkWell(
                           highlightColor: Colors.grey[200],
                           onTap: () async {
+                            final _fb = FirebaseDatabase.instance;
+                            final Carts = await _fb.ref().child(
+                                "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts");
+                            await Carts.update({
+                              'ConnectedToCart': false,
+                            });
                             await FirebaseAuth.instance.signOut();
                             print(
                                 "UID: ${FirebaseAuth.instance.currentUser?.uid}");
@@ -129,7 +135,7 @@ class LoyaltyCard extends StatelessWidget {
                   style: ButtonStyle(
                       elevation: MaterialStateProperty.all(3),
                       textStyle: MaterialStateProperty.all(const TextStyle(
-                          fontSize: 17,
+                          fontSize: 14,
                           fontFamily: 'CartToGo',
                           fontWeight: FontWeight.bold)),
                       fixedSize: MaterialStateProperty.all(const Size(70, 10)),
