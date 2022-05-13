@@ -81,7 +81,7 @@ Future<int> BringNumOfProducts() async {
     final ref = FirebaseDatabase.instance.ref();
     final snapshot = await ref
         .child(
-            "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts/numOfProducts")
+            "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts/NumOfProducts")
         .get();
     print("Last Cart Number: $LastCartNumber");
     numOfProducts = await (int.parse(snapshot.value.toString()));

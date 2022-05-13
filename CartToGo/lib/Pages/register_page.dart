@@ -242,10 +242,10 @@ class _RegisterPageState extends State<RegisterPage> {
         "NumOfProducts": 0, //always 0
       }
     });
-    // final databaseRef= FirebaseDatabase.instance.ref();
-    //    databaseRef.child("QRUidFinder").child("$LoyaltyCardID").set({
-    //   "shopperID": uid,
-    // });
+    final databaseRef= FirebaseDatabase.instance.ref();
+        databaseRef.child("QRUidFinder").child("$LoyaltyCardID").set({
+       "shopperID": uid,
+     });
   }
 
   void _showMyDialog(String error) async {

@@ -1,3 +1,4 @@
+import 'package:carttogo/Pages/login_page.dart';
 import 'package:carttogo/Pages/welcome_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:carttogo/main.dart';
@@ -85,14 +86,13 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                                   Center(child: CircularProgressIndicator()),
                             );
 
-
                             try {
                               await FirebaseAuth.instance
                                   .sendPasswordResetEmail(
                                       email: _emailController.text);
-                                      
                               Utils.showSnackBar(
                                   'تم ارسال بريد الكتروني لإعادة تعيين كلمة المرور');
+
                               Navigator.of(context)
                                   .popUntil((route) => route.isFirst);
                             } on FirebaseAuthException catch (e) {
@@ -104,82 +104,89 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                           child: const Text('إعادة تعيين كلمة المرور')),
                       const SizedBox(height: 15.0),
                       ElevatedButton(
-              style: ButtonStyle(
-                  elevation: MaterialStateProperty.all(8.0),
-                  textStyle: MaterialStateProperty.all(
-                      const TextStyle(fontSize: 25, fontFamily: 'CartToGo')),
-                  fixedSize: MaterialStateProperty.all(const Size(270, 45)),
-                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                      RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30.0))),
-                  backgroundColor: MaterialStateProperty.all(appColor),
-                  foregroundColor: MaterialStateProperty.all(Colors.white)),
-              onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  return WelcomePage();
-                }));
-              },
-              child: const Text('عودة')),
+                          style: ButtonStyle(
+                              elevation: MaterialStateProperty.all(8.0),
+                              textStyle: MaterialStateProperty.all(
+                                  const TextStyle(
+                                      fontSize: 25, fontFamily: 'CartToGo')),
+                              fixedSize: MaterialStateProperty.all(
+                                  const Size(270, 45)),
+                              shape: MaterialStateProperty.all<
+                                      RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                      borderRadius:
+                                          BorderRadius.circular(30.0))),
+                              backgroundColor:
+                                  MaterialStateProperty.all(appColor),
+                              foregroundColor:
+                                  MaterialStateProperty.all(Colors.white)),
+                          onPressed: () {
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (context) {
+                              return LoginPage();
+                            }));
+                          },
+                          child: const Text('عودة')),
                     ]),
               )),
         ));
   }
-}
 
-// void _showMyDialog(String success) async {
-//   return showDialog<void>(
-//       context: context,
-//       // user must tap button!
-//       builder: (BuildContext context) {
-//         return Directionality(
-//             textDirection: TextDirection.rtl,
-//             child: Dialog(
-//               elevation: 0,
-//               backgroundColor: Color(0xffffffff),
-//               shape: RoundedRectangleBorder(
-//                 borderRadius: BorderRadius.circular(15.0),
-//               ),
-//               child: Column(
-//                 mainAxisSize: MainAxisSize.min,
-//                 children: [
-//                   SizedBox(height: 15),
-//                   Text(
-//                     success, //Product name for IOS 1 android 4
-//                     style: TextStyle(
-//                       fontSize: 20,
-//                       fontWeight: FontWeight.w400,
-//                     ),
-//                   ),
-//                   SizedBox(height: 20),
-//                   Divider(
-//                     height: 2,
-//                     color: Colors.black,
-//                   ),
-//                   Container(
-//                     width: MediaQuery.of(context).size.width,
-//                     height: 50,
-//                     child: InkWell(
-//                       borderRadius: BorderRadius.only(
-//                         bottomLeft: Radius.circular(15.0),
-//                         bottomRight: Radius.circular(15.0),
-//                       ),
-//                       highlightColor: Colors.grey[200],
-//                       onTap: () {
-//                         Navigator.of(context).pop();
-//                       },
-//                       child: Center(
-//                         child: Text(
-//                           "موافق",
-//                           style: TextStyle(
-//                               fontSize: 16.0,
-//                               fontWeight: FontWeight.bold,
-//                               color: appColor),
-//                         ),
-//                       ),
-//                     ),
-//                   ),
-//                 ],
-//               ),
-//             ));
-//       });
-// }
+  void _showMyDialog(String success) async {
+    return showDialog<void>(
+        context: context,
+        // user must tap button!
+        builder: (BuildContext context) {
+          return Directionality(
+              textDirection: TextDirection.rtl,
+              child: Dialog(
+                elevation: 0,
+                backgroundColor: Color(0xffffffff),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15.0),
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SizedBox(height: 15),
+                    Text(
+                      success, //Product name for IOS 1 android 4
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                    SizedBox(height: 20),
+                    Divider(
+                      height: 2,
+                      color: Colors.black,
+                    ),
+                    Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: 50,
+                      child: InkWell(
+                        borderRadius: BorderRadius.only(
+                          bottomLeft: Radius.circular(15.0),
+                          bottomRight: Radius.circular(15.0),
+                        ),
+                        highlightColor: Colors.grey[200],
+                        onTap: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: Center(
+                          child: Text(
+                            "موافق",
+                            style: TextStyle(
+                                fontSize: 16.0,
+                                fontWeight: FontWeight.bold,
+                                color: appColor),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ));
+        });
+  }
+}
