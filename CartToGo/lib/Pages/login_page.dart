@@ -32,6 +32,8 @@ class _LoginPageState extends State<LoginPage> {
                       children: <Widget>[
                         //background lines
                         const Image(
+                          width: 30,
+                          height: 30,
                             image: AssetImage('assets/images/blueCart.png')),
                         //email felid
                         Directionality(
