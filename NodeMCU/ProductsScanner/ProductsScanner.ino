@@ -12,8 +12,8 @@
 #include <addons/RTDBHelper.h>
 
 //WiFi info to authenticate
-#define WIFI_SSID "Alhomaidhi"
-#define WIFI_PASSWORD "0504356565"
+#define WIFI_SSID "CartToGo"
+#define WIFI_PASSWORD "...."
 
 //Firebase info to authenticate
 #define API_KEY "AIzaSyCFoxsSG6CUrgi5DuiFz6Ph1v2kjdoDbcg"
