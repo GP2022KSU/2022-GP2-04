@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, unnecessary_new, prefer_const_literals_to_create_immutables
+// ignore_for_file: prefer_const_constructors, unnecessary_new, prefer_const_literals_to_create_immutables, nullable_type_in_catch_clause
 
 import 'dart:async';
 import 'package:flutter/material.dart';
@@ -9,6 +9,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_scrolling_fab_animated/flutter_scrolling_fab_animated.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+
 class ShoppingCartWidget extends StatefulWidget {
   const ShoppingCartWidget({Key? key}) : super(key: key);
   @override
@@ -123,15 +124,16 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
   }
 
   Future<int> BringProductQuantity(int barcode) async {
-  final _quanData = FirebaseDatabase.instance.ref("Products/${barcode.toString()}/Quantity");
-  final snapshot = await _quanData.get();
-  if (snapshot.exists) {
-    return (int.parse(snapshot.value.toString()));
-  } else {
-    print('No data available.');
+    final _quanData = FirebaseDatabase.instance
+        .ref("Products/${barcode.toString()}/Quantity");
+    final snapshot = await _quanData.get();
+    if (snapshot.exists) {
+      return (int.parse(snapshot.value.toString()));
+    } else {
+      print('No data available.');
+    }
+    return 0;
   }
-  return 0;
-}
 
   @override
   Widget build(BuildContext context) {
@@ -194,35 +196,46 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
                         Animation<double> animation, int index) {
                       numOfProducts = user.getnumOfProducts();
                       var v = snapshot.value.toString();
+                      bool checker = true;
+                      print(v[0]);
+                      try {
+                        if (v[0] == "0" && v[1].isNotEmpty) {}
+                      } on RangeError {
+                        checker = false;
+                        var g = v.replaceAll(RegExp("{|}|0: "), "");
+                      }
                       var g = v.replaceAll(
                           RegExp(
-                              "{|}|Name: |Price: |Size: |0: |Category: |Brand: |Barcode: | "),
+                              "{|}|Name: |Price: |Size: |Category: |Brand: |Barcode: "),
                           "");
-                      g.trim();
-                      //g.replaceAll(from, replace)
-                      var l = g.split(',');
 
+                      g.trim();
+
+                      var l = g.split(',');
                       print("s" + l.toString());
-                      if (!(l[0] == "0")) {
+                      if (!(l[0] == "0") && checker) {
                         void deleteProduct() async {
                           final Carts = _fb.ref().child(
                               "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts");
                           double price =
-                              double.parse(l[2]); //price for IOS 4 android 2
+                              double.parse(l[5]); //price for IOS 5 android 2
                           total = total - price;
                           numOfProducts--;
                           await Carts.update({
                             'Total': total,
                             'NumOfProducts': numOfProducts,
                           });
-                          l[3].replaceAll(' ', "");
-                          int barcode = (int.parse(l[3].toString())); 
+                          l[0].replaceAll(' ', "");
+                          int barcode = (int.parse(
+                              l[0].toString())); //barcode android 3 , IOS 0
                           print("Barcode:$barcode");
-                          int newQuantity = 
+                          int newQuantity =
                               await BringProductQuantity(barcode) + 1;
                           print("Quan: $newQuantity");
                           if (FirebaseAuth.instance.currentUser != null) {
-                            final quannn = _fb.ref().child("Products/${barcode.toString()}");
+                            final quannn = _fb
+                                .ref()
+                                .child("Products/${barcode.toString()}");
                             await quannn.update({
                               "Quantity": newQuantity,
                             });
@@ -267,7 +280,7 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
                                           ),
                                           SizedBox(height: 15),
                                           Text(
-                                            "هل تريد حذف${l[1]} ؟", //Product name for IOS 1 android 4
+                                            "هل تريد حذف ${l[2]} ؟", //Product name for IOS 2 android 1
                                             style: TextStyle(
                                               fontSize: 15,
                                               fontWeight: FontWeight.w400,
@@ -423,7 +436,7 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
                                                                 children: <
                                                                     Widget>[
                                                                   Text(
-                                                                    l[0], //Product name 0 android 1 ios
+                                                                    l[2], //Product name 1 android 2 ios
                                                                     textAlign:
                                                                         TextAlign
                                                                             .center,
@@ -447,7 +460,7 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
                                                                       height:
                                                                           10),
                                                                   Text(
-                                                                    l[4], //Product Size 4 android 2 ios
+                                                                    l[4], //Product Size 4 android 4 ios
                                                                     textAlign:
                                                                         TextAlign
                                                                             .right,
@@ -487,7 +500,7 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
                                                         MainAxisSize.min,
                                                     children: <Widget>[
                                                       Text(
-                                                        l[2], //Product Price 2 android
+                                                        l[5], //Product Price 2 android ios 5
                                                         textAlign:
                                                             TextAlign.center,
                                                         style: TextStyle(
