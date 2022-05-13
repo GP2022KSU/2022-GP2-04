@@ -1,3 +1,4 @@
+import 'package:carttogo/Pages/Products_List_Admin.dart';
 import 'package:carttogo/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:carttogo/Pages/welcome_page.dart';
@@ -39,8 +40,11 @@ class MainPage extends StatelessWidget {
               return Center(child: CircularProgressIndicator());
             } else if (snapshot.hasError) {
               return Center(child: Text('! مشكلة ما قد حدثت'));
-            } else if (snapshot.hasData) {
+            } else if (snapshot.hasData && (FirebaseAuth.instance.currentUser?.uid).toString() != "ieCOHKL0cPhTUa58IcUaEapvhjD3") {
               return Navi();
+            }
+            else if(snapshot.hasData &&(FirebaseAuth.instance.currentUser?.uid).toString() == "ieCOHKL0cPhTUa58IcUaEapvhjD3"){
+              return Products_List_Admin();
             }
             return WelcomePage();
           },
