@@ -32,40 +32,43 @@ class _LoginPageState extends State<LoginPage> {
                       children: <Widget>[
                         //background lines
                         const Image(
-                          width: 30,
-                          height: 30,
+                          width: 300,
+                          height: 300,
                             image: AssetImage('assets/images/blueCart.png')),
                         //email felid
-                        Directionality(
-                            textDirection: TextDirection.rtl,
-                            child: TextFormField(
-                                controller: _emailController,
-                                keyboardType: TextInputType.emailAddress,
-                                decoration: const InputDecoration(
-                                    labelText: "البريد الالكتروني",
-                                    labelStyle: TextStyle(
-                                        fontSize: 20, color: Colors.black),
-                                    hintText: "أدخل بريدك الالكتروني",
-                                    hintStyle: TextStyle(fontSize: 18),
-                                    enabledBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(20.0)),
-                                      borderSide:
-                                          BorderSide(width: 2, color: appColor),
-                                    ),
-                                    suffixIcon: Icon(Icons.email_outlined,
-                                        color: appColor)),
-                                validator: (value) {
-                                  if (value!.length == 0) {
-                                    return 'الرجاء ادخال البريد الالكتروني';
-                                  }
-                                  if (!RegExp(
-                                          "^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]")
-                                      .hasMatch(value)) {
-                                    return ("أدخل بريد الكتروني صحيح");
-                                  }
-                                },
-                                onChanged: (value) {})),
+                        Center(
+                          heightFactor: 1.2,
+                          child: Directionality(
+                              textDirection: TextDirection.rtl,
+                              child: TextFormField(
+                                  controller: _emailController,
+                                  keyboardType: TextInputType.emailAddress,
+                                  decoration: const InputDecoration(
+                                      labelText: "البريد الالكتروني",
+                                      labelStyle: TextStyle(
+                                          fontSize: 20, color: Colors.black),
+                                      hintText: "أدخل بريدك الالكتروني",
+                                      hintStyle: TextStyle(fontSize: 18),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(20.0)),
+                                        borderSide:
+                                            BorderSide(width: 2, color: appColor),
+                                      ),
+                                      suffixIcon: Icon(Icons.email_outlined,
+                                          color: appColor)),
+                                  validator: (value) {
+                                    if (value!.length == 0) {
+                                      return 'الرجاء ادخال البريد الالكتروني';
+                                    }
+                                    if (!RegExp(
+                                            "^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]")
+                                        .hasMatch(value)) {
+                                      return ("أدخل بريد الكتروني صحيح");
+                                    }
+                                  },
+                                  onChanged: (value) {})),
+                        ),
                         const SizedBox(height: 10.0),
                         //password felid
                         Directionality(
