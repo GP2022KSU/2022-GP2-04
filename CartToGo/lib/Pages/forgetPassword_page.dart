@@ -11,8 +11,7 @@ class ForgetPassword extends StatefulWidget {
 }
 
 class _ForgetPasswordState extends State<ForgetPassword> {
-  final formKey = GlobalKey<FormState>();
-
+  final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
 
   @override
@@ -23,6 +22,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
           child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Form(
+                key: _formKey,
                 child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
@@ -79,26 +79,23 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                               foregroundColor:
                                   MaterialStateProperty.all(Colors.white)),
                           onPressed: () async {
-                            showDialog(
-                              context: context,
-                              barrierDismissible: false,
-                              builder: (context) =>
-                                  Center(child: CircularProgressIndicator()),
-                            );
+                            if (_formKey.currentState!.validate()) {
+                              try {
+                                _showEmailDialog(
+                                    "تم ارسال بريد الكتروني لإعادة تعيين كلمة المرور");
+                                await FirebaseAuth.instance
+                                    .sendPasswordResetEmail(
+                                        email: _emailController.text);
 
-                            try {
-                              await FirebaseAuth.instance
-                                  .sendPasswordResetEmail(
-                                      email: _emailController.text);
-                              Utils.showSnackBar(
-                                  'تم ارسال بريد الكتروني لإعادة تعيين كلمة المرور');
-
-                              Navigator.of(context)
-                                  .popUntil((route) => route.isFirst);
-                            } on FirebaseAuthException catch (e) {
-                              print(e);
-                              Utils.showSnackBar(e.message);
-                              Navigator.of(context).pop();
+                                Navigator.of(context)
+                                    .popUntil((route) => route.isFirst);
+                              } on FirebaseAuthException catch (e) {
+                                if (e.code == 'MISSING_EMAIL' ||
+                                    e.code == 'missing-email') {
+                                  _showMyDialog("يجب ادخال بريد الكتروني");
+                                }
+                                print(e);
+                              }
                             }
                           },
                           child: const Text('إعادة تعيين كلمة المرور')),
@@ -132,7 +129,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
         ));
   }
 
-  void _showMyDialog(String success) async {
+   void _showMyDialog(String error) async {
     return showDialog<void>(
         context: context,
         // user must tap button!
@@ -150,7 +147,73 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                   children: [
                     SizedBox(height: 15),
                     Text(
-                      success, //Product name for IOS 1 android 4
+                      "حدث خطأ",
+                      style: TextStyle(
+                          fontSize: 19,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.red),
+                    ),
+                    SizedBox(height: 15),
+                    Text(
+                      error, //Product name for IOS 1 android 4
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                    SizedBox(height: 20),
+                    Divider(
+                      height: 2,
+                      color: Colors.black,
+                    ),
+                    Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: 50,
+                      child: InkWell(
+                        borderRadius: BorderRadius.only(
+                          bottomLeft: Radius.circular(15.0),
+                          bottomRight: Radius.circular(15.0),
+                        ),
+                        highlightColor: Colors.grey[200],
+                        onTap: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: Center(
+                          child: Text(
+                            "موافق",
+                            style: TextStyle(
+                                fontSize: 16.0,
+                                fontWeight: FontWeight.bold,
+                                color: appColor),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ));
+        });
+  }
+
+  void _showEmailDialog(String pass) async {
+    return showDialog<void>(
+        context: context,
+        // user must tap button!
+        builder: (BuildContext context) {
+          return Directionality(
+              textDirection: TextDirection.rtl,
+              child: Dialog(
+                elevation: 0,
+                backgroundColor: Color(0xffffffff),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15.0),
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SizedBox(height: 15),
+                    Text(
+                      pass, //Product name for IOS 1 android 4
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.w400,

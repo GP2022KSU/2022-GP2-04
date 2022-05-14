@@ -134,6 +134,7 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
     }
     return 0;
   }
+  
 
   @override
   Widget build(BuildContext context) {
