@@ -145,7 +145,7 @@ class _LoginPageState extends State<LoginPage> {
                                     String? UID =
                                         FirebaseAuth.instance.currentUser?.uid;
                                     if (UID.toString() ==
-                                        "ieCOHKL0cPhTUa58IcUaEapvhjD3") {
+                                        "jCG3miIP7AdaVVfY20lCn1MVWqR2") {
                                       print("Admin Logged in");
                                       Navigator.push(
                                           context,
