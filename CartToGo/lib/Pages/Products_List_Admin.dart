@@ -338,7 +338,6 @@ class _Products_List_Admin extends State<Products_List_Admin> {
                               MaterialPageRoute(
                                   builder: (context) => Products_List_Admin()));
                         },
-
                         child: Center(
                           child: Text(
                             "نعم",
@@ -354,7 +353,6 @@ class _Products_List_Admin extends State<Products_List_Admin> {
                     Divider(
                       height: 1,
                     ),
-
                     Container(
                       width: MediaQuery.of(context).size.width,
                       height: 50,
@@ -397,7 +395,6 @@ class _Products_List_Admin extends State<Products_List_Admin> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(15.0),
                 ),
-
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Form(
@@ -409,19 +406,18 @@ class _Products_List_Admin extends State<Products_List_Admin> {
                             textDirection: TextDirection.rtl,
                             child: Text(" أدخل بيانات المنتج",
                               style: TextStyle(
-                                  fontSize: 20,
-                                  color: Colors.black
+                                  fontSize: 19,
+                                  color: Colors.black,
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
                           ),
-
-                          const SizedBox(height: 10),
-
+                          SizedBox(height: 15),
                           Divider(
-                            height: 1,
-                            color: Colors.black,
+                            height: 1.5,
+                           // color: Colors.black,
                           ),
-                          const SizedBox(height: 10),
+                          const SizedBox(height: 15),
                           //السعر
                           Directionality(
                             textDirection: TextDirection.rtl,
@@ -435,14 +431,14 @@ class _Products_List_Admin extends State<Products_List_Admin> {
                                 decoration: const InputDecoration(
                                   labelText: "السعر",
                                   labelStyle:
-                                  TextStyle(fontSize: 20, color: Colors.black),
+                                  TextStyle(fontSize: 16, color: Colors.black),
                                   hintText: "أدخل سعر المنتج ",
-                                  hintStyle: TextStyle(fontSize: 18),
-                                  //  enabledBorder: OutlineInputBorder(
-                                  //borderRadius:
-                                  //BorderRadius.all(Radius.circular(20.0)),
-                                  //   borderSide: BorderSide(width: 2, color: appColor),
-                                  // ),
+                                  hintStyle: TextStyle(fontSize: 14),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius:
+                                    BorderRadius.all(Radius.circular(4.0)),
+                                    borderSide: BorderSide(width: 1.5,color: Color(0xFFAFAEAE)),
+                                  ),
                                 ),
                                 validator: (value) {
                                   if (value == null || value.isEmpty) {
@@ -456,9 +452,7 @@ class _Products_List_Admin extends State<Products_List_Admin> {
                                 },
                                 onChanged: (value) {}),
                           ),
-                          const SizedBox(height: 10),
-
-                          const SizedBox(height: 10),
+                          const SizedBox(height: 15),
                           //الكمية
                           Directionality(
                             textDirection: TextDirection.rtl,
@@ -472,14 +466,14 @@ class _Products_List_Admin extends State<Products_List_Admin> {
                                 decoration: const InputDecoration(
                                   labelText: "الكمية",
                                   labelStyle:
-                                  TextStyle(fontSize: 20, color: Colors.black),
+                                  TextStyle(fontSize: 16, color: Colors.black),
                                   hintText: "أدخل كمية المنتج ",
-                                  hintStyle: TextStyle(fontSize: 18),
-                                  /* enabledBorder: OutlineInputBorder(
+                                  hintStyle: TextStyle(fontSize: 14),
+                                  enabledBorder: OutlineInputBorder(
                                     borderRadius:
-                                   BorderRadius.all(Radius.circular(20.0)),
-                                    borderSide: BorderSide(width: 2, color: appColor),
-                                  ),*/
+                                   BorderRadius.all(Radius.circular(4.0)),
+                                    borderSide: BorderSide(width: 1.5,color: Color(0xFFAFAEAE)),
+                                  ),
                                 ),
                                 validator: (value) {
                                   if (value == null || value.isEmpty) {
@@ -493,73 +487,72 @@ class _Products_List_Admin extends State<Products_List_Admin> {
                                 },
                                 onChanged: (value) {}),
                           ),
-                          const SizedBox(height: 10),
-
-                          SizedBox(
-                            height: 11,
+                          SizedBox(height: 15),
+                          Divider(
+                            height: 1,
+                            color: Colors.black,
                           ),
-                          ElevatedButton(
-                              style: ButtonStyle(
-                                  elevation: MaterialStateProperty.all(8.0),
-                                  textStyle: MaterialStateProperty.all(
-                                      const TextStyle(
-                                          fontSize: 20, fontFamily: 'CartToGo')),
-                                  fixedSize:
-                                  MaterialStateProperty.all(const Size(270, 50)),
-                                  shape: MaterialStateProperty.all<
-                                      RoundedRectangleBorder>(
-                                      RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(90.0))),
-                                  backgroundColor:
-                                  MaterialStateProperty.all(appColor),
-                                  foregroundColor:
-                                  MaterialStateProperty.all(Colors.white)),
-                              onPressed: () {
-                                if (_formKey.currentState!.validate()) {
+                          Container(
+                            width: MediaQuery.of(context).size.width,
+                            height: 50,
+                            child: InkWell(
+                              highlightColor: Colors.grey[200],
+                              onTap: () async {
+                                if (_formKey.currentState!.validate())
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(content: Text('Processing Data')),
                                   );
-                                  if (second.text.isNotEmpty &&
-                                      third.text.isNotEmpty ) {
-                                    upd();
-                                  }
-                                  Navigator.push(context,
-                                      MaterialPageRoute(builder: (context) {
-                                        return Products_List_Admin();
-                                      }));
+                                if (second.text.isNotEmpty &&
+                                    third.text.isNotEmpty ) {
+                                  upd();
                                 }
-                              },
-                              child: const Text('تحديث')),
-
-                          SizedBox(height: 10,),
-                          ElevatedButton(
-                              style: ButtonStyle(
-                                  elevation: MaterialStateProperty.all(8.0),
-                                  textStyle: MaterialStateProperty.all(
-                                      const TextStyle(
-                                          fontSize: 20, fontFamily: 'CartToGo')),
-                                  fixedSize:
-                                  MaterialStateProperty.all(const Size(270, 50)),
-                                  shape: MaterialStateProperty.all<
-                                      RoundedRectangleBorder>(
-                                      RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(90.0))),
-                                  backgroundColor:
-                                  MaterialStateProperty.all(Colors.white),
-                                  foregroundColor:
-                                  MaterialStateProperty.all(appColor)),
-                              onPressed: () {
                                 Navigator.push(context,
                                     MaterialPageRoute(builder: (context) {
                                       return Products_List_Admin();
                                     }));
                               },
-                              child: const Text('إلغاء')),
-
-
+                              child: Center(
+                                child: Text(
+                                  "تحديث",
+                                  style: TextStyle(
+                                    fontSize: 18.0,
+                                    color: appColor,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Divider(
+                            height: 1,
+                          ),
+                          Container(
+                            width: MediaQuery.of(context).size.width,
+                            height: 50,
+                            child: InkWell(
+                              borderRadius: BorderRadius.only(
+                                bottomLeft: Radius.circular(15.0),
+                                bottomRight: Radius.circular(15.0),
+                              ),
+                              highlightColor: Colors.grey[200],
+                              onTap: () {
+                                Navigator.push(context,
+                                    MaterialPageRoute(builder: (context) {
+                                      return Products_List_Admin();
+                                    }));
+                                },
+                              child: Center(
+                                child: Text(
+                                  "إلغاء",
+                                  style: TextStyle(
+                                    fontSize: 16.0,
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
                         ]),
-
-
                   ),
                 ),
               ));
@@ -575,133 +568,3 @@ class _Products_List_Admin extends State<Products_List_Admin> {
     third.clear();
   }
 }
-
-/*
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-
-                    SizedBox(height: 15),
-                    Text(
-                      "ادخل بيانات المنتج",
-                      style: TextStyle(
-                        fontSize: 19,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    SizedBox(height: 15),
-                    Divider(
-                      height: 1,
-                      color: Colors.black,
-                    ),
-
-                    Directionality(
-                      textDirection: TextDirection.rtl,
-                      child: TextFormField(
-                          keyboardType: TextInputType.text,
-                       //   controller: ,
-                          decoration: const InputDecoration(
-                            labelText: "الحجم",
-                            labelStyle:
-                            TextStyle(fontSize: 20, color: Colors.black),
-                            hintText: "أدخل حجم، وزن المنتج ",
-                            hintStyle: TextStyle(fontSize: 18),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius:
-                              BorderRadius.all(Radius.circular(20.0)),
-                              borderSide: BorderSide(width: 2, color: appColor),
-                            ),
-                          ),
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'الرجاء كتابة حجم المنتج';
-                            }
-                            return null;
-                          },
-                          onChanged: (value) {}),
-                    ),
-
-                    TextField(
-                      controller: first,
-                      textAlign: TextAlign.right,
-                      decoration: InputDecoration(
-                        hintText: 'إسم المنتج',
-                      ),
-                    ),
-
-                    TextField(
-                      controller: second,
-                      textAlign: TextAlign.right,
-                      decoration: InputDecoration(
-                        labelText: 'الكمية',
-                        hintText: 'ادخل كمية المنتج ',
-                      ),
-                    ),
-
-                    TextField(
-                      controller: third,
-                      textAlign: TextAlign.right,
-                      decoration: InputDecoration(
-                        hintText: 'السعر',
-                      ),
-                    ),
-
-                    Container(
-                      width: MediaQuery.of(context).size.width,
-                      height: 50,
-                      child: InkWell(
-                        highlightColor: Colors.grey[200],
-                        onTap: () async {
-                          await upd();
-                          Navigator.of(context).pop();
-                         /* Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => Products_List_Admin()));*/
-                        },
-                        child: Center(
-                          child: Text(
-                            "تحديث",
-                            style: TextStyle(
-                              fontSize: 18.0,
-                              color: Color(0xFFFE4A49),
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Divider(
-                      height: 1,
-                    ),
-
-                    Container(
-                      width: MediaQuery.of(context).size.width,
-                      height: 50,
-                      child: InkWell(
-                        borderRadius: BorderRadius.only(
-                          bottomLeft: Radius.circular(15.0),
-                          bottomRight: Radius.circular(15.0),
-                        ),
-                        highlightColor: Colors.grey[200],
-                        onTap: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: Center(
-                          child: Text(
-                            "الغاء",
-                            style: TextStyle(
-                              fontSize: 16.0,
-                              fontWeight: FontWeight.w400,
-                            ),
-                          ),
-                        ),
-                      ),
-                  //  ),
-                //  ],
-               // ),
-
- */
-
-
-
