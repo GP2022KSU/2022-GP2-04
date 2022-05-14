@@ -169,7 +169,7 @@ class _Products_List_Admin extends State<Products_List_Admin> {
                         ),
 
                         title: Text(
-                          l[5],
+                          l[2],
                           style: TextStyle(
                             color: Colors.black,
                             fontWeight: FontWeight.bold,
@@ -179,10 +179,10 @@ class _Products_List_Admin extends State<Products_List_Admin> {
                         ),
 
                         subtitle: Text(
-                          "\t" +  "الحجم: "+  l[3]+ "\n"
-                              "\t" +  "العلامة التجارية: "+  l[0]+ "\n"
+                          "\t" +  "الحجم: "+  l[0]+ "\n"
+                              "\t" +  "العلامة التجارية: "+  l[3]+ "\n"
                               + "\t" +
-                              "السعر:" +l[2] + " ريال" + "\n"
+                              "السعر:" +l[4] + " ريال" + "\n"
                               + "\t" +
                               "الكمية:" +l[4] ,
                           style: TextStyle(
