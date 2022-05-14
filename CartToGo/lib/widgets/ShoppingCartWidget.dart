@@ -52,7 +52,7 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
     //_ShowNotRegisteredProduct();
     _getTotal();
   }
-
+//-----------Listens for ConnectedToCart to show the cart-----------//
   void _activateListeners() {
     if (FirebaseAuth.instance.currentUser != null) {
       _streamSubscription = _database
@@ -74,7 +74,7 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
       });
     }
   }
-
+  /* //-----------For Future Code-----------//
   void _ShowNotRegisteredProduct() {
     if (FirebaseAuth.instance.currentUser != null) {
       _streamSubscription3 = _database
@@ -100,7 +100,8 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
       });
     }
   }
-
+  */
+  //-----------Listens for Number of products-----------//
   Future<int> _CheckLastnumOfProd() async {
     if (FirebaseAuth.instance.currentUser != null) {
       _streamSubscription1 = _database
@@ -118,7 +119,7 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
     }
     return numOfProducts;
   }
-
+  //-----------Listens for Total to show the total price-----------//
   Future<double> _getTotal() async {
     if (FirebaseAuth.instance.currentUser != null) {
       _streamSubscription2 = _database
@@ -137,7 +138,7 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
     }
     return total;
   }
-
+  //-----------Listens for FutureCartNumber to show newest cart-----------//
   Future<int> BringLastCartNumber() async {
     if (FirebaseAuth.instance.currentUser != null) {
       _streamSubscription1 = _database
@@ -152,7 +153,7 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
     }
     return LastCartNumber;
   }
-
+  //-----------Brings the quantity of the deleted product-----------//
   Future<int> BringProductQuantity(int barcode) async {
     final _quanData = FirebaseDatabase.instance
         .ref("Products/${barcode.toString()}/Quantity");
@@ -171,7 +172,8 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         floatingActionButton:
             ConnectedToCart == true && numOfProducts != 0 && _isLoading == false
-                ? Center(
+                ? 
+                Center(
                     heightFactor: 3,
                     child: ScrollingFabAnimated(
                       width: MediaQuery.of(context).size.width * 0.9,
@@ -224,26 +226,31 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
                     duration: Duration(milliseconds: 500),
                     itemBuilder: (BuildContext context, DataSnapshot snapshot,
                         Animation<double> animation, int index) {
+
                       numOfProducts = user.getnumOfProducts();
-                      var v = snapshot.value.toString();
+
+                      var v = snapshot.value.toString(); //Gets the scanned product and store it in a var
                       bool checker = true;
                       print(v[0]);
                       try {
                         if (v[0] == "0" && v[1].isNotEmpty) {}
-                      } on RangeError {
+                      } on RangeError { //If there is any kind of range error to avoid errors on the app
                         checker = false;
                         var g = v.replaceAll(RegExp("{|}|0: "), "");
                       }
-                      var g = v.replaceAll(
+                      var g = v.replaceAll( //Using RegExp to remove unwanted data
                           RegExp(
                               "{|}|Name: |Price: |Size: |Category: |Brand: |Barcode: "),
                           "");
 
                       g.trim();
 
-                      var l = g.split(',');
-                      print("s" + l.toString());
-                      if (!(l[0] == "0") && checker) {
+                      var l = g.split(','); 
+                      print("Data" + l.toString());
+
+                      if (!(l[0] == "0") && checker) { //if there is data
+
+                      //-----------Deletes the swiped product-----------//
                         void deleteProduct() async {
                           final Carts = _fb.ref().child(
                               "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts");
@@ -282,6 +289,8 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
                           });
                           print("Total after $total numOfProducts");
                         }
+
+                        //-----------To confirm the deleted items-----------//
 
                         void _showMyDialog(BuildContext context) async {
                           return showDialog<void>(
@@ -378,7 +387,7 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
                                     ));
                               });
                         }
-
+                        //-----------Returns list of the scanned products-----------//
                         return SlideTransition(
                             position: Tween<Offset>(
                               begin: Offset(1, 0),
@@ -622,7 +631,7 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
       ),
     );
   }
-
+  /* //-----------For future code-----------//
   void _showNotRegisteredProduct() async {
     return showDialog<void>(
         context: context,
@@ -697,7 +706,7 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
               ));
         });
   }
-
+  */
   @override
   void deactivate() {
     _streamSubscription.cancel();
