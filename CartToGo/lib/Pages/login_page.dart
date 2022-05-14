@@ -35,7 +35,7 @@ class _LoginPageState extends State<LoginPage> {
                           width: 300,
                           height: 300,
                             image: AssetImage('assets/images/blueCart.png')),
-                        //email felid
+                        
                         Center(
                           heightFactor: 1.2,
                           child: Directionality(

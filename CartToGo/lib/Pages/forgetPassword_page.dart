@@ -28,37 +28,39 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                     children: <Widget>[
                       const Image(
                           image: AssetImage('assets/images/blueCart.png')),
-                      Directionality(
-                        textDirection: TextDirection.rtl,
-                        child: TextFormField(
-                            controller: _emailController,
-                            keyboardType: TextInputType.emailAddress,
-                            decoration: const InputDecoration(
-                                labelText: "البريد الالكتروني",
-                                labelStyle: TextStyle(
-                                    fontSize: 20, color: Colors.black),
-                                hintText: "أدخل بريدك الالكتروني",
-                                hintStyle: TextStyle(fontSize: 18),
-                                enabledBorder: OutlineInputBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(20.0)),
-                                    borderSide:
-                                        BorderSide(width: 2, color: appColor)),
-                                suffixIcon: Icon(Icons.email_outlined,
-                                    color: appColor)),
-                            validator: (value) {
-                              if (value!.length == 0) {
-                                return 'الرجاء ادخال البريد الالكتروني';
-                              }
-                              if (!RegExp(
-                                      "^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]")
-                                  .hasMatch(value)) {
-                                return ("أدخل بريد الكتروني صحيح");
-                              } else {
-                                return null;
-                              }
-                            },
-                            onChanged: (value) {}),
+                      Center(
+                        child: Directionality(
+                          textDirection: TextDirection.rtl,
+                          child: TextFormField(
+                              controller: _emailController,
+                              keyboardType: TextInputType.emailAddress,
+                              decoration: const InputDecoration(
+                                  labelText: "البريد الالكتروني",
+                                  labelStyle: TextStyle(
+                                      fontSize: 20, color: Colors.black),
+                                  hintText: "أدخل بريدك الالكتروني",
+                                  hintStyle: TextStyle(fontSize: 18),
+                                  enabledBorder: OutlineInputBorder(
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(20.0)),
+                                      borderSide:
+                                          BorderSide(width: 2, color: appColor)),
+                                  suffixIcon: Icon(Icons.email_outlined,
+                                      color: appColor)),
+                              validator: (value) {
+                                if (value!.length == 0) {
+                                  return 'الرجاء ادخال البريد الالكتروني';
+                                }
+                                if (!RegExp(
+                                        "^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]")
+                                    .hasMatch(value)) {
+                                  return ("أدخل بريد الكتروني صحيح");
+                                } else {
+                                  return null;
+                                }
+                              },
+                              onChanged: (value) {}),
+                        ),
                       ),
                       const SizedBox(height: 40.0),
                       ElevatedButton(

@@ -35,30 +35,32 @@ class _RegisterPageState extends State<RegisterPage> {
                           width: 200,
                           height: 200,
                         image: AssetImage('assets/images/blueCart.png')),
-                    Directionality(
-                        textDirection: TextDirection.rtl,
-                        child: TextFormField(
-                            controller: _userNameController,
-                            keyboardType: TextInputType.text,
-                            decoration: const InputDecoration(
-                                labelText: "اسم المستخدم",
-                                labelStyle: TextStyle(
-                                    fontSize: 20, color: Colors.black),
-                                hintText: "أدخل اسم المستخدم",
-                                hintStyle: TextStyle(fontSize: 18),
-                                enabledBorder: OutlineInputBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(20.0)),
-                                    borderSide:
-                                        BorderSide(width: 2, color: appColor)),
-                                suffixIcon: Icon(Icons.account_box_outlined,
-                                    color: appColor)),
-                            validator: (value) {
-                              if (value!.length == 0) {
-                                return 'الرجاء كتابة اسم المستخدم';
-                              }
-                            },
-                            onChanged: (value) {})),
+                    Center(
+                      child: Directionality(
+                          textDirection: TextDirection.rtl,
+                          child: TextFormField(
+                              controller: _userNameController,
+                              keyboardType: TextInputType.text,
+                              decoration: const InputDecoration(
+                                  labelText: "اسم المستخدم",
+                                  labelStyle: TextStyle(
+                                      fontSize: 20, color: Colors.black),
+                                  hintText: "أدخل اسم المستخدم",
+                                  hintStyle: TextStyle(fontSize: 18),
+                                  enabledBorder: OutlineInputBorder(
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(20.0)),
+                                      borderSide:
+                                          BorderSide(width: 2, color: appColor)),
+                                  suffixIcon: Icon(Icons.account_box_outlined,
+                                      color: appColor)),
+                              validator: (value) {
+                                if (value!.length == 0) {
+                                  return 'الرجاء كتابة اسم المستخدم';
+                                }
+                              },
+                              onChanged: (value) {})),
+                    ),
                     const SizedBox(height: 10.0),
                     //email felid
                     Directionality(
@@ -275,11 +277,13 @@ class _RegisterPageState extends State<RegisterPage> {
                           color: Colors.red),
                     ),
                     SizedBox(height: 15),
-                    Text(
-                      error, //Product name for IOS 1 android 4
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w400,
+                    Center(
+                      child: Text(
+                        error, //Product name for IOS 1 android 4
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w400,
+                        ),
                       ),
                     ),
                     SizedBox(height: 20),
