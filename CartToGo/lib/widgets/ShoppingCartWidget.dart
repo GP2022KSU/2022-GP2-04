@@ -49,7 +49,7 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
     super.initState();
     _activateListeners();
     _CheckLastnumOfProd();
-    _ShowNotRegisteredProduct();
+    //_ShowNotRegisteredProduct();
     _getTotal();
   }
 
@@ -86,10 +86,15 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
         print("Data $data");
         String Fornow = "false";
         Fornow = data.toString();
-        if (Fornow.toLowerCase() == 'true') {
+        if (Fornow.toLowerCase() == 'true' && ConnectedToCart == true) {
           _showNotRegisteredProduct();
-          Future.delayed(const Duration(seconds: 1), () async {
-
+          Future.delayed(const Duration(milliseconds: 500), () async {
+            final _fb = FirebaseDatabase.instance;
+            final Carts = await _fb.ref().child(
+                "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts");
+            await Carts.update({
+              'ShowNotRegisteredProduct': false,
+            });
           });
         }
       });
@@ -667,14 +672,13 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
                         ),
                         highlightColor: Colors.grey[200],
                         onTap: () async {
-                          
                           final _fb = FirebaseDatabase.instance;
                           final Carts = await _fb.ref().child(
                               "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts");
                           await Carts.update({
                             'ShowNotRegisteredProduct': false,
                           });
-                          
+
                           Navigator.of(context).pop();
                         },
                         child: Center(
@@ -699,7 +703,7 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
     _streamSubscription.cancel();
     _streamSubscription1.cancel();
     _streamSubscription2.cancel();
-    _streamSubscription3.cancel();
+    //_streamSubscription3.cancel();
     super.deactivate();
   }
 }
