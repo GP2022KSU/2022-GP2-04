@@ -99,10 +99,16 @@ class _Products_List_Admin extends State<Products_List_Admin> {
         elevation: 0,
       ),
 
-      body: SingleChildScrollView(
-    child: Padding(
-    padding: const EdgeInsets.all(8.0),
-      child: FirebaseAnimatedList(
+     // body: SingleChildScrollView(
+     //child: Padding(
+     //padding: const EdgeInsets.all(8.0),
+     // child: Column(
+      //    children: <Widget>[
+
+
+
+      body:FirebaseAnimatedList(
+        padding: const EdgeInsets.all(8.0),
         query: ref,
         shrinkWrap: true,
         itemBuilder: (context, snapshot, animation, index) {
@@ -180,7 +186,6 @@ class _Products_List_Admin extends State<Products_List_Admin> {
               },
               //------------------------------------------------------------
 
-
               // ترتيب الليست واظهار المنتجات
               child: Directionality(
                 textDirection: TextDirection.rtl,
@@ -225,7 +230,6 @@ class _Products_List_Admin extends State<Products_List_Admin> {
 
                       title: Text(
                         l[5],
-                        // 'dd',
                         style: TextStyle(
                           color: Colors.black,
                           fontWeight: FontWeight.bold,
@@ -254,12 +258,13 @@ class _Products_List_Admin extends State<Products_List_Admin> {
               )
             //------------------------------------------------------------
 
-
           );
         },
       ),
-      ),
-      ));
+     // ]),
+   //  ),
+     // )
+    );
   }
 
   //ميثود للخروج

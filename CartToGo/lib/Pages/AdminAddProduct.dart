@@ -382,9 +382,9 @@ class RealtimeDatabaseInsertState extends State<RealtimeDatabaseInsert> {
   void insertData(String name, String barcode, String brand, String category,
       String price, String quantity, String size) {
 
-    //var intBarcode = int.tryParse(barcode);
+    var intBarcode = int.tryParse(barcode);
 
-    databaseRef.child("Products").child("$barcode").set({
+    databaseRef.child("Products").child("$intBarcode").set({
       'Name': name,
       'Brand': brand,
       'Category': category,
