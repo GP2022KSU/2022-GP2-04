@@ -14,8 +14,8 @@
 #include <addons/RTDBHelper.h>
 
 //WiFi info to authenticate
-#define WIFI_SSID "CartToGo"
-#define WIFI_PASSWORD "11223344"
+#define WIFI_SSID "TP-Link_4EAB"
+#define WIFI_PASSWORD "28506867"
 
 //Firebase info to authenticate
 #define API_KEY "AIzaSyCFoxsSG6CUrgi5DuiFz6Ph1v2kjdoDbcg"
@@ -278,6 +278,7 @@ boolean LoyaltyCardConnectionFirebase(String QRid) {
         if (Firebase.setInt(fbdo, GetUid + "/" + CartNumber + "/0", 0)) {
           if (Firebase.setBool(fbdo, GetUid + "/ConnectedToCart", true)) {
             if (Firebase.setBool(fbdo, GetUid + "/DeletingProduct", false));
+            if(Firebase.setBool(fbdo, GetUid + "/ShowNotRegisteredProduct", false));
             if (Firebase.setInt(fbdo, GetUid + "/NumOfProducts", 0 ));
             if (Firebase.setInt(fbdo, GetUid + "/Total", 0.0)) { //Set a new total variable for the cart
               return true;
@@ -427,7 +428,9 @@ void loop()
       }
 
       else { //If barcode that is scanned is not available in the database
-
+        String carts = cartsPath + "/ShowNotRegisteredProduct";
+        Serial.print(carts);
+          
         //اذا المنتج غير مسجل تظهر عبارة "غير مسجل" على شاشاة LCD
         Serial.println(fbdo.errorReason().c_str());
         lcd.clear();
