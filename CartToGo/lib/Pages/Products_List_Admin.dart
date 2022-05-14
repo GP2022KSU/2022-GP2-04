@@ -1,22 +1,14 @@
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:firebase_database/firebase_database.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:carttogo/main.dart';
-import 'dart:async';
 import 'package:flutter/services.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:animated_button/animated_button.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:carttogo/Pages/welcome_page.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:carttogo/Pages//AdminAddProduct.dart';
-
+//import ' AdminUpdateProduct.dart';
+import 'package:flutter/rendering.dart';
 
 class Products_List_Admin extends StatefulWidget {
   @override
@@ -24,18 +16,20 @@ class Products_List_Admin extends StatefulWidget {
 }
 
 class _Products_List_Admin extends State<Products_List_Admin> {
+  bool isScrolled = false;
   final fb = FirebaseDatabase.instance;
+  final _formKey = GlobalKey<FormState>();
   TextEditingController second = TextEditingController();
   TextEditingController third = TextEditingController();
   var l;
   var g;
   var k;
+
   @override
   Widget build(BuildContext context) {
     final ref = fb.ref().child('Products');
 
     return Scaffold(
-
       //بتن يوديه لصفحة الاد
       floatingActionButton: FloatingActionButton.extended(
         onPressed: (){
@@ -43,6 +37,7 @@ class _Products_List_Admin extends State<Products_List_Admin> {
             return RealtimeDatabaseInsert();
           }));
         },
+        isExtended: isScrolled,
         icon: Icon(Icons.add),
         label: Text(
           "إضافة منتج جديد",
@@ -54,11 +49,11 @@ class _Products_List_Admin extends State<Products_List_Admin> {
           ),
         ),
         backgroundColor: appColor,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
       ),
       //------------------------------------------------------------
 
       backgroundColor: Colors.white,
-
       appBar: AppBar(
         backgroundColor: Colors.white24,
         title: Text(
@@ -78,7 +73,7 @@ class _Products_List_Admin extends State<Products_List_Admin> {
                 style: ButtonStyle(
                     elevation: MaterialStateProperty.all(3),
                     textStyle: MaterialStateProperty.all(const TextStyle(
-                        fontSize: 14,
+                        fontSize: 17,
                         fontFamily: 'CartToGo',
                         fontWeight: FontWeight.bold)),
                     fixedSize: MaterialStateProperty.all(const Size(70, 10)),
@@ -94,176 +89,121 @@ class _Products_List_Admin extends State<Products_List_Admin> {
           ),
         ],
         //------------------------------------------------------------
-
         centerTitle: true,
         elevation: 0,
       ),
 
-     // body: SingleChildScrollView(
-     //child: Padding(
-     //padding: const EdgeInsets.all(8.0),
-     // child: Column(
-      //    children: <Widget>[
+      body:NotificationListener<UserScrollNotification>(
+        onNotification: (notification){
+          if(notification.direction==ScrollDirection.forward){
+            setState(() {
+              isScrolled= true;
+            });
+          }else if(notification.direction==ScrollDirection.reverse){
+            setState(() {
+              isScrolled= false;
+            });
+          }
+          return true;
+        },
 
+        child: FirebaseAnimatedList(
+          padding: const EdgeInsets.all(8.0),
+          query: ref,
+          shrinkWrap: true,
+          itemBuilder: (context, snapshot, animation, index) {
+            var v =
+            snapshot.value.toString();
+            g = v.replaceAll(
+                RegExp("{|}|Name: |Price: |Size: |Quantity: |Category: |Brand: |Barcode: "), "");
+            g.trim();
+            l = g.split(',');
 
-
-      body:FirebaseAnimatedList(
-        padding: const EdgeInsets.all(8.0),
-        query: ref,
-        shrinkWrap: true,
-        itemBuilder: (context, snapshot, animation, index) {
-
-          var v =
-          snapshot.value.toString();
-          g = v.replaceAll(
-              RegExp("{|}|Name: |Price: |Size: |Quantity: |Category: |Brand: |Barcode: "), "");
-          g.trim();
-          l = g.split(',');
-
-          return GestureDetector(
-              onTap: () {
-                setState(() {
-                  k = snapshot.key;
-                });
-
-
-                //  جاري التضبيط >>>> مربع الابديت حقهم الميثود حقتها تحت
-                showDialog(
-                  context: context,
-                  builder: (ctx) => AlertDialog(
-
-                    title: Container(
-                      decoration: BoxDecoration(border: Border.all()),
-                      child: TextField(
-                        controller: second,
-                        textAlign: TextAlign.center,
-                        decoration: InputDecoration(
-                          hintText: 'Name',
-                        ),
-                      ),
-                    ),
-
-                    content: Container(
-                      decoration: BoxDecoration(border: Border.all()),
-                      child: TextField(
-                        controller: third,
-                        textAlign: TextAlign.center,
-                        decoration: InputDecoration(
-                          hintText: 'Brand',
-                        ),
-                      ),
-                    ),
-
-                    actions: <Widget>[
-                      MaterialButton(
-                        onPressed: () {
-                          Navigator.of(ctx).pop();
-                        },
-                        color: Color.fromARGB(255, 0, 22, 145),
-                        child: Text(
-                          "Cancel",
-                          style: TextStyle(
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                      MaterialButton(
-                        onPressed: () async {
-                          await upd();
-                          Navigator.of(ctx).pop();
-                        },
-                        color: Color.fromARGB(255, 0, 22, 145),
-                        child: Text(
-                          "Update",
-                          style: TextStyle(
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                );
-              },
-              //------------------------------------------------------------
+            return GestureDetector(
 
               // ترتيب الليست واظهار المنتجات
-              child: Directionality(
-                textDirection: TextDirection.rtl,
-                child: Container(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
+                child: Directionality(
+                  textDirection: TextDirection.rtl,
+                  child: Container(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
 
-                    child: ListTile(
+                      child: ListTile(
 
-                      shape: RoundedRectangleBorder(
-                        side: BorderSide(
-                          color: Colors.white,),
-                        borderRadius: BorderRadius.circular(10),),
+                        shape: RoundedRectangleBorder(
+                          side: BorderSide(
+                            color: Colors.white,),
+                          borderRadius: BorderRadius.circular(10),),
 
-                      tileColor: Color.fromARGB(229, 229, 227, 227),
+                        tileColor: Color.fromARGB(229, 229, 227, 227),
 
-                      trailing: IconButton(
-                        tooltip: "حذف المنتج",
-                        icon: Icon(
-                          Icons.delete,
-                          color: Color.fromARGB(255, 255, 0, 0),
+                        trailing: IconButton(
+                          tooltip: "حذف المنتج",
+                          icon: Icon(
+                            Icons.delete,
+                            color: Color.fromARGB(255, 255, 0, 0),
+                          ),
+
+                          onPressed: () {
+                            var EE = ref.child(snapshot.key!);
+                            _DeleteOrNot(EE);
+                          },
                         ),
 
-                        onPressed: () {
-                          var EE = ref.child(snapshot.key!);
-                          _DeleteOrNot(EE);
-                        },
-                      ),
-
-                      leading: IconButton(
-                        tooltip: "تعديل المنتج",
-                        icon: Icon(
-                          Icons.edit,
-                          color: Color.fromARGB(255, 94, 90, 90),
+                        leading: IconButton(
+                          tooltip: "تعديل المنتج",
+                          icon: Icon(
+                            Icons.edit,
+                            color: Color.fromARGB(255, 94, 90, 90),
+                          ),
+                          onPressed: ()async {
+                            setState(() {
+                              k = snapshot.key;
+                            });
+                            _UpdateOrNot();
+                            /*Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => RealtimeDatabaseUpdate() ));*/
+                          },
                         ),
-                        onPressed: ()async {
-                          // await upd();
-                          // Navigator.of(ctx).pop();
 
-                        },
-                      ),
-
-                      title: Text(
-                        l[5],
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                          fontFamily: 'CartToGo',
-                          fontSize: 17,
+                        title: Text(
+                          l[2],
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: 'CartToGo',
+                            fontSize: 17,
+                          ),
                         ),
-                      ),
 
-                      subtitle: Text(
-                        "\t" +  "الحجم: "+  l[3]+ "\n"
-                            "\t" +  "العلامة التجارية: "+  l[0]+ "\n"
-                            + "\t" +
-                            "السعر:" +l[2] + " ريال" + "\n"
-                            + "\t" +
-                            "الكمية:" +l[4] ,
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                          fontFamily: 'CartToGo',
-                          fontSize: 12,
+                        subtitle: Text(
+                          "\t" +  "الحجم: "+  l[0]+ "\n"
+                              "\t" +  "العلامة التجارية: "+  l[3]+ "\n"
+                              + "\t" +
+                              "السعر:" +l[5] + " ريال" + "\n"
+                              + "\t" +
+                              "الكمية:" +l[] ,
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: 'CartToGo',
+                            fontSize: 12,
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
-              )
-            //------------------------------------------------------------
-
-          );
-        },
+                )
+              //------------------------------------------------------------
+            );
+          },
+        ),
       ),
-     // ]),
-   //  ),
-     // )
+      // ]),
+      //  ),
+      // )
     );
   }
 
@@ -381,6 +321,7 @@ class _Products_List_Admin extends State<Products_List_Admin> {
                       ),
                     ),
                     SizedBox(height: 15),
+
                     Divider(
                       height: 1,
                       color: Colors.black,
@@ -443,17 +384,324 @@ class _Products_List_Admin extends State<Products_List_Admin> {
         });
   }
 
+  void _UpdateOrNot() async {
+    return showDialog<void>(
+        context: context,
+        // user must tap button!
+        builder: (BuildContext context) {
+          return Directionality(
+              textDirection: TextDirection.rtl,
+              child: Dialog(
+                elevation: 0,
+                backgroundColor: Color(0xffffffff),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15.0),
+                ),
 
-//ميثود الابديت حقتهم
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Directionality(
+                            textDirection: TextDirection.rtl,
+                            child: Text(" أدخل بيانات المنتج",
+                              style: TextStyle(
+                                  fontSize: 20,
+                                  color: Colors.black
+                              ),
+                            ),
+                          ),
+
+                          const SizedBox(height: 10),
+
+                          Divider(
+                            height: 1,
+                            color: Colors.black,
+                          ),
+                          const SizedBox(height: 10),
+                          //السعر
+                          Directionality(
+                            textDirection: TextDirection.rtl,
+                            child: TextFormField(
+                                keyboardType: TextInputType.number,
+                                inputFormatters: <TextInputFormatter>[
+                                  FilteringTextInputFormatter.digitsOnly
+                                ], // Only numbers can be entered
+                                //  obscureText: true,
+                                controller: third,
+                                decoration: const InputDecoration(
+                                  labelText: "السعر",
+                                  labelStyle:
+                                  TextStyle(fontSize: 20, color: Colors.black),
+                                  hintText: "أدخل سعر المنتج ",
+                                  hintStyle: TextStyle(fontSize: 18),
+                                  //  enabledBorder: OutlineInputBorder(
+                                  //borderRadius:
+                                  //BorderRadius.all(Radius.circular(20.0)),
+                                  //   borderSide: BorderSide(width: 2, color: appColor),
+                                  // ),
+                                ),
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'الرجاء كتابة سعر المنتج';
+                                  }
+                                  if (value.contains(RegExp(r'[A-Z]')) &&
+                                      value.contains(RegExp(r'[a-z]'))) {
+                                    return 'سعر المنتج يجب ان لا يحتوي على احرف';
+                                  }
+                                  return null;
+                                },
+                                onChanged: (value) {}),
+                          ),
+                          const SizedBox(height: 10),
+
+                          const SizedBox(height: 10),
+                          //الكمية
+                          Directionality(
+                            textDirection: TextDirection.rtl,
+                            child: TextFormField(
+                                keyboardType: TextInputType.number,
+                                inputFormatters: <TextInputFormatter>[
+                                  FilteringTextInputFormatter.digitsOnly
+                                ], // Only numbers can be entered
+                                //  obscureText: true,
+                                controller: second,
+                                decoration: const InputDecoration(
+                                  labelText: "الكمية",
+                                  labelStyle:
+                                  TextStyle(fontSize: 20, color: Colors.black),
+                                  hintText: "أدخل كمية المنتج ",
+                                  hintStyle: TextStyle(fontSize: 18),
+                                  /* enabledBorder: OutlineInputBorder(
+                                    borderRadius:
+                                   BorderRadius.all(Radius.circular(20.0)),
+                                    borderSide: BorderSide(width: 2, color: appColor),
+                                  ),*/
+                                ),
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'الرجاء كتابة كمية المنتج';
+                                  }
+                                  if (value.contains(RegExp(r'[A-Z]')) &&
+                                      value.contains(RegExp(r'[a-z]'))) {
+                                    return ' كمية المنتج يجب ان لا تحتوي على احرف';
+                                  }
+                                  return null;
+                                },
+                                onChanged: (value) {}),
+                          ),
+                          const SizedBox(height: 10),
+
+                          SizedBox(
+                            height: 11,
+                          ),
+                          ElevatedButton(
+                              style: ButtonStyle(
+                                  elevation: MaterialStateProperty.all(8.0),
+                                  textStyle: MaterialStateProperty.all(
+                                      const TextStyle(
+                                          fontSize: 20, fontFamily: 'CartToGo')),
+                                  fixedSize:
+                                  MaterialStateProperty.all(const Size(270, 50)),
+                                  shape: MaterialStateProperty.all<
+                                      RoundedRectangleBorder>(
+                                      RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(90.0))),
+                                  backgroundColor:
+                                  MaterialStateProperty.all(appColor),
+                                  foregroundColor:
+                                  MaterialStateProperty.all(Colors.white)),
+                              onPressed: () {
+                                if (_formKey.currentState!.validate()) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(content: Text('Processing Data')),
+                                  );
+                                  if (second.text.isNotEmpty &&
+                                      third.text.isNotEmpty ) {
+                                    upd();
+                                  }
+                                  Navigator.push(context,
+                                      MaterialPageRoute(builder: (context) {
+                                        return Products_List_Admin();
+                                      }));
+                                }
+                              },
+                              child: const Text('تحديث')),
+
+                          SizedBox(height: 10,),
+                          ElevatedButton(
+                              style: ButtonStyle(
+                                  elevation: MaterialStateProperty.all(8.0),
+                                  textStyle: MaterialStateProperty.all(
+                                      const TextStyle(
+                                          fontSize: 20, fontFamily: 'CartToGo')),
+                                  fixedSize:
+                                  MaterialStateProperty.all(const Size(270, 50)),
+                                  shape: MaterialStateProperty.all<
+                                      RoundedRectangleBorder>(
+                                      RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(90.0))),
+                                  backgroundColor:
+                                  MaterialStateProperty.all(Colors.white),
+                                  foregroundColor:
+                                  MaterialStateProperty.all(appColor)),
+                              onPressed: () {
+                                Navigator.push(context,
+                                    MaterialPageRoute(builder: (context) {
+                                      return Products_List_Admin();
+                                    }));
+                              },
+                              child: const Text('إلغاء')),
+
+
+                        ]),
+
+
+                  ),
+                ),
+              ));
+        });}
+
   upd() async {
     DatabaseReference ref1 = FirebaseDatabase.instance.ref("Products/$k");
-// Only update the name, leave the age and address!
     await ref1.update({
-      "Name": second.text,
-      "Brand": third.text,
+      "Quantity": second.text,
+      "Price": third.text,
     });
     second.clear();
     third.clear();
   }
 }
+
+/*
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+
+                    SizedBox(height: 15),
+                    Text(
+                      "ادخل بيانات المنتج",
+                      style: TextStyle(
+                        fontSize: 19,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(height: 15),
+                    Divider(
+                      height: 1,
+                      color: Colors.black,
+                    ),
+
+                    Directionality(
+                      textDirection: TextDirection.rtl,
+                      child: TextFormField(
+                          keyboardType: TextInputType.text,
+                       //   controller: ,
+                          decoration: const InputDecoration(
+                            labelText: "الحجم",
+                            labelStyle:
+                            TextStyle(fontSize: 20, color: Colors.black),
+                            hintText: "أدخل حجم، وزن المنتج ",
+                            hintStyle: TextStyle(fontSize: 18),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius:
+                              BorderRadius.all(Radius.circular(20.0)),
+                              borderSide: BorderSide(width: 2, color: appColor),
+                            ),
+                          ),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'الرجاء كتابة حجم المنتج';
+                            }
+                            return null;
+                          },
+                          onChanged: (value) {}),
+                    ),
+
+                    TextField(
+                      controller: first,
+                      textAlign: TextAlign.right,
+                      decoration: InputDecoration(
+                        hintText: 'إسم المنتج',
+                      ),
+                    ),
+
+                    TextField(
+                      controller: second,
+                      textAlign: TextAlign.right,
+                      decoration: InputDecoration(
+                        labelText: 'الكمية',
+                        hintText: 'ادخل كمية المنتج ',
+                      ),
+                    ),
+
+                    TextField(
+                      controller: third,
+                      textAlign: TextAlign.right,
+                      decoration: InputDecoration(
+                        hintText: 'السعر',
+                      ),
+                    ),
+
+                    Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: 50,
+                      child: InkWell(
+                        highlightColor: Colors.grey[200],
+                        onTap: () async {
+                          await upd();
+                          Navigator.of(context).pop();
+                         /* Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => Products_List_Admin()));*/
+                        },
+                        child: Center(
+                          child: Text(
+                            "تحديث",
+                            style: TextStyle(
+                              fontSize: 18.0,
+                              color: Color(0xFFFE4A49),
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Divider(
+                      height: 1,
+                    ),
+
+                    Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: 50,
+                      child: InkWell(
+                        borderRadius: BorderRadius.only(
+                          bottomLeft: Radius.circular(15.0),
+                          bottomRight: Radius.circular(15.0),
+                        ),
+                        highlightColor: Colors.grey[200],
+                        onTap: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: Center(
+                          child: Text(
+                            "الغاء",
+                            style: TextStyle(
+                              fontSize: 16.0,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ),
+                      ),
+                  //  ),
+                //  ],
+               // ),
+
+ */
+
+
 
