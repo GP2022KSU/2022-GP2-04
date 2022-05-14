@@ -182,9 +182,9 @@ class _Products_List_Admin extends State<Products_List_Admin> {
                           "\t" +  "الحجم: "+  l[0]+ "\n"
                               "\t" +  "العلامة التجارية: "+  l[3]+ "\n"
                               + "\t" +
-                              "السعر:" +l[4] + " ريال" + "\n"
+                              "السعر:" +l[5] + " ريال" + "\n"
                               + "\t" +
-                              "الكمية:" +l[4] ,
+                              "الكمية:" +l[] ,
                           style: TextStyle(
                             color: Colors.black,
                             fontWeight: FontWeight.bold,
