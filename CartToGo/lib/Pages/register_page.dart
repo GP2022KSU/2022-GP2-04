@@ -244,7 +244,7 @@ class _RegisterPageState extends State<RegisterPage> {
         "FutureCartNumber": 1, //always 1
         "Total": 0, //always 0
         "NumOfProducts": 0, //always 0
-        "ShowNotRegistered": false //always false
+        "ShowNotRegisteredProduct": false //always false
       }
     });
     final databaseRef= FirebaseDatabase.instance.ref();

@@ -9,6 +9,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_scrolling_fab_animated/flutter_scrolling_fab_animated.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:carttogo/main.dart';
 
 class ShoppingCartWidget extends StatefulWidget {
   const ShoppingCartWidget({Key? key}) : super(key: key);
@@ -23,12 +24,14 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
   double totalCart = 0;
   late int LastCartNumber = 0;
   late bool ConnectedToCart = false;
+  late bool ShowNotRegisteredProduct = false;
   late bool checkDelete;
   final _fb = FirebaseDatabase.instance;
   final _database = FirebaseDatabase.instance.ref();
   late StreamSubscription _streamSubscription;
   late StreamSubscription _streamSubscription1;
   late StreamSubscription _streamSubscription2;
+  late StreamSubscription _streamSubscription3;
 
   late bool _isLoading;
   @override
@@ -46,6 +49,7 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
     super.initState();
     _activateListeners();
     _CheckLastnumOfProd();
+    _ShowNotRegisteredProduct();
     _getTotal();
   }
 
@@ -67,6 +71,27 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
             ConnectedToCart = false;
           }
         });
+      });
+    }
+  }
+
+  void _ShowNotRegisteredProduct() {
+    if (FirebaseAuth.instance.currentUser != null) {
+      _streamSubscription3 = _database
+          .child(
+              "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts/ShowNotRegisteredProduct")
+          .onValue
+          .listen((event) {
+        final data = event.snapshot.value;
+        print("Data $data");
+        String Fornow = "false";
+        Fornow = data.toString();
+        if (Fornow.toLowerCase() == 'true') {
+          _showNotRegisteredProduct();
+          Future.delayed(const Duration(seconds: 1), () async {
+
+          });
+        }
       });
     }
   }
@@ -134,7 +159,6 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
     }
     return 0;
   }
-  
 
   @override
   Widget build(BuildContext context) {
@@ -594,11 +618,88 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
     );
   }
 
+  void _showNotRegisteredProduct() async {
+    return showDialog<void>(
+        context: context,
+        barrierDismissible: false,
+        // user must tap button!
+        builder: (BuildContext context) {
+          return Directionality(
+              textDirection: TextDirection.rtl,
+              child: Dialog(
+                elevation: 0,
+                backgroundColor: Color(0xffffffff),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15.0),
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SizedBox(height: 15),
+                    Text(
+                      "حدث خطأ",
+                      style: TextStyle(
+                        fontSize: 19,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.red,
+                      ),
+                    ),
+                    SizedBox(height: 15),
+                    Text(
+                      "المنتج غير مسجل", //Product name for IOS 1 android 4
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                    SizedBox(height: 20),
+                    Divider(
+                      height: 2,
+                      color: Colors.black,
+                    ),
+                    Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: 50,
+                      child: InkWell(
+                        borderRadius: BorderRadius.only(
+                          bottomLeft: Radius.circular(15.0),
+                          bottomRight: Radius.circular(15.0),
+                        ),
+                        highlightColor: Colors.grey[200],
+                        onTap: () async {
+                          
+                          final _fb = FirebaseDatabase.instance;
+                          final Carts = await _fb.ref().child(
+                              "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts");
+                          await Carts.update({
+                            'ShowNotRegisteredProduct': false,
+                          });
+                          
+                          Navigator.of(context).pop();
+                        },
+                        child: Center(
+                          child: Text(
+                            "موافق",
+                            style: TextStyle(
+                                fontSize: 16.0,
+                                fontWeight: FontWeight.bold,
+                                color: appColor),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ));
+        });
+  }
+
   @override
   void deactivate() {
     _streamSubscription.cancel();
     _streamSubscription1.cancel();
     _streamSubscription2.cancel();
+    _streamSubscription3.cancel();
     super.deactivate();
   }
 }
