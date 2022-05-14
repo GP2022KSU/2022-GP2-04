@@ -430,6 +430,7 @@ void loop()
       else { //If barcode that is scanned is not available in the database
         String carts = cartsPath + "/ShowNotRegisteredProduct";
         Serial.print(carts);
+        Firebase.setBool(fbdo, GetUid + "/ShowNotRegisteredProduct", true);
           
         //اذا المنتج غير مسجل تظهر عبارة "غير مسجل" على شاشاة LCD
         Serial.println(fbdo.errorReason().c_str());
