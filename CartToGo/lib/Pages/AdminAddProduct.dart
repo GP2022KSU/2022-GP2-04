@@ -62,6 +62,7 @@ class RealtimeDatabaseInsertState extends State<RealtimeDatabaseInsert> {
           centerTitle: true,
           elevation: 0,
         ),
+
         body: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(30.0),
@@ -380,15 +381,11 @@ class RealtimeDatabaseInsertState extends State<RealtimeDatabaseInsert> {
 
   void insertData(String name, String barcode, String brand, String category,
       String price, String quantity, String size) {
-    // String key = databaseRef.child("Products").push().key;
-    //databaseRef.child("Products").child(key).set({//product as parent
-    var intBarcode = int.tryParse(barcode);
 
-    databaseRef.child("Products").child("$intBarcode").set({
-      //product as parent
-      //  'ID' : key,//uni ID
+    //var intBarcode = int.tryParse(barcode);
+
+    databaseRef.child("Products").child("$barcode").set({
       'Name': name,
-      //'barcodeNumber' : int.tryParse(barcode),
       'Brand': brand,
       'Category': category,
       'Price': int.tryParse(price),

@@ -99,7 +99,10 @@ class _Products_List_Admin extends State<Products_List_Admin> {
         elevation: 0,
       ),
 
-      body: FirebaseAnimatedList(
+      body: SingleChildScrollView(
+    child: Padding(
+    padding: const EdgeInsets.all(8.0),
+      child: FirebaseAnimatedList(
         query: ref,
         shrinkWrap: true,
         itemBuilder: (context, snapshot, animation, index) {
@@ -255,7 +258,8 @@ class _Products_List_Admin extends State<Products_List_Admin> {
           );
         },
       ),
-    );
+      ),
+      ));
   }
 
   //ميثود للخروج
