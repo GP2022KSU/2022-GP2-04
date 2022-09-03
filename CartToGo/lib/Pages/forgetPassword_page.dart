@@ -3,7 +3,6 @@ import 'package:carttogo/Pages/welcome_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:carttogo/main.dart';
 import 'package:flutter/material.dart';
-import 'package:carttogo/utils.dart';
 
 class ForgetPassword extends StatefulWidget {
   @override
@@ -11,6 +10,7 @@ class ForgetPassword extends StatefulWidget {
 }
 
 class _ForgetPasswordState extends State<ForgetPassword> {
+  //create forget password form
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
 
@@ -29,6 +29,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                       const Image(
                           image: AssetImage('assets/images/blueCart.png')),
                       Center(
+                        //email text felid
                         child: Directionality(
                           textDirection: TextDirection.rtl,
                           child: TextFormField(
@@ -41,12 +42,14 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                                   hintText: "أدخل بريدك الالكتروني",
                                   hintStyle: TextStyle(fontSize: 18),
                                   enabledBorder: OutlineInputBorder(
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(20.0)),
-                                      borderSide:
-                                          BorderSide(width: 2, color: appColor)),
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(20.0)),
+                                      borderSide: BorderSide(
+                                          width: 2, color: appColor)),
                                   suffixIcon: Icon(Icons.email_outlined,
                                       color: appColor)),
+
+                              //email validation, the shopper should enter email as xxxx@xxxxx.xxx
                               validator: (value) {
                                 if (value!.length == 0) {
                                   return 'الرجاء ادخال البريد الالكتروني';
@@ -60,9 +63,12 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                                 }
                               },
                               onChanged: (value) {}),
+                          //end if email text feild
                         ),
                       ),
                       const SizedBox(height: 40.0),
+
+                      //rest password button
                       ElevatedButton(
                           style: ButtonStyle(
                               elevation: MaterialStateProperty.all(8.0),
@@ -88,9 +94,10 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                                 await FirebaseAuth.instance
                                     .sendPasswordResetEmail(
                                         email: _emailController.text);
-
                                 Navigator.of(context)
                                     .popUntil((route) => route.isFirst);
+
+                                //show email error message when the user doesn't enters any email
                               } on FirebaseAuthException catch (e) {
                                 if (e.code == 'MISSING_EMAIL' ||
                                     e.code == 'missing-email') {
@@ -101,7 +108,11 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                             }
                           },
                           child: const Text('إعادة تعيين كلمة المرور')),
+                      //end of rest password button
+
                       const SizedBox(height: 15.0),
+
+                      //back to login button
                       ElevatedButton(
                           style: ButtonStyle(
                               elevation: MaterialStateProperty.all(8.0),
@@ -126,15 +137,16 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                             }));
                           },
                           child: const Text('عودة')),
+                      //end of back button
                     ]),
               )),
+          //end of forget password form
         ));
   }
 
-   void _showMyDialog(String error) async {
+  void _showMyDialog(String error) async {
     return showDialog<void>(
         context: context,
-        // user must tap button!
         builder: (BuildContext context) {
           return Directionality(
               textDirection: TextDirection.rtl,
@@ -157,7 +169,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                     ),
                     SizedBox(height: 15),
                     Text(
-                      error, //Product name for IOS 1 android 4
+                      error,
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.w400,
@@ -215,7 +227,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                   children: [
                     SizedBox(height: 15),
                     Text(
-                      pass, //Product name for IOS 1 android 4
+                      pass,
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.w400,

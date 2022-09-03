@@ -12,8 +12,8 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
+  //create register form
   final _formKey = GlobalKey<FormState>();
-
   final _passwordController = TextEditingController();
   final _emailController = TextEditingController();
   final _userNameController = TextEditingController();
@@ -32,10 +32,11 @@ class _RegisterPageState extends State<RegisterPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     const Image(
-                          width: 200,
-                          height: 200,
+                        width: 200,
+                        height: 200,
                         image: AssetImage('assets/images/blueCart.png')),
                     Center(
+                      //username text feild
                       child: Directionality(
                           textDirection: TextDirection.rtl,
                           child: TextFormField(
@@ -48,21 +49,24 @@ class _RegisterPageState extends State<RegisterPage> {
                                   hintText: "أدخل اسم المستخدم",
                                   hintStyle: TextStyle(fontSize: 18),
                                   enabledBorder: OutlineInputBorder(
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(20.0)),
-                                      borderSide:
-                                          BorderSide(width: 2, color: appColor)),
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(20.0)),
+                                      borderSide: BorderSide(
+                                          width: 2, color: appColor)),
                                   suffixIcon: Icon(Icons.account_box_outlined,
                                       color: appColor)),
+                              //validation to check if the shopper doesn't write any name
                               validator: (value) {
                                 if (value!.length == 0) {
                                   return 'الرجاء كتابة اسم المستخدم';
                                 }
                               },
                               onChanged: (value) {})),
+                      //end of username text feild
                     ),
                     const SizedBox(height: 10.0),
-                    //email felid
+
+                    //email text felid
                     Directionality(
                         textDirection: TextDirection.rtl,
                         child: TextFormField(
@@ -81,6 +85,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                         BorderSide(width: 2, color: appColor)),
                                 suffixIcon: Icon(Icons.email_outlined,
                                     color: appColor)),
+                            //email validation, the shopper should enter email as xxxx@xxxxx.xxx
                             validator: (value) {
                               if (value!.length == 0) {
                                 return 'الرجاء ادخال البريد الالكتروني';
@@ -95,7 +100,8 @@ class _RegisterPageState extends State<RegisterPage> {
                             },
                             onChanged: (value) {})),
                     const SizedBox(height: 10.0),
-                    //password felid
+
+                    //password textfelid
                     Directionality(
                         textDirection: TextDirection.rtl,
                         child: TextFormField(
@@ -115,6 +121,9 @@ class _RegisterPageState extends State<RegisterPage> {
                                         BorderSide(width: 2, color: appColor)),
                                 suffixIcon: Icon(Icons.lock_outline_rounded,
                                     color: appColor)),
+
+                            //validation to check if the shopper
+                            //enters a password containing 8 characters with 1 capital letter, 1 small letter, and 1 number, or nothing
                             validator: (value) {
                               if (value!.length == 0) {
                                 return 'الرجاء ادخال كلمة المرور';
@@ -130,7 +139,10 @@ class _RegisterPageState extends State<RegisterPage> {
                               return null;
                             },
                             onChanged: (value) {})),
+                    //end of password text felid
+
                     const SizedBox(height: 10.0),
+                    //re enter password text field
                     Directionality(
                         textDirection: TextDirection.rtl,
                         child: TextFormField(
@@ -148,6 +160,8 @@ class _RegisterPageState extends State<RegisterPage> {
                                         BorderSide(width: 2, color: appColor)),
                                 suffixIcon: Icon(Icons.lock_outline_rounded,
                                     color: appColor)),
+
+                            //validation to check if the shopper enter the password and the two password are match
                             validator: (value) {
                               if (value!.length == 0) {
                                 return 'الرجاء اعادة ادخال كلمة المرور';
@@ -159,9 +173,11 @@ class _RegisterPageState extends State<RegisterPage> {
                               return null;
                             },
                             onChanged: (value) {})),
+                    //end of re enter password text field
 
                     const SizedBox(height: 40.0),
-                    //login button
+
+                    //register button
                     ElevatedButton(
                         style: ButtonStyle(
                             elevation: MaterialStateProperty.all(8.0),
@@ -196,6 +212,9 @@ class _RegisterPageState extends State<RegisterPage> {
                                     MaterialPageRoute(
                                         builder: (context) => Navi()));
                               });
+
+                              //show register error messages to the user,
+                              //whether the password doesn't match the requirements or the email is used by another user
                             } on FirebaseAuthException catch (e) {
                               if (e.code == 'weak-password') {
                                 _showMyDialog("كلمة المرور ضعيفة");
@@ -209,7 +228,11 @@ class _RegisterPageState extends State<RegisterPage> {
                           }
                         },
                         child: const Text('تسجيل ')),
+                    //end of register button
+
                     const SizedBox(height: 15.0),
+
+                    //if it's a already a user with account, move to login page
                     const Text('لديك حساب بالفعل؟'),
                     TextButton(
                         onPressed: () {
@@ -224,13 +247,13 @@ class _RegisterPageState extends State<RegisterPage> {
                               color: appColor, fontWeight: FontWeight.bold),
                         ))
                   ]),
-            ),
+            ), //end of register form
           ),
         ));
   }
 
   void AddShopper(String uid) async {
-    String LoyaltyCardID=await generateLoyaltyCardID(uid);
+    String LoyaltyCardID = await generateLoyaltyCardID(uid);
     DatabaseReference ref = FirebaseDatabase.instance.ref("Shopper/$uid");
     //Generate loyaltycard id 10 QRUidFinder unique id
     await ref.set({
@@ -246,16 +269,15 @@ class _RegisterPageState extends State<RegisterPage> {
         "NumOfProducts": 0, //always 0
       }
     });
-    final databaseRef= FirebaseDatabase.instance.ref();
-        databaseRef.child("QRUidFinder").child("$LoyaltyCardID").set({
-       "shopperID": uid,
-     });
+    final databaseRef = FirebaseDatabase.instance.ref();
+    databaseRef.child("QRUidFinder").child("$LoyaltyCardID").set({
+      "shopperID": uid,
+    });
   }
 
   void _showMyDialog(String error) async {
     return showDialog<void>(
         context: context,
-        // user must tap button!
         builder: (BuildContext context) {
           return Directionality(
               textDirection: TextDirection.rtl,
@@ -279,7 +301,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     SizedBox(height: 15),
                     Center(
                       child: Text(
-                        error, //Product name for IOS 1 android 4
+                        error, 
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.w400,
@@ -321,32 +343,29 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 }
 
-Future<String> generateLoyaltyCardID(String id) async{
-  // dart unique string generatofinal ref = FirebaseDatabase.instance.ref();
+Future<String> generateLoyaltyCardID(String id) async {
+  //dart unique string generatofinal ref = FirebaseDatabase.instance.ref();
   bool check = true;
-  String string1="";
+  String string1 = "";
   late String _LoyaltyCardID;
-  while(check){
+  while (check) {
     _LoyaltyCardID = string1.toString() +
         math.Random().nextInt(9).toString() +
         math.Random().nextInt(9999).toString() +
-        math.Random().nextInt(9999).toString()+"S";
-        check=await bringLoyaltyCard(_LoyaltyCardID);
+        math.Random().nextInt(9999).toString() +
+        "S";
+    check = await bringLoyaltyCard(_LoyaltyCardID);
   }
   return _LoyaltyCardID;
-  
 }
 
 Future<bool> bringLoyaltyCard(String random) async {
   final ref = FirebaseDatabase.instance.ref();
   final snapshot = await ref.child("QRUidFinder/$random").get();
-  print("Check: "+snapshot.value.toString());
+  print("Check: " + snapshot.value.toString());
 
   if (snapshot.value == null) {
-    
     return false;
   }
   return true;
-
 }
-

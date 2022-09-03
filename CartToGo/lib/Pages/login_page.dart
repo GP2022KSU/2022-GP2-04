@@ -1,5 +1,4 @@
 // ignore_for_file: prefer_const_constructors
-
 import 'package:carttogo/Pages/Navigation.dart';
 import 'package:carttogo/Pages/Products_List_Admin.dart';
 import 'package:carttogo/Pages/register_page.dart';
@@ -13,6 +12,7 @@ class LoginPage extends StatefulWidget {
   State<LoginPage> createState() => _LoginPageState();
 }
 
+//Create a login form include the email & password
 class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
   bool checkLoading = true;
@@ -30,14 +30,15 @@ class _LoginPageState extends State<LoginPage> {
                   child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        //background lines
+                        //background image
                         const Image(
-                          width: 300,
-                          height: 300,
+                            width: 300,
+                            height: 300,
                             image: AssetImage('assets/images/blueCart.png')),
-                        
+
                         Center(
                           heightFactor: 1.2,
+                          //email text field
                           child: Directionality(
                               textDirection: TextDirection.rtl,
                               child: TextFormField(
@@ -52,11 +53,12 @@ class _LoginPageState extends State<LoginPage> {
                                       enabledBorder: OutlineInputBorder(
                                         borderRadius: BorderRadius.all(
                                             Radius.circular(20.0)),
-                                        borderSide:
-                                            BorderSide(width: 2, color: appColor),
+                                        borderSide: BorderSide(
+                                            width: 2, color: appColor),
                                       ),
                                       suffixIcon: Icon(Icons.email_outlined,
                                           color: appColor)),
+                                  //email validation, the shopper should enter email as xxxx@xxxxx.xxx
                                   validator: (value) {
                                     if (value!.length == 0) {
                                       return 'الرجاء ادخال البريد الالكتروني';
@@ -68,9 +70,10 @@ class _LoginPageState extends State<LoginPage> {
                                     }
                                   },
                                   onChanged: (value) {})),
-                        ),
+                        ), //end of email text felid
+
                         const SizedBox(height: 10.0),
-                        //password felid
+                        //password text felid
                         Directionality(
                             textDirection: TextDirection.rtl,
                             child: TextFormField(
@@ -100,6 +103,9 @@ class _LoginPageState extends State<LoginPage> {
                                   }
                                 },
                                 onChanged: (value) {})),
+                                //end of password text felid
+
+                        //if the shopper forgets its password, move to forget password page
                         GestureDetector(
                           child: Text(
                             ' نسيت كلمة المرور؟ اضغط هنا',
@@ -144,8 +150,12 @@ class _LoginPageState extends State<LoginPage> {
                                       .then((value) {
                                     String? UID =
                                         FirebaseAuth.instance.currentUser?.uid;
-                                    if (UID.toString() ==
-                                        "jCG3miIP7AdaVVfY20lCn1MVWqR2") {
+
+                                    //check if the logged-in user is an admin or shopper to give the privilege
+                                    if (UID.toString() == //admins IDs
+                                            "1NH5Wj2RzTXWZxLcTcnDDdKru7I3" ||
+                                        UID.toString() ==
+                                            "jCG3miIP7AdaVVfY20lCn1MVWqR2") {
                                       print("Admin Logged in");
                                       Navigator.push(
                                           context,
@@ -153,6 +163,7 @@ class _LoginPageState extends State<LoginPage> {
                                               builder: (context) =>
                                                   Products_List_Admin()));
                                     } else {
+                                    //any other ID represents the shopper ID
                                       print("Shopper Logged in");
                                       Navigator.push(
                                           context,
@@ -160,6 +171,8 @@ class _LoginPageState extends State<LoginPage> {
                                               builder: (context) => Navi()));
                                     }
                                   });
+                                //show login error messages to the user, 
+                                //whether it does not have an account or its wrong password
                                 } on FirebaseAuthException catch (e) {
                                   if (e.code == 'user-not-found') {
                                     _showMyDialog(
@@ -174,6 +187,9 @@ class _LoginPageState extends State<LoginPage> {
                               }
                             },
                             child: const Text('تسجيل الدخول')),
+                            //end of login button
+
+                        //if it's a new shopper, move to register page
                         const SizedBox(height: 15.0),
                         const Text('متسوق جديد؟'),
                         TextButton(
@@ -189,13 +205,12 @@ class _LoginPageState extends State<LoginPage> {
                                   color: appColor, fontWeight: FontWeight.bold),
                             ))
                       ]),
-                ))));
+                )))); //end of login form
   }
 
   void _showMyDialog(String error) async {
     return showDialog<void>(
         context: context,
-        // user must tap button!
         builder: (BuildContext context) {
           return Directionality(
               textDirection: TextDirection.rtl,
@@ -218,7 +233,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     SizedBox(height: 15),
                     Text(
-                      error, //Product name for IOS 1 android 4
+                      error,
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.w400,

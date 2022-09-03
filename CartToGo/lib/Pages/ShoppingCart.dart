@@ -1,5 +1,4 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
-
 import 'package:carttogo/Pages/welcome_page.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -164,7 +163,7 @@ class _ShoppingCartState extends State<ShoppingCart> {
                 child: Align(
                   alignment: Alignment.topRight,
                   child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
@@ -213,7 +212,7 @@ class _ShoppingCartState extends State<ShoppingCart> {
                           ),
                         ),
                         SizedBox(
-                          height: 30,
+                          height: 50,
                         ),
                       ]),
                 ),
@@ -221,7 +220,7 @@ class _ShoppingCartState extends State<ShoppingCart> {
             ),
             Positioned(
                 top: 250,
-                left: 55,
+                left: 50,
                 child: Center(
                     child: AnimatedButton(
                   child: Text(
@@ -283,12 +282,6 @@ class _ShoppingCartState extends State<ShoppingCart> {
                       child: InkWell(
                         highlightColor: Colors.grey[200],
                         onTap: () async {
-                          final _fb = FirebaseDatabase.instance;
-                          final Carts = await _fb.ref().child(
-                              "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts");
-                          await Carts.update({
-                            'ConnectedToCart': false,
-                          });
                           await FirebaseAuth.instance.signOut();
                           print(
                               "UID: ${FirebaseAuth.instance.currentUser?.uid}");

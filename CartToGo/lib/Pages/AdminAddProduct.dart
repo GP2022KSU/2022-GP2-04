@@ -28,7 +28,6 @@ class RealtimeDatabaseInsertState extends State<RealtimeDatabaseInsert> {
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
-
           //رجوع لصفحة الهوم بيج
           actions: <Widget>[
             Padding(
@@ -60,7 +59,6 @@ class RealtimeDatabaseInsertState extends State<RealtimeDatabaseInsert> {
           centerTitle: true,
           elevation: 0,
         ),
-
         body: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(30.0),
@@ -78,12 +76,12 @@ class RealtimeDatabaseInsertState extends State<RealtimeDatabaseInsert> {
                           decoration: const InputDecoration(
                             labelText: "الإسم",
                             labelStyle:
-                            TextStyle(fontSize: 20, color: Colors.black),
+                                TextStyle(fontSize: 20, color: Colors.black),
                             hintText: "أدخل إسم المنتج",
                             hintStyle: TextStyle(fontSize: 18),
                             enabledBorder: OutlineInputBorder(
                               borderRadius:
-                              BorderRadius.all(Radius.circular(20.0)),
+                                  BorderRadius.all(Radius.circular(20.0)),
                               borderSide: BorderSide(width: 2, color: appColor),
                             ),
                           ),
@@ -114,12 +112,12 @@ class RealtimeDatabaseInsertState extends State<RealtimeDatabaseInsert> {
                           decoration: const InputDecoration(
                             labelText: "الرمز الشريطي",
                             labelStyle:
-                            TextStyle(fontSize: 20, color: Colors.black),
+                                TextStyle(fontSize: 20, color: Colors.black),
                             hintText: "أدخل الرمز الشريطي للمنتج ",
                             hintStyle: TextStyle(fontSize: 18),
                             enabledBorder: OutlineInputBorder(
                               borderRadius:
-                              BorderRadius.all(Radius.circular(20.0)),
+                                  BorderRadius.all(Radius.circular(20.0)),
                               borderSide: BorderSide(width: 2, color: appColor),
                             ),
                           ),
@@ -146,12 +144,12 @@ class RealtimeDatabaseInsertState extends State<RealtimeDatabaseInsert> {
                           decoration: const InputDecoration(
                             labelText: "العلامة التجارية",
                             labelStyle:
-                            TextStyle(fontSize: 20, color: Colors.black),
+                                TextStyle(fontSize: 20, color: Colors.black),
                             hintText: "أدخل العلامة التجارية للمنتج",
                             hintStyle: TextStyle(fontSize: 18),
                             enabledBorder: OutlineInputBorder(
                               borderRadius:
-                              BorderRadius.all(Radius.circular(20.0)),
+                                  BorderRadius.all(Radius.circular(20.0)),
                               borderSide: BorderSide(width: 2, color: appColor),
                             ),
                           ),
@@ -177,12 +175,12 @@ class RealtimeDatabaseInsertState extends State<RealtimeDatabaseInsert> {
                           decoration: const InputDecoration(
                             labelText: "الفئة",
                             labelStyle:
-                            TextStyle(fontSize: 20, color: Colors.black),
+                                TextStyle(fontSize: 20, color: Colors.black),
                             hintText: "أدخل الفئة، تصنيف المنتج ",
                             hintStyle: TextStyle(fontSize: 18),
                             enabledBorder: OutlineInputBorder(
                               borderRadius:
-                              BorderRadius.all(Radius.circular(20.0)),
+                                  BorderRadius.all(Radius.circular(20.0)),
                               borderSide: BorderSide(width: 2, color: appColor),
                             ),
                           ),
@@ -204,21 +202,23 @@ class RealtimeDatabaseInsertState extends State<RealtimeDatabaseInsert> {
                     Directionality(
                       textDirection: TextDirection.rtl,
                       child: TextFormField(
-                          keyboardType: TextInputType.number,
+                          keyboardType:
+                              TextInputType.numberWithOptions(decimal: true),
                           inputFormatters: <TextInputFormatter>[
-                            FilteringTextInputFormatter.digitsOnly
+                            FilteringTextInputFormatter.allow(
+                                RegExp(r'(^\d*\.?\d*)'))
                           ], // Only numbers can be entered
                           //  obscureText: true,
                           controller: pPriceController,
                           decoration: const InputDecoration(
                             labelText: "السعر",
                             labelStyle:
-                            TextStyle(fontSize: 20, color: Colors.black),
+                                TextStyle(fontSize: 20, color: Colors.black),
                             hintText: "أدخل سعر المنتج ",
                             hintStyle: TextStyle(fontSize: 18),
                             enabledBorder: OutlineInputBorder(
                               borderRadius:
-                              BorderRadius.all(Radius.circular(20.0)),
+                                  BorderRadius.all(Radius.circular(20.0)),
                               borderSide: BorderSide(width: 2, color: appColor),
                             ),
                           ),
@@ -249,12 +249,12 @@ class RealtimeDatabaseInsertState extends State<RealtimeDatabaseInsert> {
                           decoration: const InputDecoration(
                             labelText: "الكمية",
                             labelStyle:
-                            TextStyle(fontSize: 20, color: Colors.black),
+                                TextStyle(fontSize: 20, color: Colors.black),
                             hintText: "أدخل كمية المنتج ",
                             hintStyle: TextStyle(fontSize: 18),
                             enabledBorder: OutlineInputBorder(
                               borderRadius:
-                              BorderRadius.all(Radius.circular(20.0)),
+                                  BorderRadius.all(Radius.circular(20.0)),
                               borderSide: BorderSide(width: 2, color: appColor),
                             ),
                           ),
@@ -281,12 +281,12 @@ class RealtimeDatabaseInsertState extends State<RealtimeDatabaseInsert> {
                           decoration: const InputDecoration(
                             labelText: "الحجم",
                             labelStyle:
-                            TextStyle(fontSize: 20, color: Colors.black),
+                                TextStyle(fontSize: 20, color: Colors.black),
                             hintText: "أدخل حجم، وزن المنتج ",
                             hintStyle: TextStyle(fontSize: 18),
                             enabledBorder: OutlineInputBorder(
                               borderRadius:
-                              BorderRadius.all(Radius.circular(20.0)),
+                                  BorderRadius.all(Radius.circular(20.0)),
                               borderSide: BorderSide(width: 2, color: appColor),
                             ),
                           ),
@@ -310,20 +310,17 @@ class RealtimeDatabaseInsertState extends State<RealtimeDatabaseInsert> {
                                 const TextStyle(
                                     fontSize: 20, fontFamily: 'CartToGo')),
                             fixedSize:
-                            MaterialStateProperty.all(const Size(270, 50)),
+                                MaterialStateProperty.all(const Size(270, 50)),
                             shape: MaterialStateProperty.all<
-                                RoundedRectangleBorder>(
+                                    RoundedRectangleBorder>(
                                 RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(90.0))),
                             backgroundColor:
-                            MaterialStateProperty.all(appColor),
+                                MaterialStateProperty.all(appColor),
                             foregroundColor:
-                            MaterialStateProperty.all(Colors.white)),
+                                MaterialStateProperty.all(Colors.white)),
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('Processing Data')),
-                            );
                             if (pNameController.text.isNotEmpty &&
                                 pbarcodeController.text.isNotEmpty &&
                                 pBrandController.text.isNotEmpty &&
@@ -339,37 +336,13 @@ class RealtimeDatabaseInsertState extends State<RealtimeDatabaseInsert> {
                                   pPriceController.text,
                                   pQuantityController.text,
                                   pSizeController.text);
-
-                              //  Navigator.push(context, MaterialPageRoute(builder: (context) {
-                              //    return Products_List_Admin();
-                              //  }));
                             }
                             Navigator.push(context,
                                 MaterialPageRoute(builder: (context) {
-                                  return Products_List_Admin();
-                                }));
+                              return Products_List_Admin();
+                            }));
                           }
                         },
-
-                        //      if(pNameController.text.isNotEmpty &&
-                        //           pbarcodeController.text.isNotEmpty &&
-                        //           pBrandController.text.isNotEmpty &&
-                        //           pCategoryController.text.isNotEmpty &&
-                        //           pPriceController.text.isNotEmpty &&
-                        //           pQuantityController.text.isNotEmpty &&
-                        //           pSizeController.text.isNotEmpty)
-                        //      {
-
-                        //        insertData(pNameController.text, pbarcodeController.text,
-                        //        pBrandController.text, pCategoryController.text,
-                        //      pPriceController.text,  pQuantityController.text,
-                        //        pSizeController.text);
-
-                        //   //  Navigator.push(context, MaterialPageRoute(builder: (context) {
-                        //   //    return Products_List_Admin();
-                        //   //  }));
-                        //  }
-                        //     },
                         child: const Text('إضافة المنتج')),
                   ]),
             ),
@@ -379,14 +352,13 @@ class RealtimeDatabaseInsertState extends State<RealtimeDatabaseInsert> {
 
   void insertData(String name, String barcode, String brand, String category,
       String price, String quantity, String size) {
-
     var intBarcode = int.tryParse(barcode);
 
     databaseRef.child("Products").child("$intBarcode").set({
       'Name': name,
       'Brand': brand,
       'Category': category,
-      'Price': int.tryParse(price),
+      'Price': double.tryParse(price),
       'Quantity': int.tryParse(quantity),
       'Size': size,
     });

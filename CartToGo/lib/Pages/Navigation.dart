@@ -6,7 +6,6 @@ import 'package:carttogo/Pages/ShoppingCart.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-
 class Navi extends StatefulWidget {
   const Navi({Key? key}) : super(key: key);
   @override

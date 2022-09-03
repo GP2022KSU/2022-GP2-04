@@ -1,7 +1,6 @@
 import 'package:carttogo/Pages/register_page.dart';
 import 'package:carttogo/Pages/login_page.dart';
 import 'package:carttogo/main.dart';
-
 import 'package:flutter/material.dart';
 
 class WelcomePage extends StatelessWidget {
@@ -12,7 +11,8 @@ class WelcomePage extends StatelessWidget {
         backgroundColor: appColor,
         body: Column(mainAxisAlignment: MainAxisAlignment.center, children: <
             Widget>[
-          //background lines
+
+          //background image
           const Image(image: AssetImage('assets/images/background.png')),
           const SizedBox(height: 40.0),
           const Text('مرحباً بك',
@@ -30,6 +30,9 @@ class WelcomePage extends StatelessWidget {
           const Image(
               image: AssetImage('assets/images/whiteCart.png'), height: 450),
           const SizedBox(height: 40.0),
+
+//two buttons in welcome page, login and register buttons
+
           //login button
           ElevatedButton(
               style: ButtonStyle(
@@ -48,6 +51,8 @@ class WelcomePage extends StatelessWidget {
                 }));
               },
               child: const Text('تسجيل الدخول')),
+              //end of login button
+
           const SizedBox(height: 15.0),
           //register button
           ElevatedButton(
@@ -67,6 +72,7 @@ class WelcomePage extends StatelessWidget {
                 }));
               },
               child: const Text('تسجيل')),
+              //end of register button
         ]));
   }
 }
