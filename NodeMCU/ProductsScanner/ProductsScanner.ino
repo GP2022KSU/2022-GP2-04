@@ -33,13 +33,13 @@ FirebaseConfig config;
 bool signupOK = false;
 unsigned long sendDataPrevMillis = 0;
 
-SoftwareSerial mySerial(14, 12); // RX, TX for Scanner numbers on the breadboard
+SoftwareSerial Gm66Scan(14, 12); // RX, TX for Scanner numbers on the breadboard
 
 LiquidCrystal_I2C lcd(0x27, 16, 2);
 
 void setup() {
   Serial.begin(9600); //To display prininting in laptop on Serial Monitor number 9600
-  mySerial.begin(9600);
+  Gm66Scan.begin(9600);
   Wire.begin(D2, D1); //For the LCD display
   lcd.begin();
   lcd.clear();
@@ -192,8 +192,8 @@ boolean LoyaltyCardConnection() {
 
   //lcd.print("Scan your QR");
   while (con == false) {
-    while (mySerial.available()) {
-      ID = mySerial.read(); //Read 1 Byte of data and store it in a character variable
+    while (Gm66Scan.available()) {
+      ID = Gm66Scan.read(); //Read 1 Byte of data and store it in a character variable
       LoyaltyCard = LoyaltyCard + ID;
       delay(5); // A small delay
     }
@@ -338,11 +338,11 @@ void loop()
       //if (Firebase.getFloat(fbdo, cartsPath+"/lastPrice")) lastPrice = fbdo.to<float>();
       checkTotalAndCount(total);
     }
-    if (mySerial.available() && CartConnection != false) { //Check if there is Incoming Data in the Serial Buffer
+    if (Gm66Scan.available() && CartConnection != false) { //Check if there is Incoming Data in the Serial Buffer
 
-      while (mySerial.available() && CartConnection != false) {  //Keep reading Byte by Byte from the Buffer till the Buffer is empty
+      while (Gm66Scan.available() && CartConnection != false) {  //Keep reading Byte by Byte from the Buffer till the Buffer is empty
 
-        readBarcode = mySerial.read(); //Read 1 Byte of data and store it in a character variable
+        readBarcode = Gm66Scan.read(); //Read 1 Byte of data and store it in a character variable
         barcode = barcode + readBarcode;
         delay(5); // A small delay
 
