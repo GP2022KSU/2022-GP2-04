@@ -3,6 +3,7 @@ import 'package:carttogo/Pages/Navigation.dart';
 import 'package:carttogo/Pages/Products_List_Admin.dart';
 import 'package:carttogo/Pages/register_page.dart';
 import 'package:carttogo/Pages/forgetPassword_page.dart';
+import 'package:carttogo/Pages/scanInovice.dart';
 import 'package:carttogo/main.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -103,7 +104,7 @@ class _LoginPageState extends State<LoginPage> {
                                   }
                                 },
                                 onChanged: (value) {})),
-                                //end of password text felid
+                        //end of password text felid
 
                         //if the shopper forgets its password, move to forget password page
                         GestureDetector(
@@ -151,7 +152,7 @@ class _LoginPageState extends State<LoginPage> {
                                     String? UID =
                                         FirebaseAuth.instance.currentUser?.uid;
 
-                                    //check if the logged-in user is an admin or shopper to give the privilege
+                                    //check if the logged-in user is an admin or cashier or shopper to give the privilege
                                     if (UID.toString() == //admins IDs
                                             "1NH5Wj2RzTXWZxLcTcnDDdKru7I3" ||
                                         UID.toString() ==
@@ -162,8 +163,16 @@ class _LoginPageState extends State<LoginPage> {
                                           MaterialPageRoute(
                                               builder: (context) =>
                                                   Products_List_Admin()));
+                                    } else if ((UID.toString() == //cashier IDs
+                                        "OMCkaR8mdxNDmDE1O7gkFFd9HyX2")) {
+                                      print("Cashier Logged in");
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  scanInovice()));
                                     } else {
-                                    //any other ID represents the shopper ID
+                                      //any other ID represents the shopper ID
                                       print("Shopper Logged in");
                                       Navigator.push(
                                           context,
@@ -171,8 +180,8 @@ class _LoginPageState extends State<LoginPage> {
                                               builder: (context) => Navi()));
                                     }
                                   });
-                                //show login error messages to the user, 
-                                //whether it does not have an account or its wrong password
+                                  //show login error messages to the user,
+                                  //whether it does not have an account or its wrong password
                                 } on FirebaseAuthException catch (e) {
                                   if (e.code == 'user-not-found') {
                                     _showMyDialog(
@@ -187,7 +196,7 @@ class _LoginPageState extends State<LoginPage> {
                               }
                             },
                             child: const Text('تسجيل الدخول')),
-                            //end of login button
+                        //end of login button
 
                         //if it's a new shopper, move to register page
                         const SizedBox(height: 15.0),
