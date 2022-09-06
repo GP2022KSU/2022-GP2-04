@@ -9,15 +9,19 @@ import 'package:carttogo/widgets/ShoppingCartWidget.dart';
 import 'package:animated_button/animated_button.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:carttogo/Pages/CheckOut.dart';
 
 class ShoppingCart extends StatefulWidget {
   Function callback;
-  ShoppingCart(this.callback);
+  int number;
+  ShoppingCart(this.callback, this.number);
   @override
-  State<ShoppingCart> createState() => _ShoppingCartState();
+  State<ShoppingCart> createState() => ShoppingCartState(number);
 }
 
-class _ShoppingCartState extends State<ShoppingCart> {
+class ShoppingCartState extends State<ShoppingCart> {
+  int number;
+  ShoppingCartState(this.number);
   late bool ConnectedToCart = true;
   late bool _isLoading1;
   final _database = FirebaseDatabase.instance.ref();
@@ -101,8 +105,18 @@ class _ShoppingCartState extends State<ShoppingCart> {
         ),
         body: Center(
           heightFactor: 1.6,
-          child: ConnectedToCart ? ShoppingCartWidget() : Instructions(),
+          child: Con(number),
+          //child: ConnectedToCart ? ShoppingCartWidget() : Instructions(),
         ));
+  }
+
+  Widget Con(Check) {
+    if (ConnectedToCart == true && Check != -1) {
+      return ShoppingCartWidget();
+    } else if (ConnectedToCart == false && Check != -1) {
+      return Instructions();
+    }
+    return CheckOut();
   }
 
   Widget Instructions() {
