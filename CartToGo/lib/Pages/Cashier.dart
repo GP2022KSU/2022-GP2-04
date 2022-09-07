@@ -3,14 +3,104 @@ import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
+import 'welcomePage.dart';
 
 class Cashier extends StatelessWidget {
   const Cashier({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    void _showMyDialog() async {
+      return showDialog<void>(
+          context: context,
+//          user must tap button!
+          builder: (BuildContext context) {
+            return Directionality(
+                textDirection: TextDirection.rtl,
+                child: Dialog(
+                  elevation: 0,
+                  backgroundColor: Color(0xffffffff),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15.0),
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      SizedBox(height: 15),
+                      const Text(
+                        "هل تريد تسجيل الخروج؟",
+                        style: TextStyle(
+                          fontSize: 19,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 15),
+                      Divider(
+                        height: 1,
+                        color: Colors.black,
+                      ),
+                      Container(
+                        width: MediaQuery.of(context).size.width,
+                        height: 50,
+                        child: InkWell(
+                          highlightColor: Colors.grey[200],
+                          onTap: () async {
+                            await FirebaseAuth.instance.signOut();
+                            print(
+                                "UID: ${FirebaseAuth.instance.currentUser?.uid}");
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => WelcomePage()));
+                          },
+                          child: Center(
+                            child: const Text(
+                              "خروج",
+                              style: TextStyle(
+                                fontSize: 18.0,
+                                color: Color(0xFFFE4A49),
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Divider(
+                        height: 1,
+                      ),
+                      Container(
+                        width: MediaQuery.of(context).size.width,
+                        height: 50,
+                        child: InkWell(
+                          borderRadius: BorderRadius.only(
+                            bottomLeft: Radius.circular(15.0),
+                            bottomRight: Radius.circular(15.0),
+                          ),
+                          highlightColor: Colors.grey[200],
+                          onTap: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: Center(
+                            child: Text(
+                              "إلغاء",
+                              style: TextStyle(
+                                fontSize: 16.0,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ));
+          });
+    }
+
     return Scaffold(
-     appBar: AppBar(
+      appBar: AppBar(
         backgroundColor: Colors.white24,
         title: const Text(
           "المحاسب",
@@ -37,7 +127,7 @@ class Cashier extends StatelessWidget {
                     backgroundColor: MaterialStateProperty.all(Colors.red),
                     foregroundColor: MaterialStateProperty.all(Colors.white)),
                 onPressed: () async {
-                  // _showMyDialog();
+                  _showMyDialog();
                 },
                 child: const Text('خروج')),
           ),
@@ -154,91 +244,4 @@ class _scanInoviceState extends State<scanInovice> {
     controller?.dispose();
     super.dispose();
   }
-
-// void _showMyDialog() async {
-//     return showDialog<void>(
-//         context: context,
-//         // user must tap button!
-//         builder: (BuildContext context) {
-//           return Directionality(
-// textDirection: TextDirection.rtl,
-//               child: Dialog(
-//                 elevation: 0,
-//                 backgroundColor: Color(0xffffffff),
-//                 shape: RoundedRectangleBorder(
-//                   borderRadius: BorderRadius.circular(15.0),
-//                 ),
-//                 child: Column(
-//                   mainAxisSize: MainAxisSize.min,
-//                   children: [
-//                     SizedBox(height: 15),
-//                     const Text(
-//                       "هل تريد تسجيل الخروج؟",
-//                       style: TextStyle(
-//                         fontSize: 19,
-//                         fontWeight: FontWeight.bold,
-//                       ),
-//                     ),
-//                     const SizedBox(height: 15),
-//                     Divider(
-//                       height: 1,
-//                       color: Colors.black,
-//                     ),
-//                     Container(
-//                       width: MediaQuery.of(context).size.width,
-//                       height: 50,
-//                       child: InkWell(
-//                         highlightColor: Colors.grey[200],
-//                         onTap: () async {
-//                           await FirebaseAuth.instance.signOut();
-//                           print(
-//                               "UID: ${FirebaseAuth.instance.currentUser?.uid}");
-//                           Navigator.push(
-//                               context,
-//                               MaterialPageRoute(
-//                                   builder: (context) => WelcomePage()));
-//                         },
-//                         child: Center(
-//                           child: const Text(
-//                             "خروج",
-//                             style: TextStyle(
-//                               fontSize: 18.0,
-//                               color: Color(0xFFFE4A49),
-//                               fontWeight: FontWeight.bold,
-//                             ),
-//                           ),
-//                         ),
-//                       ),
-//                     ),
-//                     Divider(
-//                       height: 1,
-//                     ),
-//                     Container(
-//                       width: MediaQuery.of(context).size.width,
-//                       height: 50,
-//                       child: InkWell(
-//                         borderRadius: BorderRadius.only(
-//                           bottomLeft: Radius.circular(15.0),
-//                           bottomRight: Radius.circular(15.0),
-//                         ),
-//                         highlightColor: Colors.grey[200],
-//                         onTap: () {
-//                           Navigator.of(context).pop();
-//                         },
-//                         child: Center(
-//                           child: Text(
-//                             "إلغاء",
-//                             style: TextStyle(
-//                               fontSize: 16.0,
-//                               fontWeight: FontWeight.w400,
-//                             ),
-//                           ),
-//                         ),
-//                       ),
-//                     ),
-//                   ],
-//                 ),
-//               ));
-//         });
-//   }
 }
