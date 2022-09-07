@@ -18,82 +18,65 @@ class Cashier extends StatelessWidget {
             return Directionality(
                 textDirection: TextDirection.rtl,
                 child: Dialog(
-                  elevation: 0,
-                  backgroundColor: Color(0xffffffff),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15.0),
-                  ),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
+                    elevation: 0,
+                    backgroundColor: Color(0xffffffff),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15.0),
+                    ),
+                    child: Column(mainAxisSize: MainAxisSize.min, children: [
                       SizedBox(height: 15),
-                      const Text(
-                        "هل تريد تسجيل الخروج؟",
-                        style: TextStyle(
-                          fontSize: 19,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
+                      const Text("هل تريد تسجيل الخروج؟",
+                          style: TextStyle(
+                            fontSize: 19,
+                            fontWeight: FontWeight.bold,
+                          )),
                       const SizedBox(height: 15),
                       Divider(
                         height: 1,
                         color: Colors.black,
                       ),
                       Container(
-                        width: MediaQuery.of(context).size.width,
-                        height: 50,
-                        child: InkWell(
-                          highlightColor: Colors.grey[200],
-                          onTap: () async {
-                            await FirebaseAuth.instance.signOut();
-                            print(
-                                "UID: ${FirebaseAuth.instance.currentUser?.uid}");
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => WelcomePage()));
-                          },
-                          child: Center(
-                            child: const Text(
-                              "خروج",
-                              style: TextStyle(
-                                fontSize: 18.0,
-                                color: Color(0xFFFE4A49),
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
+                          width: MediaQuery.of(context).size.width,
+                          height: 50,
+                          child: InkWell(
+                              highlightColor: Colors.grey[200],
+                              onTap: () async {
+                                await FirebaseAuth.instance.signOut();
+                                print(
+                                    "UID: ${FirebaseAuth.instance.currentUser?.uid}");
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => WelcomePage()));
+                              },
+                              child: Center(
+                                  child: const Text("خروج",
+                                      style: TextStyle(
+                                        fontSize: 18.0,
+                                        color: Color(0xFFFE4A49),
+                                        fontWeight: FontWeight.bold,
+                                      ))))),
                       Divider(
                         height: 1,
                       ),
                       Container(
-                        width: MediaQuery.of(context).size.width,
-                        height: 50,
-                        child: InkWell(
-                          borderRadius: BorderRadius.only(
-                            bottomLeft: Radius.circular(15.0),
-                            bottomRight: Radius.circular(15.0),
-                          ),
-                          highlightColor: Colors.grey[200],
-                          onTap: () {
-                            Navigator.of(context).pop();
-                          },
-                          child: Center(
-                            child: Text(
-                              "إلغاء",
-                              style: TextStyle(
-                                fontSize: 16.0,
-                                fontWeight: FontWeight.w400,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ));
+                          width: MediaQuery.of(context).size.width,
+                          height: 50,
+                          child: InkWell(
+                              borderRadius: BorderRadius.only(
+                                  bottomLeft: Radius.circular(15.0),
+                                  bottomRight: Radius.circular(15.0)),
+                              highlightColor: Colors.grey[200],
+                              onTap: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: Center(
+                                  child: Text("إلغاء",
+                                      style: TextStyle(
+                                        fontSize: 16.0,
+                                        fontWeight: FontWeight.w400,
+                                      )))))
+                    ])));
           });
     }
 
@@ -187,9 +170,8 @@ class _scanInoviceState extends State<scanInovice> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white24,
-      body: Column(
-        children: <Widget>[
+        backgroundColor: Colors.white24,
+        body: Column(children: <Widget>[
           const SizedBox(height: 40.0),
           ElevatedButton(
               style: ButtonStyle(
@@ -210,23 +192,18 @@ class _scanInoviceState extends State<scanInovice> {
               child: const Text('عودة')),
           Expanded(flex: 4, child: _buildQrView(context)),
           Expanded(
-            flex: 1,
-            child: FittedBox(
-              fit: BoxFit.contain,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  if (result != null)
-                    Text('${result!.code}') // رقم الباركود من الكاميرا
-                  else
-                    const Text('امسح باركود الفاتورة'),
-                ],
-              ),
-            ),
-          )
-        ],
-      ),
-    );
+              flex: 1,
+              child: FittedBox(
+                  fit: BoxFit.contain,
+                  child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        if (result != null)
+                          Text('${result!.code}') // رقم الباركود من الكاميرا
+                        else
+                          const Text('امسح باركود الفاتورة'),
+                      ])))
+        ]));
   }
 
   Widget _buildQrView(BuildContext context) {
@@ -238,16 +215,15 @@ class _scanInoviceState extends State<scanInovice> {
     // To ensure the Scanner view is properly sizes after rotation
     // we need to listen for Flutter SizeChanged notification and update controller
     return QRView(
-      key: qrKey,
-      onQRViewCreated: _onQRViewCreated,
-      overlay: QrScannerOverlayShape(
-          borderColor: appColor,
-          borderRadius: 10,
-          borderLength: 30,
-          borderWidth: 10,
-          cutOutSize: scanArea),
-      onPermissionSet: (ctrl, p) => _onPermissionSet(context, ctrl, p),
-    );
+        key: qrKey,
+        onQRViewCreated: _onQRViewCreated,
+        overlay: QrScannerOverlayShape(
+            borderColor: appColor,
+            borderRadius: 10,
+            borderLength: 30,
+            borderWidth: 10,
+            cutOutSize: scanArea),
+        onPermissionSet: (ctrl, p) => _onPermissionSet(context, ctrl, p));
   }
 
   void _onQRViewCreated(QRViewController controller) {
@@ -265,8 +241,7 @@ class _scanInoviceState extends State<scanInovice> {
     log('${DateTime.now().toIso8601String()}_onPermissionSet $p');
     if (!p) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('لا يوجد تصريح من الكاميرا')),
-      );
+          const SnackBar(content: Text('لا يوجد تصريح من الكاميرا')));
     }
   }
 
