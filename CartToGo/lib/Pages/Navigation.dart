@@ -23,7 +23,7 @@ class NaviState extends State<Navi> {
   }
 
   void initState() {
-    tab1 = ShoppingCart(setPage);
+    tab1 = ShoppingCart(setPage,0);
     super.initState();
   }
 

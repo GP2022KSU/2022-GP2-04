@@ -1,6 +1,9 @@
 // ignore_for_file: prefer_const_constructors, unnecessary_new, prefer_const_literals_to_create_immutables, nullable_type_in_catch_clause
 
 import 'dart:async';
+import 'package:carttogo/Pages/CheckOut.dart';
+import 'package:carttogo/Pages/ShoppingCart.dart';
+import 'package:carttogo/Pages/scanInovice.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
@@ -52,6 +55,7 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
     //_ShowNotRegisteredProduct();
     _getTotal();
   }
+
 //-----------Listens for ConnectedToCart to show the cart-----------//
   void _activateListeners() {
     if (FirebaseAuth.instance.currentUser != null) {
@@ -74,6 +78,7 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
       });
     }
   }
+
   /* //-----------For Future Code-----------//
   void _ShowNotRegisteredProduct() {
     if (FirebaseAuth.instance.currentUser != null) {
@@ -119,6 +124,7 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
     }
     return numOfProducts;
   }
+
   //-----------Listens for Total to show the total price-----------//
   Future<double> _getTotal() async {
     if (FirebaseAuth.instance.currentUser != null) {
@@ -138,6 +144,7 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
     }
     return total;
   }
+
   //-----------Listens for FutureCartNumber to show newest cart-----------//
   Future<int> BringLastCartNumber() async {
     if (FirebaseAuth.instance.currentUser != null) {
@@ -153,6 +160,7 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
     }
     return LastCartNumber;
   }
+
   //-----------Brings the quantity of the deleted product-----------//
   Future<int> BringProductQuantity(int barcode) async {
     final _quanData = FirebaseDatabase.instance
@@ -172,8 +180,7 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         floatingActionButton:
             ConnectedToCart == true && numOfProducts != 0 && _isLoading == false
-                ? 
-                Center(
+                ? Center(
                     heightFactor: 3,
                     child: ScrollingFabAnimated(
                       width: MediaQuery.of(context).size.width * 0.9,
@@ -186,14 +193,19 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
                         textDirection: TextDirection.rtl,
                       ),
                       text: Text(
-                        '   الإجمالي:',
+                        '   عرض السلة',
                         style: TextStyle(
                             color: Colors.white,
                             fontSize: 16.0,
                             fontWeight: FontWeight.bold),
                         textDirection: TextDirection.rtl,
                       ),
-                      onPress: () {},
+                      onPress: () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) {
+                          return CheckOut();
+                        }));
+                      },
                       scrollController: _scrollController,
                       animateIcon: false,
                       inverted: false,
@@ -226,31 +238,34 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
                     duration: Duration(milliseconds: 500),
                     itemBuilder: (BuildContext context, DataSnapshot snapshot,
                         Animation<double> animation, int index) {
-
                       numOfProducts = user.getnumOfProducts();
 
-                      var v = snapshot.value.toString(); //Gets the scanned product and store it in a var
+                      var v = snapshot.value
+                          .toString(); //Gets the scanned product and store it in a var
                       bool checker = true;
                       print(v[0]);
                       try {
                         if (v[0] == "0" && v[1].isNotEmpty) {}
-                      } on RangeError { //If there is any kind of range error to avoid errors on the app
+                      } on RangeError {
+                        //If there is any kind of range error to avoid errors on the app
                         checker = false;
                         var g = v.replaceAll(RegExp("{|}|0: "), "");
                       }
-                      var g = v.replaceAll( //Using RegExp to remove unwanted data
+                      var g = v.replaceAll(
+                          //Using RegExp to remove unwanted data
                           RegExp(
                               "{|}|Name: |Price: |Size: |Category: |Brand: |Barcode: "),
                           "");
 
                       g.trim();
 
-                      var l = g.split(','); 
+                      var l = g.split(',');
                       print("Data" + l.toString());
 
-                      if (!(l[0] == "0") && checker) { //if there is data
+                      if (!(l[0] == "0") && checker) {
+                        //if there is data
 
-                      //-----------Deletes the swiped product-----------//
+                        //-----------Deletes the swiped product-----------//
                         void deleteProduct() async {
                           final Carts = _fb.ref().child(
                               "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts");
@@ -387,6 +402,7 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
                                     ));
                               });
                         }
+
                         //-----------Returns list of the scanned products-----------//
                         return SlideTransition(
                             position: Tween<Offset>(
@@ -631,6 +647,7 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
       ),
     );
   }
+
   /* //-----------For future code-----------//
   void _showNotRegisteredProduct() async {
     return showDialog<void>(

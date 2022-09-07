@@ -41,14 +41,22 @@ class MainPage extends StatelessWidget {
               return Center(child: CircularProgressIndicator());
             } else if (snapshot.hasError) {
               return Center(child: Text('! مشكلة ما قد حدثت'));
+<<<<<<< HEAD
             } else if (snapshot.hasData && (FirebaseAuth.instance.currentUser?.uid).toString() != "jCG3miIP7AdaVVfY20lCn1MVWqR2" 
             && snapshot.hasData &&(FirebaseAuth.instance.currentUser?.uid).toString() != "OMCkaR8mdxNDmDE1O7gkFFd9HyX2") {
+=======
+            } else if (snapshot.hasData &&
+                (FirebaseAuth.instance.currentUser?.uid).toString() !=
+                    ("jCG3miIP7AdaVVfY20lCn1MVWqR2") ) {
+>>>>>>> d9c2790c7715019457f22911736077b248af1f6f
               return Navi();
-            }
-            else if(snapshot.hasData &&(FirebaseAuth.instance.currentUser?.uid).toString() == "jCG3miIP7AdaVVfY20lCn1MVWqR2"){
+            } else if (snapshot.hasData &&
+                (FirebaseAuth.instance.currentUser?.uid).toString() ==
+                    "jCG3miIP7AdaVVfY20lCn1MVWqR2") {
               return Products_List_Admin();
-            }
-            else if(snapshot.hasData &&(FirebaseAuth.instance.currentUser?.uid).toString() == "OMCkaR8mdxNDmDE1O7gkFFd9HyX2"){
+            } else if (snapshot.hasData &&
+                (FirebaseAuth.instance.currentUser?.uid).toString() ==
+                    "OMCkaR8mdxNDmDE1O7gkFFd9HyX2") {
               return scanInovice();
             }
             return WelcomePage();
