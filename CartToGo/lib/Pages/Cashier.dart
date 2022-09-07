@@ -1,3 +1,4 @@
+import 'package:carttogo/main.dart';
 import 'package:flutter/material.dart';
 import 'dart:developer';
 import 'dart:io';
@@ -99,52 +100,67 @@ class Cashier extends StatelessWidget {
     }
 
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white24,
-        title: const Text(
-          "المحاسب",
-          style: TextStyle(
-            color: Colors.black,
-            fontWeight: FontWeight.bold,
-            fontFamily: 'CartToGo',
+        appBar: AppBar(
+          backgroundColor: Colors.white24,
+          title: const Text(
+            "المحاسب",
+            style: TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'CartToGo',
+            ),
           ),
+          actions: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ElevatedButton(
+                  style: ButtonStyle(
+                      elevation: MaterialStateProperty.all(3),
+                      textStyle: MaterialStateProperty.all(const TextStyle(
+                          fontSize: 14,
+                          fontFamily: 'CartToGo',
+                          fontWeight: FontWeight.bold)),
+                      fixedSize: MaterialStateProperty.all(const Size(70, 10)),
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30.0))),
+                      backgroundColor: MaterialStateProperty.all(Colors.red),
+                      foregroundColor: MaterialStateProperty.all(Colors.white)),
+                  onPressed: () async {
+                    _showMyDialog();
+                  },
+                  child: const Text('خروج')),
+            ),
+          ],
+          centerTitle: true,
+          elevation: 0,
         ),
-        actions: <Widget>[
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: ElevatedButton(
-                style: ButtonStyle(
-                    elevation: MaterialStateProperty.all(3),
-                    textStyle: MaterialStateProperty.all(const TextStyle(
-                        fontSize: 14,
-                        fontFamily: 'CartToGo',
-                        fontWeight: FontWeight.bold)),
-                    fixedSize: MaterialStateProperty.all(const Size(70, 10)),
-                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                        RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30.0))),
-                    backgroundColor: MaterialStateProperty.all(Colors.red),
-                    foregroundColor: MaterialStateProperty.all(Colors.white)),
-                onPressed: () async {
-                  _showMyDialog();
-                },
-                child: const Text('خروج')),
-          ),
-        ],
-        centerTitle: true,
-        elevation: 0,
-      ),
-      body: Center(
-        child: ElevatedButton(
-          onPressed: () {
-            Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => const scanInovice(),
-            ));
-          },
-          child: const Text('مسح الفاتورة'),
-        ),
-      ),
-    );
+        body: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Image(image: AssetImage('assets/images/barcode.png')),
+              SizedBox(height: 40.0),
+
+              //start scanning butoon
+              ElevatedButton(
+                  style: ButtonStyle(
+                      elevation: MaterialStateProperty.all(8.0),
+                      textStyle: MaterialStateProperty.all(const TextStyle(
+                          fontSize: 23, fontFamily: 'CartToGo')),
+                      fixedSize: MaterialStateProperty.all(const Size(270, 45)),
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30.0))),
+                      backgroundColor: MaterialStateProperty.all(appColor),
+                      foregroundColor: MaterialStateProperty.all(Colors.white)),
+                  onPressed: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => const scanInovice(),
+                    ));
+                  },
+                  child: const Text('ابدأ بمسح الفاتورة')),
+              //end of scanning button
+            ]));
   }
 }
 
