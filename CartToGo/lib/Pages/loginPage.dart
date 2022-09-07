@@ -3,7 +3,7 @@ import 'package:carttogo/Pages/Navigation.dart';
 import 'package:carttogo/Pages/Products_List_Admin.dart';
 import 'package:carttogo/Pages/registerPage.dart';
 import 'package:carttogo/Pages/forgetPassword_page.dart';
-import 'package:carttogo/Pages/scanInovice.dart';
+import 'package:carttogo/Pages/Cashier.dart';
 import 'package:carttogo/main.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';

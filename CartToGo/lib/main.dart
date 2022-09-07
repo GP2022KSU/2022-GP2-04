@@ -1,5 +1,6 @@
+import 'package:carttogo/Pages/Cashier.dart';
 import 'package:carttogo/Pages/Products_List_Admin.dart';
-import 'package:carttogo/Pages/scanInovice.dart';
+import 'package:carttogo/Pages/Cashier.dart';
 import 'package:carttogo/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:carttogo/Pages/welcomePage.dart';
@@ -41,8 +42,11 @@ class MainPage extends StatelessWidget {
               return Center(child: CircularProgressIndicator());
             } else if (snapshot.hasError) {
               return Center(child: Text('! مشكلة ما قد حدثت'));
-            } else if (snapshot.hasData && (FirebaseAuth.instance.currentUser?.uid).toString() != "jCG3miIP7AdaVVfY20lCn1MVWqR2" 
-            && snapshot.hasData &&(FirebaseAuth.instance.currentUser?.uid).toString() != "OMCkaR8mdxNDmDE1O7gkFFd9HyX2") {
+            } else if (snapshot.hasData &&
+                (FirebaseAuth.instance.currentUser?.uid).toString() !=
+                    "jCG3miIP7AdaVVfY20lCn1MVWqR2" &&
+                FirebaseAuth.instance.currentUser?.uid.toString() !=
+                    "OMCkaR8mdxNDmDE1O7gkFFd9HyX2") {
               return Navi();
             } else if (snapshot.hasData &&
                 (FirebaseAuth.instance.currentUser?.uid).toString() ==
@@ -51,7 +55,7 @@ class MainPage extends StatelessWidget {
             } else if (snapshot.hasData &&
                 (FirebaseAuth.instance.currentUser?.uid).toString() ==
                     "OMCkaR8mdxNDmDE1O7gkFFd9HyX2") {
-              return scanInovice();
+              return Cashier();
             }
             return WelcomePage();
           },
