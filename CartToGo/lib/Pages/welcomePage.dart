@@ -1,5 +1,5 @@
-import 'package:carttogo/Pages/register_page.dart';
-import 'package:carttogo/Pages/login_page.dart';
+import 'package:carttogo/Pages/registerPage.dart';
+import 'package:carttogo/Pages/loginPage.dart';
 import 'package:carttogo/main.dart';
 import 'package:flutter/material.dart';
 

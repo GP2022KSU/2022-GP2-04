@@ -1,4 +1,4 @@
-import 'package:carttogo/Pages/welcome_page.dart';
+import 'package:carttogo/Pages/welcomePage.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 

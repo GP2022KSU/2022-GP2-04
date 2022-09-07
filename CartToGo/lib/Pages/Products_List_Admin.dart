@@ -5,7 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:carttogo/main.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:carttogo/Pages/welcome_page.dart';
+import 'package:carttogo/Pages/welcomePage.dart';
 import 'package:carttogo/Pages//AdminAddProduct.dart';
 import 'package:flutter/rendering.dart';
 //import ' AdminUpdateProduct.dart';

@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 import 'package:carttogo/Pages/Navigation.dart';
 import 'package:carttogo/Pages/Products_List_Admin.dart';
-import 'package:carttogo/Pages/register_page.dart';
+import 'package:carttogo/Pages/registerPage.dart';
 import 'package:carttogo/Pages/forgetPassword_page.dart';
 import 'package:carttogo/Pages/scanInovice.dart';
 import 'package:carttogo/main.dart';

@@ -1,5 +1,5 @@
-import 'package:carttogo/Pages/login_page.dart';
-import 'package:carttogo/Pages/welcome_page.dart';
+import 'package:carttogo/Pages/loginPage.dart';
+import 'package:carttogo/Pages/welcomePage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:carttogo/main.dart';
 import 'package:flutter/material.dart';
