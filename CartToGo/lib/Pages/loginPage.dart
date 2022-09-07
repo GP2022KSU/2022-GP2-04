@@ -170,7 +170,7 @@ class _LoginPageState extends State<LoginPage> {
                                           context,
                                           MaterialPageRoute(
                                               builder: (context) =>
-                                                  scanInovice()));
+                                                  Cashier()));
                                     } else {
                                       //any other ID represents the shopper ID
                                       print("Shopper Logged in");
