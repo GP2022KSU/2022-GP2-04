@@ -2,7 +2,7 @@ import 'package:carttogo/Pages/Products_List_Admin.dart';
 import 'package:carttogo/Pages/scanInovice.dart';
 import 'package:carttogo/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:carttogo/Pages/welcome_page.dart';
+import 'package:carttogo/Pages/welcomePage.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:carttogo/Pages/Navigation.dart';
@@ -41,14 +41,8 @@ class MainPage extends StatelessWidget {
               return Center(child: CircularProgressIndicator());
             } else if (snapshot.hasError) {
               return Center(child: Text('! مشكلة ما قد حدثت'));
-<<<<<<< HEAD
             } else if (snapshot.hasData && (FirebaseAuth.instance.currentUser?.uid).toString() != "jCG3miIP7AdaVVfY20lCn1MVWqR2" 
             && snapshot.hasData &&(FirebaseAuth.instance.currentUser?.uid).toString() != "OMCkaR8mdxNDmDE1O7gkFFd9HyX2") {
-=======
-            } else if (snapshot.hasData &&
-                (FirebaseAuth.instance.currentUser?.uid).toString() !=
-                    ("jCG3miIP7AdaVVfY20lCn1MVWqR2") ) {
->>>>>>> d9c2790c7715019457f22911736077b248af1f6f
               return Navi();
             } else if (snapshot.hasData &&
                 (FirebaseAuth.instance.currentUser?.uid).toString() ==
