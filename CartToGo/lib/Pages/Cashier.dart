@@ -4,7 +4,6 @@ import 'dart:developer';
 import 'dart:io';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
 import 'welcomePage.dart';
 
 class Cashier extends StatelessWidget {
@@ -15,7 +14,6 @@ class Cashier extends StatelessWidget {
     void _showMyDialog() async {
       return showDialog<void>(
           context: context,
-//          user must tap button!
           builder: (BuildContext context) {
             return Directionality(
                 textDirection: TextDirection.rtl,
@@ -159,7 +157,7 @@ class Cashier extends StatelessWidget {
                     ));
                   },
                   child: const Text('ابدأ بمسح الفاتورة')),
-              //end of scanning button
+              //end of start scanning button
             ]));
   }
 }
@@ -192,6 +190,24 @@ class _scanInoviceState extends State<scanInovice> {
       backgroundColor: Colors.white24,
       body: Column(
         children: <Widget>[
+          const SizedBox(height: 40.0),
+          ElevatedButton(
+              style: ButtonStyle(
+                  elevation: MaterialStateProperty.all(8.0),
+                  textStyle: MaterialStateProperty.all(
+                      const TextStyle(fontSize: 23, fontFamily: 'CartToGo')),
+                  fixedSize: MaterialStateProperty.all(const Size(270, 45)),
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                      RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30.0))),
+                  backgroundColor: MaterialStateProperty.all(appColor),
+                  foregroundColor: MaterialStateProperty.all(Colors.white)),
+              onPressed: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => const Cashier(),
+                ));
+              },
+              child: const Text('عودة')),
           Expanded(flex: 4, child: _buildQrView(context)),
           Expanded(
             flex: 1,
@@ -225,7 +241,7 @@ class _scanInoviceState extends State<scanInovice> {
       key: qrKey,
       onQRViewCreated: _onQRViewCreated,
       overlay: QrScannerOverlayShape(
-          borderColor: Colors.red,
+          borderColor: appColor,
           borderRadius: 10,
           borderLength: 30,
           borderWidth: 10,
@@ -249,7 +265,7 @@ class _scanInoviceState extends State<scanInovice> {
     log('${DateTime.now().toIso8601String()}_onPermissionSet $p');
     if (!p) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('no Permission')),
+        const SnackBar(content: Text('لا يوجد تصريح من الكاميرا')),
       );
     }
   }
