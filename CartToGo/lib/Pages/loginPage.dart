@@ -108,19 +108,16 @@ class _LoginPageState extends State<LoginPage> {
 
                         //if the shopper forgets its password, move to forget password page
                         GestureDetector(
-                          child: Text(
-                            ' نسيت كلمة المرور؟ اضغط هنا',
-                            style: TextStyle(
-                              color: appColor,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 17,
-                            ),
-                          ),
-                          onTap: () =>
-                              Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => ForgetPassword(),
-                          )),
-                        ),
+                            child: Text(' نسيت كلمة المرور؟ اضغط هنا',
+                                style: TextStyle(
+                                  color: appColor,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 17,
+                                )),
+                            onTap: () =>
+                                Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => ForgetPassword(),
+                                ))),
 
                         const SizedBox(height: 80.0),
                         //login button
@@ -169,8 +166,7 @@ class _LoginPageState extends State<LoginPage> {
                                       Navigator.push(
                                           context,
                                           MaterialPageRoute(
-                                              builder: (context) =>
-                                                  scanInovice()));
+                                              builder: (context) => Cashier()));
                                     } else {
                                       //any other ID represents the shopper ID
                                       print("Shopper Logged in");
@@ -224,14 +220,12 @@ class _LoginPageState extends State<LoginPage> {
           return Directionality(
               textDirection: TextDirection.rtl,
               child: Dialog(
-                elevation: 0,
-                backgroundColor: Color(0xffffffff),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15.0),
-                ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
+                  elevation: 0,
+                  backgroundColor: Color(0xffffffff),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15.0),
+                  ),
+                  child: Column(mainAxisSize: MainAxisSize.min, children: [
                     SizedBox(height: 15),
                     Text(
                       "حدث خطأ",
@@ -241,44 +235,37 @@ class _LoginPageState extends State<LoginPage> {
                           color: Colors.red),
                     ),
                     SizedBox(height: 15),
-                    Text(
-                      error,
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
+                    Text(error,
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w400,
+                        )),
                     SizedBox(height: 20),
                     Divider(
                       height: 2,
                       color: Colors.black,
                     ),
                     Container(
-                      width: MediaQuery.of(context).size.width,
-                      height: 50,
-                      child: InkWell(
-                        borderRadius: BorderRadius.only(
-                          bottomLeft: Radius.circular(15.0),
-                          bottomRight: Radius.circular(15.0),
-                        ),
-                        highlightColor: Colors.grey[200],
-                        onTap: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: Center(
-                          child: Text(
-                            "موافق",
-                            style: TextStyle(
-                                fontSize: 16.0,
-                                fontWeight: FontWeight.bold,
-                                color: appColor),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ));
+                        width: MediaQuery.of(context).size.width,
+                        height: 50,
+                        child: InkWell(
+                            borderRadius: BorderRadius.only(
+                              bottomLeft: Radius.circular(15.0),
+                              bottomRight: Radius.circular(15.0),
+                            ),
+                            highlightColor: Colors.grey[200],
+                            onTap: () {
+                              Navigator.of(context).pop();
+                            },
+                            child: Center(
+                                child: Text(
+                              "موافق",
+                              style: TextStyle(
+                                  fontSize: 16.0,
+                                  fontWeight: FontWeight.bold,
+                                  color: appColor),
+                            ))))
+                  ])));
         });
   }
 }

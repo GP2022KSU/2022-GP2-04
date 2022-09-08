@@ -282,14 +282,12 @@ class _RegisterPageState extends State<RegisterPage> {
           return Directionality(
               textDirection: TextDirection.rtl,
               child: Dialog(
-                elevation: 0,
-                backgroundColor: Color(0xffffffff),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15.0),
-                ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
+                  elevation: 0,
+                  backgroundColor: Color(0xffffffff),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15.0),
+                  ),
+                  child: Column(mainAxisSize: MainAxisSize.min, children: [
                     SizedBox(height: 15),
                     Text(
                       "حدث خطأ",
@@ -300,45 +298,37 @@ class _RegisterPageState extends State<RegisterPage> {
                     ),
                     SizedBox(height: 15),
                     Center(
-                      child: Text(
-                        error, 
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                    ),
+                        child: Text(error,
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.w400,
+                            ))),
                     SizedBox(height: 20),
                     Divider(
                       height: 2,
                       color: Colors.black,
                     ),
                     Container(
-                      width: MediaQuery.of(context).size.width,
-                      height: 50,
-                      child: InkWell(
-                        borderRadius: BorderRadius.only(
-                          bottomLeft: Radius.circular(15.0),
-                          bottomRight: Radius.circular(15.0),
-                        ),
-                        highlightColor: Colors.grey[200],
-                        onTap: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: Center(
-                          child: Text(
-                            "موافق",
-                            style: TextStyle(
-                                fontSize: 16.0,
-                                fontWeight: FontWeight.bold,
-                                color: appColor),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ));
+                        width: MediaQuery.of(context).size.width,
+                        height: 50,
+                        child: InkWell(
+                            borderRadius: BorderRadius.only(
+                              bottomLeft: Radius.circular(15.0),
+                              bottomRight: Radius.circular(15.0),
+                            ),
+                            highlightColor: Colors.grey[200],
+                            onTap: () {
+                              Navigator.of(context).pop();
+                            },
+                            child: Center(
+                                child: Text(
+                              "موافق",
+                              style: TextStyle(
+                                  fontSize: 16.0,
+                                  fontWeight: FontWeight.bold,
+                                  color: appColor),
+                            ))))
+                  ])));
         });
   }
 }
