@@ -84,7 +84,7 @@ class Cashier extends StatelessWidget {
         appBar: AppBar(
           backgroundColor: Colors.white24,
           title: const Text(
-            "المحاسب",
+            "دفع الفاتورة",
             style: TextStyle(
               color: Colors.black,
               fontWeight: FontWeight.bold,
@@ -139,7 +139,7 @@ class Cashier extends StatelessWidget {
                       builder: (context) => const scanInovice(),
                     ));
                   },
-                  child: const Text('ابدأ بمسح الفاتورة')),
+                  child: const Text('البدأ بدفع الفاتورة')),
               //end of start scanning button
             ]));
   }
@@ -192,18 +192,18 @@ class _scanInoviceState extends State<scanInovice> {
           Expanded(flex: 4, child: _buildQrView(context)),
           Expanded(
               flex: 1,
-              child: FittedBox(
-                  fit: BoxFit.contain,
-                  child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: <Widget>[
-                        if (result != null)
-                          Text('${result!.code}') // رقم الباركود من الكاميرا
-                        else
-                          const Text(
-                            'قم بمسح باركود الفاتورة',
-                          )
-                      ])))
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    if (result != null)
+                      Text('${result!.code}') // رقم الباركود من الكاميرا
+                    else
+                      Center(
+                          child: const Text(
+                              ' قم بمسح باركود الفاتورة لاتمام عملية الدفع',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(fontSize: 21)))
+                  ]))
         ]));
   }
 
