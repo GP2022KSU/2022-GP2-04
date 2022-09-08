@@ -189,7 +189,6 @@ class _scanInoviceState extends State<scanInovice> {
                     )))),
         backgroundColor: Colors.white24,
         body: Column(children: <Widget>[
-          const SizedBox(height: 40.0),
           Expanded(flex: 4, child: _buildQrView(context)),
           Expanded(
               flex: 1,
@@ -201,13 +200,15 @@ class _scanInoviceState extends State<scanInovice> {
                         if (result != null)
                           Text('${result!.code}') // رقم الباركود من الكاميرا
                         else
-                          const Text('امسح باركود الفاتورة'),
+                          const Text(
+                            'قم بمسح باركود الفاتورة',
+                          )
                       ])))
         ]));
   }
 
   Widget _buildQrView(BuildContext context) {
-    // For this example we check how width or tall the device is and change the scanArea and overlay accordingly.
+    // check how width or tall the device is and change the scanArea and overlay accordingly.
     var scanArea = (MediaQuery.of(context).size.width < 400 ||
             MediaQuery.of(context).size.height < 400)
         ? 150.0
