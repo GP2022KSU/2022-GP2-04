@@ -116,7 +116,7 @@ class ShoppingCartState extends State<ShoppingCart> {
     } else if (ConnectedToCart == false && Check != -1) {
       return Instructions();
     }
-    return CheckOut();
+    return Container();
   }
 
   Widget Instructions() {

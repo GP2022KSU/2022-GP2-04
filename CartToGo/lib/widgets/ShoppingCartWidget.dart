@@ -13,6 +13,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_scrolling_fab_animated/flutter_scrolling_fab_animated.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:carttogo/main.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class ShoppingCartWidget extends StatefulWidget {
   const ShoppingCartWidget({Key? key}) : super(key: key);
@@ -618,6 +619,18 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
     } else {
       return Container();
     }
+  }
+
+  Widget SlidingUp() {
+    return SlidingUpPanel(
+      parallaxEnabled: true,
+      parallaxOffset: 2,
+      maxHeight: 700,
+      minHeight: 200,
+      body: Cart(),
+      //panelBuilder: (_) => CheckOut(),
+      //collapsed: ,
+    );
   }
 
   Widget CartEmpty() {

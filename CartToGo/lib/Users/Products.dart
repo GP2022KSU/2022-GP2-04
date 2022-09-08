@@ -1,7 +1,9 @@
+import 'package:firebase_database/firebase_database.dart';
+
 class Product {
-  final String name;
-  final String size;
-  final String price;
+  String name = '';
+  String size = '';
+  String price = '';
   String quantity;
   Product({
     required this.name,
@@ -9,4 +11,6 @@ class Product {
     required this.price,
     required this.quantity,
   });
+  //Product.fromSnapshot(DataSnapshot snapshot)
+
 }
