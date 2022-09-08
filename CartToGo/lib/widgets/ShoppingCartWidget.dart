@@ -202,10 +202,11 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
                         textDirection: TextDirection.rtl,
                       ),
                       onPress: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) {
-                          return CheckOut();
-                        }));
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    CheckOut()));
                       },
                       scrollController: _scrollController,
                       animateIcon: false,

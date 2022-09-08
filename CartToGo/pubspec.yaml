@@ -60,6 +60,8 @@ dev_dependencies:
   flutter_slidable: ^1.2.0
   flutter_scrolling_fab_animated: ^0.1.3+2
   sliding_up_panel: ^2.0.0+1
+  dependencies:
+  flutter_staggered_animations: ^1.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
