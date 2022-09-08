@@ -170,26 +170,26 @@ class _scanInoviceState extends State<scanInovice> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        appBar: AppBar(
+            centerTitle: false,
+            iconTheme: IconThemeData(
+              color: Colors.black,
+            ),
+            backgroundColor: Colors.white,
+            title: InkWell(
+                onTap: () {
+                  Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => const Cashier()));
+                },
+                child: const Text("عـودة",
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'CartToGo',
+                    )))),
         backgroundColor: Colors.white24,
         body: Column(children: <Widget>[
           const SizedBox(height: 40.0),
-          ElevatedButton(
-              style: ButtonStyle(
-                  elevation: MaterialStateProperty.all(8.0),
-                  textStyle: MaterialStateProperty.all(
-                      const TextStyle(fontSize: 23, fontFamily: 'CartToGo')),
-                  fixedSize: MaterialStateProperty.all(const Size(270, 45)),
-                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                      RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30.0))),
-                  backgroundColor: MaterialStateProperty.all(appColor),
-                  foregroundColor: MaterialStateProperty.all(Colors.white)),
-              onPressed: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => const Cashier(),
-                ));
-              },
-              child: const Text('عودة')),
           Expanded(flex: 4, child: _buildQrView(context)),
           Expanded(
               flex: 1,
@@ -241,7 +241,7 @@ class _scanInoviceState extends State<scanInovice> {
     log('${DateTime.now().toIso8601String()}_onPermissionSet $p');
     if (!p) {
       ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('لا يوجد تصريح من الكاميرا')));
+          const SnackBar(content: Text('لا يوجد سماح من الكاميرا')));
     }
   }
 
