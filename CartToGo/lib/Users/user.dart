@@ -1,5 +1,7 @@
 library carttogo.globals;
 
+import 'dart:ffi';
+
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -89,6 +91,19 @@ Future<int> BringNumOfProducts() async {
   }
   return 0;
 }
+
+Future<double> BringTotalPrice() async {
+  if (FirebaseAuth.instance.currentUser != null) {
+    final ref = FirebaseDatabase.instance.ref();
+    final snapshot = await ref
+        .child("Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts/Total")
+        .get();
+    Total = await (double.parse(snapshot.value.toString()));
+    return Total;
+  }
+  return 0;
+}
+
 String getLoyaltyCardID() {
   if (_L1 == 0) {
     BringLoyaltyCardID();
@@ -118,6 +133,11 @@ int getnumOfProducts() {
   return numOfProducts;
 }
 
+double getTotal() {
+  BringTotalPrice();
+  return Total;
+}
+
 /*
 int getLastCartNumber() {
   if (_C1 == 0) {
@@ -137,3 +157,4 @@ int LastCartNumber = 0;
 String Username = "";
 String LoyaltyCardID = "";
 int numOfProducts = 0;
+double Total = 0.0;
