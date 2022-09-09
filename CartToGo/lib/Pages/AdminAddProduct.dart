@@ -438,7 +438,7 @@ class _scanInoviceState extends State<scanProduct> {
                     else
                       const Center(
                           child: Text(
-                              'قم بمسح باركود المنتج لإضافته إلى المخزون',
+                              'قم بمسح الرمز الشريطي المنتج لإضافته إلى المخزون',
                               textAlign: TextAlign.center,
                               style: TextStyle(fontSize: 21)))
                   ]))
