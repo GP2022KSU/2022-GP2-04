@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:firebase_database/firebase_database.dart';
+import '../main.dart';
 import '../widgets/ShoppingCartWidget.dart';
 import 'Navigation.dart';
 import 'package:carttogo/Users/user.dart' as user;
@@ -22,23 +23,36 @@ class CheckOut extends StatefulWidget {
 }
 
 class _CheckOutState extends State<CheckOut> {
+  bool vis = false;
+
+  void _changed(bool visibility, bool field) {
+    setState(() {
+      if (field == true) {
+        vis = visibility;
+      }
+      if (field == false) {
+        vis = visibility;
+      }
+    });
+  }
+
   Widget build(BuildContext context) {
     final _fb = FirebaseDatabase.instance;
     return Scaffold(
-        backgroundColor: Color.fromARGB(231, 249, 248, 248),
+        backgroundColor: const Color.fromARGB(231, 249, 248, 248),
         appBar: AppBar(
           leading: IconButton(
-            icon: Icon(Icons.arrow_back_ios_new, color: Colors.black),
+            icon: const Icon(Icons.arrow_back_ios_new, color: Colors.black),
             onPressed: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return Navi();
+                return const Navi();
               }));
             },
           ),
-          backgroundColor: Color.fromARGB(231, 255, 255, 255),
-          title: Text(
+          backgroundColor: const Color.fromARGB(231, 255, 255, 255),
+          title: const Text(
             "مراجعة السلة",
-            style: TextStyle(
+            style: const TextStyle(
               color: Colors.black,
               fontWeight: FontWeight.bold,
               fontFamily: 'CartToGo',
@@ -51,7 +65,7 @@ class _CheckOutState extends State<CheckOut> {
             heightFactor: 2,
             child: Column(
               children: <Widget>[
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 Text(
                   "(" +
                       user.getnumOfProducts().toString() +
@@ -59,8 +73,8 @@ class _CheckOutState extends State<CheckOut> {
                       " السلة", //Product name 1 android 2 ios
                   textAlign: TextAlign.right,
                   textDirection: TextDirection.ltr,
-                  style: TextStyle(
-                      color: Color.fromRGBO(32, 26, 37, 1),
+                  style: const TextStyle(
+                      color: const Color.fromRGBO(32, 26, 37, 1),
                       fontSize: 20,
                       letterSpacing:
                           0 /*percentages not used in flutter. defaulting to zero*/,
@@ -68,11 +82,11 @@ class _CheckOutState extends State<CheckOut> {
                       height: 0.9),
                 ),
                 Cart(),
-                SizedBox(
+                const SizedBox(
                   height: 15,
                 ),
                 Container(
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     color: Color.fromARGB(255, 242, 240, 240),
                     //border: Border.all(color: Colors.black),
                   ),
@@ -81,11 +95,11 @@ class _CheckOutState extends State<CheckOut> {
                   child: Row(
                     textDirection: TextDirection.rtl,
                     children: <Widget>[
-                      Text(
+                      const Text(
                         "  استخدام النقاط    ",
                         //textAlign: TextAlign.right,
                         //textDirection: TextDirection.ltr,
-                        style: TextStyle(
+                        style: const TextStyle(
                             color: Color.fromRGBO(32, 26, 37, 1),
                             fontSize: 20,
                             letterSpacing:
@@ -95,7 +109,7 @@ class _CheckOutState extends State<CheckOut> {
                       ),
                       Text(
                         "(" + user.getPoints().toString() + ")",
-                        style: TextStyle(
+                        style: const TextStyle(
                             color: Color.fromARGB(255, 101, 204, 140),
                             fontSize: 20,
                             letterSpacing:
@@ -120,7 +134,17 @@ class _CheckOutState extends State<CheckOut> {
                             textSize: 10,
                             iconOn: Icons.circle_sharp,
                             iconOff: Icons.circle_sharp,
-                            onChanged: (bool postion) {},
+                            onChanged: (bool postion) {
+                              if (user.getPoints() > 0) {
+                                setState(() {
+                                  if (postion == true) {
+                                    _changed(true, postion);
+                                  } else {
+                                    _changed(false, postion);
+                                  }
+                                });
+                              }
+                            },
                             onDoubleTap: () {},
                             onSwipe: () {},
                             onTap: () {},
@@ -132,8 +156,8 @@ class _CheckOutState extends State<CheckOut> {
                   height: 20,
                 ),
                 Container(
-                  decoration: BoxDecoration(
-                    color: Color.fromARGB(255, 242, 240, 240),
+                  decoration: const BoxDecoration(
+                    color: const Color.fromARGB(255, 242, 240, 240),
                     //border: Border.all(color: Colors.black),
                   ),
                   height: MediaQuery.of(context).size.height * 0.06,
@@ -141,7 +165,7 @@ class _CheckOutState extends State<CheckOut> {
                   child: Row(
                     textDirection: TextDirection.rtl,
                     children: <Widget>[
-                      Text(
+                      const Text(
                         "  المجموع   ",
                         //textAlign: TextAlign.right,
                         //textDirection: TextDirection.ltr,
@@ -160,8 +184,8 @@ class _CheckOutState extends State<CheckOut> {
                         user.getTotal().toString() + " ريال",
                         textAlign: TextAlign.right,
                         textDirection: TextDirection.rtl,
-                        style: TextStyle(
-                            color: Color.fromARGB(255, 17, 18, 18),
+                        style: const TextStyle(
+                            color: const Color.fromARGB(255, 17, 18, 18),
                             fontSize: 20,
                             letterSpacing:
                                 0 /*percentages not used in flutter. defaulting to zero*/,
@@ -171,6 +195,72 @@ class _CheckOutState extends State<CheckOut> {
                     ],
                   ),
                 ),
+                const SizedBox(
+                  height: 20,
+                ),
+                Visibility(
+                  visible: vis,
+                  child: Container(
+                    decoration: const BoxDecoration(
+                      color: const Color.fromARGB(255, 242, 240, 240),
+                      //border: Border.all(color: Colors.black),
+                    ),
+                    height: MediaQuery.of(context).size.height * 0.06,
+                    //width: MediaQuery.of(context).size.width * 0.9,
+                    child: Row(
+                      textDirection: TextDirection.rtl,
+                      children: <Widget>[
+                        const Text(
+                          "  المجموع بعد النقاط  ",
+                          //textAlign: TextAlign.right,
+                          //textDirection: TextDirection.ltr,
+                          style: TextStyle(
+                              color: Color.fromRGBO(32, 26, 37, 1),
+                              fontSize: 20,
+                              letterSpacing:
+                                  0 /*percentages not used in flutter. defaulting to zero*/,
+                              fontWeight: FontWeight.w700,
+                              height: 0.9),
+                        ),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.313,
+                        ),
+                        Text(
+                          user.getTotal().toString() + " ريال",
+                          textAlign: TextAlign.right,
+                          textDirection: TextDirection.rtl,
+                          style: const TextStyle(
+                              color: const Color.fromARGB(255, 17, 18, 18),
+                              fontSize: 20,
+                              letterSpacing:
+                                  0 /*percentages not used in flutter. defaulting to zero*/,
+                              //fontWeight: FontWeight.w700,
+                              height: 0.9),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 40,
+                ),
+                ElevatedButton(
+                    style: ButtonStyle(
+                        elevation: MaterialStateProperty.all(8.0),
+                        textStyle: MaterialStateProperty.all(const TextStyle(
+                            fontSize: 20, fontFamily: 'CartToGo')),
+                        fixedSize:
+                            MaterialStateProperty.all(const Size(200, 50)),
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(30.0))),
+                        backgroundColor: MaterialStateProperty.all(appColor),
+                        foregroundColor:
+                            MaterialStateProperty.all(Colors.white)),
+                    onPressed: () async {},
+                    child: const Text('اتمام الدفع')),
+                //end of login button
               ],
             )));
   }
@@ -194,7 +284,7 @@ class _CheckOutState extends State<CheckOut> {
                   child: FirebaseAnimatedList(
                       query: _fb.ref().child(
                           "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts/${asyn.data}"),
-                      duration: Duration(milliseconds: 500),
+                      duration: const Duration(milliseconds: 500),
                       itemBuilder: (BuildContext context, DataSnapshot snapshot,
                           Animation<double> animation, int index) {
                         //numOfProducts = user.getnumOfProducts();
