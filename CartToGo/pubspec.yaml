@@ -35,6 +35,7 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   qr_code_scanner: ^0.7.0
+  font_awesome_flutter: ^10.2.1
 
 dev_dependencies:
   flutter_test:
@@ -73,6 +74,9 @@ flutter:
     - family: CartToGo
       fonts:
         - asset: assets/fonts/CartToGo.ttf
+    - family: Scanner
+      fonts:
+        - asset: assets/fonts/Scanner.ttf
   uses-material-design: true
   assets:
     - assets/images/

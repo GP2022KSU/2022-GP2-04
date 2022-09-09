@@ -3,6 +3,10 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:carttogo/main.dart';
 import 'package:flutter/services.dart';
 import 'package:carttogo/Pages/Products_List_Admin.dart';
+import 'package:carttogo/scanner_icons.dart';
+import 'package:qr_code_scanner/qr_code_scanner.dart';
+import 'dart:developer';
+import 'dart:io';
 
 class RealtimeDatabaseInsert extends StatefulWidget {
   RealtimeDatabaseInsert({Key? key}) : super(key: key);
@@ -67,6 +71,52 @@ class RealtimeDatabaseInsertState extends State<RealtimeDatabaseInsert> {
               child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
+                    // الباركود نمبر
+                    Directionality(
+                      textDirection: TextDirection.rtl,
+                      child: TextFormField(
+                          keyboardType: TextInputType.number,
+                          inputFormatters: <TextInputFormatter>[
+                            FilteringTextInputFormatter.digitsOnly
+                          ], // Only numbers can be entered
+                          //  obscureText: true,
+                          //  obscureText: true,
+                          controller: pbarcodeController,
+                          decoration: InputDecoration(
+                            labelText: "الرمز الشريطي",
+                            labelStyle:
+                                TextStyle(fontSize: 20, color: Colors.black),
+                            hintText: "أدخل الرمز الشريطي للمنتج ",
+                            hintStyle: TextStyle(fontSize: 18),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(20.0)),
+                              borderSide: BorderSide(width: 2, color: appColor),
+                            ),
+                            suffixIcon: IconButton(
+                              onPressed: () {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => const scanProduct(),
+                                ));
+                              },
+                              icon: const Icon(Scanner.scanner),
+                              color: appColor,
+                            ),
+                          ),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'الرجاء كتابة الرمز الشريطي للمنتج';
+                            }
+                            if (value.contains(RegExp(r'[A-Z]')) &&
+                                value.contains(RegExp(r'[a-z]'))) {
+                              return 'الرمز الشريطي للمنتج يجب ان لا يحتوي على احرف';
+                            }
+                            return null;
+                          },
+                          onChanged: (value) {}),
+                    ),
+                    const SizedBox(height: 14),
+
                     //اسم المنتج
                     Directionality(
                       textDirection: TextDirection.rtl,
@@ -91,43 +141,6 @@ class RealtimeDatabaseInsertState extends State<RealtimeDatabaseInsert> {
                             }
                             if (value.contains(RegExp(r'[0-9]'))) {
                               return 'اسم المنتج يجب ان لا يحتوي على ارقام';
-                            }
-                            return null;
-                          },
-                          onChanged: (value) {}),
-                    ),
-                    const SizedBox(height: 14),
-
-                    // الباركود نمبر
-                    Directionality(
-                      textDirection: TextDirection.rtl,
-                      child: TextFormField(
-                          keyboardType: TextInputType.number,
-                          inputFormatters: <TextInputFormatter>[
-                            FilteringTextInputFormatter.digitsOnly
-                          ], // Only numbers can be entered
-                          //  obscureText: true,
-                          //  obscureText: true,
-                          controller: pbarcodeController,
-                          decoration: const InputDecoration(
-                            labelText: "الرمز الشريطي",
-                            labelStyle:
-                                TextStyle(fontSize: 20, color: Colors.black),
-                            hintText: "أدخل الرمز الشريطي للمنتج ",
-                            hintStyle: TextStyle(fontSize: 18),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(20.0)),
-                              borderSide: BorderSide(width: 2, color: appColor),
-                            ),
-                          ),
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'الرجاء كتابة الرمز الشريطي للمنتج';
-                            }
-                            if (value.contains(RegExp(r'[A-Z]')) &&
-                                value.contains(RegExp(r'[a-z]'))) {
-                              return 'الرمز الشريطي للمنتج يجب ان لا يحتوي على احرف';
                             }
                             return null;
                           },
@@ -369,5 +382,113 @@ class RealtimeDatabaseInsertState extends State<RealtimeDatabaseInsert> {
     pPriceController.clear();
     pQuantityController.clear();
     pSizeController.clear();
+  }
+}
+
+class scanProduct extends StatefulWidget {
+  const scanProduct({Key? key}) : super(key: key);
+  @override
+  State<scanProduct> createState() => _scanInoviceState();
+}
+
+class _scanInoviceState extends State<scanProduct> {
+  Barcode? result;
+  QRViewController? controller;
+  final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
+
+// In order to get hot reload to work we need to pause the camera if the platform
+// is android, or resume the camera if the platform is iOS.
+  @override
+  void reassemble() {
+    super.reassemble();
+    if (Platform.isAndroid) {
+      controller!.pauseCamera();
+    }
+    controller!.resumeCamera();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+            centerTitle: false,
+            iconTheme: IconThemeData(
+              color: Colors.black,
+            ),
+            backgroundColor: Colors.white,
+            title: InkWell(
+                onTap: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => RealtimeDatabaseInsert()));
+                },
+                child: const Text("عـودة",
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'CartToGo',
+                    )))),
+        backgroundColor: Colors.white24,
+        body: Column(children: <Widget>[
+          Expanded(flex: 4, child: _buildQrView(context)),
+          Expanded(
+              flex: 1,
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    if (result != null)
+                      Text('${result!.code}') // رقم الباركود من الكاميرا
+                    else
+                      Center(
+                          child: const Text(
+                              'قم بمسح باركود المنتج لإضافته إلى المخزون',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(fontSize: 21)))
+                  ]))
+        ]));
+  }
+
+  Widget _buildQrView(BuildContext context) {
+    // check how width or tall the device is and change the scanArea and overlay accordingly.
+    var scanArea = (MediaQuery.of(context).size.width < 400 ||
+            MediaQuery.of(context).size.height < 400)
+        ? 150.0
+        : 300.0;
+    // To ensure the Scanner view is properly sizes after rotation
+    // we need to listen for Flutter SizeChanged notification and update controller
+    return QRView(
+        key: qrKey,
+        onQRViewCreated: _onQRViewCreated,
+        overlay: QrScannerOverlayShape(
+            borderColor: appColor,
+            borderRadius: 10,
+            borderLength: 30,
+            borderWidth: 10,
+            cutOutSize: scanArea),
+        onPermissionSet: (ctrl, p) => _onPermissionSet(context, ctrl, p));
+  }
+
+  void _onQRViewCreated(QRViewController controller) {
+    setState(() {
+      this.controller = controller;
+    });
+    controller.scannedDataStream.listen((scanData) {
+      setState(() {
+        result = scanData;
+      });
+    });
+  }
+
+  void _onPermissionSet(BuildContext context, QRViewController ctrl, bool p) {
+    log('${DateTime.now().toIso8601String()}_onPermissionSet $p');
+    if (!p) {
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('لا يوجد سماح من الكاميرا')));
+    }
+  }
+
+  @override
+  void dispose() {
+    controller?.dispose();
+    super.dispose();
   }
 }
