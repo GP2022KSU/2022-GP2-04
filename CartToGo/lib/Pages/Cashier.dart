@@ -173,7 +173,7 @@ class _scanInoviceState extends State<scanInovice> {
         appBar: AppBar(
             centerTitle: false,
             iconTheme: IconThemeData(
-              color: Colors.black,
+              color: appColor,
             ),
             backgroundColor: Colors.white,
             title: InkWell(
@@ -195,9 +195,9 @@ class _scanInoviceState extends State<scanInovice> {
               child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
-                    if (result != null)
-                      Text('${result!.code}') // رقم الباركود من الكاميرا
-                    else
+                    // if (result != null)
+                    //   Text('${result!.code}') // رقم الباركود من الكاميرا
+                    // else
                       Center(
                           child: const Text(
                               ' قم بمسح باركود الفاتورة لاتمام عملية الدفع',

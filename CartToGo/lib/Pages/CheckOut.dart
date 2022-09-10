@@ -1,7 +1,6 @@
 // ignore_for_file: unnecessary_const
 
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -73,127 +72,128 @@ class _CheckOutState extends State<CheckOut> {
     void _showMyDialog() async {
       return showDialog<void>(
           context: context,
-          builder: (BuildContext context) => 
-          StatefulBuilder(builder: (context, setState) {
-            checkPay;
-          return Directionality(
-                textDirection: TextDirection.rtl,
-                child: Dialog(
-                  elevation: 0,
-                  backgroundColor: const Color(0xffffffff),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15.0),
-                  ),
-                  child: Column(mainAxisSize: MainAxisSize.min, children: [
-                    const SizedBox(height: 15),
-                    Card(
-                        shadowColor: Color.fromARGB(255, 0, 0, 0),
-                        elevation: 15,
-                        color: const Color.fromARGB(165, 255, 255, 255),
-                        clipBehavior: Clip.antiAlias,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10)),
-                        child: Container(
-                            width: MediaQuery.of(context).size.width * 0.6,
-                            height: MediaQuery.of(context).size.height * 0.27,
-                            decoration: const BoxDecoration(
-                              color: Color.fromARGB(255, 255, 255, 255),
-                            ),
-                            child: Column(children: [
-                              QrImage(
-                                foregroundColor: Colors.black,
-                                gapless: true,
-                                embeddedImage: const AssetImage(
-                                    'assets/images/logomini.png'),
-                                data: user
-                                    .getLoyaltyCardID()
-                                    .toString(), //ID for the card
-                                version: QrVersions.auto,
-                                size: MediaQuery.of(context).size.width * 0.5,
-                              ),
-                              const SizedBox(height: 5),
-                              Align(
-                                  alignment: Alignment.bottomCenter,
-                                  child: Text(
-                                    user.getLoyaltyCardID().toString(), //text
-                                    textAlign: TextAlign.center,
-                                    style: const TextStyle(
-                                        color: Color.fromARGB(255, 0, 0, 0),
-                                        shadows: <Shadow>[
-                                          const Shadow(
-                                            offset: const Offset(0.5, 0.5),
-                                            blurRadius: 1,
-                                            color:
-                                                Color.fromARGB(162, 63, 63, 63),
-                                          )
-                                        ],
-                                        fontFamily: 'CartToGo',
-                                        fontSize: 20,
-                                        letterSpacing: -0.5,
-                                        fontWeight: FontWeight.w500,
-                                        height: 1),
-                                  )),
-                            ]))),
-                    const SizedBox(height: 15),
-                    const Text("قم بالمسح عند المحاسب",
-                        style: TextStyle(
-                          fontSize: 19,
-                          fontWeight: FontWeight.bold,
-                        )),
-                    const SizedBox(height: 15),
-                    const Divider(
-                      height: 1,
-                      color: Colors.black,
-                    ),
-                    Visibility(
-                      visible: checkPay,
-                      child: ElevatedButton(
-                          style: ButtonStyle(
-                              elevation: MaterialStateProperty.all(8.0),
-                              textStyle: MaterialStateProperty.all(
-                                  const TextStyle(
-                                      fontSize: 20, fontFamily: 'CartToGo')),
-                              fixedSize: MaterialStateProperty.all(
-                                  const Size(200, 50)),
-                              shape: MaterialStateProperty.all<
-                                      RoundedRectangleBorder>(
-                                  RoundedRectangleBorder(
-                                      borderRadius:
-                                          BorderRadius.circular(30.0))),
-                              backgroundColor:
-                                  MaterialStateProperty.all(appColor),
-                              foregroundColor:
-                                  MaterialStateProperty.all(Colors.white)),
-                          onPressed: () async {
-                            //return _showMyDialog();
-                          },
-                          child: const Text('استرداد النقاط')),
-                    ),
-                  ]),
-                ));
-    }));
+          builder: (BuildContext context) =>
+              StatefulBuilder(builder: (context, setState) {
+                checkPay;
+                return Directionality(
+                    textDirection: TextDirection.rtl,
+                    child: Dialog(
+                      elevation: 0,
+                      backgroundColor: const Color(0xffffffff),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15.0),
+                      ),
+                      child: Column(mainAxisSize: MainAxisSize.min, children: [
+                        const SizedBox(height: 15),
+                        Card(
+                            shadowColor: Color.fromARGB(255, 0, 0, 0),
+                            elevation: 15,
+                            color: const Color.fromARGB(165, 255, 255, 255),
+                            clipBehavior: Clip.antiAlias,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10)),
+                            child: Container(
+                                width: MediaQuery.of(context).size.width * 0.6,
+                                height:
+                                    MediaQuery.of(context).size.height * 0.27,
+                                decoration: const BoxDecoration(
+                                  color: Color.fromARGB(255, 255, 255, 255),
+                                ),
+                                child: Column(children: [
+                                  QrImage(
+                                    foregroundColor: Colors.black,
+                                    gapless: true,
+                                    embeddedImage: const AssetImage(
+                                        'assets/images/logomini.png'),
+                                    data: user
+                                        .getLoyaltyCardID()
+                                        .toString(), //ID for the card
+                                    version: QrVersions.auto,
+                                    size:
+                                        MediaQuery.of(context).size.width * 0.5,
+                                  ),
+                                  const SizedBox(height: 5),
+                                  Align(
+                                      alignment: Alignment.bottomCenter,
+                                      child: Text(
+                                        user
+                                            .getLoyaltyCardID()
+                                            .toString(), //text
+                                        textAlign: TextAlign.center,
+                                        style: const TextStyle(
+                                            color: Color.fromARGB(255, 0, 0, 0),
+                                            shadows: <Shadow>[
+                                              const Shadow(
+                                                offset: const Offset(0.5, 0.5),
+                                                blurRadius: 1,
+                                                color: Color.fromARGB(
+                                                    162, 63, 63, 63),
+                                              )
+                                            ],
+                                            fontFamily: 'CartToGo',
+                                            fontSize: 20,
+                                            letterSpacing: -0.5,
+                                            fontWeight: FontWeight.w500,
+                                            height: 1),
+                                      )),
+                                ]))),
+                        const SizedBox(height: 15),
+                        const Text("قم بالمسح عند المحاسب",
+                            style: TextStyle(
+                              fontSize: 19,
+                              fontWeight: FontWeight.bold,
+                            )),
+                        const SizedBox(height: 15),
+                        const Divider(
+                          height: 1,
+                          color: Colors.black,
+                        ),
+                        Visibility(
+                          visible: checkPay,
+                          child: ElevatedButton(
+                              style: ButtonStyle(
+                                  elevation: MaterialStateProperty.all(8.0),
+                                  textStyle: MaterialStateProperty.all(
+                                      const TextStyle(
+                                          fontSize: 20,
+                                          fontFamily: 'CartToGo')),
+                                  fixedSize: MaterialStateProperty.all(
+                                      const Size(200, 50)),
+                                  shape: MaterialStateProperty.all<
+                                          RoundedRectangleBorder>(
+                                      RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(30.0))),
+                                  backgroundColor:
+                                      MaterialStateProperty.all(appColor),
+                                  foregroundColor:
+                                      MaterialStateProperty.all(Colors.white)),
+                              onPressed: () async {
+                                //return _showMyDialog();
+                              },
+                              child: const Text('استرداد النقاط')),
+                        ),
+                      ]),
+                    ));
+              }));
     }
 
     return Scaffold(
-        backgroundColor: const Color.fromARGB(231, 249, 248, 248),
+        backgroundColor: Colors.white,
         appBar: AppBar(
           leading: IconButton(
-            icon: const Icon(Icons.arrow_back_ios_new, color: Colors.black),
-            onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return const Navi();
-              }));
-            },
-          ),
+              icon: const Icon(Icons.arrow_back_ios_new, color: appColor),
+              onPressed: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  return const Navi();
+                }));
+              }),
           backgroundColor: const Color.fromARGB(231, 255, 255, 255),
-          title: const Text(
-            "مراجعة السلة",
-            style: const TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.bold,
-              fontFamily: 'CartToGo',
-            ),
-          ),
+          title: const Text("مراجعة السلة",
+              style: const TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+              )),
           centerTitle: true,
           elevation: 0,
         ),
