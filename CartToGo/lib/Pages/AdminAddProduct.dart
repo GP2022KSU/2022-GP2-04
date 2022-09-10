@@ -458,14 +458,19 @@ class _scanInoviceState extends State<scanProduct> {
       this.controller = controller;
     });
     controller.scannedDataStream.listen((scanData) {
-      Navigator.push(context, MaterialPageRoute(builder: (context) {
-        return RealtimeDatabaseInsert();
-      }
-          //result = scanData;
+      Navigator.push(context, MaterialPageRoute(builder: (context) 
+        => RealtimeDatabaseInsert()
+          //data: scanData.code,
           ));
     });
   }
 
+/* 
+The barcode number is the data. 
+You have to make a parameter for your widget in which the textfield is. 
+Then data: scanData.code will work. 
+You can do setState(() => controller.text = data);
+*/
   void _onPermissionSet(BuildContext context, QRViewController ctrl, bool p) {
     log('${DateTime.now().toIso8601String()}_onPermissionSet $p');
     if (!p) {
