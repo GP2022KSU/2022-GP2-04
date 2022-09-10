@@ -179,41 +179,39 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-        floatingActionButton:
-            ConnectedToCart == true && numOfProducts != 0 && _isLoading == false
-                ? Center(
-                    heightFactor: 3,
-                    child: ScrollingFabAnimated(
-                      width: MediaQuery.of(context).size.width * 0.9,
-                      icon: Text(
-                        "${total.toString()} ريال ",
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16.0,
-                            fontWeight: FontWeight.bold),
-                        textDirection: TextDirection.rtl,
-                      ),
-                      text: Text(
-                        '   عرض السلة',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16.0,
-                            fontWeight: FontWeight.bold),
-                        textDirection: TextDirection.rtl,
-                      ),
-                      onPress: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    CheckOut()));
-                      },
-                      scrollController: _scrollController,
-                      animateIcon: false,
-                      inverted: false,
-                      radius: 10.0,
-                    ))
-                : Container(),
+        floatingActionButton: ConnectedToCart == true &&
+                numOfProducts != 0 &&
+                _isLoading == false
+            ? Center(
+                heightFactor: 3,
+                child: ScrollingFabAnimated(
+                  width: MediaQuery.of(context).size.width * 0.9,
+                  icon: Text(
+                    "${total.toString()} ريال ",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.bold),
+                    textDirection: TextDirection.rtl,
+                  ),
+                  text: Text(
+                    '   عرض السلة',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.bold),
+                    textDirection: TextDirection.rtl,
+                  ),
+                  onPress: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => CheckOut()));
+                  },
+                  scrollController: _scrollController,
+                  animateIcon: false,
+                  inverted: false,
+                  radius: 10.0,
+                ))
+            : Container(),
         body: _isLoading
             ? Center(
                 child: SpinKitWave(
@@ -245,13 +243,13 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
                       var v = snapshot.value
                           .toString(); //Gets the scanned product and store it in a var
                       bool checker = true;
-                      print(v[0]);
+                      //print(v[0]);
                       try {
                         if (v[0] == "0" && v[1].isNotEmpty) {}
                       } on RangeError {
                         //If there is any kind of range error to avoid errors on the app
                         checker = false;
-                        var g = v.replaceAll(RegExp("{|}|0: "), "");
+                        var g = v.replaceAll(RegExp("{|}|0:|false|true"), "");
                       }
                       var g = v.replaceAll(
                           //Using RegExp to remove unwanted data
@@ -262,9 +260,15 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
                       g.trim();
 
                       var l = g.split(',');
-                      print("Data" + l.toString());
-
-                      if (!(l[0] == "0") && checker) {
+                      //print("Data" + l.toString());
+                      bool check2 = true;
+                      //print("Data" + l.toString());
+                      if (l.toString() == "[true]" ||
+                          l.toString() == "[false]") {
+                        print(l.toString());
+                        check2 = false;
+                      }
+                      if (!(l[0] == "0") && checker && check2) {
                         //if there is data
 
                         //-----------Deletes the swiped product-----------//

@@ -112,6 +112,11 @@ String getLoyaltyCardID() {
   return LoyaltyCardID;
 }
 
+int getLastCartNum() {
+  BringLastCartNumber();
+  return LastCartNumber;
+}
+
 String getUsername() {
   if (_U1 == 0) {
     BirngUsername();

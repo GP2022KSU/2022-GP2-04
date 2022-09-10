@@ -170,21 +170,23 @@ class _scanInoviceState extends State<scanInovice> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(backgroundColor: Colors.white, actions: <Widget>[
-          Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: IconButton(
-                  iconSize: 44,
-                  alignment: Alignment.topRight,
-                  color: appColor,
-                  onPressed: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) {
-                      return Cashier();
-                    }));
-                  },
-                  icon: Icon(Icons.keyboard_arrow_right)))
-        ]),
+        appBar: AppBar(
+            centerTitle: false,
+            iconTheme: IconThemeData(
+              color: Colors.black,
+            ),
+            backgroundColor: Colors.white,
+            title: InkWell(
+                onTap: () {
+                  Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => const Cashier()));
+                },
+                child: const Text("عـودة",
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'CartToGo',
+                    )))),
         backgroundColor: Colors.white24,
         body: Column(children: <Widget>[
           Expanded(flex: 4, child: _buildQrView(context)),
@@ -198,7 +200,7 @@ class _scanInoviceState extends State<scanInovice> {
                     else
                       Center(
                           child: const Text(
-                              ' قم بمسح الرمز الشريطي للفاتورة لاتمام عملية الدفع',
+                              ' قم بمسح باركود الفاتورة لاتمام عملية الدفع',
                               textAlign: TextAlign.center,
                               style: TextStyle(fontSize: 21)))
                   ]))
