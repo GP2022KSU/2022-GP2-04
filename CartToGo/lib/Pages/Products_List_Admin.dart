@@ -34,7 +34,7 @@ class _Products_List_Admin extends State<Products_List_Admin> {
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
           Navigator.push(context, MaterialPageRoute(builder: (context) {
-            return RealtimeDatabaseInsert();
+            return RealtimeDatabaseInsert(" ");
           }));
         },
         isExtended: isScrolled,

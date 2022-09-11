@@ -148,31 +148,7 @@ class _CheckOutState extends State<CheckOut> {
                           height: 1,
                           color: Colors.black,
                         ),
-                        Visibility(
-                          visible: checkPay,
-                          child: ElevatedButton(
-                              style: ButtonStyle(
-                                  elevation: MaterialStateProperty.all(8.0),
-                                  textStyle: MaterialStateProperty.all(
-                                      const TextStyle(
-                                          fontSize: 20,
-                                          fontFamily: 'CartToGo')),
-                                  fixedSize: MaterialStateProperty.all(
-                                      const Size(200, 50)),
-                                  shape: MaterialStateProperty.all<
-                                          RoundedRectangleBorder>(
-                                      RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(30.0))),
-                                  backgroundColor:
-                                      MaterialStateProperty.all(appColor),
-                                  foregroundColor:
-                                      MaterialStateProperty.all(Colors.white)),
-                              onPressed: () async {
-                                //return _showMyDialog();
-                              },
-                              child: const Text('استرداد النقاط')),
-                        ),
+                        ShowButton(),
                       ]),
                     ));
               }));
@@ -401,6 +377,27 @@ class _CheckOutState extends State<CheckOut> {
                 //end of login button
               ],
             )));
+  }
+
+  Widget ShowButton() {
+    return Visibility(
+      visible: checkPay,
+      child: ElevatedButton(
+          style: ButtonStyle(
+              elevation: MaterialStateProperty.all(8.0),
+              textStyle: MaterialStateProperty.all(
+                  const TextStyle(fontSize: 20, fontFamily: 'CartToGo')),
+              fixedSize: MaterialStateProperty.all(const Size(200, 50)),
+              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30.0))),
+              backgroundColor: MaterialStateProperty.all(appColor),
+              foregroundColor: MaterialStateProperty.all(Colors.white)),
+          onPressed: () async {
+            //return _showMyDialog();
+          },
+          child: const Text('استرداد النقاط')),
+    );
   }
 
   Widget Cart() {

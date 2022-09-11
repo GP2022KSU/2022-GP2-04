@@ -9,15 +9,19 @@ import 'dart:developer';
 import 'dart:io';
 
 class RealtimeDatabaseInsert extends StatefulWidget {
-  RealtimeDatabaseInsert({Key? key}) : super(key: key);
-
+  String scanData;
+  RealtimeDatabaseInsert(this.scanData);
   @override
-  RealtimeDatabaseInsertState createState() => RealtimeDatabaseInsertState();
+  State<RealtimeDatabaseInsert> createState() =>
+      RealtimeDatabaseInsertState(scanData);
 }
 
 class RealtimeDatabaseInsertState extends State<RealtimeDatabaseInsert> {
+  late String scanData;
+  RealtimeDatabaseInsertState(this.scanData);
+  @override
   final _formKey = GlobalKey<FormState>();
-  var pbarcodeController = new TextEditingController();
+  var pbarcodeController = TextEditingController();
   var pNameController = new TextEditingController();
   var pBrandController = new TextEditingController();
   var pPriceController = new TextEditingController();
@@ -29,6 +33,7 @@ class RealtimeDatabaseInsertState extends State<RealtimeDatabaseInsert> {
 
   @override
   Widget build(BuildContext context) {
+    setState(() => pbarcodeController.text = scanData);
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
@@ -458,10 +463,13 @@ class _scanInoviceState extends State<scanProduct> {
       this.controller = controller;
     });
     controller.scannedDataStream.listen((scanData) {
-      Navigator.push(context, MaterialPageRoute(builder: (context) 
-        => RealtimeDatabaseInsert()
-          //data: scanData.code,
-          ));
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  RealtimeDatabaseInsert(scanData.code.toString())
+              //data: scanData.code,
+              ));
     });
   }
 
