@@ -57,6 +57,7 @@ class RealtimeDatabaseInsertState extends State<RealtimeDatabaseInsert> {
                     child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
+
                           // الباركود نمبر
                           Directionality(
                             textDirection: TextDirection.rtl,
@@ -65,7 +66,6 @@ class RealtimeDatabaseInsertState extends State<RealtimeDatabaseInsert> {
                                 inputFormatters: <TextInputFormatter>[
                                   FilteringTextInputFormatter.digitsOnly
                                 ], // Only numbers can be entered
-
                                 controller: pbarcodeController,
                                 decoration: InputDecoration(
                                   labelText: "الرمز الشريطي",
@@ -391,14 +391,15 @@ class _scanInoviceState extends State<scanProduct> {
 
 // In order to get hot reload to work we need to pause the camera if the platform
 // is android, or resume the camera if the platform is iOS.
-  @override
-  void reassemble() {
-    super.reassemble();
-    if (Platform.isAndroid) {
-      controller!.pauseCamera();
-    }
-    controller!.resumeCamera();
-  }
+
+  // @override
+  // void reassemble() {
+  //   super.reassemble();
+  //   if (Platform.isAndroid) {
+  //     controller!.pauseCamera();
+  //   }
+  //   controller!.resumeCamera();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -426,9 +427,6 @@ class _scanInoviceState extends State<scanProduct> {
               child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
-                    //  if (result != null)
-                    //    Text('${result!.code}') // رقم الباركود من الكاميرا
-                    //  else
                     const Center(
                         child: Text(
                             'قم بمسح الرمز الشريطي للمنتج لإضافته إلى المخزون',
@@ -468,17 +466,10 @@ class _scanInoviceState extends State<scanProduct> {
           MaterialPageRoute(
               builder: (context) =>
                   RealtimeDatabaseInsert(scanData.code.toString())
-              //data: scanData.code,
               ));
     });
   }
 
-/* 
-The barcode number is the data. 
-You have to make a parameter for your widget in which the textfield is. 
-Then data: scanData.code will work. 
-You can do setState(() => controller.text = data);
-*/
   void _onPermissionSet(BuildContext context, QRViewController ctrl, bool p) {
     log('${DateTime.now().toIso8601String()}_onPermissionSet $p');
     if (!p) {
