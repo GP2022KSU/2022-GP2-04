@@ -387,18 +387,6 @@ class _scanInoviceState extends State<scanProduct> {
   QRViewController? controller;
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
 
-// In order to get hot reload to work we need to pause the camera if the platform
-// is android, or resume the camera if the platform is iOS.
-
-  // @override
-  // void reassemble() {
-  //   super.reassemble();
-  //   if (Platform.isAndroid) {
-  //     controller!.pauseCamera();
-  //   }
-  //   controller!.resumeCamera();
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -463,33 +451,15 @@ class _scanInoviceState extends State<scanProduct> {
 
     controller.scannedDataStream.listen((scanData) {
       check++;
-
       if (check == 1) {
         Navigator.push(
             context,
             MaterialPageRoute(
                 builder: (context) =>
-                    RealtimeDatabaseInsert(scanData.code.toString())
-
-                //data: scanData.code,
-
-                ));
+                    RealtimeDatabaseInsert(scanData.code.toString())));
       }
     });
   }
-  // void _onQRViewCreated(QRViewController controller) {
-  //   setState(() {
-  //     this.controller = controller;
-  //   });
-  //   controller.scannedDataStream.listen((scanData) {
-  //     Navigator.push(
-  //         context,
-  //         MaterialPageRoute(
-  //             builder: (context) =>
-  //                 RealtimeDatabaseInsert(scanData.code.toString())
-  //             ));
-  //   });
-  // }
 
   void _onPermissionSet(BuildContext context, QRViewController ctrl, bool p) {
     log('${DateTime.now().toIso8601String()}_onPermissionSet $p');
