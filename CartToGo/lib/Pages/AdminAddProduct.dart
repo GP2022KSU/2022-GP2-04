@@ -57,7 +57,6 @@ class RealtimeDatabaseInsertState extends State<RealtimeDatabaseInsert> {
                     child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-
                           // الباركود نمبر
                           Directionality(
                             textDirection: TextDirection.rtl,
@@ -249,7 +248,6 @@ class RealtimeDatabaseInsertState extends State<RealtimeDatabaseInsert> {
                                 inputFormatters: <TextInputFormatter>[
                                   FilteringTextInputFormatter.digitsOnly
                                 ], // Only numbers can be entered
-                                //  obscureText: true,
                                 controller: pQuantityController,
                                 decoration: const InputDecoration(
                                   labelText: "الكمية",
@@ -427,7 +425,7 @@ class _scanInoviceState extends State<scanProduct> {
               child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
-                    const Center(
+                    Center(
                         child: Text(
                             'قم بمسح الرمز الشريطي للمنتج لإضافته إلى المخزون',
                             textAlign: TextAlign.center,
@@ -457,18 +455,41 @@ class _scanInoviceState extends State<scanProduct> {
   }
 
   void _onQRViewCreated(QRViewController controller) {
+    int check = 0;
+
     setState(() {
       this.controller = controller;
     });
+
     controller.scannedDataStream.listen((scanData) {
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) =>
-                  RealtimeDatabaseInsert(scanData.code.toString())
-              ));
+      check++;
+
+      if (check == 1) {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    RealtimeDatabaseInsert(scanData.code.toString())
+
+                //data: scanData.code,
+
+                ));
+      }
     });
   }
+  // void _onQRViewCreated(QRViewController controller) {
+  //   setState(() {
+  //     this.controller = controller;
+  //   });
+  //   controller.scannedDataStream.listen((scanData) {
+  //     Navigator.push(
+  //         context,
+  //         MaterialPageRoute(
+  //             builder: (context) =>
+  //                 RealtimeDatabaseInsert(scanData.code.toString())
+  //             ));
+  //   });
+  // }
 
   void _onPermissionSet(BuildContext context, QRViewController ctrl, bool p) {
     log('${DateTime.now().toIso8601String()}_onPermissionSet $p');
