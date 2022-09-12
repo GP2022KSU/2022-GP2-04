@@ -186,7 +186,7 @@ class _scanInoviceState extends State<scanInovice> {
                   children: <Widget>[
                     Center(
                         child: const Text(
-                            ' قم بمسح باركود الفاتورة لاتمام عملية الدفع',
+                            'قم بمسح الرمز الشريطي للفاتورة لاتمام عملية الدفع',
                             textAlign: TextAlign.center,
                             style: TextStyle(fontSize: 21)))
                   ]))

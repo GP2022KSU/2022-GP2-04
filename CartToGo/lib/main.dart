@@ -50,7 +50,7 @@ class MainPage extends StatelessWidget {
             } else if (snapshot.hasData &&
                 (FirebaseAuth.instance.currentUser?.uid).toString() ==
                     "jCG3miIP7AdaVVfY20lCn1MVWqR2") {
-              return Products_List_Admin();
+              return ProductsListAdmin();
             } else if (snapshot.hasData &&
                 (FirebaseAuth.instance.currentUser?.uid).toString() ==
                     "OMCkaR8mdxNDmDE1O7gkFFd9HyX2") {
