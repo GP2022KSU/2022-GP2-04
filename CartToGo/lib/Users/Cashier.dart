@@ -9,6 +9,9 @@ final bool check = false;
 void main() {}
 String uid = "";
 String Username = "";
+int numOfProducts = 0;
+double Total = 0.0;
+
 Future<String> BringUID(String QRId) async {
   if (FirebaseAuth.instance.currentUser != null) {
     print(FirebaseAuth.instance.currentUser?.uid);
@@ -31,6 +34,27 @@ Future<String> BirngUsername(String uid1) async {
   return Username;
 }
 
+Future<int> BringNumOfProducts(String uid2) async {
+  if (FirebaseAuth.instance.currentUser != null) {
+    final ref = FirebaseDatabase.instance.ref();
+    final snapshot =
+        await ref.child("Shopper/${uid2}/Carts/NumOfProducts").get();
+    numOfProducts = await (int.parse(snapshot.value.toString()));
+    return numOfProducts;
+  }
+  return numOfProducts;
+}
+
+Future<double> BringTotalPrice(String uid3) async {
+  if (FirebaseAuth.instance.currentUser != null) {
+    final ref = FirebaseDatabase.instance.ref();
+    final snapshot = await ref.child("Shopper/${uid3}/Carts/Total").get();
+    Total = await (double.parse(snapshot.value.toString()));
+    return Total;
+  }
+  return Total;
+}
+
 String getUID(String qrid) {
   BringUID(qrid);
   return uid;
@@ -39,4 +63,14 @@ String getUID(String qrid) {
 String getUsername(String id) {
   BirngUsername(id);
   return Username;
+}
+
+int getnumOfProducts(String id1) {
+  BringNumOfProducts(id1);
+  return numOfProducts;
+}
+
+double getTotal(String id2) {
+  BringTotalPrice(id2);
+  return Total;
 }
