@@ -55,8 +55,9 @@ class PaymentCompletionState extends State<PaymentCompletion> {
                 const SizedBox(height: 20),
                 Text(
                   "(" +
-                      user.getnumOfProducts().toString() +
+                      cashier.getnumOfProducts(uid).toString() +
                       ")" +
+                      cashier.getUsername(uid) +
                       "السلة الخاصة بـ",
                   textAlign: TextAlign.right,
                   textDirection: TextDirection.ltr,
@@ -68,38 +69,50 @@ class PaymentCompletionState extends State<PaymentCompletion> {
                       fontWeight: FontWeight.w700,
                       height: 0.9),
                 ),
-                FutureBuilder<String>(
-                    future: cashier.BringUID(splitted[0].toString()),
-                    builder:
-                        (BuildContext context, AsyncSnapshot<String> asyn) {
-                      if (asyn.hasData) {
-                        return Text(
-                          cashier.getUsername(
-                              asyn.data.toString()), //text username
-                          textAlign: TextAlign.left,
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontFamily: 'CartToGo',
-                              fontSize: 19,
-                              fontWeight: FontWeight.w600,
-                              height: 0.9),
-                        );
-                      }
-                      return Text(
-                        user.getUsername().toString(),
-                        textAlign: TextAlign.left,
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontFamily: 'CartToGo',
-                            fontSize: 19,
-                            fontWeight: FontWeight.w600,
-                            height: 0.9),
-                      );
-                    }),
-//  Text(
-//                       "Haya",),
-
                 Cart(),
+                const SizedBox(
+                  height: 15,
+                ),
+                Container(
+                  decoration: const BoxDecoration(
+                    color: const Color.fromARGB(255, 242, 240, 240),
+                    //border: Border.all(color: Colors.black),
+                  ),
+                  height: MediaQuery.of(context).size.height * 0.06,
+                  //width: MediaQuery.of(context).size.width * 0.9,
+                  child: Row(
+                    textDirection: TextDirection.rtl,
+                    children: <Widget>[
+                      const Text(
+                        "  المجموع   ",
+                        //textAlign: TextAlign.right,
+                        //textDirection: TextDirection.ltr,
+                        style: TextStyle(
+                            color: Color.fromRGBO(32, 26, 37, 1),
+                            fontSize: 20,
+                            letterSpacing:
+                                0 /*percentages not used in flutter. defaulting to zero*/,
+                            fontWeight: FontWeight.w700,
+                            height: 0.9),
+                      ),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.54,
+                      ),
+                      Text(
+                        user.getTotal().toString() + " ريال",
+                        textAlign: TextAlign.right,
+                        textDirection: TextDirection.rtl,
+                        style: const TextStyle(
+                            color: const Color.fromARGB(255, 17, 18, 18),
+                            fontSize: 20,
+                            letterSpacing:
+                                0 /*percentages not used in flutter. defaulting to zero*/,
+                            //fontWeight: FontWeight.w700,
+                            height: 0.9),
+                      ),
+                    ],
+                  ),
+                ),
                 const SizedBox(
                   height: 15,
                 ),
