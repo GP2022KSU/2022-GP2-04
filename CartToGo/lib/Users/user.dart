@@ -78,6 +78,20 @@ Future<int> BringLastCartNumber() async {
   return 0;
 }
 
+Future<int> BringnumOfObtPoints() async {
+  if (FirebaseAuth.instance.currentUser != null) {
+    final ref = FirebaseDatabase.instance.ref();
+    final snapshot = await ref
+        .child(
+            "Shopper/${FirebaseAuth.instance.currentUser?.uid}/PointsHistory/numOfObtPoints")
+        .get();
+    numOfObtPoints = await (int.parse(snapshot.value.toString()));
+    print("djhjdhjd " + numOfObtPoints.toString());
+    return numOfObtPoints;
+  }
+  return 0;
+}
+
 Future<int> BringNumOfProducts() async {
   if (FirebaseAuth.instance.currentUser != null) {
     final ref = FirebaseDatabase.instance.ref();
@@ -138,6 +152,11 @@ int getnumOfProducts() {
   return numOfProducts;
 }
 
+int getnumOfObtPoints() {
+  BringnumOfObtPoints();
+  return numOfObtPoints;
+}
+
 double getTotal() {
   BringTotalPrice();
   return Total;
@@ -162,4 +181,5 @@ int LastCartNumber = 0;
 String Username = "";
 String LoyaltyCardID = "";
 int numOfProducts = 0;
+int numOfObtPoints = 0;
 double Total = 0.0;

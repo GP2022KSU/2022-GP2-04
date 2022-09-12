@@ -105,9 +105,11 @@ class _CheckOutState extends State<CheckOut> {
                                     gapless: true,
                                     embeddedImage: const AssetImage(
                                         'assets/images/logomini.png'),
-                                    data: user
-                                        .getLoyaltyCardID()
-                                        .toString(), //ID for the card
+                                    data: user.getLoyaltyCardID().toString() +
+                                        " - " +
+                                        user
+                                            .getLastCartNum()
+                                            .toString(), //ID for the card
                                     version: QrVersions.auto,
                                     size:
                                         MediaQuery.of(context).size.width * 0.5,
