@@ -11,27 +11,28 @@ import '../main.dart';
 import 'package:carttogo/Users/user.dart' as user;
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 
+import 'package:carttogo/Users/Cashier.dart' as cashier;
+
 final _fb = FirebaseDatabase.instance;
 
 class PaymentCompletion extends StatefulWidget {
   String scanData;
-  bool checkPay = false;
   PaymentCompletion(this.scanData);
   @override
   State<PaymentCompletion> createState() => PaymentCompletionState(scanData);
 }
 
 class PaymentCompletionState extends State<PaymentCompletion> {
-  late String scanData;
+  String scanData;
   PaymentCompletionState(this.scanData);
   @override
   final _formKey = GlobalKey<FormState>();
   var inoviceQRController = TextEditingController();
-
+  var splitted;
   @override
   Widget build(BuildContext context) {
-    setState(() => inoviceQRController.text = scanData);
-
+    setState(() => splitted = scanData.split(' - '));
+    String uid = cashier.getUID(splitted[0]);
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
@@ -68,12 +69,13 @@ class PaymentCompletionState extends State<PaymentCompletion> {
                       height: 0.9),
                 ),
                 FutureBuilder<String>(
-                    future: user.BirngUsername(),
+                    future: cashier.BringUID(splitted[0].toString()),
                     builder:
                         (BuildContext context, AsyncSnapshot<String> asyn) {
                       if (asyn.hasData) {
                         return Text(
-                          user.getUsername(), //text username
+                          cashier.getUsername(
+                              asyn.data.toString()), //text username
                           textAlign: TextAlign.left,
                           style: TextStyle(
                               color: Colors.white,
@@ -128,20 +130,17 @@ class PaymentCompletionState extends State<PaymentCompletion> {
       height: MediaQuery.of(context).size.height * 0.3,
       width: MediaQuery.of(context).size.width * 0.9,
       //color: Colors.black,
-      child: FutureBuilder<int>(
-          future: user.BringLastCartNumber(),
-          builder: (BuildContext context, AsyncSnapshot<int> asyn) {
+      child: FutureBuilder<String>(
+          future: cashier.BringUID(splitted[0].toString()),
+          builder: (BuildContext context, AsyncSnapshot<String> asyn) {
             if (FirebaseAuth.instance.currentUser != null) {
-              final ref = _fb.ref().child(
-                  "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts/${asyn.data}");
-              print("Successful ${asyn.data}");
-              String a = asyn.data.toString();
+              String uid = asyn.data.toString();
               if (asyn.hasData) {
                 return Container(
                   height: MediaQuery.of(context).size.height * 0.713,
                   child: FirebaseAnimatedList(
                       query: _fb.ref().child(
-                          "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts/${asyn.data}"),
+                          "Shopper/${uid}/Carts/${splitted[1].toString()}"),
                       duration: const Duration(milliseconds: 500),
                       itemBuilder: (BuildContext context, DataSnapshot snapshot,
                           Animation<double> animation, int index) {
