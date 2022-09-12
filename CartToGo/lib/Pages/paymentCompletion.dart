@@ -32,7 +32,7 @@ class PaymentCompletionState extends State<PaymentCompletion> {
   @override
   Widget build(BuildContext context) {
     setState(() => splitted = scanData.split(' - '));
-    String uid = cashier.getUID(splitted[0]);
+    //String uid = cashier.getUID(splitted[0]);
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
@@ -50,92 +50,104 @@ class PaymentCompletionState extends State<PaymentCompletion> {
         ),
         body: Center(
             heightFactor: 2,
-            child: Column(
-              children: <Widget>[
-                const SizedBox(height: 20),
-                Text(
-                  "(" +
-                      cashier.getnumOfProducts(uid).toString() +
-                      ")" +
-                      cashier.getUsername(uid) +
-                      "السلة الخاصة بـ",
-                  textAlign: TextAlign.right,
-                  textDirection: TextDirection.ltr,
-                  style: const TextStyle(
-                      color: const Color.fromRGBO(32, 26, 37, 1),
-                      fontSize: 20,
-                      letterSpacing:
-                          0 /*percentages not used in flutter. defaulting to zero*/,
-                      fontWeight: FontWeight.w700,
-                      height: 0.9),
-                ),
-                Cart(),
-                const SizedBox(
-                  height: 15,
-                ),
-                Container(
-                  decoration: const BoxDecoration(
-                    color: const Color.fromARGB(255, 242, 240, 240),
-                    //border: Border.all(color: Colors.black),
-                  ),
-                  height: MediaQuery.of(context).size.height * 0.06,
-                  //width: MediaQuery.of(context).size.width * 0.9,
-                  child: Row(
-                    textDirection: TextDirection.rtl,
-                    children: <Widget>[
-                      const Text(
-                        "  المجموع   ",
-                        //textAlign: TextAlign.right,
-                        //textDirection: TextDirection.ltr,
-                        style: TextStyle(
-                            color: Color.fromRGBO(32, 26, 37, 1),
-                            fontSize: 20,
-                            letterSpacing:
-                                0 /*percentages not used in flutter. defaulting to zero*/,
-                            fontWeight: FontWeight.w700,
-                            height: 0.9),
-                      ),
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.54,
-                      ),
-                      Text(
-                        user.getTotal().toString() + " ريال",
-                        textAlign: TextAlign.right,
-                        textDirection: TextDirection.rtl,
-                        style: const TextStyle(
-                            color: const Color.fromARGB(255, 17, 18, 18),
-                            fontSize: 20,
-                            letterSpacing:
-                                0 /*percentages not used in flutter. defaulting to zero*/,
-                            //fontWeight: FontWeight.w700,
-                            height: 0.9),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(
-                  height: 15,
-                ),
-                ElevatedButton(
-                    style: ButtonStyle(
-                        elevation: MaterialStateProperty.all(8.0),
-                        textStyle: MaterialStateProperty.all(const TextStyle(
-                            fontSize: 20, fontFamily: 'CartToGo')),
-                        fixedSize:
-                            MaterialStateProperty.all(const Size(200, 50)),
-                        shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
-                                RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(30.0))),
-                        backgroundColor: MaterialStateProperty.all(appColor),
-                        foregroundColor:
-                            MaterialStateProperty.all(Colors.white)),
-                    onPressed: () {
-                      return _showMyDialog();
-                    },
-                    child: const Text('اتمام الدفع')),
-              ],
-            )));
+            child: FutureBuilder<String>(
+                future: cashier.BringUID(splitted[0].toString()),
+                builder: (BuildContext context, AsyncSnapshot<String> asyn) {
+                  if (FirebaseAuth.instance.currentUser != null) {
+                    String uid = asyn.data.toString();
+                    Column(
+                      children: <Widget>[
+                        const SizedBox(height: 20),
+                        Text(
+                          "(" +
+                              cashier.getnumOfProducts(uid).toString() +
+                              ")" +
+                              cashier.getUsername(uid) +
+                              "السلة الخاصة بـ",
+                          textAlign: TextAlign.right,
+                          textDirection: TextDirection.ltr,
+                          style: const TextStyle(
+                              color: const Color.fromRGBO(32, 26, 37, 1),
+                              fontSize: 20,
+                              letterSpacing:
+                                  0 /*percentages not used in flutter. defaulting to zero*/,
+                              fontWeight: FontWeight.w700,
+                              height: 0.9),
+                        ),
+                        Cart(),
+                        const SizedBox(
+                          height: 15,
+                        ),
+                        Container(
+                          decoration: const BoxDecoration(
+                            color: const Color.fromARGB(255, 242, 240, 240),
+                            //border: Border.all(color: Colors.black),
+                          ),
+                          height: MediaQuery.of(context).size.height * 0.06,
+                          //width: MediaQuery.of(context).size.width * 0.9,
+                          child: Row(
+                            textDirection: TextDirection.rtl,
+                            children: <Widget>[
+                              const Text(
+                                "  المجموع   ",
+                                //textAlign: TextAlign.right,
+                                //textDirection: TextDirection.ltr,
+                                style: TextStyle(
+                                    color: Color.fromRGBO(32, 26, 37, 1),
+                                    fontSize: 20,
+                                    letterSpacing:
+                                        0 /*percentages not used in flutter. defaulting to zero*/,
+                                    fontWeight: FontWeight.w700,
+                                    height: 0.9),
+                              ),
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.54,
+                              ),
+                              Text(
+                                cashier.getTotal(uid).toString() + " ريال",
+                                textAlign: TextAlign.right,
+                                textDirection: TextDirection.rtl,
+                                style: const TextStyle(
+                                    color:
+                                        const Color.fromARGB(255, 17, 18, 18),
+                                    fontSize: 20,
+                                    letterSpacing:
+                                        0 /*percentages not used in flutter. defaulting to zero*/,
+                                    //fontWeight: FontWeight.w700,
+                                    height: 0.9),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 15,
+                        ),
+                        ElevatedButton(
+                            style: ButtonStyle(
+                                elevation: MaterialStateProperty.all(8.0),
+                                textStyle: MaterialStateProperty.all(
+                                    const TextStyle(
+                                        fontSize: 20, fontFamily: 'CartToGo')),
+                                fixedSize: MaterialStateProperty.all(
+                                    const Size(200, 50)),
+                                shape: MaterialStateProperty.all<
+                                        RoundedRectangleBorder>(
+                                    RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(30.0))),
+                                backgroundColor:
+                                    MaterialStateProperty.all(appColor),
+                                foregroundColor:
+                                    MaterialStateProperty.all(Colors.white)),
+                            onPressed: () {
+                              return _showMyDialog();
+                            },
+                            child: const Text('اتمام الدفع')),
+                      ],
+                    );
+                  }
+                  return Container();
+                })));
   }
 
   Widget Cart() {
