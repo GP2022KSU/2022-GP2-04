@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'welcomePage.dart';
+import 'paymentCompletion.dart';
 
 class Cashier extends StatelessWidget {
   const Cashier({Key? key}) : super(key: key);
@@ -79,7 +80,6 @@ class Cashier extends StatelessWidget {
                     ])));
           });
     }
-
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.white24,
@@ -186,7 +186,7 @@ class _scanInoviceState extends State<scanInovice> {
                   children: <Widget>[
                     Center(
                         child: const Text(
-                            ' قم بمسح باركود الفاتورة لاتمام عملية الدفع',
+                            'قم بمسح الرمز الشريطي للفاتورة لاتمام عملية الدفع',
                             textAlign: TextAlign.center,
                             style: TextStyle(fontSize: 21)))
                   ]))
@@ -214,13 +214,21 @@ class _scanInoviceState extends State<scanInovice> {
   }
 
   void _onQRViewCreated(QRViewController controller) {
+    int check = 0;
     setState(() {
       this.controller = controller;
     });
+
+//if the scanner has read the barcode return to "add new prduct page"
     controller.scannedDataStream.listen((scanData) {
-      setState(() {
-        result = scanData;
-      });
+      check++;
+      if (check == 1) {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    PaymentCompletion(scanData.code.toString())));
+      }
     });
   }
 
@@ -238,3 +246,4 @@ class _scanInoviceState extends State<scanInovice> {
     super.dispose();
   }
 }
+

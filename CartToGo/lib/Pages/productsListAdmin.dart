@@ -10,12 +10,12 @@ import 'package:carttogo/Pages/addNewProduct.dart';
 import 'package:flutter/rendering.dart';
 //import ' AdminUpdateProduct.dart';
 
-class Products_List_Admin extends StatefulWidget {
+class ProductsListAdmin extends StatefulWidget {
   @override
-  State<Products_List_Admin> createState() => _Products_List_Admin();
+  State<ProductsListAdmin> createState() => _ProductsListAdmin();
 }
 
-class _Products_List_Admin extends State<Products_List_Admin> {
+class _ProductsListAdmin extends State<ProductsListAdmin> {
   bool isScrolled = false;
   final fb = FirebaseDatabase.instance;
   final _formKey = GlobalKey<FormState>();
@@ -312,7 +312,7 @@ class _Products_List_Admin extends State<Products_List_Admin> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) =>
-                                          Products_List_Admin()));
+                                          ProductsListAdmin()));
                             },
                             child: Center(
                                 child: Text("نعم",
@@ -479,7 +479,7 @@ class _Products_List_Admin extends State<Products_List_Admin> {
                                             Navigator.push(context,
                                                 MaterialPageRoute(
                                                     builder: (context) {
-                                              return Products_List_Admin();
+                                              return ProductsListAdmin();
                                             }));
                                           }
                                         },
@@ -506,7 +506,7 @@ class _Products_List_Admin extends State<Products_List_Admin> {
                                           Navigator.push(context,
                                               MaterialPageRoute(
                                                   builder: (context) {
-                                            return Products_List_Admin();
+                                            return ProductsListAdmin();
                                           }));
                                         },
                                         child: Center(

@@ -159,7 +159,7 @@ class _LoginPageState extends State<LoginPage> {
                                           context,
                                           MaterialPageRoute(
                                               builder: (context) =>
-                                                  Products_List_Admin()));
+                                                  ProductsListAdmin()));
                                     } else if ((UID.toString() == //cashier IDs
                                         "OMCkaR8mdxNDmDE1O7gkFFd9HyX2")) {
                                       print("Cashier Logged in");

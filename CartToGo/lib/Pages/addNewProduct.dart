@@ -347,7 +347,7 @@ class AddNewProductState extends State<AddNewProduct> {
                                   }
                                   Navigator.push(context,
                                       MaterialPageRoute(builder: (context) {
-                                    return Products_List_Admin();
+                                    return ProductsListAdmin();
                                   }));
                                 }
                               },
@@ -401,7 +401,7 @@ class _scanInoviceState extends State<scanProduct> {
                   onPressed: () {
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) {
-                      return Products_List_Admin();
+                      return ProductsListAdmin();
                     }));
                   },
                   icon: Icon(Icons.keyboard_arrow_right)))
@@ -445,12 +445,11 @@ class _scanInoviceState extends State<scanProduct> {
 
   void _onQRViewCreated(QRViewController controller) {
     int check = 0;
-
     setState(() {
       this.controller = controller;
     });
 
-//if the scanner had read the barcode return to "add new prduct page"
+//if the scanner has read the barcode return to "add new prduct page"
     controller.scannedDataStream.listen((scanData) {
       check++;
       if (check == 1) {
