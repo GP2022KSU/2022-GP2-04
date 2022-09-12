@@ -1,8 +1,8 @@
 // ignore_for_file: prefer_const_constructors, unnecessary_new, prefer_const_literals_to_create_immutables, nullable_type_in_catch_clause
 
 import 'dart:async';
-import 'package:carttogo/Pages/CheckOut.dart';
-import 'package:carttogo/Pages/ShoppingCart.dart';
+import 'package:carttogo/Pages/checkOut.dart';
+import 'package:carttogo/Pages/shoppingCart.dart';
 import 'package:carttogo/Pages/Cashier.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';

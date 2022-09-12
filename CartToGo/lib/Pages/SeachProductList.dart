@@ -1,6 +1,6 @@
 import 'package:carttogo/main.dart';
 import 'package:flutter/material.dart';
-import 'package:carttogo/Pages/SearchProduct.dart';
+import 'package:carttogo/Pages/searchProduct.dart';
 import 'Product.dart';
 import 'package:firebase_database/firebase_database.dart';
 

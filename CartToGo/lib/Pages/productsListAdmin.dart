@@ -6,7 +6,7 @@ import 'package:carttogo/main.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:carttogo/Pages/welcomePage.dart';
-import 'package:carttogo/Pages//AdminAddProduct.dart';
+import 'package:carttogo/Pages/addNewProduct.dart';
 import 'package:flutter/rendering.dart';
 //import ' AdminUpdateProduct.dart';
 
@@ -34,7 +34,7 @@ class _Products_List_Admin extends State<Products_List_Admin> {
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
           Navigator.push(context, MaterialPageRoute(builder: (context) {
-            return RealtimeDatabaseInsert(" ");
+            return AddNewProduct(" ");
           }));
         },
         isExtended: isScrolled,

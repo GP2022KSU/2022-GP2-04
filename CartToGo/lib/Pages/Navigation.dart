@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
-import 'package:carttogo/Pages/LoyaltyCard.dart';
-import 'package:carttogo/Pages/ShoppingCart.dart';
+import 'package:carttogo/Pages/loyaltyCard.dart';
+import 'package:carttogo/Pages/shoppingCart.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 

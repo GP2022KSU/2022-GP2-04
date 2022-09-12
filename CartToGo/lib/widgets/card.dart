@@ -5,7 +5,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:carttogo/Users/user.dart' as user;
-import 'package:carttogo/Pages/LoyaltyCard.dart';
+import 'package:carttogo/Pages/loyaltyCard.dart';
 
 class CardWidget extends StatefulWidget {
   @override

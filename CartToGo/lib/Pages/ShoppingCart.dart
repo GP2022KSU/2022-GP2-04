@@ -9,7 +9,7 @@ import 'package:carttogo/widgets/ShoppingCartWidget.dart';
 import 'package:animated_button/animated_button.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:carttogo/Pages/CheckOut.dart';
+import 'package:carttogo/Pages/checkOut.dart';
 
 class ShoppingCart extends StatefulWidget {
   Function callback;

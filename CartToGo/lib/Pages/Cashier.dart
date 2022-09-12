@@ -156,17 +156,6 @@ class _scanInoviceState extends State<scanInovice> {
   QRViewController? controller;
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
 
-// In order to get hot reload to work we need to pause the camera if the platform
-// is android, or resume the camera if the platform is iOS.
-  @override
-  void reassemble() {
-    super.reassemble();
-    if (Platform.isAndroid) {
-      controller!.pauseCamera();
-    }
-    controller!.resumeCamera();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -195,14 +184,11 @@ class _scanInoviceState extends State<scanInovice> {
               child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
-                    // if (result != null)
-                    //   Text('${result!.code}') // رقم الباركود من الكاميرا
-                    // else
-                      Center(
-                          child: const Text(
-                              ' قم بمسح باركود الفاتورة لاتمام عملية الدفع',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(fontSize: 21)))
+                    Center(
+                        child: const Text(
+                            ' قم بمسح باركود الفاتورة لاتمام عملية الدفع',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(fontSize: 21)))
                   ]))
         ]));
   }

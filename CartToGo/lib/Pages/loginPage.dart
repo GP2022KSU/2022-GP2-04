@@ -1,8 +1,8 @@
 // ignore_for_file: prefer_const_constructors
 import 'package:carttogo/Pages/Navigation.dart';
-import 'package:carttogo/Pages/Products_List_Admin.dart';
+import 'package:carttogo/Pages/productsListAdmin.dart';
 import 'package:carttogo/Pages/registerPage.dart';
-import 'package:carttogo/Pages/forgetPassword_page.dart';
+import 'package:carttogo/Pages/forgetPassword.dart';
 import 'package:carttogo/Pages/Cashier.dart';
 import 'package:carttogo/main.dart';
 import 'package:flutter/material.dart';

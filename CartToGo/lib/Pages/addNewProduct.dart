@@ -2,23 +2,24 @@ import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:carttogo/main.dart';
 import 'package:flutter/services.dart';
-import 'package:carttogo/Pages/Products_List_Admin.dart';
+import 'package:carttogo/Pages/productsListAdmin.dart';
 import 'package:carttogo/scanner_icons.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'dart:developer';
 import 'dart:io';
 
-class RealtimeDatabaseInsert extends StatefulWidget {
+
+class AddNewProduct extends StatefulWidget {
   String scanData;
-  RealtimeDatabaseInsert(this.scanData);
+  AddNewProduct(this.scanData);
   @override
-  State<RealtimeDatabaseInsert> createState() =>
-      RealtimeDatabaseInsertState(scanData);
+  State<AddNewProduct> createState() =>
+      AddNewProductState(scanData);
 }
 
-class RealtimeDatabaseInsertState extends State<RealtimeDatabaseInsert> {
+class AddNewProductState extends State<AddNewProduct> {
   late String scanData;
-  RealtimeDatabaseInsertState(this.scanData);
+ AddNewProductState(this.scanData);
   @override
   final _formKey = GlobalKey<FormState>();
   var pbarcodeController = TextEditingController();
@@ -449,6 +450,7 @@ class _scanInoviceState extends State<scanProduct> {
       this.controller = controller;
     });
 
+//if the scanner had read the barcode return to "add new prduct page"
     controller.scannedDataStream.listen((scanData) {
       check++;
       if (check == 1) {
@@ -456,7 +458,7 @@ class _scanInoviceState extends State<scanProduct> {
             context,
             MaterialPageRoute(
                 builder: (context) =>
-                    RealtimeDatabaseInsert(scanData.code.toString())));
+                    AddNewProduct(scanData.code.toString())));
       }
     });
   }

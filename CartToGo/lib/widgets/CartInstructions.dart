@@ -1,6 +1,6 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
-import 'package:carttogo/Pages/LoyaltyCard.dart';
+import 'package:carttogo/Pages/loyaltyCard.dart';
 import 'package:flutter/material.dart';
 import 'package:carttogo/Pages/Navigation.dart';
 
