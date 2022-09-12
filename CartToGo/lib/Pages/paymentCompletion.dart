@@ -3,21 +3,13 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:carttogo/main.dart';
 import 'dart:io';
 import 'dart:async';
-import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:firebase_database/firebase_database.dart';
 import '../main.dart';
-import '../widgets/ShoppingCartWidget.dart';
-import 'Navigation.dart';
 import 'package:carttogo/Users/user.dart' as user;
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
-import 'package:lite_rolling_switch/lite_rolling_switch.dart';
-import 'package:qr_flutter/qr_flutter.dart';
-import 'package:provider/provider.dart';
 
 final _fb = FirebaseDatabase.instance;
 
@@ -26,21 +18,20 @@ class PaymentCompletion extends StatefulWidget {
   bool checkPay = false;
   PaymentCompletion(this.scanData);
   @override
-  State<PaymentCompletion> createState() =>
-      PaymentCompletionState(scanData);
+  State<PaymentCompletion> createState() => PaymentCompletionState(scanData);
 }
 
 class PaymentCompletionState extends State<PaymentCompletion> {
   late String scanData;
- PaymentCompletionState(this.scanData);
+  PaymentCompletionState(this.scanData);
   @override
   final _formKey = GlobalKey<FormState>();
   var inoviceQRController = TextEditingController();
-  
-   @override
-Widget build(BuildContext context) {
+
+  @override
+  Widget build(BuildContext context) {
     setState(() => inoviceQRController.text = scanData);
-    
+
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
@@ -56,7 +47,7 @@ Widget build(BuildContext context) {
           centerTitle: true,
           elevation: 0,
         ),
-                body: Center(
+        body: Center(
             heightFactor: 2,
             child: Column(
               children: <Widget>[
@@ -65,7 +56,7 @@ Widget build(BuildContext context) {
                   "(" +
                       user.getnumOfProducts().toString() +
                       ")" +
-                      " السلة", //Product name 1 android 2 ios
+                      "السلة الخاصة بـ",
                   textAlign: TextAlign.right,
                   textDirection: TextDirection.ltr,
                   style: const TextStyle(
@@ -76,11 +67,38 @@ Widget build(BuildContext context) {
                       fontWeight: FontWeight.w700,
                       height: 0.9),
                 ),
+                FutureBuilder<String>(
+                    future: user.BirngUsername(),
+                    builder:
+                        (BuildContext context, AsyncSnapshot<String> asyn) {
+                      if (asyn.hasData) {
+                        return Text(
+                          user.getUsername(), //text username
+                          textAlign: TextAlign.left,
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontFamily: 'CartToGo',
+                              fontSize: 19,
+                              fontWeight: FontWeight.w600,
+                              height: 0.9),
+                        );
+                      }
+                      return Text(
+                        user.getUsername().toString(),
+                        textAlign: TextAlign.left,
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontFamily: 'CartToGo',
+                            fontSize: 19,
+                            fontWeight: FontWeight.w600,
+                            height: 0.9),
+                      );
+                    }),
                 Cart(),
                 const SizedBox(
                   height: 15,
                 ),
-                         ElevatedButton(
+                ElevatedButton(
                     style: ButtonStyle(
                         elevation: MaterialStateProperty.all(8.0),
                         textStyle: MaterialStateProperty.all(const TextStyle(
@@ -99,14 +117,8 @@ Widget build(BuildContext context) {
                     },
                     child: const Text('اتمام الدفع')),
               ],
-    )));
-    
-    
-    
-    
-    
-    
-     }
+            )));
+  }
 
   Widget Cart() {
     return SizedBox(
@@ -196,64 +208,66 @@ Widget build(BuildContext context) {
           }),
     );
   }
-     void _showMyDialog() async {
-      return showDialog<void>(
-          context: context,
-          builder: (BuildContext context) {
-            return Directionality(
-                textDirection: TextDirection.rtl,
-                child: Dialog(
-                    elevation: 0,
-                    backgroundColor: Color(0xffffffff),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15.0)),
-                    child: Column(mainAxisSize: MainAxisSize.min, children: [
-                      SizedBox(height: 15),
-                      Text(
-                        "هل تمت عملية الدفع؟",
-                        style: TextStyle(
-                          fontSize: 19,
-                          fontWeight: FontWeight.bold,
-                        ),
+
+  void _showMyDialog() async {
+    return showDialog<void>(
+        context: context,
+        builder: (BuildContext context) {
+          return Directionality(
+              textDirection: TextDirection.rtl,
+              child: Dialog(
+                  elevation: 0,
+                  backgroundColor: Color(0xffffffff),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15.0)),
+                  child: Column(mainAxisSize: MainAxisSize.min, children: [
+                    SizedBox(height: 15),
+                    Text(
+                      "هل تمت عملية الدفع؟",
+                      style: TextStyle(
+                        fontSize: 19,
+                        fontWeight: FontWeight.bold,
                       ),
-                      SizedBox(height: 15),
-                      Divider(
-                        height: 1,
-                        color: Colors.black,
-                      ),
-                      Container(
-                          width: MediaQuery.of(context).size.width,
-                          height: 50,
-                          child: InkWell(
-                              highlightColor: Colors.grey[200],
-                              child: Center(
-                                  child: Text("نعم",
-                                      style: TextStyle(
-                                        fontSize: 14.0,
-                                        color: Colors.green,
-                                        fontWeight: FontWeight.bold,
-                                      ))))),
-                      Divider(
-                        height: 1,
-                      ),
-                      Container(
-                          width: MediaQuery.of(context).size.width,
-                          height: 50,
-                          child: InkWell(
-                              borderRadius: BorderRadius.only(
-                                  bottomLeft: Radius.circular(15.0),
-                                  bottomRight: Radius.circular(15.0)),
-                              highlightColor: Colors.grey[200],
-                              onTap: () {
-                                Navigator.of(context).pop();
-                              },
-                              child: Center(
-                                  child: Text("لا",
-                                      style: TextStyle(
-                                        fontSize: 16.0,
-                                        fontWeight: FontWeight.w400,
-                                      )))))
-                    ])));
-          });
-    }
+                    ),
+                    SizedBox(height: 15),
+                    Divider(
+                      height: 1,
+                      color: Colors.black,
+                    ),
+                    Container(
+                        width: MediaQuery.of(context).size.width,
+                        height: 50,
+                        child: InkWell(
+                            highlightColor: Colors.grey[200],
+                            child: Center(
+                                child: Text("نعم",
+                                    style: TextStyle(
+                                      fontSize: 14.0,
+                                      color: Colors.green,
+                                      fontWeight: FontWeight.bold,
+                                    ))))),
+                    Divider(
+                      height: 1,
+                    ),
+                    Container(
+                        width: MediaQuery.of(context).size.width,
+                        height: 50,
+                        child: InkWell(
+                            borderRadius: BorderRadius.only(
+                                bottomLeft: Radius.circular(15.0),
+                                bottomRight: Radius.circular(15.0)),
+                            highlightColor: Colors.grey[200],
+                            onTap: () {
+                              Navigator.of(context).pop();
+                            },
+                            child: Center(
+                                child: Text("لا",
+                                    style: TextStyle(
+                                      color: Colors.red,
+                                      fontSize: 16.0,
+                                      fontWeight: FontWeight.w400,
+                                    )))))
+                  ])));
+        });
+  }
 }
