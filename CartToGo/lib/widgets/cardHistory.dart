@@ -29,9 +29,6 @@ class _CardhistoryState extends State<Cardhistory> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(
-                height: 50,
-              ),
               CheckPoints(),
             ],
           ),
@@ -88,7 +85,7 @@ class _CardhistoryState extends State<Cardhistory> {
 
   Widget PointsHistory() {
     return SizedBox(
-      height: MediaQuery.of(context).size.height * 0.3,
+      height: MediaQuery.of(context).size.height * 0.45,
       width: MediaQuery.of(context).size.width * 0.9,
       //color: Colors.black,
       child: FutureBuilder<int>(
@@ -107,22 +104,27 @@ class _CardhistoryState extends State<Cardhistory> {
                       itemBuilder: (BuildContext context, DataSnapshot snapshot,
                           Animation<double> animation, int index) {
                         bool check = true;
-                        bool checker = true;
                         //numOfProducts = user.getnumOfProducts();
                         var v = snapshot.value
                             .toString(); //Gets the scanned product and store it in a var
                         var g = v.replaceAll(
                             //Using RegExp to remove unwanted data
-                            RegExp("{|}|Date:|GainedPoints:|"),
+                            RegExp("{|}|Date:|GainedPoints:|numOfObtPoints:"),
                             "");
                         g.trim();
 
                         var l = g.split(',');
-                        if (l[1].length == 0) {
+                        print(l.toString());
+                        if (l[0] == user.getnumOfObtPoints().toString()) {
                           check = false;
                         }
-                        print(l[1]);
-                        if (check && checker) {
+                        /*
+                        String word = l[0];
+                        if (word[1] == "+") {
+                          color = "green";
+                        }
+                        */
+                        if (check) {
                           return AnimationConfiguration.staggeredList(
                             position: index,
                             duration: const Duration(milliseconds: 375),
@@ -131,11 +133,19 @@ class _CardhistoryState extends State<Cardhistory> {
                               child: FadeInAnimation(
                                 child: ListTile(
                                   trailing: Text(
-                                    "+ " + l[0].toString(),
+                                    l[0].toString(),
                                     textAlign: TextAlign.center,
+                                    style: const TextStyle(
+                                      fontSize: 20,
+                                      color: Colors.black,
+                                    ),
                                   ),
                                   leading: Text(
                                     l[1].toString(),
+                                    style: const TextStyle(
+                                      fontSize: 15,
+                                      color: Colors.black,
+                                    ),
                                     textAlign: TextAlign.right,
                                     textDirection: TextDirection.rtl,
                                   ),
