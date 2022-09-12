@@ -29,10 +29,11 @@ class PaymentCompletionState extends State<PaymentCompletion> {
   final _formKey = GlobalKey<FormState>();
   var inoviceQRController = TextEditingController();
   var splitted;
+  late String uid;
   @override
   Widget build(BuildContext context) {
     setState(() => splitted = scanData.split(' - '));
-    //String uid = cashier.getUID(splitted[0]);
+    uid = cashier.getUID(splitted[0]);
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
@@ -54,15 +55,15 @@ class PaymentCompletionState extends State<PaymentCompletion> {
                 future: cashier.BringUID(splitted[0].toString()),
                 builder: (BuildContext context, AsyncSnapshot<String> asyn) {
                   if (FirebaseAuth.instance.currentUser != null) {
-                    String uid = asyn.data.toString();
+                    //String uid = asyn.data.toString();
                     Column(
                       children: <Widget>[
                         const SizedBox(height: 20),
                         Text(
                           "(" +
-                              cashier.getnumOfProducts(uid).toString() +
+                              cashier.BringNumOfProducts(uid).toString() +
                               ")" +
-                              cashier.getUsername(uid) +
+                              cashier.BirngUsername(uid).toString() +
                               "السلة الخاصة بـ",
                           textAlign: TextAlign.right,
                           textDirection: TextDirection.ltr,
@@ -104,7 +105,8 @@ class PaymentCompletionState extends State<PaymentCompletion> {
                                 width: MediaQuery.of(context).size.width * 0.54,
                               ),
                               Text(
-                                cashier.getTotal(uid).toString() + " ريال",
+                                cashier.BringTotalPrice(uid).toString() +
+                                    " ريال",
                                 textAlign: TextAlign.right,
                                 textDirection: TextDirection.rtl,
                                 style: const TextStyle(
@@ -159,7 +161,7 @@ class PaymentCompletionState extends State<PaymentCompletion> {
           future: cashier.BringUID(splitted[0].toString()),
           builder: (BuildContext context, AsyncSnapshot<String> asyn) {
             if (FirebaseAuth.instance.currentUser != null) {
-              String uid = asyn.data.toString();
+              //String uid = asyn.data.toString();
               if (asyn.hasData) {
                 return Container(
                   height: MediaQuery.of(context).size.height * 0.713,
@@ -266,6 +268,9 @@ class PaymentCompletionState extends State<PaymentCompletion> {
                         height: 50,
                         child: InkWell(
                             highlightColor: Colors.grey[200],
+                            onTap: () {
+                              Navigator.of(context).pop();
+                            },
                             child: Center(
                                 child: Text("نعم",
                                     style: TextStyle(
@@ -284,8 +289,26 @@ class PaymentCompletionState extends State<PaymentCompletion> {
                                 bottomLeft: Radius.circular(15.0),
                                 bottomRight: Radius.circular(15.0)),
                             highlightColor: Colors.grey[200],
-                            onTap: () {
-                              Navigator.of(context).pop();
+                            onTap: () async {
+                              DatabaseReference ref1 = FirebaseDatabase.instance
+                                  .ref("Shopper/${uid}");
+                              await ref1.update({
+                                //"Points": int.tryParse(second.text),
+                              });
+                              DatabaseReference ref2 = FirebaseDatabase.instance
+                                  .ref("Shopper/${uid}/Carts");
+                              await ref2.update({
+                                "ConnectedToCart": false,
+                                "Total": 0,
+                                "NumOfProducts": 0,
+                              });
+                              DatabaseReference ref3 = FirebaseDatabase.instance
+                                  .ref(
+                                      "Shopper/${uid}/Carts/${splitted[1].toString()}");
+                              await ref3.update({
+                                "Paid": true,
+                                "Total": cashier.BringTotalPrice(uid),
+                              });
                             },
                             child: Center(
                                 child: Text("لا",
