@@ -445,12 +445,11 @@ class _scanInoviceState extends State<scanProduct> {
 
   void _onQRViewCreated(QRViewController controller) {
     int check = 0;
-
     setState(() {
       this.controller = controller;
     });
 
-//if the scanner had read the barcode return to "add new prduct page"
+//if the scanner has read the barcode return to "add new prduct page"
     controller.scannedDataStream.listen((scanData) {
       check++;
       if (check == 1) {
