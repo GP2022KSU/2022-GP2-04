@@ -347,7 +347,7 @@ class AddNewProductState extends State<AddNewProduct> {
                                   }
                                   Navigator.push(context,
                                       MaterialPageRoute(builder: (context) {
-                                    return Products_List_Admin();
+                                    return ProductsListAdmin();
                                   }));
                                 }
                               },
@@ -401,7 +401,7 @@ class _scanInoviceState extends State<scanProduct> {
                   onPressed: () {
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) {
-                      return Products_List_Admin();
+                      return ProductsListAdmin();
                     }));
                   },
                   icon: Icon(Icons.keyboard_arrow_right)))
