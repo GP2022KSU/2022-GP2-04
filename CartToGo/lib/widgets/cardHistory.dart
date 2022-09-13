@@ -133,7 +133,7 @@ class _CardhistoryState extends State<Cardhistory> {
                               child: FadeInAnimation(
                                 child: ListTile(
                                   trailing: Text(
-                                    l[0].toString(),
+                                    l[1].toString(),
                                     textAlign: TextAlign.center,
                                     style: const TextStyle(
                                       fontSize: 20,
@@ -141,7 +141,7 @@ class _CardhistoryState extends State<Cardhistory> {
                                     ),
                                   ),
                                   leading: Text(
-                                    l[1].toString(),
+                                    l[0].toString(),
                                     style: const TextStyle(
                                       fontSize: 15,
                                       color: Colors.black,

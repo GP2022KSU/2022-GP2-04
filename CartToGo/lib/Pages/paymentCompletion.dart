@@ -79,7 +79,7 @@ class PaymentCompletionState extends State<PaymentCompletion> {
                         Text(
                           "(" +
                               cashier.getnumOfProducts(uid).toString() +
-                              ")" +
+                              ") " +
                               cashier.getUsername(uid).toString() +
                               "السلة الخاصة بـ",
                           textAlign: TextAlign.right,
