@@ -9,7 +9,7 @@ import 'paymentCompletion.dart';
 
 class Cashier extends StatelessWidget {
   const Cashier({Key? key}) : super(key: key);
-
+  
   @override
   Widget build(BuildContext context) {
     void _showMyDialog() async {
@@ -121,7 +121,6 @@ class Cashier extends StatelessWidget {
             children: <Widget>[
               Image(image: AssetImage('assets/images/barcode.png')),
               SizedBox(height: 40.0),
-
               //start scanning butoon
               ElevatedButton(
                   style: ButtonStyle(

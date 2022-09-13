@@ -1,3 +1,4 @@
+import 'package:carttogo/Pages/Cashier.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:carttogo/main.dart';
@@ -23,6 +24,7 @@ class PaymentCompletion extends StatefulWidget {
 }
 
 class PaymentCompletionState extends State<PaymentCompletion> {
+  late bool _isLoading1;
   String scanData;
   PaymentCompletionState(this.scanData);
   @override
@@ -30,6 +32,21 @@ class PaymentCompletionState extends State<PaymentCompletion> {
   var inoviceQRController = TextEditingController();
   var splitted;
   late String uid;
+
+  void initState() {
+    _isLoading1 = true;
+
+    Future.delayed(const Duration(milliseconds: 500), () {
+      if (mounted) {
+        setState(() {
+          _isLoading1 = false;
+        });
+      }
+    });
+
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     setState(() => splitted = scanData.split(' - '));
@@ -37,7 +54,7 @@ class PaymentCompletionState extends State<PaymentCompletion> {
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
-          iconTheme: IconThemeData(
+          iconTheme: const IconThemeData(
             color: appColor,
           ),
           backgroundColor: Colors.white,
@@ -56,14 +73,14 @@ class PaymentCompletionState extends State<PaymentCompletion> {
                 builder: (BuildContext context, AsyncSnapshot<String> asyn) {
                   if (FirebaseAuth.instance.currentUser != null) {
                     //String uid = asyn.data.toString();
-                    Column(
+                    return Column(
                       children: <Widget>[
                         const SizedBox(height: 20),
                         Text(
                           "(" +
-                              cashier.BringNumOfProducts(uid).toString() +
+                              cashier.getnumOfProducts(uid).toString() +
                               ")" +
-                              cashier.BirngUsername(uid).toString() +
+                              cashier.getUsername(uid).toString() +
                               "السلة الخاصة بـ",
                           textAlign: TextAlign.right,
                           textDirection: TextDirection.ltr,
@@ -105,8 +122,7 @@ class PaymentCompletionState extends State<PaymentCompletion> {
                                 width: MediaQuery.of(context).size.width * 0.54,
                               ),
                               Text(
-                                cashier.BringTotalPrice(uid).toString() +
-                                    " ريال",
+                                cashier.getTotal(uid).toString() + " ريال",
                                 textAlign: TextAlign.right,
                                 textDirection: TextDirection.rtl,
                                 style: const TextStyle(
@@ -161,7 +177,7 @@ class PaymentCompletionState extends State<PaymentCompletion> {
           future: cashier.BringUID(splitted[0].toString()),
           builder: (BuildContext context, AsyncSnapshot<String> asyn) {
             if (FirebaseAuth.instance.currentUser != null) {
-              //String uid = asyn.data.toString();
+              uid = asyn.data.toString();
               if (asyn.hasData) {
                 return Container(
                   height: MediaQuery.of(context).size.height * 0.713,
@@ -246,20 +262,20 @@ class PaymentCompletionState extends State<PaymentCompletion> {
               textDirection: TextDirection.rtl,
               child: Dialog(
                   elevation: 0,
-                  backgroundColor: Color(0xffffffff),
+                  backgroundColor: const Color(0xffffffff),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15.0)),
                   child: Column(mainAxisSize: MainAxisSize.min, children: [
-                    SizedBox(height: 15),
-                    Text(
+                    const SizedBox(height: 15),
+                    const Text(
                       "هل تمت عملية الدفع؟",
                       style: TextStyle(
                         fontSize: 19,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    SizedBox(height: 15),
-                    Divider(
+                    const SizedBox(height: 15),
+                    const Divider(
                       height: 1,
                       color: Colors.black,
                     ),
@@ -271,23 +287,23 @@ class PaymentCompletionState extends State<PaymentCompletion> {
                             onTap: () {
                               Navigator.of(context).pop();
                             },
-                            child: Center(
-                                child: Text("نعم",
-                                    style: TextStyle(
+                            child: const Center(
+                                child: const Text("نعم",
+                                    style: const TextStyle(
                                       fontSize: 14.0,
                                       color: Colors.green,
                                       fontWeight: FontWeight.bold,
                                     ))))),
-                    Divider(
+                    const Divider(
                       height: 1,
                     ),
                     Container(
                         width: MediaQuery.of(context).size.width,
                         height: 50,
                         child: InkWell(
-                            borderRadius: BorderRadius.only(
+                            borderRadius: const BorderRadius.only(
                                 bottomLeft: Radius.circular(15.0),
-                                bottomRight: Radius.circular(15.0)),
+                                bottomRight: const Radius.circular(15.0)),
                             highlightColor: Colors.grey[200],
                             onTap: () async {
                               DatabaseReference ref1 = FirebaseDatabase.instance
@@ -309,10 +325,14 @@ class PaymentCompletionState extends State<PaymentCompletion> {
                                 "Paid": true,
                                 "Total": cashier.BringTotalPrice(uid),
                               });
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => const Cashier()));
                             },
-                            child: Center(
-                                child: Text("لا",
-                                    style: TextStyle(
+                            child: const Center(
+                                child: const Text("لا",
+                                    style: const TextStyle(
                                       color: Colors.red,
                                       fontSize: 16.0,
                                       fontWeight: FontWeight.w400,

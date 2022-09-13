@@ -6,7 +6,6 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 final bool check = false;
-void main() {}
 String uid = "";
 String Username = "";
 int numOfProducts = 0;
