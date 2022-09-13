@@ -31,6 +31,21 @@ class _CheckOutState extends State<CheckOut> {
   bool vis = false;
   int pointsChange = user.getPoints();
   bool checkPay = false;
+  late bool _isLoading;
+  
+  void initState() {
+    _isLoading = true;
+
+    Future.delayed(const Duration(milliseconds: 500), () {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    });
+
+    super.initState();
+  }
 
 /*
   bool _activateListeners() {

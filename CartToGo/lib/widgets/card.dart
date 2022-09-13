@@ -16,6 +16,22 @@ class CardWidgetState extends State<CardWidget> {
   int points = 0;
   final _database = FirebaseDatabase.instance.ref();
   @override
+  late bool _isLoading;
+
+  void initState() {
+    _isLoading = true;
+
+    Future.delayed(const Duration(milliseconds: 500), () {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    });
+
+    super.initState();
+  }
+
   Widget build(BuildContext context) {
     return Container(
       width: MediaQuery.of(context).size.width * 0.94,

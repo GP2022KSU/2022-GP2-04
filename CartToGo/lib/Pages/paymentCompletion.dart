@@ -32,7 +32,7 @@ class PaymentCompletionState extends State<PaymentCompletion> {
   var inoviceQRController = TextEditingController();
   var splitted;
   late String uid;
-
+  late double TotalBefore;
   void initState() {
     _isLoading1 = true;
 
@@ -51,6 +51,7 @@ class PaymentCompletionState extends State<PaymentCompletion> {
   Widget build(BuildContext context) {
     setState(() => splitted = scanData.split(' - '));
     uid = cashier.getUID(splitted[0]);
+    TotalBefore = cashier.getTotal(uid);
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
@@ -284,8 +285,30 @@ class PaymentCompletionState extends State<PaymentCompletion> {
                         height: 50,
                         child: InkWell(
                             highlightColor: Colors.grey[200],
-                            onTap: () {
-                              Navigator.of(context).pop();
+                            onTap: () async {
+                              DatabaseReference ref1 = FirebaseDatabase.instance
+                                  .ref("Shopper/${uid}");
+                              await ref1.update({
+                                //"Points": int.tryParse(second.text),
+                              });
+                              DatabaseReference ref2 = FirebaseDatabase.instance
+                                  .ref("Shopper/${uid}/Carts");
+                              await ref2.update({
+                                "ConnectedToCart": false,
+                                "Total": 0,
+                                "NumOfProducts": 0,
+                              });
+                              DatabaseReference ref3 = FirebaseDatabase.instance
+                                  .ref(
+                                      "Shopper/${uid}/Carts/${splitted[1].toString()}");
+                              await ref3.update({
+                                "Paid": true,
+                                "Total": TotalBefore,
+                              });
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => const Cashier()));
                             },
                             child: const Center(
                                 child: const Text("نعم",
@@ -305,30 +328,8 @@ class PaymentCompletionState extends State<PaymentCompletion> {
                                 bottomLeft: Radius.circular(15.0),
                                 bottomRight: const Radius.circular(15.0)),
                             highlightColor: Colors.grey[200],
-                            onTap: () async {
-                              DatabaseReference ref1 = FirebaseDatabase.instance
-                                  .ref("Shopper/${uid}");
-                              await ref1.update({
-                                //"Points": int.tryParse(second.text),
-                              });
-                              DatabaseReference ref2 = FirebaseDatabase.instance
-                                  .ref("Shopper/${uid}/Carts");
-                              await ref2.update({
-                                "ConnectedToCart": false,
-                                "Total": 0,
-                                "NumOfProducts": 0,
-                              });
-                              DatabaseReference ref3 = FirebaseDatabase.instance
-                                  .ref(
-                                      "Shopper/${uid}/Carts/${splitted[1].toString()}");
-                              await ref3.update({
-                                "Paid": true,
-                                "Total": cashier.BringTotalPrice(uid),
-                              });
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => const Cashier()));
+                            onTap: () {
+                              Navigator.of(context).pop();
                             },
                             child: const Center(
                                 child: const Text("لا",
