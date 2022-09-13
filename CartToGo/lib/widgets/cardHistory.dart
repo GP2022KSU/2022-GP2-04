@@ -95,6 +95,7 @@ class _CardhistoryState extends State<Cardhistory> {
               print("Successful ${asyn.data}");
               String a = asyn.data.toString();
               if (asyn.hasData) {
+                user.getProducts();
                 return Container(
                   height: MediaQuery.of(context).size.height * 0.713,
                   child: FirebaseAnimatedList(

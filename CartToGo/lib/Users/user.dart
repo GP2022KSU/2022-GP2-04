@@ -5,6 +5,8 @@ import 'dart:ffi';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+import '../Pages/Product.dart';
+
 final bool check = false;
 void main() {
   DatabaseReference starCountRef = FirebaseDatabase.instance
@@ -105,6 +107,22 @@ Future<int> BringNumOfProducts() async {
   return 0;
 }
 
+Future<List<String>> BringProducts() async {
+  if (FirebaseAuth.instance.currentUser != null) {
+    final ref = FirebaseDatabase.instance.ref();
+    final snapshot = await ref.child("Products").get();
+    print(snapshot.value.toString());
+    final map = snapshot.value as Map<dynamic, dynamic>;
+    map.forEach((key, value) {
+      final product = Product.fromMap(value);
+      names.add(product.Name.toString());
+    });
+    print(names);
+    return names;
+  }
+  return names;
+}
+
 Future<double> BringTotalPrice() async {
   if (FirebaseAuth.instance.currentUser != null) {
     final ref = FirebaseDatabase.instance.ref();
@@ -136,6 +154,10 @@ String getUsername() {
     _U1++;
   }
   return Username;
+}
+
+void getProducts() {
+  BringProducts();
 }
 
 int getPoints() {
@@ -182,3 +204,4 @@ String LoyaltyCardID = "";
 int numOfProducts = 0;
 int numOfObtPoints = 0;
 double Total = 0.0;
+List<String> names = [];

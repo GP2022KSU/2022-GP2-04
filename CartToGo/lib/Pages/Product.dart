@@ -1,36 +1,34 @@
 class Product {
   final String Name;
 
-  /*final String Brand;
+  final String Brand;
   final String Category;
-  final String Price;
-  final String Quantity;
+  //final double Price;
+  //final int Quantity;
   final String Size;
   final String Barcode;
-*/
-  
+
   const Product({
     required this.Name,
-    /*required this.Brand,
+    required this.Brand,
     required this.Category,
-    required this.Price,
-    required this.Quantity,
+    //required this.Price,
+    //required this.Quantity,
     required this.Size,
-    required this.Barcode,*/
+    required this.Barcode,
   });
 
   factory Product.fromMap(Map<dynamic, dynamic> map) {
     return Product(
       Name: map['Name'] ?? '',
-     /* Brand: map['Brand'] ?? '',
+      Brand: map['Brand'] ?? '',
       Category: map['Category'] ?? '',
-      Price: map['Price'] ?? '',
-      Quantity: map['Quantity'] ?? '',
+      //Price: map['Price'] ?? '',
+      //Quantity: map['Quantity'] ?? '',
       Size: map['Size'] ?? '',
-      Barcode: map['Barcode'] ?? '',*/
+      Barcode: map['Barcode'] ?? '',
     );
   }
-
 }
 
 /*
