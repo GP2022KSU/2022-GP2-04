@@ -86,7 +86,6 @@ Future<int> BringnumOfObtPoints() async {
             "Shopper/${FirebaseAuth.instance.currentUser?.uid}/PointsHistory/numOfObtPoints")
         .get();
     numOfObtPoints = await (int.parse(snapshot.value.toString()));
-    print("djhjdhjd " + numOfObtPoints.toString());
     return numOfObtPoints;
   }
   return 0;

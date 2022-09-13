@@ -103,7 +103,7 @@ class PaymentCompletionState extends State<PaymentCompletion> {
                             //border: Border.all(color: Colors.black),
                           ),
                           height: MediaQuery.of(context).size.height * 0.06,
-                          //width: MediaQuery.of(context).size.width * 0.9,
+                          width: MediaQuery.of(context).size.width * 1,
                           child: Row(
                             textDirection: TextDirection.rtl,
                             children: <Widget>[
@@ -172,7 +172,7 @@ class PaymentCompletionState extends State<PaymentCompletion> {
   Widget Cart() {
     return SizedBox(
       height: MediaQuery.of(context).size.height * 0.3,
-      width: MediaQuery.of(context).size.width * 0.9,
+      width: MediaQuery.of(context).size.width * 1,
       //color: Colors.black,
       child: FutureBuilder<String>(
           future: cashier.BringUID(splitted[0].toString()),

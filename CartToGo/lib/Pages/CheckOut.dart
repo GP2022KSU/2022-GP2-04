@@ -32,7 +32,7 @@ class _CheckOutState extends State<CheckOut> {
   int pointsChange = user.getPoints();
   bool checkPay = false;
   late bool _isLoading;
-  
+
   void initState() {
     _isLoading = true;
 
@@ -220,7 +220,7 @@ class _CheckOutState extends State<CheckOut> {
                     //border: Border.all(color: Colors.black),
                   ),
                   height: MediaQuery.of(context).size.height * 0.06,
-                  //width: MediaQuery.of(context).size.width * 0.9,
+                  width: MediaQuery.of(context).size.width * 1,
                   child: Row(
                     textDirection: TextDirection.rtl,
                     children: <Widget>[
@@ -290,7 +290,7 @@ class _CheckOutState extends State<CheckOut> {
                     //border: Border.all(color: Colors.black),
                   ),
                   height: MediaQuery.of(context).size.height * 0.06,
-                  //width: MediaQuery.of(context).size.width * 0.9,
+                  width: MediaQuery.of(context).size.width * 1,
                   child: Row(
                     textDirection: TextDirection.rtl,
                     children: <Widget>[
@@ -335,7 +335,7 @@ class _CheckOutState extends State<CheckOut> {
                       //border: Border.all(color: Colors.black),
                     ),
                     height: MediaQuery.of(context).size.height * 0.06,
-                    //width: MediaQuery.of(context).size.width * 0.9,
+                    width: MediaQuery.of(context).size.width * 1,
                     child: Row(
                       textDirection: TextDirection.rtl,
                       children: <Widget>[
