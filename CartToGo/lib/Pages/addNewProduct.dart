@@ -22,7 +22,7 @@ class AddNewProductState extends State<AddNewProduct> {
   AddNewProductState(this.scanData);
   @override
   final _formKey = GlobalKey<FormState>();
-  var pbarcodeController = TextEditingController();
+  var pbarcodeController = new TextEditingController();
   var pNameController = new TextEditingController();
   var pBrandController = new TextEditingController();
   var pPriceController = new TextEditingController();
@@ -67,7 +67,6 @@ class AddNewProductState extends State<AddNewProduct> {
                                   FilteringTextInputFormatter.digitsOnly
                                 ], // Only numbers can be entered
                                 controller: pbarcodeController,
-                                enabled: false,
                                 decoration: InputDecoration(
                                   labelText: "الرمز الشريطي",
                                   labelStyle: TextStyle(
