@@ -92,7 +92,7 @@ class _CardhistoryState extends State<Cardhistory> {
           future: user.BringnumOfObtPoints(),
           builder: (BuildContext context, AsyncSnapshot<int> asyn) {
             if (FirebaseAuth.instance.currentUser != null) {
-              print("Successful ${asyn.data}");
+              //user.getProducts();
               String a = asyn.data.toString();
               if (asyn.hasData) {
                 return Container(

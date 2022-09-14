@@ -112,7 +112,7 @@ class _CheckOutState extends State<CheckOut> {
                                           gapless: true,
                                           embeddedImage: const AssetImage(
                                               'assets/images/logomini.png'),
-                                          data: LoyaltyID.data.toString() +
+                                          data: user.getLoyaltyCardID().toString() +
                                               " - " +
                                               user
                                                   .getLastCartNum()
@@ -128,7 +128,7 @@ class _CheckOutState extends State<CheckOut> {
                                       Align(
                                           alignment: Alignment.bottomCenter,
                                           child: Text(
-                                            LoyaltyID.data.toString(), //text
+                                            user.getLoyaltyCardID().toString(), //text
                                             textAlign: TextAlign.center,
                                             style: const TextStyle(
                                                 color: Color.fromARGB(
