@@ -29,6 +29,8 @@ class CheckOut extends StatefulWidget {
 class _CheckOutState extends State<CheckOut> {
   bool vis = false;
   int pointsChange = user.getPoints();
+  double Total = user.getTotal();
+  late double PriceAfterPoin;
   bool checkPay = false;
   late bool _isLoading;
   late StreamSubscription _streamSubscription4;
@@ -45,9 +47,14 @@ class _CheckOutState extends State<CheckOut> {
       }
     });
 
-    super.initState();
     _activateListeners();
     _showMyDialog(context);
+    user.getPoints();
+    pointsChange = user.getPoints();
+    user.getTotal();
+    Total = user.getTotal();
+    PriceAfterPoin = totalAfterPoints();
+    super.initState();
   }
 
   Future<void> _showMyDialog(BuildContext context) async {
@@ -112,7 +119,9 @@ class _CheckOutState extends State<CheckOut> {
                                           gapless: true,
                                           embeddedImage: const AssetImage(
                                               'assets/images/logomini.png'),
-                                          data: user.getLoyaltyCardID().toString() +
+                                          data: user
+                                                  .getLoyaltyCardID()
+                                                  .toString() +
                                               " - " +
                                               user
                                                   .getLastCartNum()
@@ -128,7 +137,9 @@ class _CheckOutState extends State<CheckOut> {
                                       Align(
                                           alignment: Alignment.bottomCenter,
                                           child: Text(
-                                            user.getLoyaltyCardID().toString(), //text
+                                            user
+                                                .getLoyaltyCardID()
+                                                .toString(), //text
                                             textAlign: TextAlign.center,
                                             style: const TextStyle(
                                                 color: Color.fromARGB(
@@ -490,7 +501,7 @@ class _CheckOutState extends State<CheckOut> {
                           width: MediaQuery.of(context).size.width * 0.313,
                         ),
                         Text(
-                          user.getTotal().toString() + " ريال",
+                          PriceAfterPoin.toString() + " ريال",
                           textAlign: TextAlign.right,
                           textDirection: TextDirection.rtl,
                           style: const TextStyle(
@@ -535,6 +546,24 @@ class _CheckOutState extends State<CheckOut> {
   void deactivate() {
     _streamSubscription4.cancel();
     super.deactivate();
+  }
+
+  double totalAfterPoints() {
+    double eachPointinRiyal = 0.1;
+    double PointinRiyal = 0;
+    double NewTotal = 0;
+    if (pointsChange > 0) {
+      for (var i = 0; i < pointsChange; i++) {
+        PointinRiyal += eachPointinRiyal;
+      }
+      String inString = PointinRiyal.toStringAsFixed(2); // '2.35'
+      PointinRiyal = double.parse(inString); // 2.35
+      print("inRiyal: " + PointinRiyal.toString());
+      print("Total: " + Total.toString());
+      NewTotal = Total - PointinRiyal;
+      return NewTotal;
+    }
+    return NewTotal;
   }
 
   Widget Cart() {

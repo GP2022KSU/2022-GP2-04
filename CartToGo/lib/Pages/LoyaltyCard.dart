@@ -17,7 +17,6 @@ class LoyaltyCard extends StatelessWidget {
       print("Here");
       return "نقاط";
     }
-    print(user.getPoints());
     return "نقطة";
   }
 

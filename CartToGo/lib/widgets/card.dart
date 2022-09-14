@@ -98,7 +98,7 @@ class CardWidgetState extends State<CardWidget> {
                             ))),
                     Positioned(
                         top: 10.025157928466797,
-                        left: 80.0571403503418,
+                        left: 70,
                         child: FutureBuilder<int>(
                             future: user.BringPoints(),
                             builder: (BuildContext context,
@@ -106,7 +106,8 @@ class CardWidgetState extends State<CardWidget> {
                               if (asyn.hasData) {
                                 return Text(
                                   asyn.data.toString(), //points text
-                                  textAlign: TextAlign.center,
+                                  textAlign: TextAlign.left,
+                                  textDirection: TextDirection.ltr,
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontFamily: 'Inter',
@@ -117,7 +118,7 @@ class CardWidgetState extends State<CardWidget> {
                               }
                               return Text(
                                 user.getPoints().toString(),
-                                textAlign: TextAlign.center,
+                                textAlign: TextAlign.left,
                                 style: TextStyle(
                                     color: Colors.white,
                                     fontFamily: 'Inter',
