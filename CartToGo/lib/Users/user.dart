@@ -85,9 +85,9 @@ Future<int> BringnumOfObtPoints() async {
     final ref = FirebaseDatabase.instance.ref();
     final snapshot = await ref
         .child(
-            "Shopper/${FirebaseAuth.instance.currentUser?.uid}/PointsHistory/numOfObtPoints")
+            "Shopper/${FirebaseAuth.instance.currentUser?.uid}/PointsHistory/numOfObtPoints/")
         .get();
-    numOfObtPoints = await (int.parse(snapshot.value.toString()));
+    numOfObtPoints = (int.parse(snapshot.value.toString()));
     return numOfObtPoints;
   }
   return 0;
@@ -111,7 +111,7 @@ Future<List<String>> BringProducts() async {
   if (FirebaseAuth.instance.currentUser != null) {
     final ref = FirebaseDatabase.instance.ref();
     final snapshot = await ref.child("Products").get();
-    print(snapshot.value.toString());
+    //print(snapshot.value.toString());
     final map = snapshot.value as Map<dynamic, dynamic>;
     map.forEach((key, value) {
       final product = Product.fromMap(value);
@@ -156,8 +156,9 @@ String getUsername() {
   return Username;
 }
 
-void getProducts() {
+List<String> getProducts() {
   BringProducts();
+  return names;
 }
 
 int getPoints() {
