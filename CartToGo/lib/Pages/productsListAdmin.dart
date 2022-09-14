@@ -161,7 +161,7 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
                           },
                         ),
                         title: Text(
-                          l[2],
+                          l[3],
                           style: TextStyle(
                             color: Colors.black,
                             fontWeight: FontWeight.bold,
@@ -176,7 +176,7 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
                               "\n"
                                   "\t" +
                               "العلامة التجارية: " +
-                              l[3] +
+                              l[6] +
                               "\n" +
                               "\t" +
                               "السعر:" +
@@ -189,7 +189,7 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
                               "\n" +
                               "\t" +
                               "الموقع:" +
-                              l[6],
+                              l[2],
                           style: TextStyle(
                             color: Colors.black,
                             fontWeight: FontWeight.bold,

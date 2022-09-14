@@ -59,7 +59,6 @@ class AddNewProductState extends State<AddNewProduct> {
                     child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          // الباركود نمبر راح يكتبه؟
                           Directionality(
                             textDirection: TextDirection.rtl,
                             child: TextFormField(
@@ -68,6 +67,7 @@ class AddNewProductState extends State<AddNewProduct> {
                                   FilteringTextInputFormatter.digitsOnly
                                 ], // Only numbers can be entered
                                 controller: pbarcodeController,
+                                enabled: false,
                                 decoration: InputDecoration(
                                   labelText: "الرمز الشريطي",
                                   labelStyle: TextStyle(
