@@ -6,7 +6,6 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:carttogo/Users/user.dart' as user;
 
 
-// باقي احد يتأكد انه يبحث
 class Search2 extends StatefulWidget {
   Search2({Key? key}) : super(key: key);
   @override
