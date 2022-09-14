@@ -135,6 +135,22 @@ Future<double> BringTotalPrice() async {
   return 0;
 }
 
+Future<bool> BringPaid() async {
+  if (FirebaseAuth.instance.currentUser != null) {
+    final ref = FirebaseDatabase.instance.ref();
+    final snapshot = await ref
+        .child(
+            "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts/${getLastCartNum()}/Paid")
+        .get();
+    if (snapshot.value.toString() == "true") {
+      Paid = true;
+      print("Paid" + Paid.toString());
+    }
+    return Paid;
+  }
+  return Paid;
+}
+
 String getLoyaltyCardID() {
   if (_L1 == 0) {
     BringLoyaltyCardID();
@@ -184,6 +200,11 @@ double getTotal() {
   return Total;
 }
 
+bool getPaid() {
+  BringPaid();
+  return Paid;
+}
+
 /*
 int getLastCartNumber() {
   if (_C1 == 0) {
@@ -205,4 +226,5 @@ String LoyaltyCardID = "";
 int numOfProducts = 0;
 int numOfObtPoints = 0;
 double Total = 0.0;
+bool Paid = false;
 List<String> names = [];

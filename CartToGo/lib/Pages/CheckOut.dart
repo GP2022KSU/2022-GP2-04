@@ -1,5 +1,4 @@
 // ignore_for_file: unnecessary_const
-
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -32,6 +31,8 @@ class _CheckOutState extends State<CheckOut> {
   int pointsChange = user.getPoints();
   bool checkPay = false;
   late bool _isLoading;
+  late StreamSubscription _streamSubscription4;
+  final _database = FirebaseDatabase.instance.ref();
 
   void initState() {
     _isLoading = true;
@@ -45,9 +46,229 @@ class _CheckOutState extends State<CheckOut> {
     });
 
     super.initState();
+    _activateListeners();
+    _showMyDialog(context);
   }
 
-/*
+  Future<void> _showMyDialog(BuildContext context) async {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) =>
+            StatefulBuilder(builder: (context, setState) {
+              if (FirebaseAuth.instance.currentUser != null) {
+                if (!(checkPay)) {
+                  _streamSubscription4 = _database
+                      .child(
+                          "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts/${user.getLastCartNum()}/Paid")
+                      .onValue
+                      .listen((event) {
+                    final data = event.snapshot.value;
+                    setState(() {
+                      String Fornow = "false";
+                      Fornow = data.toString();
+                      if (Fornow.toLowerCase() == 'true') {
+                        checkPay = true;
+                      } else if (Fornow.toLowerCase() == 'false') {
+                        checkPay = false;
+                      }
+                    });
+                  });
+                }
+              }
+              return FutureBuilder<String>(
+                  future: user.BringLoyaltyCardID(),
+                  builder:
+                      (BuildContext context, AsyncSnapshot<String> LoyaltyID) {
+                    return Directionality(
+                        textDirection: TextDirection.rtl,
+                        child: Dialog(
+                          elevation: 0,
+                          backgroundColor: const Color(0xffffffff),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15.0),
+                          ),
+                          child:
+                              Column(mainAxisSize: MainAxisSize.min, children: [
+                            const SizedBox(height: 15),
+                            Card(
+                                shadowColor: Color.fromARGB(255, 0, 0, 0),
+                                elevation: 15,
+                                color: const Color.fromARGB(165, 255, 255, 255),
+                                clipBehavior: Clip.antiAlias,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10)),
+                                child: Container(
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.6,
+                                    height: MediaQuery.of(context).size.height *
+                                        0.27,
+                                    decoration: const BoxDecoration(
+                                      color: Color.fromARGB(255, 255, 255, 255),
+                                    ),
+                                    child: Column(children: [
+                                      Container(
+                                        child: QrImage(
+                                          foregroundColor: Colors.black,
+                                          gapless: true,
+                                          embeddedImage: const AssetImage(
+                                              'assets/images/logomini.png'),
+                                          data: LoyaltyID.data.toString() +
+                                              " - " +
+                                              user
+                                                  .getLastCartNum()
+                                                  .toString(), //ID for the card
+                                          version: QrVersions.auto,
+                                          size: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.5,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 5),
+                                      Align(
+                                          alignment: Alignment.bottomCenter,
+                                          child: Text(
+                                            LoyaltyID.data.toString(), //text
+                                            textAlign: TextAlign.center,
+                                            style: const TextStyle(
+                                                color: Color.fromARGB(
+                                                    255, 0, 0, 0),
+                                                shadows: <Shadow>[
+                                                  const Shadow(
+                                                    offset:
+                                                        const Offset(0.5, 0.5),
+                                                    blurRadius: 1,
+                                                    color: Color.fromARGB(
+                                                        162, 63, 63, 63),
+                                                  )
+                                                ],
+                                                fontFamily: 'CartToGo',
+                                                fontSize: 20,
+                                                letterSpacing: -0.5,
+                                                fontWeight: FontWeight.w500,
+                                                height: 1),
+                                          )),
+                                    ]))),
+                            const SizedBox(height: 15),
+                            const Text("قم بالمسح عند المحاسب",
+                                style: TextStyle(
+                                  fontSize: 19,
+                                  fontWeight: FontWeight.bold,
+                                )),
+                            const SizedBox(height: 15),
+                            Visibility(
+                              visible: checkPay,
+                              child: ElevatedButton(
+                                  style: ButtonStyle(
+                                      elevation: MaterialStateProperty.all(8.0),
+                                      textStyle: MaterialStateProperty.all(
+                                          const TextStyle(
+                                              fontSize: 16,
+                                              fontFamily: 'CartToGo')),
+                                      fixedSize: MaterialStateProperty.all(
+                                          const Size(150, 30)),
+                                      shape: MaterialStateProperty.all<
+                                              RoundedRectangleBorder>(
+                                          RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(20))),
+                                      backgroundColor:
+                                          MaterialStateProperty.all(appColor),
+                                      foregroundColor: MaterialStateProperty.all(
+                                          Colors.white)),
+                                  onPressed: () async {
+                                    if (checkPay) {
+                                      Navigator.of(context).pop();
+                                      return _showMyDialogShowPoints(context);
+                                    }
+                                  },
+                                  child: const Text('استرداد النقاط')),
+                            ),
+                            const SizedBox(height: 15),
+                          ]),
+                        ));
+                  });
+            }));
+  }
+
+  Future<void> _showMyDialogShowPoints(BuildContext context) async {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) =>
+            StatefulBuilder(builder: (context, setState) {
+              setState(() {});
+              return FutureBuilder<String>(
+                  future: user.BringLoyaltyCardID(),
+                  builder:
+                      (BuildContext context, AsyncSnapshot<String> LoyaltyID) {
+                    return Directionality(
+                        textDirection: TextDirection.rtl,
+                        child: Dialog(
+                          elevation: 0,
+                          backgroundColor: const Color(0xffffffff),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15.0),
+                          ),
+                          child:
+                              Column(mainAxisSize: MainAxisSize.min, children: [
+                            const SizedBox(height: 15),
+                            Container(
+                              width: MediaQuery.of(context).size.width * 0.5,
+                              height: MediaQuery.of(context).size.height * 0.2,
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                    scale: 10,
+                                    image:
+                                        AssetImage('assets/images/points.png'),
+                                    fit: BoxFit.fitHeight),
+                              ),
+                            ),
+                            const SizedBox(height: 15),
+                            const Text("لقد كسبت",
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                )),
+                            const Text("10", //POINTS HERE
+                                style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color.fromARGB(255, 10, 70, 175))),
+                            const SizedBox(height: 15),
+                            ElevatedButton(
+                                style: ButtonStyle(
+                                    elevation: MaterialStateProperty.all(8.0),
+                                    textStyle: MaterialStateProperty.all(
+                                        const TextStyle(
+                                            fontSize: 16,
+                                            fontFamily: 'CartToGo')),
+                                    fixedSize: MaterialStateProperty.all(
+                                        const Size(150, 30)),
+                                    shape: MaterialStateProperty.all<
+                                            RoundedRectangleBorder>(
+                                        RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(20))),
+                                    backgroundColor:
+                                        MaterialStateProperty.all(appColor),
+                                    foregroundColor: MaterialStateProperty.all(
+                                        Colors.white)),
+                                onPressed: () async {
+                                  if (checkPay) {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => Navi()));
+                                  }
+                                },
+                                child: const Text('الرئيسية')),
+                            const SizedBox(height: 15),
+                          ]),
+                        ));
+                  });
+            }));
+  }
+
   bool _activateListeners() {
     if (FirebaseAuth.instance.currentUser != null) {
       _streamSubscription4 = _database
@@ -59,7 +280,6 @@ class _CheckOutState extends State<CheckOut> {
         setState(() {
           String Fornow = "false";
           Fornow = data.toString();
-          print("hoo " + Fornow);
           if (Fornow.toLowerCase() == 'true') {
             checkPay = true;
           } else if (Fornow.toLowerCase() == 'false') {
@@ -71,7 +291,7 @@ class _CheckOutState extends State<CheckOut> {
     }
     return checkPay;
   }
-*/
+
   void _changed(bool visibility, bool field) {
     setState(() {
       if (field == true) {
@@ -84,92 +304,7 @@ class _CheckOutState extends State<CheckOut> {
   }
 
   Widget build(BuildContext context) {
-    void _showMyDialog() async {
-      return showDialog<void>(
-          context: context,
-          builder: (BuildContext context) =>
-              StatefulBuilder(builder: (context, setState) {
-                checkPay;
-                return Directionality(
-                    textDirection: TextDirection.rtl,
-                    child: Dialog(
-                      elevation: 0,
-                      backgroundColor: const Color(0xffffffff),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15.0),
-                      ),
-                      child: Column(mainAxisSize: MainAxisSize.min, children: [
-                        const SizedBox(height: 15),
-                        Card(
-                            shadowColor: Color.fromARGB(255, 0, 0, 0),
-                            elevation: 15,
-                            color: const Color.fromARGB(165, 255, 255, 255),
-                            clipBehavior: Clip.antiAlias,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10)),
-                            child: Container(
-                                width: MediaQuery.of(context).size.width * 0.6,
-                                height:
-                                    MediaQuery.of(context).size.height * 0.27,
-                                decoration: const BoxDecoration(
-                                  color: Color.fromARGB(255, 255, 255, 255),
-                                ),
-                                child: Column(children: [
-                                  QrImage(
-                                    foregroundColor: Colors.black,
-                                    gapless: true,
-                                    embeddedImage: const AssetImage(
-                                        'assets/images/logomini.png'),
-                                    data: user.getLoyaltyCardID().toString() +
-                                        " - " +
-                                        user
-                                            .getLastCartNum()
-                                            .toString(), //ID for the card
-                                    version: QrVersions.auto,
-                                    size:
-                                        MediaQuery.of(context).size.width * 0.5,
-                                  ),
-                                  const SizedBox(height: 5),
-                                  Align(
-                                      alignment: Alignment.bottomCenter,
-                                      child: Text(
-                                        user
-                                            .getLoyaltyCardID()
-                                            .toString(), //text
-                                        textAlign: TextAlign.center,
-                                        style: const TextStyle(
-                                            color: Color.fromARGB(255, 0, 0, 0),
-                                            shadows: <Shadow>[
-                                              const Shadow(
-                                                offset: const Offset(0.5, 0.5),
-                                                blurRadius: 1,
-                                                color: Color.fromARGB(
-                                                    162, 63, 63, 63),
-                                              )
-                                            ],
-                                            fontFamily: 'CartToGo',
-                                            fontSize: 20,
-                                            letterSpacing: -0.5,
-                                            fontWeight: FontWeight.w500,
-                                            height: 1),
-                                      )),
-                                ]))),
-                        const SizedBox(height: 15),
-                        const Text("قم بالمسح عند المحاسب",
-                            style: TextStyle(
-                              fontSize: 19,
-                              fontWeight: FontWeight.bold,
-                            )),
-                        const SizedBox(height: 15),
-                        const Divider(
-                          height: 1,
-                          color: Colors.black,
-                        ),
-                        ShowButton(),
-                      ]),
-                    ));
-              }));
-    }
+    //final checkpay = Provider.of<Navi>(context, listen: true);
 
     return Scaffold(
         backgroundColor: Colors.white,
@@ -387,8 +522,8 @@ class _CheckOutState extends State<CheckOut> {
                         backgroundColor: MaterialStateProperty.all(appColor),
                         foregroundColor:
                             MaterialStateProperty.all(Colors.white)),
-                    onPressed: () {
-                      return _showMyDialog();
+                    onPressed: () async {
+                      await _showMyDialog(context);
                     },
                     child: const Text('اتمام الدفع')),
                 //end of login button
@@ -396,25 +531,10 @@ class _CheckOutState extends State<CheckOut> {
             )));
   }
 
-  Widget ShowButton() {
-    return Visibility(
-      visible: checkPay,
-      child: ElevatedButton(
-          style: ButtonStyle(
-              elevation: MaterialStateProperty.all(8.0),
-              textStyle: MaterialStateProperty.all(
-                  const TextStyle(fontSize: 20, fontFamily: 'CartToGo')),
-              fixedSize: MaterialStateProperty.all(const Size(200, 50)),
-              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                  RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30.0))),
-              backgroundColor: MaterialStateProperty.all(appColor),
-              foregroundColor: MaterialStateProperty.all(Colors.white)),
-          onPressed: () async {
-            //return _showMyDialog();
-          },
-          child: const Text('استرداد النقاط')),
-    );
+  @override
+  void deactivate() {
+    _streamSubscription4.cancel();
+    super.deactivate();
   }
 
   Widget Cart() {
@@ -467,9 +587,11 @@ class _CheckOutState extends State<CheckOut> {
                             l.toString() == "[false]") {
                           print(l.toString());
                           checke2 = false;
+                          /*
                           if (l.toString() == "[true]") {
                             checkPay = true;
                           }
+                          */
                         }
 
                         if (!(l[0] == "0") && checker && checke2) {
