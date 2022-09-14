@@ -7,7 +7,6 @@ import 'package:firebase_database/firebase_database.dart';
 
 class NameSearch extends SearchDelegate<String> {
   final List<String> names;
-
 // OLD >> NameSearch(this.names);
 
   //NEW with hint
@@ -76,23 +75,26 @@ class NameSearch extends SearchDelegate<String> {
   final SSnapshot = ref.child("Products/./Location").get();
    */
 
+
   @override
   Widget buildSuggestions(BuildContext context) {
-/*
-  final Suggestions = names.where((name){ // list what is in Suggestions list but here with condition
-  return name.toLowerCase().contains((query.toLowerCase()));
-  });
-*/
-    /* if the Location and Name stored in same list and each with its own
-  final Suggestions = query.isEmpty
-  ? names
-  : names.where((p)=> p.Location.startwith(query)).toList();
- */
+
     final Suggestions = query.isEmpty
         ? names
-        : names.where((p)=> p.startsWith(query)).toList();// هنا لو نبي يكون دايم يعرض شيء قبل يبحث المتسوق
+        : names.where((p)=> p.startsWith(query)).toList();
 
-    // final Suggestions = names;
+    var v;
+    var l;
+    var g;
+    v = names.toString();
+    g = v.replaceAll(
+        RegExp(
+            "{|}|Name: |Location: "),
+        "");
+    g.trim();
+    l = g.split(',');
+    //l[0] for example for Name and l[1] for Location
+
     return Suggestions.isEmpty
         ? Center(
         child: Text(
@@ -104,31 +106,30 @@ class NameSearch extends SearchDelegate<String> {
               fontSize: 18),
         ))
         : ListView.builder(
+
       itemCount: Suggestions.length,
       itemBuilder: (BuildContext context, int index) => ListTile(
-
-        //  final  String names = Suggestions[index];
 
         onTap: () {
           showResults(context);
         },
 
-// هنا المفروض قبل كل لوكيشن يطلع له ايكون ويكون يمين مع العربي :)
+        shape: RoundedRectangleBorder(
+          side: BorderSide(
+            color: Colors.white,
+          ),
+          borderRadius: BorderRadius.circular(10),
+        ),
+
         trailing:
         Icon(Icons.location_on_outlined,
           color: appColor,
         ),
 
-        // نحتاج column لو بنعرض اللوكيشن وتحته الاسم لو ضبطت :)
         title:
         Column(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: <Widget>[
-
-            //if the Location and Name stored in same list and each with its own
-            //Text(Suggestions.Name,
-            //
-            // to incress UX I added highlite(bold them) letter by letter if they search but i can't see if its works in Arabic or not
             RichText(
                 text: TextSpan(
                     text: Suggestions.elementAt(index).substring(0,query.length),
@@ -146,25 +147,26 @@ class NameSearch extends SearchDelegate<String> {
                       ),
 
                     )]
-                )),
-
-
-
-            /*if the Location and Name stored in same list and each with its own
-                    Text(Suggestions.Location,
-                  Text(
-                    Suggestions.elementAt(index),
-                    style: TextStyle(
-                    color: Colors.blue,
-                    fontWeight: FontWeight.bold,
-                    fontFamily: 'CartToGo',
-                   ),
-                   textAlign: TextAlign.right,
-                   ),*/
-
-
-            // ],
-            //  ),
+                )
+            ),
+            RichText(
+                text: TextSpan(
+                    text: Suggestions.elementAt(index+1).substring(0,query.length),
+                    style:
+                    TextStyle( color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'CartToGo',
+                    ),
+                    children: [TextSpan(
+                      text: Suggestions.elementAt(index+1).substring(query.length),
+                      style:
+                      TextStyle( color: Colors.black,
+                        fontWeight: FontWeight.normal,
+                        fontFamily: 'CartToGo',
+                      ),
+                    )]
+                )
+            ),
             Divider() // to arrange them and make it comfortable to eye
           ],
         ),
@@ -172,3 +174,27 @@ class NameSearch extends SearchDelegate<String> {
     );
   }
 }
+
+
+/*
+title:
+          Text(
+            Suggestions.elementAt(index),
+            style: TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'CartToGo',
+            ),
+            textAlign: TextAlign.right,
+          ),
+
+          subtitle :Text(
+            Suggestions.elementAt(index+1),
+            style: TextStyle(
+              color: Colors.grey,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'CartToGo',
+            ),
+            textAlign: TextAlign.right,
+          ),
+ */
