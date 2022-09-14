@@ -8,6 +8,9 @@ class Product {
   final String Size;
   final String Barcode;
 
+  final String Location;
+
+
   const Product({
     required this.Name,
     required this.Brand,
@@ -16,6 +19,7 @@ class Product {
     //required this.Quantity,
     required this.Size,
     required this.Barcode,
+    required this.Location,
   });
 
   factory Product.fromMap(Map<dynamic, dynamic> map) {
@@ -27,6 +31,7 @@ class Product {
       //Quantity: map['Quantity'] ?? '',
       Size: map['Size'] ?? '',
       Barcode: map['Barcode'] ?? '',
+      Location: map['Location'] ?? '',
     );
   }
 }

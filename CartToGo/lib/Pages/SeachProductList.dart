@@ -5,11 +5,8 @@ import 'Product.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:carttogo/Users/user.dart' as user;
 
-//
-//باقي
-//
-//
 
+// باقي احد يتأكد انه يبحث
 class Search2 extends StatefulWidget {
   Search2({Key? key}) : super(key: key);
   @override
@@ -17,8 +14,9 @@ class Search2 extends StatefulWidget {
 }
 
 List<String> names = [];
+
 getProducts() async {
-  final snapshot = await FirebaseDatabase.instance.ref('Product').get();
+  final snapshot = await FirebaseDatabase.instance.ref('Products').get();
   final map = snapshot.value as Map<dynamic, dynamic>;
   map.forEach((key, value) {
     final product = Product.fromMap(value);
@@ -32,7 +30,7 @@ class _Search2State extends State<Search2> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: appColor,
+        backgroundColor: Colors.white,
         title: Text(
           "البحث عن المنتجات",
           style: TextStyle(
@@ -42,7 +40,23 @@ class _Search2State extends State<Search2> {
           ),
           textAlign: TextAlign.right,
         ),
+        centerTitle: true,
+        elevation: 0,
+        actions: [
+          IconButton(
+            onPressed: () async {
+              final result = await showSearch<String>(
+                context: context,
+                delegate: NameSearch(user.getProducts()),
+              );
+              print(result);
+            },
+            icon: Icon(Icons.search_outlined),
+            color: appColor,
+          )
+        ],
       ),
+
       body: ListView.builder(
         itemCount: names.length,
         itemBuilder: (BuildContext context, int index) {
@@ -51,6 +65,7 @@ class _Search2State extends State<Search2> {
               names.elementAt(index),
               style: TextStyle(
                 color: Colors.black,
+                backgroundColor: Color.fromARGB(255, 248, 248, 249),
                 fontWeight: FontWeight.bold,
                 fontFamily: 'CartToGo',
               ),
@@ -59,127 +74,6 @@ class _Search2State extends State<Search2> {
           );
         },
       ),
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.only(bottom: 90),
-        child: FloatingActionButton(
-          child: Icon(Icons.search),
-          backgroundColor: appColor,
-          onPressed: () async {
-            final result = await showSearch<String>(
-              context: context,
-              delegate: NameSearch(user.getProducts()),
-            );
-            print(result);
-          },
-        ),
-      ),
     );
   }
 }
-
-
-
-/*
-const names = [
-  "Camila	Chapman",
-  "Belinda	Cameron",
-  "Amelia	Harris",
-  "Aldus	Howard",
-  "Mike	Ryan",
-  "Adelaide	Perry",
-  "Derek	Hall",
-  "Cherry	Ryan",
-  "Derek	Owens",
-  "John	Walker",
-  "Belinda	Ferguson",
-  "Vanessa	Barrett",
-  "Julian	Foster",
-  "Jasmine	Evans",
-  "Sabrina	Hunt",
-  "Deanna	Carroll",
-  "Hailey	Murray",
-  "Maximilian	Crawford",
-  "Grace	Wright",
-  "Garry	Murphy",
-  "Catherine	Ferguson",
-  "Amelia	Watson",
-  "Alisa	Baker",
-  "Maria	Miller",
-  "Daisy	Harper",
-  "Michelle	West",
-  "Caroline	Taylor",
-  "Heather	West",
-  "Justin	Lloyd",
-  "Lydia	Cameron",
-  "Daryl	Harris",
-  "Tara	Robinson",
-  "Haris	Wells",
-  "Emily	Scott",
-  "Catherine	Wells",
-  "Ned	Murphy",
-  "Blake	Casey",
-  "Chelsea	Mitchell",
-  "Stuart	Reed",
-  "Ellia	Jones",
-  "Florrie	Lloyd",
-  "Blake	Barnes",
-  "Jack	Cole",
-  "Adele	Henderson",
-  "Jessica	Rogers",
-  "Florrie	Barrett",
-  "Ryan	Owens",
-  "Briony	Dixon",
-  "Alexander	Cole",
-  "Jessica	Casey",
-  "Ryan	Grant",
-  "Emily	Fowler",
-  "Edith	Turner",
-  "Max	Payne",
-  "Melanie	Davis",
-  "Lucas	Mitchell",
-  "Aldus	Warren",
-  "Ashton	Kelley",
-  "Frederick	Armstrong",
-  "Chester	Smith",
-  "Alissa	Riley",
-  "Bruce	Rogers",
-  "Edgar	Armstrong",
-  "Cadie	Cooper",
-  "Ryan	Scott",
-  "Rebecca	Campbell",
-  "Rebecca	Parker",
-  "Grace	Bennett",
-  "Alen	Cunningham",
-  "Lucia	Douglas",
-  "Sydney	Allen",
-  "Roland	Cole",
-  "Eddy	Lloyd",
-  "Haris	Murphy",
-  "Fiona	Farrell",
-  "Honey	Jones",
-  "Edward	Watson",
-  "Ada	Harris",
-  "Jordan	Owens",
-  "Carlos	Stevens",
-  "Alissa	Howard",
-  "Madaline	Smith",
-  "Luke	Carroll",
-  "Paul	Campbell",
-  "Adrian	Murray",
-  "Ashton	Brown",
-  "Ned	Harris",
-  "Michelle	Thomas",
-  "Ted	Evans",
-  "Adelaide	Hawkins",
-  "Sydney	Hall",
-  "Arnold	Ross",
-  "Clark	Stewart",
-  "Carl	Smith",
-  "Vivian	Watson",
-  "Sam	Wells",
-  "Arnold	Stevens",
-  "Vivian	Miller",
-  "John	Hawkins",
-  "Edgar	Payne",
-];
-*/

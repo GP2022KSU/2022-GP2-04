@@ -21,6 +21,7 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
   final _formKey = GlobalKey<FormState>();
   TextEditingController second = TextEditingController();
   TextEditingController third = TextEditingController();
+  TextEditingController zero = TextEditingController();
   var l;
   var g;
   var k;
@@ -111,91 +112,95 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
             var v = snapshot.value.toString();
             g = v.replaceAll(
                 RegExp(
-                    "{|}|Name: |Price: |Size: |Quantity: |Category: |Brand: |Barcode: "),
+                    "{|}|Name: |Price: |Size: |Quantity: |Category: |Brand: |Barcode: |Location: "),
                 "");
             g.trim();
             l = g.split(',');
             return GestureDetector(
 
-                // ترتيب الليست واظهار المنتجات
+              // ترتيب الليست واظهار المنتجات
                 child: Directionality(
-              textDirection: TextDirection.rtl,
-              child: Container(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ListTile(
-                    shape: RoundedRectangleBorder(
-                      side: BorderSide(
-                        color: Colors.white,
-                      ),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    tileColor: Color.fromARGB(229, 229, 227, 227),
-                    trailing: IconButton(
-                      tooltip: "حذف المنتج",
-                      icon: Icon(
-                        Icons.delete,
-                        color: Color.fromARGB(255, 255, 0, 0),
-                      ),
-                      onPressed: () {
-                        var EE = ref.child(snapshot.key!);
-                        _DeleteOrNot(EE);
-                      },
-                    ),
-                    leading: IconButton(
-                      tooltip: "تعديل المنتج",
-                      icon: Icon(
-                        Icons.edit,
-                        color: Color.fromARGB(255, 94, 90, 90),
-                      ),
-                      onPressed: () async {
-                        setState(() {
-                          k = snapshot.key;
-                        });
-                        _UpdateOrNot();
-                        /*Navigator.push(
+                  textDirection: TextDirection.rtl,
+                  child: Container(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: ListTile(
+                        shape: RoundedRectangleBorder(
+                          side: BorderSide(
+                            color: Colors.white,
+                          ),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        tileColor: Color.fromARGB(229, 229, 227, 227),
+                        trailing: IconButton(
+                          tooltip: "حذف المنتج",
+                          icon: Icon(
+                            Icons.delete,
+                            color: Color.fromARGB(255, 255, 0, 0),
+                          ),
+                          onPressed: () {
+                            var EE = ref.child(snapshot.key!);
+                            _DeleteOrNot(EE);
+                          },
+                        ),
+                        leading: IconButton(
+                          tooltip: "تعديل المنتج",
+                          icon: Icon(
+                            Icons.edit,
+                            color: Color.fromARGB(255, 94, 90, 90),
+                          ),
+                          onPressed: () async {
+                            setState(() {
+                              k = snapshot.key;
+                            });
+                            _UpdateOrNot();
+                            /*Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => RealtimeDatabaseUpdate() ));*/
-                      },
-                    ),
-                    title: Text(
-                      l[2],
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'CartToGo',
-                        fontSize: 17,
-                      ),
-                    ),
-                    subtitle: Text(
-                      "\t" +
-                          "الحجم: " +
-                          l[0] +
-                          "\n"
+                          },
+                        ),
+                        title: Text(
+                          l[2],
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: 'CartToGo',
+                            fontSize: 17,
+                          ),
+                        ),
+                        subtitle: Text(
+                          "\t" +
+                              "الحجم: " +
+                              l[0] +
+                              "\n"
+                                  "\t" +
+                              "العلامة التجارية: " +
+                              l[3] +
+                              "\n" +
                               "\t" +
-                          "العلامة التجارية: " +
-                          l[3] +
-                          "\n" +
-                          "\t" +
-                          "السعر:" +
-                          l[5] +
-                          " ريال" +
-                          "\n" +
-                          "\t" +
-                          "الكمية:" +
-                          l[4],
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'CartToGo',
-                        fontSize: 12,
+                              "السعر:" +
+                              l[5] +
+                              " ريال" +
+                              "\n" +
+                              "\t" +
+                              "الكمية:" +
+                              l[4]+
+                              "\n" +
+                              "\t" +
+                              "الموقع:" +
+                              l[6],
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: 'CartToGo',
+                            fontSize: 12,
+                          ),
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ),
-            ));
+                ));
           },
         ),
       ),
@@ -384,8 +389,8 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
                                   textDirection: TextDirection.rtl,
                                   child: TextFormField(
                                       keyboardType:
-                                          TextInputType.numberWithOptions(
-                                              decimal: true),
+                                      TextInputType.numberWithOptions(
+                                          decimal: true),
                                       inputFormatters: <TextInputFormatter>[
                                         FilteringTextInputFormatter.allow(
                                             RegExp(r'(^\d*\.?\d*)'))
@@ -456,6 +461,37 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
                                       onChanged: (value) {}),
                                 ),
                                 SizedBox(height: 15),
+
+                                //الموقع
+                                Directionality(
+                                  textDirection: TextDirection.rtl,
+                                  child: TextFormField(
+                                      keyboardType: TextInputType.text,
+                                      controller: zero,
+                                      decoration: const InputDecoration(
+                                        labelText: "الموقع",
+                                        labelStyle: TextStyle(
+                                            fontSize: 16, color: Colors.black),
+                                        hintText: "أدخل موقع المنتج ",
+                                        hintStyle: TextStyle(fontSize: 14),
+                                        enabledBorder: OutlineInputBorder(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(4.0)),
+                                          borderSide: BorderSide(
+                                              width: 1.5,
+                                              color: Color(0xFFAFAEAE)),
+                                        ),
+                                      ),
+                                      validator: (value) {
+                                        if (value == null || value.isEmpty) {
+                                          return 'الرجاء كتابة موقع المنتج';
+                                        }
+                                        return null;
+                                      },
+                                      onChanged: (value) {}),
+                                ),
+                                SizedBox(height: 15),
+
                                 Divider(
                                   height: 1,
                                   color: Colors.black,
@@ -479,8 +515,8 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
                                             Navigator.push(context,
                                                 MaterialPageRoute(
                                                     builder: (context) {
-                                              return ProductsListAdmin();
-                                            }));
+                                                      return ProductsListAdmin();
+                                                    }));
                                           }
                                         },
                                         child: Center(
@@ -506,8 +542,8 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
                                           Navigator.push(context,
                                               MaterialPageRoute(
                                                   builder: (context) {
-                                            return ProductsListAdmin();
-                                          }));
+                                                    return ProductsListAdmin();
+                                                  }));
                                         },
                                         child: Center(
                                             child: Text("إلغاء",
@@ -524,9 +560,11 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
     await ref1.update({
       "Quantity": int.tryParse(second.text),
       "Price": double.tryParse(third.text),
+      "Location": zero.text, // بعدل الدايلوق
     });
     second.clear();
     third.clear();
+    zero.clear();
   }
 
   void _showDialog(String pass) async {

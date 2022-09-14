@@ -116,6 +116,7 @@ Future<List<String>> BringProducts() async {
     map.forEach((key, value) {
       final product = Product.fromMap(value);
       names.add(product.Name.toString());
+      names.add(product.Location.toString()); // ممكن يضبط كذا وراح يضبط كل اسم بموقعه؟
     });
     print(names);
     return names;
