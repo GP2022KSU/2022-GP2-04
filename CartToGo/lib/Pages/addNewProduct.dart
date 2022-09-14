@@ -388,7 +388,7 @@ class AddNewProductState extends State<AddNewProduct> {
         ));
   }
 
-  void insertData(String name, String barcode, String brand, String category,
+  void insertData(String barcode, String name, String brand, String category,
       String price, String quantity, String size, String Location) {
     var intBarcode = int.tryParse(barcode);
 
