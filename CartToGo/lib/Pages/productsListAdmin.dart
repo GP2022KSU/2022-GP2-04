@@ -118,89 +118,89 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
             l = g.split(',');
             return GestureDetector(
 
-              // ترتيب الليست واظهار المنتجات
+                // ترتيب الليست واظهار المنتجات
                 child: Directionality(
-                  textDirection: TextDirection.rtl,
-                  child: Container(
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: ListTile(
-                        shape: RoundedRectangleBorder(
-                          side: BorderSide(
-                            color: Colors.white,
-                          ),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        tileColor: Color.fromARGB(229, 229, 227, 227),
-                        trailing: IconButton(
-                          tooltip: "حذف المنتج",
-                          icon: Icon(
-                            Icons.delete,
-                            color: Color.fromARGB(255, 255, 0, 0),
-                          ),
-                          onPressed: () {
-                            var EE = ref.child(snapshot.key!);
-                            _DeleteOrNot(EE);
-                          },
-                        ),
-                        leading: IconButton(
-                          tooltip: "تعديل المنتج",
-                          icon: Icon(
-                            Icons.edit,
-                            color: Color.fromARGB(255, 94, 90, 90),
-                          ),
-                          onPressed: () async {
-                            setState(() {
-                              k = snapshot.key;
-                            });
-                            _UpdateOrNot();
-                            /*Navigator.push(
+              textDirection: TextDirection.rtl,
+              child: Container(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ListTile(
+                    shape: RoundedRectangleBorder(
+                      side: BorderSide(
+                        color: Colors.white,
+                      ),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    tileColor: Color.fromARGB(229, 229, 227, 227),
+                    trailing: IconButton(
+                      tooltip: "حذف المنتج",
+                      icon: Icon(
+                        Icons.delete,
+                        color: Color.fromARGB(255, 255, 0, 0),
+                      ),
+                      onPressed: () {
+                        var EE = ref.child(snapshot.key!);
+                        _DeleteOrNot(EE);
+                      },
+                    ),
+                    leading: IconButton(
+                      tooltip: "تعديل المنتج",
+                      icon: Icon(
+                        Icons.edit,
+                        color: Color.fromARGB(255, 94, 90, 90),
+                      ),
+                      onPressed: () async {
+                        setState(() {
+                          k = snapshot.key;
+                        });
+                        _UpdateOrNot();
+                        /*Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => RealtimeDatabaseUpdate() ));*/
-                          },
-                        ),
-                        title: Text(
-                          l[3],
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: 'CartToGo',
-                            fontSize: 17,
-                          ),
-                        ),
-                        subtitle: Text(
+                      },
+                    ),
+                    title: Text(
+                      l[3],
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'CartToGo',
+                        fontSize: 17,
+                      ),
+                    ),
+                    subtitle: Text(
+                      "\t" +
+                          "الحجم: " +
+                          l[0] +
+                          "\n"
+                              "\t" +
+                          "العلامة التجارية: " +
+                          l[6] +
+                          "\n" +
                           "\t" +
-                              "الحجم: " +
-                              l[0] +
-                              "\n"
-                                  "\t" +
-                              "العلامة التجارية: " +
-                              l[6] +
-                              "\n" +
-                              "\t" +
-                              "السعر:" +
-                              l[5] +
-                              " ريال" +
-                              "\n" +
-                              "\t" +
-                              "الكمية:" +
-                              l[4]+
-                              "\n" +
-                              "\t" +
-                              "الموقع:" +
-                              l[2],
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: 'CartToGo',
-                            fontSize: 12,
-                          ),
-                        ),
+                          "السعر:" +
+                          l[5] +
+                          " ريال" +
+                          "\n" +
+                          "\t" +
+                          "الكمية:" +
+                          l[4] +
+                          "\n" +
+                          "\t" +
+                          "الموقع:" +
+                          l[2],
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'CartToGo',
+                        fontSize: 12,
                       ),
                     ),
                   ),
-                ));
+                ),
+              ),
+            ));
           },
         ),
       ),
@@ -389,8 +389,8 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
                                   textDirection: TextDirection.rtl,
                                   child: TextFormField(
                                       keyboardType:
-                                      TextInputType.numberWithOptions(
-                                          decimal: true),
+                                          TextInputType.numberWithOptions(
+                                              decimal: true),
                                       inputFormatters: <TextInputFormatter>[
                                         FilteringTextInputFormatter.allow(
                                             RegExp(r'(^\d*\.?\d*)'))
@@ -515,8 +515,8 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
                                             Navigator.push(context,
                                                 MaterialPageRoute(
                                                     builder: (context) {
-                                                      return ProductsListAdmin();
-                                                    }));
+                                              return ProductsListAdmin();
+                                            }));
                                           }
                                         },
                                         child: Center(
@@ -542,8 +542,8 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
                                           Navigator.push(context,
                                               MaterialPageRoute(
                                                   builder: (context) {
-                                                    return ProductsListAdmin();
-                                                  }));
+                                            return ProductsListAdmin();
+                                          }));
                                         },
                                         child: Center(
                                             child: Text("إلغاء",

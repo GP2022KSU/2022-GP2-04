@@ -2,16 +2,13 @@ import 'package:carttogo/Pages/Cashier.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:carttogo/main.dart';
-import 'dart:io';
 import 'dart:async';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:firebase_database/firebase_database.dart';
 import '../main.dart';
-import 'package:carttogo/Users/user.dart' as user;
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
-
 import 'package:carttogo/Users/Cashier.dart' as cashier;
 
 final _fb = FirebaseDatabase.instance;

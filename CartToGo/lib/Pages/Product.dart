@@ -1,15 +1,12 @@
 class Product {
   final String Name;
-
   final String Brand;
   final String Category;
   //final double Price;
   //final int Quantity;
   final String Size;
   final String Barcode;
-
   final String Location;
-
 
   const Product({
     required this.Name,

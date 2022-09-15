@@ -3,8 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:carttogo/Pages/loyaltyCard.dart';
 import 'package:carttogo/Pages/shoppingCart.dart';
-import 'package:carttogo/Pages/SeachProductList.dart';
-
+import 'package:carttogo/Pages/seachProductList.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 

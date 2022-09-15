@@ -1,7 +1,6 @@
 import 'package:carttogo/main.dart';
 import 'package:flutter/material.dart';
 import 'dart:developer';
-import 'dart:io';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'welcomePage.dart';
@@ -9,7 +8,7 @@ import 'paymentCompletion.dart';
 
 class Cashier extends StatelessWidget {
   const Cashier({Key? key}) : super(key: key);
-  
+
   @override
   Widget build(BuildContext context) {
     void _showMyDialog() async {
@@ -80,6 +79,7 @@ class Cashier extends StatelessWidget {
                     ])));
           });
     }
+
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.white24,
@@ -245,4 +245,3 @@ class _scanInoviceState extends State<scanInovice> {
     super.dispose();
   }
 }
-
