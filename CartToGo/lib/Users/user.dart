@@ -113,9 +113,8 @@ Future<List<String>> BringProducts() async {
     final map = snapshot.value as Map<dynamic, dynamic>;
     map.forEach((key, value) {
       final product = Product.fromMap(value);
-      names.add(product.Name.toString());
-      names.add(product.Location
-          .toString()); // ممكن يضبط كذا وراح يضبط كل اسم بموقعه؟
+      final D = product.Name.toString();
+      names.add(D+product.Location.toString());
     });
     print(names);
     return names;

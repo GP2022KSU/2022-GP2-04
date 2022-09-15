@@ -68,34 +68,39 @@ class NameSearch extends SearchDelegate<String> {
               fontSize: 18),
         ));
   }
-
-  /* تجاهلوه بس كنت احاول اجيب اللوكيشن المرتبط مع الاسم
- to get the name that the user typing and take the Location of this
-  final ref = FirebaseDatabase.instance.ref();
-  final SSnapshot = ref.child("Products/./Location").get();
-   */
-
-
   @override
   Widget buildSuggestions(BuildContext context) {
 
+    /*final ref = FirebaseDatabase.instance.ref();
+    var BARCODE = query.isEmpty
+        ? Center(
+        child: Text(
+          "لا توجد منتجات بهذا الإسم",
+          style: TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'CartToGo',
+              fontSize: 18),
+        )):
+    ref.child("Products/").get();
+     var LOCATION = query.isEmpty
+        ? Center(
+        child: Text(
+          "لا توجد منتجات بهذا الإسم",
+          style: TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'CartToGo',
+              fontSize: 18),
+        )):
+    ref.child("Products/BARCODE/query.Location").get();
+     String LLOCATION = LOCATION.toString();*/
+
     final Suggestions = query.isEmpty
         ? names
-        : names.where((p)=> p.startsWith(query)).toList();
+        : names.where((p)=> p.startsWith(query)).toList();// maybe we will remove it
 
-    var v;
-    var l;
-    var g;
-    v = names.toString();
-    g = v.replaceAll(
-        RegExp(
-            "{|}|Name: |Location: "),
-        "");
-    g.trim();
-    l = g.split(',');
-    //l[0] for example for Name and l[1] for Location
-
-    return Suggestions.isEmpty
+    return Suggestions.isEmpty && query.isNotEmpty
         ? Center(
         child: Text(
           "لا توجد منتجات بهذا الإسم",
@@ -110,7 +115,7 @@ class NameSearch extends SearchDelegate<String> {
       itemCount: Suggestions.length,
       itemBuilder: (BuildContext context, int index) => ListTile(
 
-        onTap: () {
+        onTap: () {// maybe we will remove it
           showResults(context);
         },
 
