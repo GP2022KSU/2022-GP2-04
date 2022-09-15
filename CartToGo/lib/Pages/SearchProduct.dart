@@ -154,24 +154,6 @@ class NameSearch extends SearchDelegate<String> {
                     )]
                 )
             ),
-            RichText(
-                text: TextSpan(
-                    text: Suggestions.elementAt(index+1).substring(0,query.length),
-                    style:
-                    TextStyle( color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: 'CartToGo',
-                    ),
-                    children: [TextSpan(
-                      text: Suggestions.elementAt(index+1).substring(query.length),
-                      style:
-                      TextStyle( color: Colors.black,
-                        fontWeight: FontWeight.normal,
-                        fontFamily: 'CartToGo',
-                      ),
-                    )]
-                )
-            ),
             Divider() // to arrange them and make it comfortable to eye
           ],
         ),
@@ -179,7 +161,6 @@ class NameSearch extends SearchDelegate<String> {
     );
   }
 }
-
 
 /*
 title:
