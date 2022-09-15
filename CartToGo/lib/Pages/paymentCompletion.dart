@@ -32,31 +32,32 @@ class PaymentCompletionState extends State<PaymentCompletion> {
   late double TotalBefore;
   final _database = FirebaseDatabase.instance.ref();
   late StreamSubscription _streamSubscription;
-  late double TotalInCart;
+  late double TotalInCart = 0;
 
   void initState() {
     _isLoading1 = true;
 
-    Future.delayed(const Duration(milliseconds: 500), () {
+    Future.delayed(const Duration(milliseconds: 600), () {
       if (mounted) {
         setState(() {
+          /*
           _streamSubscription = _database
               .child("Shopper/${uid}/Carts/${splitted[1].toString()}/Total")
               .onValue
               .listen((event) {
             final data = event.snapshot.value;
-            setState(() {
-              TotalInCart = double.parse(event.snapshot.value.toString());
-            });
+            TotalInCart = double.parse(event.snapshot.value.toString());
           });
+          */
           _isLoading1 = false;
         });
       }
     });
-    _activateListeners();
+    //_activateListeners();
     super.initState();
   }
 
+/*
   void _activateListeners() {
     _streamSubscription = _database
         .child("Shopper/${uid}/Carts/${splitted[1].toString()}/Total")
@@ -68,12 +69,12 @@ class PaymentCompletionState extends State<PaymentCompletion> {
       });
     });
   }
-
+*/
   @override
   Widget build(BuildContext context) {
     setState(() => splitted = scanData.split(' - '));
     uid = cashier.getUID(splitted[0]);
-    TotalBefore = cashier.getTotal(uid, int.parse(splitted[1]));
+    TotalBefore = cashier.getTotalAfterPoints(uid, int.parse(splitted[1]));
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
@@ -146,7 +147,8 @@ class PaymentCompletionState extends State<PaymentCompletion> {
                               ),
                               Text(
                                 cashier
-                                        .getTotal(uid, int.parse(splitted[1]))
+                                        .getTotalAfterPoints(
+                                            uid, int.parse(splitted[1]))
                                         .toString() +
                                     " ريال",
                                 textAlign: TextAlign.right,
@@ -357,9 +359,10 @@ class PaymentCompletionState extends State<PaymentCompletion> {
                   ])));
         });
   }
-
+/*
   void deactivate() {
     _streamSubscription.cancel();
     super.deactivate();
   }
+  */
 }

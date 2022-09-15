@@ -45,6 +45,7 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
       if (mounted) {
         setState(() {
           _isLoading = false;
+          /*
           _streamSubscription1 = _database
               .child(
                   "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts/${user.getLastCartNum()}/Total")
@@ -54,7 +55,9 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
             setState(() {
               TotalInCart = double.parse(event.snapshot.value.toString());
             });
+            
           });
+          */
         });
       }
     });
@@ -67,6 +70,7 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
 
 //-----------Listens for ConnectedToCart to show the cart-----------//
   void _activateListeners() {
+    /*
     _streamSubscription1 = _database
         .child(
             "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts/${user.getLastCartNum()}/Total")
@@ -77,6 +81,7 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
         TotalInCart = double.parse(event.snapshot.value.toString());
       });
     });
+    */
     if (FirebaseAuth.instance.currentUser != null) {
       _streamSubscription = _database
           .child(
@@ -283,7 +288,7 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
                         //print(l.toString());
                         check2 = false;
                       }
-                      if (l is! int && checker && check2) {
+                      if (!(l[0] == "0") && checker && check2) {
                         //if there is data
 
                         //-----------Deletes the swiped product-----------//

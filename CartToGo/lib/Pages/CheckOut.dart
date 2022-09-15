@@ -381,6 +381,7 @@ class _CheckOutState extends State<CheckOut> {
   }
 
   bool _activateListeners() {
+    /*
     _streamSubscription4 = _database
         .child(
             "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts/${user.getLastCartNum()}/Total")
@@ -391,6 +392,7 @@ class _CheckOutState extends State<CheckOut> {
         TotalInCart = double.parse(event.snapshot.value.toString());
       });
     });
+    */
     if (FirebaseAuth.instance.currentUser != null) {
       _streamSubscription4 = _database
           .child(
@@ -645,9 +647,10 @@ class _CheckOutState extends State<CheckOut> {
                             MaterialStateProperty.all(Colors.white)),
                     onPressed: () async {
                       DatabaseReference ref3 = FirebaseDatabase.instance.ref(
-                          "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts/${user.getLastCartNum()}");
+                          "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts}");
                       await ref3.update({
-                        "Total": vis ? user.getTotalAfterPoints() : user.getTotal(),
+                        "TotalAfterPoints":
+                            vis ? user.getTotalAfterPoints() : user.getTotal(),
                       });
                       await _showMyDialog(context);
                     },
@@ -718,7 +721,7 @@ class _CheckOutState extends State<CheckOut> {
                           checke2 = false;
                         }
 
-                        if (!(l[0] is double) && checker && checke2) {
+                        if (!(l[0] == "0") && checker && checke2) {
                           return AnimationConfiguration.staggeredList(
                             position: index,
                             duration: const Duration(milliseconds: 375),
