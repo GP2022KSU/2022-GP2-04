@@ -30,6 +30,7 @@ class _CheckOutState extends State<CheckOut> {
   bool vis = false;
   int pointsChange = user.getPoints();
   double Total = user.getTotal();
+  late double TotalInCart;
   late double PriceAfterPoin;
   bool checkPay = false;
   late bool _isLoading;
@@ -381,6 +382,16 @@ class _CheckOutState extends State<CheckOut> {
   }
 
   bool _activateListeners() {
+    _streamSubscription4 = _database
+        .child(
+            "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts/${user.getLastCartNum()}/Total")
+        .onValue
+        .listen((event) {
+      final data = event.snapshot.value;
+      setState(() {
+        TotalInCart = double.parse(event.snapshot.value.toString());
+      });
+    });
     if (FirebaseAuth.instance.currentUser != null) {
       _streamSubscription4 = _database
           .child(
@@ -698,12 +709,12 @@ class _CheckOutState extends State<CheckOut> {
                         g.trim();
 
                         var l = g.split(',');
-                        if (l[0] == user.getTotalInCart().toString()) {
+                        if (l[0] == TotalInCart.toString()) {
                           checke2 = false;
                         }
                         if (l.toString() == "[true]" ||
                             l.toString() == "[false]" ||
-                            l[0] == user.getTotalInCart().toStringAsFixed(0)) {
+                            l[0] == TotalInCart.toStringAsFixed(0)) {
                           //print(l.toString());
                           checke2 = false;
                         }

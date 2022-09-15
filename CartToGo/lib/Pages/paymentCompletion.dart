@@ -30,6 +30,10 @@ class PaymentCompletionState extends State<PaymentCompletion> {
   var splitted;
   late String uid;
   late double TotalBefore;
+  final _database = FirebaseDatabase.instance.ref();
+  late StreamSubscription _streamSubscription;
+  late double TotalInCart;
+
   void initState() {
     _isLoading1 = true;
 
@@ -40,8 +44,20 @@ class PaymentCompletionState extends State<PaymentCompletion> {
         });
       }
     });
-
+    _activateListeners();
     super.initState();
+  }
+
+  void _activateListeners() {
+    _streamSubscription = _database
+        .child("Shopper/${uid}/Carts/${splitted[1].toString()}/Total")
+        .onValue
+        .listen((event) {
+      final data = event.snapshot.value;
+      setState(() {
+        TotalInCart = double.parse(event.snapshot.value.toString());
+      });
+    });
   }
 
   @override
@@ -212,17 +228,13 @@ class PaymentCompletionState extends State<PaymentCompletion> {
 
                         var l = g.split(',');
 
-                        if (l[0] ==
-                            cashier.getTotal(uid, splitted[1]).toString()) {
+                        if (l[0] == TotalInCart.toString()) {
                           checke2 = false;
                         }
 
                         if (l.toString() == "[true]" ||
                             l.toString() == "[false]" ||
-                            l[0] ==
-                                cashier
-                                    .getTotal(uid, splitted[1])
-                                    .toStringAsFixed(0)) {
+                            l[0] == TotalInCart.toStringAsFixed(0)) {
                           checke2 = false;
                           if (l.toString() == "[true]") {
                             //checkPay = true;
@@ -335,5 +347,10 @@ class PaymentCompletionState extends State<PaymentCompletion> {
                                     )))))
                   ])));
         });
+  }
+
+  void deactivate() {
+    _streamSubscription.cancel();
+    super.deactivate();
   }
 }

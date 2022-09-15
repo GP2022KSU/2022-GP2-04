@@ -35,8 +35,7 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
   late StreamSubscription _streamSubscription;
   late StreamSubscription _streamSubscription1;
   late StreamSubscription _streamSubscription2;
-  late StreamSubscription _streamSubscription3;
-
+  late double TotalInCart;
   late bool _isLoading;
   @override
   void initState() {
@@ -46,19 +45,38 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
       if (mounted) {
         setState(() {
           _isLoading = false;
+          _streamSubscription1 = _database
+              .child(
+                  "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts/${user.getLastCartNum()}/Total")
+              .onValue
+              .listen((event) {
+            final data = event.snapshot.value;
+            setState(() {
+              TotalInCart = double.parse(event.snapshot.value.toString());
+            });
+          });
         });
       }
     });
 
-    super.initState();
     _activateListeners();
     _CheckLastnumOfProd();
-    //_ShowNotRegisteredProduct();
     _getTotal();
+    super.initState();
   }
 
 //-----------Listens for ConnectedToCart to show the cart-----------//
   void _activateListeners() {
+    _streamSubscription1 = _database
+        .child(
+            "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts/${user.getLastCartNum()}/Total")
+        .onValue
+        .listen((event) {
+      final data = event.snapshot.value;
+      setState(() {
+        TotalInCart = double.parse(event.snapshot.value.toString());
+      });
+    });
     if (FirebaseAuth.instance.currentUser != null) {
       _streamSubscription = _database
           .child(
@@ -255,12 +273,13 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
 
                       var l = g.split(',');
                       bool check2 = true;
-                      if (l[0] == user.getTotalInCart().toString()) {
+                      if (l[0] == TotalInCart.toString()) {
                         check2 = false;
                       }
                       if (l.toString() == "[true]" ||
                           l.toString() == "[false]" ||
-                          l[0] == user.getTotalInCart().toStringAsFixed(0)) {
+                          l[0] == TotalInCart.toStringAsFixed(0) ||
+                          l[0] == "0") {
                         //print(l.toString());
                         check2 = false;
                       }
@@ -740,8 +759,6 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
   void deactivate() {
     _streamSubscription.cancel();
     _streamSubscription1.cancel();
-    _streamSubscription2.cancel();
-    //_streamSubscription3.cancel();
     super.deactivate();
   }
 }
