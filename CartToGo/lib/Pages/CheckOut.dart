@@ -50,7 +50,6 @@ class _CheckOutState extends State<CheckOut> {
     });
 
     _activateListeners();
-    _showMyDialog(context);
     user.getPoints();
     pointsChange = user.getPoints();
     user.getTotal();
@@ -648,7 +647,7 @@ class _CheckOutState extends State<CheckOut> {
                       DatabaseReference ref3 = FirebaseDatabase.instance.ref(
                           "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts/${user.getLastCartNum()}");
                       await ref3.update({
-                        "Total": vis ? user.getTotalAfterPoints() : Total,
+                        "Total": vis ? user.getTotalAfterPoints() : user.getTotal(),
                       });
                       await _showMyDialog(context);
                     },

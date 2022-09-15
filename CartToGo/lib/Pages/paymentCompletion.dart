@@ -40,6 +40,15 @@ class PaymentCompletionState extends State<PaymentCompletion> {
     Future.delayed(const Duration(milliseconds: 500), () {
       if (mounted) {
         setState(() {
+          _streamSubscription = _database
+              .child("Shopper/${uid}/Carts/${splitted[1].toString()}/Total")
+              .onValue
+              .listen((event) {
+            final data = event.snapshot.value;
+            setState(() {
+              TotalInCart = double.parse(event.snapshot.value.toString());
+            });
+          });
           _isLoading1 = false;
         });
       }
