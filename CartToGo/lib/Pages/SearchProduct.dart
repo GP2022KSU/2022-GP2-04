@@ -78,7 +78,6 @@ class NameSearch extends SearchDelegate<String> {
                 fontSize: 18),
           ))
         : ListView.builder(
-<<<<<<< HEAD
             itemCount: Suggestions.length,
             itemBuilder: (BuildContext context, int index) => ListTile(
               onTap: () {
@@ -125,78 +124,3 @@ class NameSearch extends SearchDelegate<String> {
           );
   }
 }
-=======
-
-      itemCount: Suggestions.length,
-      itemBuilder: (BuildContext context, int index) => ListTile(
-
-        onTap: () {// maybe we will remove it
-          showResults(context);
-        },
-
-        shape: RoundedRectangleBorder(
-          side: BorderSide(
-            color: Colors.white,
-          ),
-          borderRadius: BorderRadius.circular(10),
-        ),
-
-        trailing:
-        Icon(Icons.location_on_outlined,
-          color: appColor,
-        ),
-
-        title:
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: <Widget>[
-            RichText(
-                text: TextSpan(
-                    text: Suggestions.elementAt(index).substring(0,query.length),
-                    style:
-                    TextStyle( color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: 'CartToGo',
-                    ),
-                    children: [TextSpan(
-                      text: Suggestions.elementAt(index).substring(query.length),
-                      style:
-                      TextStyle( color: Colors.black,
-                        fontWeight: FontWeight.normal,
-                        fontFamily: 'CartToGo',
-                      ),
-
-                    )]
-                )
-            ),
-            Divider() // to arrange them and make it comfortable to eye
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-/*
-title:
-          Text(
-            Suggestions.elementAt(index),
-            style: TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.bold,
-              fontFamily: 'CartToGo',
-            ),
-            textAlign: TextAlign.right,
-          ),
-
-          subtitle :Text(
-            Suggestions.elementAt(index+1),
-            style: TextStyle(
-              color: Colors.grey,
-              fontWeight: FontWeight.bold,
-              fontFamily: 'CartToGo',
-            ),
-            textAlign: TextAlign.right,
-          ),
- */
->>>>>>> 69794b80c9e041700f0025fdd77fcbd8ee795235
