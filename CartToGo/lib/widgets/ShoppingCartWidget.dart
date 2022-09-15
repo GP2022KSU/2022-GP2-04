@@ -292,7 +292,7 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
                         //if there is data
 
                         //-----------Deletes the swiped product-----------//
-                        void deleteProduct() async {
+                        void deleteProduct(var product) async {
                           final Carts = _fb.ref().child(
                               "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts");
                           double price =
@@ -300,12 +300,12 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
                           total = total - price;
                           numOfProducts--;
                           await Carts.update({
-                            'Total': total,
+                            'Total': (double.parse(total.toStringAsFixed(2))),
                             'NumOfProducts': numOfProducts,
                           });
                           l[0].replaceAll(' ', "");
                           int barcode = (int.parse(
-                              l[0].toString())); //barcode android 3 , IOS 0
+                              l[2].toString())); //barcode android 3 , IOS 0
                           int newQuantity =
                               await BringProductQuantity(barcode) + 1;
                           if (FirebaseAuth.instance.currentUser != null) {
@@ -316,11 +316,11 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
                               "Quantity": newQuantity,
                             });
                           }
-                          ref.child(snapshot.key!).remove();
+                          product.remove();
                           await Carts.update({
                             'DeletingProduct': true,
                           });
-                          Future.delayed(const Duration(milliseconds: 500),
+                          Future.delayed(const Duration(milliseconds: 2000),
                               () async {
                             await Carts.update({
                               'DeletingProduct': false,
@@ -358,7 +358,7 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
                                           ),
                                           SizedBox(height: 15),
                                           Text(
-                                            "هل تريد حذف ${l[2]} ؟", //Product name for IOS 2 android 1
+                                            "هل تريد حذف ${l[4]} ؟", //Product name for IOS 4 android 1
                                             style: TextStyle(
                                               fontSize: 15,
                                               fontWeight: FontWeight.w400,
@@ -377,7 +377,9 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
                                               highlightColor: Colors.grey[200],
                                               onTap: () {
                                                 Navigator.of(context).pop();
-                                                deleteProduct();
+                                                print(ref.child(snapshot.key!));
+                                                deleteProduct(
+                                                    ref.child(snapshot.key!));
                                               },
                                               child: Center(
                                                 child: Text(
@@ -515,7 +517,7 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
                                                                 children: <
                                                                     Widget>[
                                                                   Text(
-                                                                    l[2], //Product name 1 android 2 ios
+                                                                    l[4], //Product name 1 android 4 ios
                                                                     textAlign:
                                                                         TextAlign
                                                                             .center,
@@ -539,7 +541,7 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
                                                                       height:
                                                                           10),
                                                                   Text(
-                                                                    l[4], //Product Size 4 android 4 ios
+                                                                    l[0], //Product Size 4 android 0 ios
                                                                     textAlign:
                                                                         TextAlign
                                                                             .right,

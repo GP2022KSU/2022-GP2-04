@@ -261,7 +261,7 @@ class PaymentCompletionState extends State<PaymentCompletion> {
                               child: FadeInAnimation(
                                 child: ListTile(
                                   trailing: Text(
-                                    l[2],
+                                    l[4],
                                     textAlign: TextAlign.center,
                                   ),
                                   leading: Text(

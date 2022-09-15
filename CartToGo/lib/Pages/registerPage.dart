@@ -271,7 +271,7 @@ class _RegisterPageState extends State<RegisterPage> {
         "NumOfProducts": 0, //always 0
       },
       "PointsHistory": {
-        "numOfObtPoints": 1, //always 1
+        "0": 0,
       }
     });
     final databaseRef = FirebaseDatabase.instance.ref();

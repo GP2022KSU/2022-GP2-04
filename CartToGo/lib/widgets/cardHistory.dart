@@ -124,7 +124,7 @@ class _CardhistoryState extends State<Cardhistory> {
                           color = "green";
                         }
                         */
-                        if (check) {
+                        if (check && !(l[0] == "0")) {
                           return AnimationConfiguration.staggeredList(
                             position: index,
                             duration: const Duration(milliseconds: 375),

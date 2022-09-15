@@ -294,6 +294,7 @@ class _CheckOutState extends State<CheckOut> {
                                     "ConnectedToCart": false,
                                     "Total": 0,
                                     "NumOfProducts": 0,
+                                    "TotalAfterPoints": 0,
                                   });
                                   DatabaseReference ref3 =
                                       FirebaseDatabase.instance.ref(
@@ -310,6 +311,7 @@ class _CheckOutState extends State<CheckOut> {
                                       "-" +
                                       currDt.year.toString();
                                   if (vis) {
+                                    int checkIfGained = 1;
                                     //if points are used
                                     DatabaseReference ref4 =
                                         FirebaseDatabase.instance.ref(
@@ -319,23 +321,25 @@ class _CheckOutState extends State<CheckOut> {
                                       "GainedPoints":
                                           "-" + pointsChange.toString(),
                                     });
-                                    DatabaseReference ref5 =
-                                        FirebaseDatabase.instance.ref(
-                                            "Shopper/${FirebaseAuth.instance.currentUser?.uid}/PointsHistory/${user.getnumOfObtPoints() + 1}");
-                                    await ref5.set({
-                                      "Date": date,
-                                      "GainedPoints":
-                                          "+" + GainedPoints.toString(),
-                                    });
-
+                                    if (GainedPoints > 0) {
+                                      DatabaseReference ref5 =
+                                          FirebaseDatabase.instance.ref(
+                                              "Shopper/${FirebaseAuth.instance.currentUser?.uid}/PointsHistory/${user.getnumOfObtPoints() + 1}");
+                                      await ref5.set({
+                                        "Date": date,
+                                        "GainedPoints":
+                                            "+" + GainedPoints.toString(),
+                                      });
+                                      checkIfGained++;
+                                    }
                                     DatabaseReference ref6 =
                                         FirebaseDatabase.instance.ref(
                                             "Shopper/${FirebaseAuth.instance.currentUser?.uid}");
                                     await ref6.update({
                                       "numOfObtPoints":
-                                          (user.getnumOfObtPoints() + 2)
+                                          (user.getnumOfObtPoints() +
+                                              checkIfGained)
                                     });
-
                                     DatabaseReference ref7 =
                                         FirebaseDatabase.instance.ref(
                                             "Shopper/${FirebaseAuth.instance.currentUser?.uid}");
@@ -343,14 +347,18 @@ class _CheckOutState extends State<CheckOut> {
                                       "Points": GainedPoints,
                                     });
                                   } else {
-                                    DatabaseReference ref5 =
-                                        FirebaseDatabase.instance.ref(
-                                            "Shopper/${FirebaseAuth.instance.currentUser?.uid}/PointsHistory/${user.getnumOfObtPoints()}");
-                                    await ref5.set({
-                                      "Date": date,
-                                      "GainedPoints":
-                                          "+" + GainedPoints.toString(),
-                                    });
+                                    int checkIfGained = 0;
+                                    if (GainedPoints > 0) {
+                                      checkIfGained++;
+                                      DatabaseReference ref5 =
+                                          FirebaseDatabase.instance.ref(
+                                              "Shopper/${FirebaseAuth.instance.currentUser?.uid}/PointsHistory/${user.getnumOfObtPoints()}");
+                                      await ref5.set({
+                                        "Date": date,
+                                        "GainedPoints":
+                                            "+" + GainedPoints.toString(),
+                                      });
+                                    }
                                     DatabaseReference ref7 =
                                         FirebaseDatabase.instance.ref(
                                             "Shopper/${FirebaseAuth.instance.currentUser?.uid}");
@@ -362,7 +370,8 @@ class _CheckOutState extends State<CheckOut> {
                                             "Shopper/${FirebaseAuth.instance.currentUser?.uid}");
                                     await ref6.update({
                                       "numOfObtPoints":
-                                          (user.getnumOfObtPoints() + 1)
+                                          (user.getnumOfObtPoints() +
+                                              checkIfGained)
                                     });
                                   }
                                   if (checkPay) {
@@ -381,10 +390,9 @@ class _CheckOutState extends State<CheckOut> {
   }
 
   bool _activateListeners() {
-    /*
     _streamSubscription4 = _database
         .child(
-            "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts/${user.getLastCartNum()}/Total")
+            "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts/TotalAfterPoints")
         .onValue
         .listen((event) {
       final data = event.snapshot.value;
@@ -392,7 +400,7 @@ class _CheckOutState extends State<CheckOut> {
         TotalInCart = double.parse(event.snapshot.value.toString());
       });
     });
-    */
+
     if (FirebaseAuth.instance.currentUser != null) {
       _streamSubscription4 = _database
           .child(
@@ -712,7 +720,11 @@ class _CheckOutState extends State<CheckOut> {
                         g.trim();
 
                         var l = g.split(',');
-                        if (l[0] == TotalInCart.toString()) {
+                        String checkInsideNum = user
+                            .getTotalAfterPoints()
+                            .toStringAsFixed(0)
+                            .toString();
+                        if (l[0] == TotalInCart.toStringAsFixed(0)) {
                           checke2 = false;
                         }
                         if (l.toString() == "[true]" ||
@@ -731,7 +743,7 @@ class _CheckOutState extends State<CheckOut> {
                               child: FadeInAnimation(
                                 child: ListTile(
                                   trailing: Text(
-                                    l[2],
+                                    l[4],
                                     textAlign: TextAlign.center,
                                   ),
                                   leading: Text(
