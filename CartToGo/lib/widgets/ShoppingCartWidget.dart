@@ -66,7 +66,6 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
           .onValue
           .listen((event) {
         final data = event.snapshot.value;
-        print("Data $data");
         setState(() {
           String Fornow = "false";
           Fornow = data.toString();
@@ -120,7 +119,6 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
           numOfProducts = (int.parse(data.toString()));
         });
       });
-      print("NumOfProducts: $numOfProducts");
       return numOfProducts;
     }
     return numOfProducts;
@@ -140,7 +138,6 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
           total = (double.parse(hea.toStringAsFixed(2)));
         });
       });
-      print("total: $total");
       return total;
     }
     return total;
@@ -169,9 +166,7 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
     final snapshot = await _quanData.get();
     if (snapshot.exists) {
       return (int.parse(snapshot.value.toString()));
-    } else {
-      print('No data available.');
-    }
+    } else {}
     return 0;
   }
 
@@ -227,7 +222,6 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
           if (FirebaseAuth.instance.currentUser != null) {
             final ref = _fb.ref().child(
                 "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts/${asyn.data}");
-            print("Successful ${asyn.data}");
             String a = asyn.data.toString();
             if (asyn.hasData) {
               return Container(
@@ -249,7 +243,7 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
                       } on RangeError {
                         //If there is any kind of range error to avoid errors on the app
                         checker = false;
-                        var g = v.replaceAll(RegExp("{|}|0:|false|true"), "");
+                        var g = v.replaceAll(RegExp("{|}|0:|false|true|"), "");
                       }
                       var g = v.replaceAll(
                           //Using RegExp to remove unwanted data
@@ -260,15 +254,17 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
                       g.trim();
 
                       var l = g.split(',');
-                      //print("Data" + l.toString());
                       bool check2 = true;
-                      //print("Data" + l.toString());
-                      if (l.toString() == "[true]" ||
-                          l.toString() == "[false]") {
-                        print(l.toString());
+                      if (l[0] == user.getTotalInCart().toString()) {
                         check2 = false;
                       }
-                      if (!(l[0] == "0") && checker && check2) {
+                      if (l.toString() == "[true]" ||
+                          l.toString() == "[false]" ||
+                          l[0] == user.getTotalInCart().toStringAsFixed(0)) {
+                        //print(l.toString());
+                        check2 = false;
+                      }
+                      if (l is! int && checker && check2) {
                         //if there is data
 
                         //-----------Deletes the swiped product-----------//
@@ -286,10 +282,8 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
                           l[0].replaceAll(' ', "");
                           int barcode = (int.parse(
                               l[0].toString())); //barcode android 3 , IOS 0
-                          print("Barcode:$barcode");
                           int newQuantity =
                               await BringProductQuantity(barcode) + 1;
-                          print("Quan: $newQuantity");
                           if (FirebaseAuth.instance.currentUser != null) {
                             final quannn = _fb
                                 .ref()

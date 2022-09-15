@@ -44,10 +44,12 @@ Future<int> BringNumOfProducts(String uid2) async {
   return numOfProducts;
 }
 
-Future<double> BringTotalPrice(String uid3) async {
+Future<double> BringTotalPrice(String uid3, int cartNumber) async {
   if (FirebaseAuth.instance.currentUser != null) {
     final ref = FirebaseDatabase.instance.ref();
-    final snapshot = await ref.child("Shopper/${uid3}/Carts/Total").get();
+    final snapshot = await ref
+        .child("Shopper/${uid3}/Carts/${cartNumber.toString()}/Total")
+        .get();
     Total = await (double.parse(snapshot.value.toString()));
     return Total;
   }
@@ -69,7 +71,7 @@ int getnumOfProducts(String id1) {
   return numOfProducts;
 }
 
-double getTotal(String id2) {
-  BringTotalPrice(id2);
+double getTotal(String id2, int cartNum) {
+  BringTotalPrice(id2, cartNum);
   return Total;
 }

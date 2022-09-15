@@ -51,7 +51,7 @@ class PaymentCompletionState extends State<PaymentCompletion> {
   Widget build(BuildContext context) {
     setState(() => splitted = scanData.split(' - '));
     uid = cashier.getUID(splitted[0]);
-    TotalBefore = cashier.getTotal(uid);
+    TotalBefore = cashier.getTotal(uid, int.parse(splitted[1]));
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
@@ -123,7 +123,10 @@ class PaymentCompletionState extends State<PaymentCompletion> {
                                 width: MediaQuery.of(context).size.width * 0.54,
                               ),
                               Text(
-                                cashier.getTotal(uid).toString() + " ريال",
+                                cashier
+                                        .getTotal(uid, int.parse(splitted[1]))
+                                        .toString() +
+                                    " ريال",
                                 textAlign: TextAlign.right,
                                 textDirection: TextDirection.rtl,
                                 style: const TextStyle(
@@ -211,10 +214,18 @@ class PaymentCompletionState extends State<PaymentCompletion> {
                         g.trim();
 
                         var l = g.split(',');
-                        //print("Data" + l.toString());
+
+                        if (l[0] ==
+                            cashier.getTotal(uid, splitted[1]).toString()) {
+                          checke2 = false;
+                        }
+
                         if (l.toString() == "[true]" ||
-                            l.toString() == "[false]") {
-                          print(l.toString());
+                            l.toString() == "[false]" ||
+                            l[0] ==
+                                cashier
+                                    .getTotal(uid, splitted[1])
+                                    .toStringAsFixed(0)) {
                           checke2 = false;
                           if (l.toString() == "[true]") {
                             //checkPay = true;
@@ -286,24 +297,11 @@ class PaymentCompletionState extends State<PaymentCompletion> {
                         child: InkWell(
                             highlightColor: Colors.grey[200],
                             onTap: () async {
-                              DatabaseReference ref1 = FirebaseDatabase.instance
-                                  .ref("Shopper/${uid}");
-                              await ref1.update({
-                                //"Points": int.tryParse(second.text),
-                              });
-                              DatabaseReference ref2 = FirebaseDatabase.instance
-                                  .ref("Shopper/${uid}/Carts");
-                              await ref2.update({
-                                "ConnectedToCart": false,
-                                "Total": 0,
-                                "NumOfProducts": 0,
-                              });
                               DatabaseReference ref3 = FirebaseDatabase.instance
                                   .ref(
                                       "Shopper/${uid}/Carts/${splitted[1].toString()}");
                               await ref3.update({
                                 "Paid": true,
-                                "Total": TotalBefore,
                               });
                               Navigator.push(
                                   context,

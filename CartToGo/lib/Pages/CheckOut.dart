@@ -35,6 +35,7 @@ class _CheckOutState extends State<CheckOut> {
   late bool _isLoading;
   late StreamSubscription _streamSubscription4;
   final _database = FirebaseDatabase.instance.ref();
+  int GainedPoints = 0;
 
   void initState() {
     _isLoading = true;
@@ -52,8 +53,6 @@ class _CheckOutState extends State<CheckOut> {
     user.getPoints();
     pointsChange = user.getPoints();
     user.getTotal();
-    Total = user.getTotal();
-    PriceAfterPoin = totalAfterPoints();
     super.initState();
   }
 
@@ -188,6 +187,29 @@ class _CheckOutState extends State<CheckOut> {
                                       foregroundColor: MaterialStateProperty.all(
                                           Colors.white)),
                                   onPressed: () async {
+                                    if (vis) {
+                                      double dpoints = 0;
+                                      for (var i = 0;
+                                          i < user.getTotalAfterPoints();
+                                          i++) {
+                                        dpoints += 0.1;
+                                      }
+                                      GainedPoints =
+                                          int.parse(dpoints.toStringAsFixed(0));
+                                      print("Points Gained true: " +
+                                          GainedPoints.toString());
+                                    } else {
+                                      double dpoints = 0;
+                                      for (var i = 0;
+                                          i < user.getTotal();
+                                          i++) {
+                                        dpoints += 0.1;
+                                      }
+                                      GainedPoints =
+                                          int.parse(dpoints.toStringAsFixed(0));
+                                      print("Points Gained false: " +
+                                          GainedPoints.toString());
+                                    }
                                     if (checkPay) {
                                       Navigator.of(context).pop();
                                       return _showMyDialogShowPoints(context);
@@ -240,8 +262,8 @@ class _CheckOutState extends State<CheckOut> {
                                   fontSize: 20,
                                   fontWeight: FontWeight.bold,
                                 )),
-                            const Text("10", //POINTS HERE
-                                style: TextStyle(
+                            Text(GainedPoints.toString(), //POINTS HERE
+                                style: const TextStyle(
                                     fontSize: 20,
                                     fontWeight: FontWeight.bold,
                                     color: Color.fromARGB(255, 10, 70, 175))),
@@ -265,6 +287,84 @@ class _CheckOutState extends State<CheckOut> {
                                     foregroundColor: MaterialStateProperty.all(
                                         Colors.white)),
                                 onPressed: () async {
+                                  DatabaseReference ref2 =
+                                      FirebaseDatabase.instance.ref(
+                                          "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts");
+                                  await ref2.update({
+                                    "ConnectedToCart": false,
+                                    "Total": 0,
+                                    "NumOfProducts": 0,
+                                  });
+                                  DatabaseReference ref3 =
+                                      FirebaseDatabase.instance.ref(
+                                          "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts/${user.getLastCartNum()}");
+                                  await ref3.update({
+                                    "Total": vis
+                                        ? user.getTotalAfterPoints()
+                                        : Total,
+                                  });
+                                  var currDt = DateTime.now();
+                                  String date = currDt.day.toString() +
+                                      "-" +
+                                      currDt.month.toString() +
+                                      "-" +
+                                      currDt.year.toString();
+                                  if (vis) {
+                                    //if points are used
+                                    DatabaseReference ref4 =
+                                        FirebaseDatabase.instance.ref(
+                                            "Shopper/${FirebaseAuth.instance.currentUser?.uid}/PointsHistory/${user.getnumOfObtPoints()}");
+                                    await ref4.set({
+                                      "Date": date,
+                                      "GainedPoints":
+                                          "-" + pointsChange.toString(),
+                                    });
+                                    DatabaseReference ref5 =
+                                        FirebaseDatabase.instance.ref(
+                                            "Shopper/${FirebaseAuth.instance.currentUser?.uid}/PointsHistory/${user.getnumOfObtPoints() + 1}");
+                                    await ref5.set({
+                                      "Date": date,
+                                      "GainedPoints":
+                                          "+" + GainedPoints.toString(),
+                                    });
+
+                                    DatabaseReference ref6 =
+                                        FirebaseDatabase.instance.ref(
+                                            "Shopper/${FirebaseAuth.instance.currentUser?.uid}/PointsHistory");
+                                    await ref6.update({
+                                      "numOfObtPoints":
+                                          (user.getnumOfObtPoints() + 2)
+                                    });
+
+                                    DatabaseReference ref7 =
+                                        FirebaseDatabase.instance.ref(
+                                            "Shopper/${FirebaseAuth.instance.currentUser?.uid}");
+                                    await ref7.update({
+                                      "Points": GainedPoints,
+                                    });
+                                  } else {
+                                    DatabaseReference ref5 =
+                                        FirebaseDatabase.instance.ref(
+                                            "Shopper/${FirebaseAuth.instance.currentUser?.uid}/PointsHistory/${user.getnumOfObtPoints()}");
+                                    await ref5.set({
+                                      "Date": date,
+                                      "GainedPoints":
+                                          "+" + GainedPoints.toString(),
+                                    });
+                                    DatabaseReference ref7 =
+                                        FirebaseDatabase.instance.ref(
+                                            "Shopper/${FirebaseAuth.instance.currentUser?.uid}");
+                                    await ref7.update({
+                                      "Points": GainedPoints + user.getPoints(),
+                                    });
+                                    DatabaseReference ref6 =
+                                        FirebaseDatabase.instance.ref(
+                                            "Shopper/${FirebaseAuth.instance.currentUser?.uid}/PointsHistory");
+                                    await ref6.update({
+                                      "numOfObtPoints":
+                                          (user.getnumOfObtPoints() + 1)
+                                    });
+                                  }
                                   if (checkPay) {
                                     Navigator.push(
                                         context,
@@ -501,7 +601,7 @@ class _CheckOutState extends State<CheckOut> {
                           width: MediaQuery.of(context).size.width * 0.313,
                         ),
                         Text(
-                          PriceAfterPoin.toString() + " ريال",
+                          user.getTotalAfterPoints().toString() + " ريال",
                           textAlign: TextAlign.right,
                           textDirection: TextDirection.rtl,
                           style: const TextStyle(
@@ -534,6 +634,11 @@ class _CheckOutState extends State<CheckOut> {
                         foregroundColor:
                             MaterialStateProperty.all(Colors.white)),
                     onPressed: () async {
+                      DatabaseReference ref3 = FirebaseDatabase.instance.ref(
+                          "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts/${user.getLastCartNum()}");
+                      await ref3.update({
+                        "Total": vis ? user.getTotalAfterPoints() : Total,
+                      });
                       await _showMyDialog(context);
                     },
                     child: const Text('اتمام الدفع')),
@@ -546,24 +651,6 @@ class _CheckOutState extends State<CheckOut> {
   void deactivate() {
     _streamSubscription4.cancel();
     super.deactivate();
-  }
-
-  double totalAfterPoints() {
-    double eachPointinRiyal = 0.1;
-    double PointinRiyal = 0;
-    double NewTotal = 0;
-    if (pointsChange > 0) {
-      for (var i = 0; i < pointsChange; i++) {
-        PointinRiyal += eachPointinRiyal;
-      }
-      String inString = PointinRiyal.toStringAsFixed(2); // '2.35'
-      PointinRiyal = double.parse(inString); // 2.35
-      print("inRiyal: " + PointinRiyal.toString());
-      print("Total: " + Total.toString());
-      NewTotal = Total - PointinRiyal;
-      return NewTotal;
-    }
-    return NewTotal;
   }
 
   Widget Cart() {
@@ -605,25 +692,23 @@ class _CheckOutState extends State<CheckOut> {
                         var g = v.replaceAll(
                             //Using RegExp to remove unwanted data
                             RegExp(
-                                "{|}|Name: |Price: |Size: |Category: |Brand: |Barcode: |Paid:"),
+                                "{|}|Name: |Price: |Size: |Category: |Brand: |Barcode: |Paid: | Total:"),
                             "");
 
                         g.trim();
 
                         var l = g.split(',');
-                        //print("Data" + l.toString());
-                        if (l.toString() == "[true]" ||
-                            l.toString() == "[false]") {
-                          print(l.toString());
+                        if (l[0] == user.getTotalInCart().toString()) {
                           checke2 = false;
-                          /*
-                          if (l.toString() == "[true]") {
-                            checkPay = true;
-                          }
-                          */
+                        }
+                        if (l.toString() == "[true]" ||
+                            l.toString() == "[false]" ||
+                            l[0] == user.getTotalInCart().toStringAsFixed(0)) {
+                          //print(l.toString());
+                          checke2 = false;
                         }
 
-                        if (!(l[0] == "0") && checker && checke2) {
+                        if (!(l[0] is double) && checker && checke2) {
                           return AnimationConfiguration.staggeredList(
                             position: index,
                             duration: const Duration(milliseconds: 375),

@@ -151,12 +151,56 @@ Future<bool> BringPaid() async {
   return Paid;
 }
 
+Future<double> BringTotalInsideCart() async {
+  if (FirebaseAuth.instance.currentUser != null) {
+    final ref = FirebaseDatabase.instance.ref();
+    final snapshot = await ref
+        .child(
+            "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts/${getLastCartNum()}/Total")
+        .get();
+    TotalInsideCart = await (double.parse(snapshot.value.toString()));
+    return TotalInsideCart;
+  }
+  return TotalInsideCart;
+}
+
+double totalPriceAfterPoints() {
+  double eachPointinRiyal = 0.1;
+  double PointinRiyal = 0;
+  double NewTotal = 0;
+  if (getPoints() > 0) {
+    for (var i = 0; i < getPoints(); i++) {
+      PointinRiyal += eachPointinRiyal;
+    }
+    String inString = PointinRiyal.toStringAsFixed(2); // '2.35'
+    PointinRiyal = double.parse(inString); // 2.35
+    print("inRiyal: " + PointinRiyal.toString());
+    print("Total: " + Total.toString());
+    Total = getTotal();
+    NewTotal = Total - PointinRiyal;
+    return NewTotal;
+  }
+
+  return NewTotal;
+}
+
+double getTotalInCart() {
+  BringTotalInsideCart();
+  return TotalInsideCart;
+}
+
 String getLoyaltyCardID() {
   if (_L1 == 0) {
     BringLoyaltyCardID();
     _L1++;
   }
   return LoyaltyCardID;
+}
+
+double getTotalAfterPoints() {
+  totalPriceAfterPoints();
+  TotalAfterPoints = totalPriceAfterPoints();
+  return TotalAfterPoints;
 }
 
 int getLastCartNum() {
@@ -226,5 +270,8 @@ String LoyaltyCardID = "";
 int numOfProducts = 0;
 int numOfObtPoints = 0;
 double Total = 0.0;
+double TotalAfterPoints = 0.0;
+double TotalInsideCart = 0.0;
+int PointsAfterPaying = 0;
 bool Paid = false;
 List<String> names = [];
