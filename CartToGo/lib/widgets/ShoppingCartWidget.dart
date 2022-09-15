@@ -35,7 +35,7 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
   late StreamSubscription _streamSubscription;
   late StreamSubscription _streamSubscription1;
   late StreamSubscription _streamSubscription2;
-  late double TotalInCart;
+  late double TotalInCart = 0;
   late bool _isLoading;
   @override
   void initState() {

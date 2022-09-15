@@ -30,7 +30,7 @@ class _CheckOutState extends State<CheckOut> {
   bool vis = false;
   int pointsChange = user.getPoints();
   double Total = user.getTotal();
-  late double TotalInCart;
+  late double TotalInCart = 0;
   late double PriceAfterPoin;
   bool checkPay = false;
   late bool _isLoading;
@@ -330,7 +330,7 @@ class _CheckOutState extends State<CheckOut> {
 
                                     DatabaseReference ref6 =
                                         FirebaseDatabase.instance.ref(
-                                            "Shopper/${FirebaseAuth.instance.currentUser?.uid}/PointsHistory");
+                                            "Shopper/${FirebaseAuth.instance.currentUser?.uid}");
                                     await ref6.update({
                                       "numOfObtPoints":
                                           (user.getnumOfObtPoints() + 2)
@@ -359,7 +359,7 @@ class _CheckOutState extends State<CheckOut> {
                                     });
                                     DatabaseReference ref6 =
                                         FirebaseDatabase.instance.ref(
-                                            "Shopper/${FirebaseAuth.instance.currentUser?.uid}/PointsHistory");
+                                            "Shopper/${FirebaseAuth.instance.currentUser?.uid}");
                                     await ref6.update({
                                       "numOfObtPoints":
                                           (user.getnumOfObtPoints() + 1)
@@ -647,10 +647,11 @@ class _CheckOutState extends State<CheckOut> {
                             MaterialStateProperty.all(Colors.white)),
                     onPressed: () async {
                       DatabaseReference ref3 = FirebaseDatabase.instance.ref(
-                          "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts}");
+                          "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts");
                       await ref3.update({
-                        "TotalAfterPoints":
-                            vis ? user.getTotalAfterPoints() : user.getTotal(),
+                        "TotalAfterPoints": vis
+                            ? await user.getTotalAfterPoints()
+                            : await user.getTotal(),
                       });
                       await _showMyDialog(context);
                     },

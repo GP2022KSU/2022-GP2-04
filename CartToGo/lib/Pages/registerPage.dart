@@ -261,11 +261,13 @@ class _RegisterPageState extends State<RegisterPage> {
       "Points": 0,
       "Username": _userNameController.text,
       "Email": _emailController.text,
+      "numOfObtPoints": 1,
       "Carts": {
         "ConnectedToCart": false, //always false
         "DeletingProduct": false, //always false
         "FutureCartNumber": 1, //always 1
         "Total": 0, //always 0
+        "TotalAfterPoints": 0,
         "NumOfProducts": 0, //always 0
       },
       "PointsHistory": {
