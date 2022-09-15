@@ -200,7 +200,6 @@ class _ForgetPasswordState extends State<ForgetPassword> {
   void _showEmailDialog(String pass) async {
     return showDialog<void>(
         context: context,
-        // user must tap button!
         builder: (BuildContext context) {
           return Directionality(
               textDirection: TextDirection.rtl,

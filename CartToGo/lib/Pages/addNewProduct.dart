@@ -6,15 +6,12 @@ import 'package:carttogo/Pages/productsListAdmin.dart';
 import 'package:carttogo/scanner_icons.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'dart:developer';
-import 'dart:io';
-
 
 class AddNewProduct extends StatefulWidget {
   String scanData;
   AddNewProduct(this.scanData);
   @override
-  State<AddNewProduct> createState() =>
-      AddNewProductState(scanData);
+  State<AddNewProduct> createState() => AddNewProductState(scanData);
 }
 
 class AddNewProductState extends State<AddNewProduct> {
@@ -75,16 +72,16 @@ class AddNewProductState extends State<AddNewProduct> {
                                   hintStyle: TextStyle(fontSize: 18),
                                   enabledBorder: OutlineInputBorder(
                                     borderRadius:
-                                    BorderRadius.all(Radius.circular(20.0)),
+                                        BorderRadius.all(Radius.circular(20.0)),
                                     borderSide:
-                                    BorderSide(width: 2, color: appColor),
+                                        BorderSide(width: 2, color: appColor),
                                   ),
                                   suffixIcon: IconButton(
                                     onPressed: () {
                                       Navigator.of(context)
                                           .push(MaterialPageRoute(
                                         builder: (context) =>
-                                        const scanProduct(),
+                                            const scanProduct(),
                                       ));
                                     },
                                     icon: const Icon(Scanner.scanner),
@@ -119,9 +116,9 @@ class AddNewProductState extends State<AddNewProduct> {
                                   hintStyle: TextStyle(fontSize: 18),
                                   enabledBorder: OutlineInputBorder(
                                     borderRadius:
-                                    BorderRadius.all(Radius.circular(20.0)),
+                                        BorderRadius.all(Radius.circular(20.0)),
                                     borderSide:
-                                    BorderSide(width: 2, color: appColor),
+                                        BorderSide(width: 2, color: appColor),
                                   ),
                                 ),
                                 validator: (value) {
@@ -151,9 +148,9 @@ class AddNewProductState extends State<AddNewProduct> {
                                   hintStyle: TextStyle(fontSize: 18),
                                   enabledBorder: OutlineInputBorder(
                                     borderRadius:
-                                    BorderRadius.all(Radius.circular(20.0)),
+                                        BorderRadius.all(Radius.circular(20.0)),
                                     borderSide:
-                                    BorderSide(width: 2, color: appColor),
+                                        BorderSide(width: 2, color: appColor),
                                   ),
                                 ),
                                 validator: (value) {
@@ -180,9 +177,9 @@ class AddNewProductState extends State<AddNewProduct> {
                                   hintStyle: TextStyle(fontSize: 18),
                                   enabledBorder: OutlineInputBorder(
                                     borderRadius:
-                                    BorderRadius.all(Radius.circular(20.0)),
+                                        BorderRadius.all(Radius.circular(20.0)),
                                     borderSide:
-                                    BorderSide(width: 2, color: appColor),
+                                        BorderSide(width: 2, color: appColor),
                                   ),
                                 ),
                                 validator: (value) {
@@ -212,9 +209,9 @@ class AddNewProductState extends State<AddNewProduct> {
                                   hintStyle: TextStyle(fontSize: 18),
                                   enabledBorder: OutlineInputBorder(
                                     borderRadius:
-                                    BorderRadius.all(Radius.circular(20.0)),
+                                        BorderRadius.all(Radius.circular(20.0)),
                                     borderSide:
-                                    BorderSide(width: 2, color: appColor),
+                                        BorderSide(width: 2, color: appColor),
                                   ),
                                 ),
                                 validator: (value) {
@@ -251,9 +248,9 @@ class AddNewProductState extends State<AddNewProduct> {
                                   hintStyle: TextStyle(fontSize: 18),
                                   enabledBorder: OutlineInputBorder(
                                     borderRadius:
-                                    BorderRadius.all(Radius.circular(20.0)),
+                                        BorderRadius.all(Radius.circular(20.0)),
                                     borderSide:
-                                    BorderSide(width: 2, color: appColor),
+                                        BorderSide(width: 2, color: appColor),
                                   ),
                                 ),
                                 validator: (value) {
@@ -287,9 +284,9 @@ class AddNewProductState extends State<AddNewProduct> {
                                   hintStyle: TextStyle(fontSize: 18),
                                   enabledBorder: OutlineInputBorder(
                                     borderRadius:
-                                    BorderRadius.all(Radius.circular(20.0)),
+                                        BorderRadius.all(Radius.circular(20.0)),
                                     borderSide:
-                                    BorderSide(width: 2, color: appColor),
+                                        BorderSide(width: 2, color: appColor),
                                   ),
                                 ),
                                 validator: (value) {
@@ -320,9 +317,9 @@ class AddNewProductState extends State<AddNewProduct> {
                                   hintStyle: TextStyle(fontSize: 18),
                                   enabledBorder: OutlineInputBorder(
                                     borderRadius:
-                                    BorderRadius.all(Radius.circular(20.0)),
+                                        BorderRadius.all(Radius.circular(20.0)),
                                     borderSide:
-                                    BorderSide(width: 2, color: appColor),
+                                        BorderSide(width: 2, color: appColor),
                                   ),
                                 ),
                                 validator: (value) {
@@ -348,14 +345,14 @@ class AddNewProductState extends State<AddNewProduct> {
                                   fixedSize: MaterialStateProperty.all(
                                       const Size(270, 50)),
                                   shape: MaterialStateProperty.all<
-                                      RoundedRectangleBorder>(
+                                          RoundedRectangleBorder>(
                                       RoundedRectangleBorder(
                                           borderRadius:
-                                          BorderRadius.circular(90.0))),
+                                              BorderRadius.circular(90.0))),
                                   backgroundColor:
-                                  MaterialStateProperty.all(appColor),
+                                      MaterialStateProperty.all(appColor),
                                   foregroundColor:
-                                  MaterialStateProperty.all(Colors.white)),
+                                      MaterialStateProperty.all(Colors.white)),
                               onPressed: () {
                                 if (_formKey.currentState!.validate()) {
                                   if (pbarcodeController.text.isNotEmpty &&
@@ -364,7 +361,7 @@ class AddNewProductState extends State<AddNewProduct> {
                                       pCategoryController.text.isNotEmpty &&
                                       pPriceController.text.isNotEmpty &&
                                       pQuantityController.text.isNotEmpty &&
-                                      pSizeController.text.isNotEmpty&&
+                                      pSizeController.text.isNotEmpty &&
                                       pLocController.text.isNotEmpty) {
                                     insertData(
                                         pbarcodeController.text,
@@ -374,18 +371,16 @@ class AddNewProductState extends State<AddNewProduct> {
                                         pPriceController.text,
                                         pQuantityController.text,
                                         pSizeController.text,
-                                        pLocController.text
-                                    );
+                                        pLocController.text);
                                   }
                                   Navigator.push(context,
                                       MaterialPageRoute(builder: (context) {
-                                        return ProductsListAdmin();
-                                      }));
+                                    return ProductsListAdmin();
+                                  }));
                                 }
                               },
                               child: const Text('إضافة المنتج')),
-                        ])))
-        ));
+                        ])))));
   }
 
   void insertData(String barcode, String name, String brand, String category,
@@ -436,8 +431,8 @@ class _scanInoviceState extends State<scanProduct> {
                   onPressed: () {
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) {
-                          return ProductsListAdmin();
-                        }));
+                      return ProductsListAdmin();
+                    }));
                   },
                   icon: Icon(Icons.keyboard_arrow_right)))
         ]),
@@ -461,7 +456,7 @@ class _scanInoviceState extends State<scanProduct> {
   Widget _buildQrView(BuildContext context) {
     // check how width or tall the device is and change the scanArea and overlay accordingly.
     var scanArea = (MediaQuery.of(context).size.width < 400 ||
-        MediaQuery.of(context).size.height < 400)
+            MediaQuery.of(context).size.height < 400)
         ? 150.0
         : 300.0;
     // To ensure the Scanner view is properly sizes after rotation
@@ -491,8 +486,7 @@ class _scanInoviceState extends State<scanProduct> {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) =>
-                    AddNewProduct(scanData.code.toString())));
+                builder: (context) => AddNewProduct(scanData.code.toString())));
       }
     });
   }

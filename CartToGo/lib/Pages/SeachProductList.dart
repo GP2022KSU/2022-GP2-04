@@ -5,7 +5,6 @@ import 'Product.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:carttogo/Users/user.dart' as user;
 
-
 class Search2 extends StatefulWidget {
   Search2({Key? key}) : super(key: key);
   @override
@@ -55,7 +54,6 @@ class _Search2State extends State<Search2> {
           )
         ],
       ),
-
       body: ListView.builder(
         itemCount: names.length,
         itemBuilder: (BuildContext context, int index) {

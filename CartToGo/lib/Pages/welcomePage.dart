@@ -11,7 +11,6 @@ class WelcomePage extends StatelessWidget {
         backgroundColor: appColor,
         body: Column(mainAxisAlignment: MainAxisAlignment.center, children: <
             Widget>[
-
           //background image
           const Image(image: AssetImage('assets/images/background.png')),
           const SizedBox(height: 40.0),
@@ -51,7 +50,7 @@ class WelcomePage extends StatelessWidget {
                 }));
               },
               child: const Text('تسجيل الدخول')),
-              //end of login button
+          //end of login button
 
           const SizedBox(height: 15.0),
           //register button
@@ -72,7 +71,7 @@ class WelcomePage extends StatelessWidget {
                 }));
               },
               child: const Text('تسجيل')),
-              //end of register button
+          //end of register button
         ]));
   }
 }
