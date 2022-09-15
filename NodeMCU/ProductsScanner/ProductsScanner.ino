@@ -32,7 +32,7 @@ FirebaseAuth auth;
 FirebaseConfig config;
 bool signupOK = false;
 unsigned long sendDataPrevMillis = 0;
-
+float total = 0.0;
 SoftwareSerial Gm66Scan(14, 12); // RX, TX for Scanner numbers on the breadboard
 
 LiquidCrystal_I2C lcd(0x27, 16, 2);
@@ -155,9 +155,10 @@ void FirebaseConnection() {
 
 String LoyaltyCard = "";
 boolean LoyaltyCardConnection() {
+  LoyaltyCard="";
   char ID;
   boolean con = false;
-
+  total=0.0;
 
   lcd.clear();
   //طباعة عبارة "امسح الQR على الشاشة
@@ -294,13 +295,14 @@ boolean LoyaltyCardConnectionFirebase(String QRid) {
         Firebase.setInt(fbdo, "/Shopper/" + UID.to<String>() + "/Carts/FutureCartNumber", CartNumber + 1);
         delay(200);
         Serial.print("Add Cart: " + GetUid);
-        if (Firebase.setInt(fbdo, GetUid + "/" + CartNumber + "/0", 0)) {
-          if (Firebase.setBool(fbdo, GetUid + "/ConnectedToCart", true)) {
-            if (Firebase.setBool(fbdo, GetUid + "/DeletingProduct", false));
-
-            if (Firebase.setInt(fbdo, GetUid + "/NumOfProducts", 0 ));
-            if (Firebase.setInt(fbdo, GetUid + "/Total", 0.0)) { //Set a new total variable for the cart
-              return true;
+        if (Firebase.setInt(fbdo, GetUid + "/" + CartNumber + "/Total", 0)) {
+          if (Firebase.setInt(fbdo, GetUid + "/" + CartNumber + "/Paid", false)) {
+            if (Firebase.setBool(fbdo, GetUid + "/ConnectedToCart", true)) {
+              if (Firebase.setBool(fbdo, GetUid + "/DeletingProduct", false));
+              if (Firebase.setInt(fbdo, GetUid + "/NumOfProducts", 0 ));
+              if (Firebase.setInt(fbdo, GetUid + "/Total", 0.0)) { //Set a new total variable for the cart
+                return true;
+              }
             }
           }
         }
@@ -310,7 +312,6 @@ boolean LoyaltyCardConnectionFirebase(String QRid) {
   return false;
 }
 
-float total = 0.0;
 int count = 0;
 int countProducts = 0;
 int NumOfProducts = 0;
@@ -319,6 +320,7 @@ float lastPrice = 0.0;
 void loop()
 {
   String cartsPath = "/Shopper/" + UID.to<String>() + "/Carts";
+  bool ConnectedToCart= true;
   String barcode = "";
   char readBarcode;
   FirebaseJson json;
@@ -332,11 +334,15 @@ void loop()
   if (Firebase.ready() == 1 && signupOK && WiFi.status() == 3) {
     String cartsPath = "/Shopper/" + UID.to<String>() + "/Carts";
     if (Firebase.getBool(fbdo, cartsPath + "/DeletingProduct")) checkDelete = fbdo.to<bool>();
+    if(Firebase.getBool(fbdo, cartsPath + "/ConnectedToCart")) ConnectedToCart = fbdo.to<bool>();
     if (countProducts >= 1 && CartConnection != false && checkDelete == true) {
       if (Firebase.getFloat(fbdo, cartsPath + "/Total")) total = fbdo.to<float>();
       if (Firebase.getInt(fbdo, cartsPath + "/NumOfProducts")) NumOfProducts = fbdo.to<int>();
       //if (Firebase.getFloat(fbdo, cartsPath+"/lastPrice")) lastPrice = fbdo.to<float>();
       checkTotalAndCount(total);
+    }
+            if(!(ConnectedToCart)){
+    LoyaltyCardConnection();
     }
     if (Gm66Scan.available() && CartConnection != false) { //Check if there is Incoming Data in the Serial Buffer
 
