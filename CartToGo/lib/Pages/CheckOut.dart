@@ -30,7 +30,7 @@ class _CheckOutState extends State<CheckOut> {
   bool vis = false;
   int pointsChange = user.getPoints();
   double Total = user.getTotal();
-  late double TotalInCart;
+  late double TotalInCart = 0;
   late double PriceAfterPoin;
   bool checkPay = false;
   late bool _isLoading;
@@ -647,7 +647,7 @@ class _CheckOutState extends State<CheckOut> {
                             MaterialStateProperty.all(Colors.white)),
                     onPressed: () async {
                       DatabaseReference ref3 = FirebaseDatabase.instance.ref(
-                          "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts}");
+                          "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts");
                       await ref3.update({
                         "TotalAfterPoints":
                             vis ? user.getTotalAfterPoints() : user.getTotal(),
