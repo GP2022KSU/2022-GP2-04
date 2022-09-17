@@ -265,7 +265,7 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
                                 child: Text("إلغاء",
                                     style: TextStyle(
                                       fontSize: 16.0,
-                                      fontWeight: FontWeight.w400,
+                                      fontWeight: FontWeight.bold,
                                     )))))
                   ])));
         });
@@ -538,7 +538,7 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
                                             child: Text("إلغاء",
                                                 style: TextStyle(
                                                   fontSize: 16.0,
-                                                  fontWeight: FontWeight.w400,
+                                                  fontWeight: FontWeight.bold,
                                                 )))))
                               ])))));
         });
