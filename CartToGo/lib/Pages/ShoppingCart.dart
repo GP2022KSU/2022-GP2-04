@@ -1,15 +1,12 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
 import 'package:carttogo/Pages/welcomePage.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'dart:async';
-import 'package:carttogo/widgets/CartInstructions.dart';
 import 'package:carttogo/widgets/ShoppingCartWidget.dart';
 import 'package:animated_button/animated_button.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:carttogo/Pages/checkOut.dart';
 
 class ShoppingCart extends StatefulWidget {
   Function callback;

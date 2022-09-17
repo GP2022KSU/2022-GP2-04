@@ -1,14 +1,12 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:carttogo/main.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:carttogo/Pages/welcomePage.dart';
 import 'package:carttogo/Pages/addNewProduct.dart';
 import 'package:flutter/rendering.dart';
-//import ' AdminUpdateProduct.dart';
 
 class ProductsListAdmin extends StatefulWidget {
   @override
@@ -31,7 +29,7 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
     final ref = fb.ref().child('Products');
 
     return Scaffold(
-      //بتن يوديه لصفحة الاد
+      // add new prduct button to navigate the admin to add new product form
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
           Navigator.push(context, MaterialPageRoute(builder: (context) {
@@ -52,7 +50,7 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
         backgroundColor: appColor,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
       ),
-      //------------------------------------------------------------
+// end of add new prodcut button
 
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -63,7 +61,7 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
               fontWeight: FontWeight.bold,
             )),
 
-        //بتن الخروج
+        // logout button
         actions: <Widget>[
           Padding(
             padding: const EdgeInsets.all(8.0),
@@ -84,13 +82,12 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
                   _showMyDialog();
                 },
                 child: const Text('خروج')),
+            // end of logout button
           ),
         ],
-        //------------------------------------------------------------
         centerTitle: true,
         elevation: 0,
       ),
-
       body: NotificationListener<UserScrollNotification>(
         onNotification: (notification) {
           if (notification.direction == ScrollDirection.forward) {
@@ -154,10 +151,6 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
                           k = snapshot.key;
                         });
                         _UpdateOrNot();
-                        /*Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => RealtimeDatabaseUpdate() ));*/
                       },
                     ),
                     title: Text(
@@ -207,11 +200,10 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
     );
   }
 
-  //ميثود للخروج
+  //logout dialog, to ensure that the admin want to log out or not
   void _showMyDialog() async {
     return showDialog<void>(
         context: context,
-        // user must tap button!
         builder: (BuildContext context) {
           return Directionality(
               textDirection: TextDirection.rtl,
@@ -279,8 +271,8 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
         });
   }
 
-  // ميثود للتأكد من الحذف
-  void _DeleteOrNot(var EE) async {
+  // dialog to ensure the admin wants to delete a product or not
+  void _DeleteOrNot(var delete) async {
     return showDialog<void>(
         context: context,
         builder: (BuildContext context) {
@@ -312,7 +304,7 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
                         child: InkWell(
                             highlightColor: Colors.grey[200],
                             onTap: () async {
-                              await EE.remove();
+                              await delete.remove();
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
@@ -351,6 +343,7 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
         });
   }
 
+// dialog to enter the new product info
   void _UpdateOrNot() async {
     return showDialog<void>(
         context: context,
@@ -381,10 +374,10 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
                                 SizedBox(height: 15),
                                 Divider(
                                   height: 1.5,
-                                  // color: Colors.black,
                                 ),
                                 const SizedBox(height: 15),
-                                //السعر
+
+                                // new product's price
                                 Directionality(
                                   textDirection: TextDirection.rtl,
                                   child: TextFormField(
@@ -395,7 +388,7 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
                                         FilteringTextInputFormatter.allow(
                                             RegExp(r'(^\d*\.?\d*)'))
                                       ], // Only numbers can be entered
-                                      //  obscureText: true,
+
                                       controller: third,
                                       decoration: const InputDecoration(
                                         labelText: "السعر",
@@ -424,7 +417,8 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
                                       onChanged: (value) {}),
                                 ),
                                 const SizedBox(height: 15),
-                                //الكمية
+
+                                // new product's quantity
                                 Directionality(
                                   textDirection: TextDirection.rtl,
                                   child: TextFormField(
@@ -432,7 +426,6 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
                                       inputFormatters: <TextInputFormatter>[
                                         FilteringTextInputFormatter.digitsOnly
                                       ], // Only numbers can be entered
-
                                       controller: second,
                                       decoration: const InputDecoration(
                                         labelText: "الكمية",
@@ -462,7 +455,7 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
                                 ),
                                 SizedBox(height: 15),
 
-                                //الموقع
+                                // new product's location
                                 Directionality(
                                   textDirection: TextDirection.rtl,
                                   child: TextFormField(
@@ -504,13 +497,9 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
                                         onTap: () async {
                                           if (_formKey.currentState!
                                               .validate()) {
-                                            //   _showDialog("تم تعديل معلومات المنتج بنجاح");
-                                            // // ScaffoldMessenger.of(context).showSnackBar(
-                                            // //   const SnackBar(
-                                            // //       content: Text('Processing Data')),
                                             if (second.text.isNotEmpty &&
                                                 third.text.isNotEmpty) {
-                                              upd();
+                                              updateProductInfo();
                                             }
                                             Navigator.push(context,
                                                 MaterialPageRoute(
@@ -555,7 +544,8 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
         });
   }
 
-  upd() async {
+// add the new product's info to the database
+  updateProductInfo() async {
     DatabaseReference ref1 = FirebaseDatabase.instance.ref("Products/$k");
     await ref1.update({
       "Quantity": int.tryParse(second.text),
@@ -570,7 +560,6 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
   void _showDialog(String pass) async {
     return showDialog<void>(
         context: context,
-        // user must tap button!
         builder: (BuildContext context) {
           return Directionality(
               textDirection: TextDirection.rtl,
@@ -582,7 +571,7 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
                   ),
                   child: Column(mainAxisSize: MainAxisSize.min, children: [
                     SizedBox(height: 15),
-                    Text(pass, //Product name for IOS 1 android 4
+                    Text(pass,
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.w400,

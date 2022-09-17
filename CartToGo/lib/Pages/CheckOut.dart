@@ -1,20 +1,15 @@
 // ignore_for_file: unnecessary_const
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:firebase_database/firebase_database.dart';
 import '../main.dart';
-import '../widgets/ShoppingCartWidget.dart';
 import 'Navigation.dart';
-import 'package:carttogo/Users/user.dart' as user;
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:lite_rolling_switch/lite_rolling_switch.dart';
 import 'package:qr_flutter/qr_flutter.dart';
-import 'package:provider/provider.dart';
+import 'package:carttogo/Users/user.dart' as user;
 
 final _fb = FirebaseDatabase.instance;
 
@@ -27,16 +22,16 @@ class CheckOut extends StatefulWidget {
 }
 
 class _CheckOutState extends State<CheckOut> {
-  bool vis = false;
   int pointsChange = user.getPoints();
+  int GainedPoints = 0;
+  bool checkPay = false;
+  bool vis = false;
   double Total = user.getTotal();
   late double TotalInCart = 0;
   late double PriceAfterPoin;
-  bool checkPay = false;
   late bool _isLoading;
   late StreamSubscription _streamSubscription4;
   final _database = FirebaseDatabase.instance.ref();
-  int GainedPoints = 0;
 
   void initState() {
     _isLoading = true;

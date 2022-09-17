@@ -9,7 +9,7 @@ class ForgetPassword extends StatefulWidget {
 }
 
 class _ForgetPasswordState extends State<ForgetPassword> {
-  //create forget password form
+  //create forget password form include the shopper's email
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
 
@@ -62,7 +62,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                                 }
                               },
                               onChanged: (value) {}),
-                          //end if email text feild
+                          //end of email text feild
                         ),
                       ),
                       const SizedBox(height: 40.0),
@@ -111,7 +111,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
 
                       const SizedBox(height: 15.0),
 
-                      //back to login button
+                      //back to login page button
                       ElevatedButton(
                           style: ButtonStyle(
                               elevation: MaterialStateProperty.all(8.0),
@@ -143,6 +143,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
         ));
   }
 
+// dialog to show an error message when the shopper doesn't enter an email
   void _showMyDialog(String error) async {
     return showDialog<void>(
         context: context,
@@ -197,6 +198,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
         });
   }
 
+// dialog to inform the shopper that an email has been sent to reset the password
   void _showEmailDialog(String pass) async {
     return showDialog<void>(
         context: context,

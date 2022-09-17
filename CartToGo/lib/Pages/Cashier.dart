@@ -10,6 +10,7 @@ class Cashier extends StatelessWidget {
   const Cashier({Key? key}) : super(key: key);
 
   @override
+  //logout dialog, to ensure that the cashier want to log out or not
   Widget build(BuildContext context) {
     void _showMyDialog() async {
       return showDialog<void>(
@@ -78,8 +79,9 @@ class Cashier extends StatelessWidget {
                                       )))))
                     ])));
           });
-    }
+    } // end of logout dialog
 
+//Cahsier's homepage
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.white24,
@@ -110,7 +112,7 @@ class Cashier extends StatelessWidget {
                   onPressed: () async {
                     _showMyDialog();
                   },
-                  child: const Text('خروج')),
+                  child: const Text('خروج')), //logout button
             ),
           ],
           centerTitle: true,
@@ -121,7 +123,8 @@ class Cashier extends StatelessWidget {
             children: <Widget>[
               Image(image: AssetImage('assets/images/barcode.png')),
               SizedBox(height: 40.0),
-              //start scanning butoon
+
+              //start scanning invoice butoon
               ElevatedButton(
                   style: ButtonStyle(
                       elevation: MaterialStateProperty.all(8.0),
@@ -139,7 +142,7 @@ class Cashier extends StatelessWidget {
                     ));
                   },
                   child: const Text('البدأ بدفع الفاتورة')),
-              //end of start scanning button
+              //end of start scanning invoice button
             ]));
   }
 }
@@ -155,6 +158,7 @@ class _scanInoviceState extends State<scanInovice> {
   QRViewController? controller;
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
 
+  // scanner page
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -192,14 +196,15 @@ class _scanInoviceState extends State<scanInovice> {
         ]));
   }
 
+  // the QR code scan area
   Widget _buildQrView(BuildContext context) {
-    // check how width or tall the device is and change the scanArea and overlay accordingly.
+    // check device's size and change the scanArea and overlay accordingly.
     var scanArea = (MediaQuery.of(context).size.width < 400 ||
             MediaQuery.of(context).size.height < 400)
         ? 150.0
         : 300.0;
-    // To ensure the Scanner view is properly sizes after rotation
-    // we need to listen for Flutter SizeChanged notification and update controller
+    // To ensure the Scanner view is properly sizes after rotation,
+    // listen for Flutter SizeChanged notification and update controller
     return QRView(
         key: qrKey,
         onQRViewCreated: _onQRViewCreated,
@@ -218,7 +223,7 @@ class _scanInoviceState extends State<scanInovice> {
       this.controller = controller;
     });
 
-//if the scanner has read the barcode return to "add new prduct page"
+    // if the scanner has read the invoice QR code return to "paymentCompletion" page, to complete the payment
     controller.scannedDataStream.listen((scanData) {
       check++;
       if (check == 1) {
@@ -231,6 +236,7 @@ class _scanInoviceState extends State<scanInovice> {
     });
   }
 
+  // Cashier must allow the camera to scan by clicking on the "البدأ بدفع الفاتورة" button, then allow permission
   void _onPermissionSet(BuildContext context, QRViewController ctrl, bool p) {
     log('${DateTime.now().toIso8601String()}_onPermissionSet $p');
     if (!p) {

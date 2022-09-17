@@ -252,6 +252,7 @@ class _RegisterPageState extends State<RegisterPage> {
         ));
   }
 
+//add new shopper to the database
   void AddShopper(String uid) async {
     String LoyaltyCardID = await generateLoyaltyCardID(uid);
     DatabaseReference ref = FirebaseDatabase.instance.ref("Shopper/$uid");
@@ -280,6 +281,8 @@ class _RegisterPageState extends State<RegisterPage> {
     });
   }
 
+// dialog to show an error message when the shopper enter a weak password
+// or when the shopper use email used already by other shopper
   void _showMyDialog(String error) async {
     return showDialog<void>(
         context: context,

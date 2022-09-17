@@ -51,8 +51,8 @@ class WelcomePage extends StatelessWidget {
               },
               child: const Text('تسجيل الدخول')),
           //end of login button
-
           const SizedBox(height: 15.0),
+
           //register button
           ElevatedButton(
               style: ButtonStyle(

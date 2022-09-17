@@ -3,10 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:carttogo/main.dart';
 import 'dart:async';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
-import 'package:firebase_database/firebase_database.dart';
 import '../main.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:carttogo/Users/Cashier.dart' as cashier;
@@ -24,13 +22,14 @@ class PaymentCompletionState extends State<PaymentCompletion> {
   late bool _isLoading1;
   String scanData;
   PaymentCompletionState(this.scanData);
+
   @override
   final _formKey = GlobalKey<FormState>();
   var inoviceQRController = TextEditingController();
   var splitted;
+  final _database = FirebaseDatabase.instance.ref();
   late String uid;
   late double TotalBefore;
-  final _database = FirebaseDatabase.instance.ref();
   late StreamSubscription _streamSubscription;
   late double TotalInCart = 0;
 
@@ -99,6 +98,8 @@ class PaymentCompletionState extends State<PaymentCompletion> {
                     //String uid = asyn.data.toString();
                     return Column(
                       children: <Widget>[
+                        // review the shopping cart by the cashier which include,
+                        // shopper's name, number of products in the cart, and the total price
                         const SizedBox(height: 20),
                         Text(
                           "(" +
@@ -168,6 +169,8 @@ class PaymentCompletionState extends State<PaymentCompletion> {
                         const SizedBox(
                           height: 15,
                         ),
+
+                        // payment completion button
                         ElevatedButton(
                             style: ButtonStyle(
                                 elevation: MaterialStateProperty.all(8.0),
@@ -189,6 +192,7 @@ class PaymentCompletionState extends State<PaymentCompletion> {
                               return _showMyDialog();
                             },
                             child: const Text('اتمام الدفع')),
+                        // end of payment completion button
                       ],
                     );
                   }
@@ -200,7 +204,6 @@ class PaymentCompletionState extends State<PaymentCompletion> {
     return SizedBox(
       height: MediaQuery.of(context).size.height * 0.3,
       width: MediaQuery.of(context).size.width * 1,
-      //color: Colors.black,
       child: FutureBuilder<String>(
           future: cashier.BringUID(splitted[0].toString()),
           builder: (BuildContext context, AsyncSnapshot<String> asyn) {
@@ -236,9 +239,7 @@ class PaymentCompletionState extends State<PaymentCompletion> {
                             "");
 
                         g.trim();
-
                         var l = g.split(',');
-
                         if (l[0] == TotalInCart.toString()) {
                           checke2 = false;
                         }
@@ -274,7 +275,6 @@ class PaymentCompletionState extends State<PaymentCompletion> {
                             ),
                           );
                         }
-
                         return Container();
                       }),
                 );
@@ -286,6 +286,7 @@ class PaymentCompletionState extends State<PaymentCompletion> {
     );
   }
 
+// dialog for the cashier to checks whether the shopper has paid or not
   void _showMyDialog() async {
     return showDialog<void>(
         context: context,
@@ -311,6 +312,8 @@ class PaymentCompletionState extends State<PaymentCompletion> {
                       height: 1,
                       color: Colors.black,
                     ),
+
+                    // if the shopper has paid, navigate to the cashier's homepage
                     Container(
                         width: MediaQuery.of(context).size.width,
                         height: 50,
@@ -338,6 +341,8 @@ class PaymentCompletionState extends State<PaymentCompletion> {
                     const Divider(
                       height: 1,
                     ),
+
+                    // if the  shopper doesn't paid, close the dialog and stay in review shopping cart 
                     Container(
                         width: MediaQuery.of(context).size.width,
                         height: 50,

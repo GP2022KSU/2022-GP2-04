@@ -13,8 +13,8 @@ class LoginPage extends StatefulWidget {
   State<LoginPage> createState() => _LoginPageState();
 }
 
-//Create a login form include the email & password
 class _LoginPageState extends State<LoginPage> {
+  //Create a login form include the email & password
   final _formKey = GlobalKey<FormState>();
   bool checkLoading = true;
   final _passwordController = TextEditingController();
@@ -36,9 +36,9 @@ class _LoginPageState extends State<LoginPage> {
                             width: 300,
                             height: 300,
                             image: AssetImage('assets/images/blueCart.png')),
-
                         Center(
                           heightFactor: 1.2,
+
                           //email text field
                           child: Directionality(
                               textDirection: TextDirection.rtl,
@@ -72,8 +72,8 @@ class _LoginPageState extends State<LoginPage> {
                                   },
                                   onChanged: (value) {})),
                         ), //end of email text felid
-
                         const SizedBox(height: 10.0),
+
                         //password text felid
                         Directionality(
                             textDirection: TextDirection.rtl,
@@ -118,8 +118,8 @@ class _LoginPageState extends State<LoginPage> {
                                 Navigator.of(context).push(MaterialPageRoute(
                                   builder: (context) => ForgetPassword(),
                                 ))),
-
                         const SizedBox(height: 80.0),
+
                         //login button
                         ElevatedButton(
                             style: ButtonStyle(
@@ -160,7 +160,7 @@ class _LoginPageState extends State<LoginPage> {
                                           MaterialPageRoute(
                                               builder: (context) =>
                                                   ProductsListAdmin()));
-                                    } else if ((UID.toString() == //cashier IDs
+                                    } else if ((UID.toString() == //cashier ID
                                         "OMCkaR8mdxNDmDE1O7gkFFd9HyX2")) {
                                       print("Cashier Logged in");
                                       Navigator.push(
@@ -213,6 +213,8 @@ class _LoginPageState extends State<LoginPage> {
                 )))); //end of login form
   }
 
+// dialog to show an error message when the shopper enters a wrong password
+// or when the shopper use an unregistered email
   void _showMyDialog(String error) async {
     return showDialog<void>(
         context: context,

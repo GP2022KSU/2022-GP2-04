@@ -18,6 +18,8 @@ class AddNewProductState extends State<AddNewProduct> {
   late String scanData;
   AddNewProductState(this.scanData);
   @override
+
+  //create add new product form
   final _formKey = GlobalKey<FormState>();
   var pbarcodeController = new TextEditingController();
   var pNameController = new TextEditingController();
@@ -56,13 +58,15 @@ class AddNewProductState extends State<AddNewProduct> {
                     child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
+                          // Product's barcode number
                           Directionality(
                             textDirection: TextDirection.rtl,
                             child: TextFormField(
+                                // #1 the barcode number can be added by typing
                                 keyboardType: TextInputType.number,
                                 inputFormatters: <TextInputFormatter>[
                                   FilteringTextInputFormatter.digitsOnly
-                                ], // Only numbers can be entered
+                                ], // numbers keyboard to ensure only numbers can be entered
                                 controller: pbarcodeController,
                                 decoration: InputDecoration(
                                   labelText: "الرمز الشريطي",
@@ -76,12 +80,15 @@ class AddNewProductState extends State<AddNewProduct> {
                                     borderSide:
                                         BorderSide(width: 2, color: appColor),
                                   ),
+
+                                  // #2 the barcode number can be added by scanning
+                                  // click on the scan icon to open the scanner to scan the product's barcode
                                   suffixIcon: IconButton(
                                     onPressed: () {
                                       Navigator.of(context)
                                           .push(MaterialPageRoute(
                                         builder: (context) =>
-                                            const scanProduct(),
+                                            const scanProductBarcode(),
                                       ));
                                     },
                                     icon: const Icon(Scanner.scanner),
@@ -102,7 +109,7 @@ class AddNewProductState extends State<AddNewProduct> {
                           ),
                           const SizedBox(height: 14),
 
-                          //اسم المنتج
+                          // Product's name
                           Directionality(
                             textDirection: TextDirection.rtl,
                             child: TextFormField(
@@ -134,7 +141,7 @@ class AddNewProductState extends State<AddNewProduct> {
                           ),
                           const SizedBox(height: 14),
 
-                          //الموقع
+                          // Product's location
                           Directionality(
                             textDirection: TextDirection.rtl,
                             child: TextFormField(
@@ -163,7 +170,7 @@ class AddNewProductState extends State<AddNewProduct> {
                           ),
                           const SizedBox(height: 14),
 
-                          //العلامة التجارية
+                          // Product's brand
                           Directionality(
                             textDirection: TextDirection.rtl,
                             child: TextFormField(
@@ -195,7 +202,7 @@ class AddNewProductState extends State<AddNewProduct> {
                           ),
                           const SizedBox(height: 14),
 
-                          //الفئة
+                          // Product's category
                           Directionality(
                             textDirection: TextDirection.rtl,
                             child: TextFormField(
@@ -228,7 +235,7 @@ class AddNewProductState extends State<AddNewProduct> {
 
                           const SizedBox(height: 14),
 
-                          //السعر
+                          //Product's price
                           Directionality(
                             textDirection: TextDirection.rtl,
                             child: TextFormField(
@@ -238,7 +245,6 @@ class AddNewProductState extends State<AddNewProduct> {
                                   FilteringTextInputFormatter.allow(
                                       RegExp(r'(^\d*\.?\d*)'))
                                 ], // Only numbers can be entered
-                                //  obscureText: true,
                                 controller: pPriceController,
                                 decoration: const InputDecoration(
                                   labelText: "السعر",
@@ -267,7 +273,7 @@ class AddNewProductState extends State<AddNewProduct> {
                           ),
                           const SizedBox(height: 14),
 
-                          //الكمية
+                          // Product's quantity
                           Directionality(
                             textDirection: TextDirection.rtl,
                             child: TextFormField(
@@ -303,7 +309,7 @@ class AddNewProductState extends State<AddNewProduct> {
                           ),
                           const SizedBox(height: 14),
 
-                          // الحجم
+                          // Product's size
                           Directionality(
                             textDirection: TextDirection.rtl,
                             child: TextFormField(
@@ -330,11 +336,13 @@ class AddNewProductState extends State<AddNewProduct> {
                                 },
                                 onChanged: (value) {}),
                           ),
-                          const SizedBox(height: 14),
 
+                          const SizedBox(height: 14),
                           SizedBox(
                             height: 11,
                           ),
+
+                          // start of "add new product" button
                           ElevatedButton(
                               style: ButtonStyle(
                                   elevation: MaterialStateProperty.all(8.0),
@@ -363,7 +371,7 @@ class AddNewProductState extends State<AddNewProduct> {
                                       pQuantityController.text.isNotEmpty &&
                                       pSizeController.text.isNotEmpty &&
                                       pLocController.text.isNotEmpty) {
-                                    insertData(
+                                    addProduct(
                                         pbarcodeController.text,
                                         pNameController.text,
                                         pBrandController.text,
@@ -373,6 +381,8 @@ class AddNewProductState extends State<AddNewProduct> {
                                         pSizeController.text,
                                         pLocController.text);
                                   }
+                                  // if the form completed correctly،
+                                  //navigate to "ProductsListAdmin" to show the product in the products' list
                                   Navigator.push(context,
                                       MaterialPageRoute(builder: (context) {
                                     return ProductsListAdmin();
@@ -380,10 +390,14 @@ class AddNewProductState extends State<AddNewProduct> {
                                 }
                               },
                               child: const Text('إضافة المنتج')),
-                        ])))));
+                          // end of "add new product" button
+                        ]))
+                // end of add new product form
+                )));
   }
 
-  void insertData(String barcode, String name, String brand, String category,
+// add new product to the database/stock
+  void addProduct(String barcode, String name, String brand, String category,
       String price, String quantity, String size, String Location) {
     var intBarcode = int.tryParse(barcode);
 
@@ -407,17 +421,18 @@ class AddNewProductState extends State<AddNewProduct> {
   }
 }
 
-class scanProduct extends StatefulWidget {
-  const scanProduct({Key? key}) : super(key: key);
+class scanProductBarcode extends StatefulWidget {
+  const scanProductBarcode({Key? key}) : super(key: key);
   @override
-  State<scanProduct> createState() => _scanInoviceState();
+  State<scanProductBarcode> createState() => _scanProductBarcodeState();
 }
 
-class _scanInoviceState extends State<scanProduct> {
+class _scanProductBarcodeState extends State<scanProductBarcode> {
   Barcode? result;
   QRViewController? controller;
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
 
+  // scanner page
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -448,19 +463,20 @@ class _scanInoviceState extends State<scanProduct> {
                         child: Text(
                             'قم بمسح الرمز الشريطي للمنتج لإضافته إلى المخزون',
                             textAlign: TextAlign.center,
-                            style: TextStyle(fontSize: 19)))
+                            style: TextStyle(fontSize: 17)))
                   ]))
         ]));
   }
 
+  // the barcode scan area
   Widget _buildQrView(BuildContext context) {
-    // check how width or tall the device is and change the scanArea and overlay accordingly.
+    // check device's size and change the scanArea and overlay accordingly.
     var scanArea = (MediaQuery.of(context).size.width < 400 ||
             MediaQuery.of(context).size.height < 400)
         ? 150.0
         : 300.0;
-    // To ensure the Scanner view is properly sizes after rotation
-    // we need to listen for Flutter SizeChanged notification and update controller
+    // To ensure the Scanner view is properly sizes after rotation,
+    // listen for Flutter SizeChanged notification and update controller
     return QRView(
         key: qrKey,
         onQRViewCreated: _onQRViewCreated,
@@ -479,7 +495,7 @@ class _scanInoviceState extends State<scanProduct> {
       this.controller = controller;
     });
 
-//if the scanner has read the barcode return to "add new prduct page"
+//if the scanner has read the product's barcode number return to "add new prduct page" to complete the "add new product form"
     controller.scannedDataStream.listen((scanData) {
       check++;
       if (check == 1) {
@@ -491,6 +507,7 @@ class _scanInoviceState extends State<scanProduct> {
     });
   }
 
+  // Addmin must allow the camera to scan by clicking on the scanner icon, then allow permission
   void _onPermissionSet(BuildContext context, QRViewController ctrl, bool p) {
     log('${DateTime.now().toIso8601String()}_onPermissionSet $p');
     if (!p) {

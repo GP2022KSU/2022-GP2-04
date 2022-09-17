@@ -2,11 +2,8 @@ import 'package:carttogo/Pages/welcomePage.dart';
 import 'package:carttogo/widgets/card.dart';
 import 'package:flutter/material.dart';
 import 'package:carttogo/widgets/cardHistory.dart';
-import 'dart:math' as math;
-import 'package:google_fonts/google_fonts.dart';
-import 'package:firebase_database/firebase_database.dart';
-import 'package:carttogo/Users/user.dart' as user;
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:carttogo/Users/user.dart' as user;
 
 class LoyaltyCard extends StatelessWidget {
   String checkPointText() {

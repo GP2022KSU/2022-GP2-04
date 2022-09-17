@@ -1,15 +1,12 @@
 import 'package:carttogo/main.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_database/firebase_database.dart';
 
 class NameSearch extends SearchDelegate<String> {
   final List<String> names;
 
   NameSearch(this.names)
       : super(
-          searchFieldLabel:
-              "     ابحث عن موقع المنتجات         ", 
+          searchFieldLabel: "     ابحث عن موقع المنتجات         ",
           keyboardType: TextInputType.text,
           textInputAction: TextInputAction.search,
         );
@@ -63,9 +60,7 @@ class NameSearch extends SearchDelegate<String> {
   Widget buildSuggestions(BuildContext context) {
     final Suggestions = query.isEmpty
         ? names
-        : names
-            .where((p) => p.startsWith(query))
-            .toList(); // maybe we will remove it
+        : names.where((p) => p.startsWith(query)).toList();
 
     return Suggestions.isEmpty && query.isNotEmpty
         ? Center(
@@ -81,7 +76,6 @@ class NameSearch extends SearchDelegate<String> {
             itemCount: Suggestions.length,
             itemBuilder: (BuildContext context, int index) => ListTile(
               onTap: () {
-                // maybe we will remove it
                 showResults(context);
               },
               shape: RoundedRectangleBorder(
