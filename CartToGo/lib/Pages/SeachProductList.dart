@@ -5,10 +5,10 @@ import 'Product.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:carttogo/Users/user.dart' as user;
 
-class Search2 extends StatefulWidget {
-  Search2({Key? key}) : super(key: key);
+class SearchProductList extends StatefulWidget {
+  SearchProductList({Key? key}) : super(key: key);
   @override
-  _Search2State createState() => _Search2State();
+  _SearchProductListState createState() => _SearchProductListState();
 }
 
 List<String> names = [];
@@ -23,7 +23,7 @@ getProducts() async {
   return names;
 }
 
-class _Search2State extends State<Search2> {
+class _SearchProductListState extends State<SearchProductList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

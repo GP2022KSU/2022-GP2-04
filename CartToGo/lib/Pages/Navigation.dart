@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:carttogo/Pages/loyaltyCard.dart';
 import 'package:carttogo/Pages/shoppingCart.dart';
-import 'package:carttogo/Pages/seachProductList.dart';
+import 'SeachProductList.dart';
 
 class Navi extends StatefulWidget {
   const Navi({Key? key}) : super(key: key);
@@ -32,7 +32,7 @@ class NaviState extends State<Navi> {
       case 1:
         return LoyaltyCard();
       case 2:
-        return Search2();
+        return SearchProductList();
     }
     return Container();
   }
