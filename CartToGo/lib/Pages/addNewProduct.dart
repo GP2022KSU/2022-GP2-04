@@ -401,6 +401,7 @@ class AddNewProductState extends State<AddNewProduct> {
       String price, String quantity, String size, String Location) {
     var intBarcode = int.tryParse(barcode);
 
+// insert into database
     databaseRef.child("Products").child("$intBarcode").set({
       'Name': name,
       'Brand': brand,
@@ -507,7 +508,7 @@ class _scanProductBarcodeState extends State<scanProductBarcode> {
     });
   }
 
-  // Addmin must allow the camera to scan by clicking on the scanner icon, then allow permission
+  // Admin must allow the camera to scan by clicking on the scanner icon, then allow permission
   void _onPermissionSet(BuildContext context, QRViewController ctrl, bool p) {
     log('${DateTime.now().toIso8601String()}_onPermissionSet $p');
     if (!p) {

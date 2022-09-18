@@ -17,6 +17,8 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
   bool isScrolled = false;
   final fb = FirebaseDatabase.instance;
   final _formKey = GlobalKey<FormState>();
+
+  //controller to edit function
   TextEditingController second = TextEditingController();
   TextEditingController third = TextEditingController();
   TextEditingController zero = TextEditingController();
@@ -29,7 +31,7 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
     final ref = fb.ref().child('Products');
 
     return Scaffold(
-      // add new prduct button to navigate the admin to add new product form
+      // add new product button to navigate the admin to add new product form
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
           Navigator.push(context, MaterialPageRoute(builder: (context) {
@@ -115,7 +117,7 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
             l = g.split(',');
             return GestureDetector(
 
-                // ترتيب الليست واظهار المنتجات
+                // ترتيب الليست واظهار المنتجات للادمن
                 child: Directionality(
               textDirection: TextDirection.rtl,
               child: Container(
@@ -544,13 +546,14 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
         });
   }
 
+
 // add the new product's info to the database
   updateProductInfo() async {
     DatabaseReference ref1 = FirebaseDatabase.instance.ref("Products/$k");
     await ref1.update({
       "Quantity": int.tryParse(second.text),
       "Price": double.tryParse(third.text),
-      "Location": zero.text, // بعدل الدايلوق
+      "Location": zero.text,
     });
     second.clear();
     third.clear();

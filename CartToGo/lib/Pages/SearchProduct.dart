@@ -11,6 +11,7 @@ class NameSearch extends SearchDelegate<String> {
           textInputAction: TextInputAction.search,
         );
 
+
   @override
   List<Widget>? buildActions(BuildContext context) {
     // حتى يرجع لشكل الصفحة الاساسي بدون كيبورد وكذا
@@ -56,6 +57,8 @@ class NameSearch extends SearchDelegate<String> {
     ));
   }
 
+
+//ميثود لظهور الاقتراحات عند البحث
   @override
   Widget buildSuggestions(BuildContext context) {
     final Suggestions = query.isEmpty
@@ -75,7 +78,7 @@ class NameSearch extends SearchDelegate<String> {
         : ListView.builder(
             itemCount: Suggestions.length,
             itemBuilder: (BuildContext context, int index) => ListTile(
-              onTap: () {
+              onTap: () { 
                 showResults(context);
               },
               shape: RoundedRectangleBorder(

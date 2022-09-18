@@ -19,6 +19,7 @@ class Product {
     required this.Location,
   });
 
+  //
   factory Product.fromMap(Map<dynamic, dynamic> map) {
     return Product(
       Name: map['Name'] ?? '',
