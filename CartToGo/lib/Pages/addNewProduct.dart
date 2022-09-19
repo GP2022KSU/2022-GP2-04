@@ -29,7 +29,7 @@ class AddNewProductState extends State<AddNewProduct> {
     'ممر 2',
     'ممر 1'
   ];
-  String? selectedLocation = 'ممر 1';
+  String? selectedLocation = '';
 
   List<String> Brands = [
     'ديتول',
@@ -49,7 +49,7 @@ class AddNewProductState extends State<AddNewProduct> {
     'البطل',
     'نادك'
   ];
-  String? selectedBrand = 'المراعي';
+  String? selectedBrand = '';
 
   List<String> Categories = [
     'منظفات ومطهرات',
@@ -68,7 +68,7 @@ class AddNewProductState extends State<AddNewProduct> {
     'بسكويت',
     'كريمات يدين وجسم'
   ];
-  String? selectedCategory = 'حليب ومنتجات الألبان';
+  String? selectedCategory = '';
 
   List<String> Sizes = ['غ', 'مل', 'ل', 'منديل', 'كيس', 'رول', 'ك'];
   String? selectedSize = 'غ';
@@ -252,7 +252,7 @@ class AddNewProductState extends State<AddNewProduct> {
                                     borderSide:
                                         BorderSide(width: 2, color: appColor),
                                   ),
-                                  labelText: 'العلامة التجارية',
+                                  labelText: 'الفئه',
                                   labelStyle: TextStyle(
                                       fontSize: 20, color: Colors.black)),
                               isExpanded: true,
