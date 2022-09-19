@@ -15,11 +15,63 @@ class AddNewProduct extends StatefulWidget {
 }
 
 class AddNewProductState extends State<AddNewProduct> {
-  List<String> Locations = ['ممر 1', 'ممر2'];
+  List<String> Locations = [
+    'ممر 12',
+    'ممر 11',
+    'ممر 10',
+    'ممر 9',
+    'ممر 8',
+    'ممر 7',
+    'ممر 6',
+    'ممر 5',
+    'ممر 4',
+    'ممر 3',
+    'ممر 2',
+    'ممر 1'
+  ];
   String? selectedLocation = 'ممر 1';
-  String? selectedQuantity;
-  String? selectedBrand;
-  String? selectedSize;
+
+  List<String> Brands = [
+    'ديتول',
+    'نوفا',
+    'بيرين',
+    'اوريو',
+    'السعودية',
+    'هاينز',
+    'لفانا',
+    'دايجستف',
+    'غارنييه',
+    'سانيتا',
+    'كوكاكولا',
+    'نيفيا',
+    'المراعي',
+    'لوزين',
+    'البطل',
+    'نادك'
+  ];
+  String? selectedBrand = 'المراعي';
+
+  List<String> Categories = [
+    'منظفات ومطهرات',
+    'منتجات الشعر',
+    'عسل',
+    'شوكولاته',
+    'مشروبات غازية',
+    'مناديل ومناديل مبلله',
+    'مخبوزات',
+    'حليب ومنتجات الألبان',
+    'أطعمة معلبة',
+    'وجبات خفيفة',
+    'مياه',
+    'صلصات طعام',
+    'شاي وقهوة',
+    'بسكويت',
+    'كريمات يدين وجسم'
+  ];
+  String? selectedCategory = 'حليب ومنتجات الألبان';
+
+  List<String> Sizes = ['غ', 'مل', 'ل', 'منديل', 'كيس', 'رول', 'ك'];
+  String? selectedSize = 'غ';
 
   late String scanData;
   AddNewProductState(this.scanData);
@@ -29,12 +81,8 @@ class AddNewProductState extends State<AddNewProduct> {
   final _formKey = GlobalKey<FormState>();
   var pbarcodeController = new TextEditingController();
   var pNameController = new TextEditingController();
-  var pBrandController = new TextEditingController();
-  var pCategoryController = new TextEditingController();
   var pQuantityController = new TextEditingController();
   var pSizeController = new TextEditingController();
-  var pLocationController = new TextEditingController();
-  var pLocController = new TextEditingController();
   var pPriceController = new TextEditingController();
 
   final databaseRef = FirebaseDatabase.instance.reference();
@@ -148,72 +196,97 @@ class AddNewProductState extends State<AddNewProduct> {
                           ),
                           const SizedBox(height: 14),
 
-
                           // Product's brand
                           Directionality(
                             textDirection: TextDirection.rtl,
-                            child: TextFormField(
-                                keyboardType: TextInputType.text,
-                                controller: pBrandController,
-                                decoration: const InputDecoration(
-                                  labelText: "العلامة التجارية",
-                                  labelStyle: TextStyle(
-                                      fontSize: 20, color: Colors.black),
-                                  hintText: "أدخل العلامة التجارية للمنتج",
-                                  hintStyle: TextStyle(fontSize: 18),
+                            child: DropdownButtonFormField(
+                              decoration: InputDecoration(
                                   enabledBorder: OutlineInputBorder(
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(20.0)),
                                     borderSide:
                                         BorderSide(width: 2, color: appColor),
                                   ),
-                                ),
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return 'الرجاء كتابة العلامة التجارية المنتج';
-                                  }
-                                  if (value.contains(RegExp(r'[0-9]'))) {
-                                    return 'العلامة التجارية للمنتج يجب ان لا تحتوي على ارقام';
-                                  }
-                                  return null;
-                                },
-                                onChanged: (value) {}),
+                                  labelText: 'العلامة التجارية',
+                                  labelStyle: TextStyle(
+                                      fontSize: 20, color: Colors.black)),
+                              isExpanded: true,
+                              // Initial Value
+                              value: selectedLocation,
+                              icon: const Icon(
+                                Icons.keyboard_arrow_down,
+                                color: appColor,
+                              ),
+                              // Array list of items
+                              items: Brands.map((String items) {
+                                return DropdownMenuItem(
+                                  value: items,
+                                  child: Text(items),
+                                );
+                              }).toList(),
+                              validator: (value) {
+                                if (value == null) {
+                                  return 'الرجاء اختيار العلامة التجارية';
+                                }
+                                return null;
+                              },
+                              // After selecting the desired option,it will
+                              // change button value to selected value
+                              onChanged: (String? newBrand) {
+                                setState(() {
+                                  selectedBrand = newBrand!;
+                                });
+                              },
+                            ),
                           ),
-                             const SizedBox(height: 14),
+                          const SizedBox(height: 14),
 
 // Product's category
                           Directionality(
                             textDirection: TextDirection.rtl,
-                            child: TextFormField(
-                                keyboardType: TextInputType.text,
-                                controller: pCategoryController,
-                                decoration: const InputDecoration(
-                                  labelText: "الفئة",
-                                  labelStyle: TextStyle(
-                                      fontSize: 20, color: Colors.black),
-                                  hintText: "أدخل الفئة، تصنيف المنتج ",
-                                  hintStyle: TextStyle(fontSize: 18),
+                            child: DropdownButtonFormField(
+                              decoration: InputDecoration(
                                   enabledBorder: OutlineInputBorder(
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(20.0)),
                                     borderSide:
                                         BorderSide(width: 2, color: appColor),
                                   ),
-                                ),
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return 'الرجاء كتابة فئة المنتج';
-                                  }
-                                  if (value.contains(RegExp(r'[0-9]'))) {
-                                    return 'فئة المنتج يجب ان لا تحتوي على ارقام';
-                                  }
-                                  return null;
-                                },
-                                onChanged: (value) {}),
+                                  labelText: 'العلامة التجارية',
+                                  labelStyle: TextStyle(
+                                      fontSize: 20, color: Colors.black)),
+                              isExpanded: true,
+                              // Initial Value
+                              value: selectedLocation,
+                              icon: const Icon(
+                                Icons.keyboard_arrow_down,
+                                color: appColor,
+                              ),
+                              // Array list of items
+                              items: Categories.map((String items) {
+                                return DropdownMenuItem(
+                                  value: items,
+                                  child: Text(items),
+                                );
+                              }).toList(),
+                              validator: (value) {
+                                if (value == null) {
+                                  return 'الرجاء اختيار فئه المنتج';
+                                }
+                                return null;
+                              },
+                              // After selecting the desired option,it will
+                              // change button value to selected value
+                              onChanged: (String? newCategory) {
+                                setState(() {
+                                  selectedCategory = newCategory!;
+                                });
+                              },
+                            ),
                           ),
-   const SizedBox(height: 14),
+                          const SizedBox(height: 14),
 
-      // Product's quantity
+                          // Product's quantity
                           Directionality(
                             textDirection: TextDirection.rtl,
                             child: TextFormField(
@@ -249,7 +322,7 @@ class AddNewProductState extends State<AddNewProduct> {
                           ),
                           const SizedBox(height: 14),
 
-                           // Product's size
+                          // Product's size
                           Directionality(
                             textDirection: TextDirection.rtl,
                             child: TextFormField(
@@ -310,6 +383,12 @@ class AddNewProductState extends State<AddNewProduct> {
                                   child: Text(items),
                                 );
                               }).toList(),
+                              validator: (value) {
+                                if (value == null) {
+                                  return 'الرجاء كتابة حجم المنتج';
+                                }
+                                return null;
+                              },
                               // After selecting the desired option,it will
                               // change button value to selected value
                               onChanged: (String? newLocation) {
@@ -358,7 +437,7 @@ class AddNewProductState extends State<AddNewProduct> {
                                 onChanged: (value) {}),
                           ),
                           const SizedBox(height: 11),
-                         
+
                           // start of "add new product" button
                           ElevatedButton(
                               style: ButtonStyle(
@@ -381,22 +460,24 @@ class AddNewProductState extends State<AddNewProduct> {
                               onPressed: () {
                                 if (_formKey.currentState!.validate()) {
                                   if (pbarcodeController.text.isNotEmpty &&
-                                      pNameController.text.isNotEmpty &&
-                                      pBrandController.text.isNotEmpty &&
-                                      pCategoryController.text.isNotEmpty &&
-                                      pPriceController.text.isNotEmpty &&
-                                      pQuantityController.text.isNotEmpty &&
-                                      pSizeController.text.isNotEmpty &&
-                                      pLocController.text.isNotEmpty) {
+                                          pNameController.text.isNotEmpty &&
+                                          selectedBrand!.isNotEmpty &&
+                                          selectedCategory!.isNotEmpty &&
+                                          pQuantityController.text.isNotEmpty &&
+                                          pSizeController.text.isNotEmpty &&
+                                          selectedLocation!.isNotEmpty &&
+                                          pPriceController.text.isNotEmpty
+                                      ) {
                                     addProduct(
-                                        pbarcodeController.text,
-                                        pNameController.text,
-                                        pBrandController.text,
-                                        pCategoryController.text,
-                                        pPriceController.text,
-                                        pQuantityController.text,
-                                        pSizeController.text,
-                                        pLocController.text);
+                                      pbarcodeController.text,
+                                      pNameController.text,
+                                      selectedBrand.toString(),
+                                      selectedCategory.toString(),
+                                      pQuantityController.text,
+                                      pSizeController.text,
+                                      selectedLocation.toString(),
+                                      pPriceController.text,
+                                    );
                                   }
                                   // if the form completed correctly،
                                   //navigate to "ProductsListAdmin" to show the product in the products' list
@@ -414,29 +495,35 @@ class AddNewProductState extends State<AddNewProduct> {
   }
 
 // add new product to the database/stock
-  void addProduct(String barcode, String name, String brand, String category,
-      String quantity, String size, String Location, String price ) {
+  void addProduct(
+      String barcode,
+      String name,
+      String selectedBrand,
+      String selectedCategory,
+      String quantity,
+      String size,
+      String selectedLocation,
+      String price) {
     var intBarcode = int.tryParse(barcode);
 
 // insert into database
     databaseRef.child("Products").child("$intBarcode").set({
       'Name': name,
-      'Brand': brand,
-      'Category': category,
+      'Brand': selectedBrand,
+      'Category': selectedCategory,
       'Quantity': int.tryParse(quantity),
       'Size': size,
-      'Location': Location,
+      'Location': selectedLocation,
       'Price': double.tryParse(price),
     });
     pbarcodeController.clear();
     pNameController.clear();
-    pBrandController.clear();
-    pCategoryController.clear();
+    // pBrandController.clear();
+    // pCategoryController.clear();
     pQuantityController.clear();
     pSizeController.clear();
-    pLocController.clear();
+    //pLocController.clear();
     pPriceController.clear();
-  
   }
 }
 
