@@ -15,6 +15,12 @@ class AddNewProduct extends StatefulWidget {
 }
 
 class AddNewProductState extends State<AddNewProduct> {
+  List<String> Locations = ['ممر 1', 'ممر2'];
+  String? selectedLocation = 'ممر 1';
+  String? selectedQuantity;
+  String? selectedBrand;
+  String? selectedSize;
+
   late String scanData;
   AddNewProductState(this.scanData);
   @override
@@ -24,12 +30,13 @@ class AddNewProductState extends State<AddNewProduct> {
   var pbarcodeController = new TextEditingController();
   var pNameController = new TextEditingController();
   var pBrandController = new TextEditingController();
-  var pPriceController = new TextEditingController();
   var pCategoryController = new TextEditingController();
   var pQuantityController = new TextEditingController();
   var pSizeController = new TextEditingController();
   var pLocationController = new TextEditingController();
   var pLocController = new TextEditingController();
+  var pPriceController = new TextEditingController();
+
   final databaseRef = FirebaseDatabase.instance.reference();
 
   @override
@@ -141,34 +148,6 @@ class AddNewProductState extends State<AddNewProduct> {
                           ),
                           const SizedBox(height: 14),
 
-                          // Product's location
-                          Directionality(
-                            textDirection: TextDirection.rtl,
-                            child: TextFormField(
-                                keyboardType: TextInputType.text,
-                                controller: pLocController,
-                                decoration: const InputDecoration(
-                                  labelText: "الموقع",
-                                  labelStyle: TextStyle(
-                                      fontSize: 20, color: Colors.black),
-                                  hintText: "أدخل موقع المنتج",
-                                  hintStyle: TextStyle(fontSize: 18),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(20.0)),
-                                    borderSide:
-                                        BorderSide(width: 2, color: appColor),
-                                  ),
-                                ),
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return 'الرجاء كتابة موقع المنتج';
-                                  }
-                                  return null;
-                                },
-                                onChanged: (value) {}),
-                          ),
-                          const SizedBox(height: 14),
 
                           // Product's brand
                           Directionality(
@@ -200,9 +179,9 @@ class AddNewProductState extends State<AddNewProduct> {
                                 },
                                 onChanged: (value) {}),
                           ),
-                          const SizedBox(height: 14),
+                             const SizedBox(height: 14),
 
-                          // Product's category
+// Product's category
                           Directionality(
                             textDirection: TextDirection.rtl,
                             child: TextFormField(
@@ -232,7 +211,114 @@ class AddNewProductState extends State<AddNewProduct> {
                                 },
                                 onChanged: (value) {}),
                           ),
+   const SizedBox(height: 14),
 
+      // Product's quantity
+                          Directionality(
+                            textDirection: TextDirection.rtl,
+                            child: TextFormField(
+                                keyboardType: TextInputType.number,
+                                inputFormatters: <TextInputFormatter>[
+                                  FilteringTextInputFormatter.digitsOnly
+                                ], // Only numbers can be entered
+                                controller: pQuantityController,
+                                decoration: const InputDecoration(
+                                  labelText: "الكمية",
+                                  labelStyle: TextStyle(
+                                      fontSize: 20, color: Colors.black),
+                                  hintText: "أدخل كمية المنتج ",
+                                  hintStyle: TextStyle(fontSize: 18),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(20.0)),
+                                    borderSide:
+                                        BorderSide(width: 2, color: appColor),
+                                  ),
+                                ),
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'الرجاء كتابة كمية المنتج';
+                                  }
+                                  if (value.contains(RegExp(r'[A-Z]')) &&
+                                      value.contains(RegExp(r'[a-z]'))) {
+                                    return 'كمية المنتج يجب ان لا تحتوي على احرف';
+                                  }
+                                  return null;
+                                },
+                                onChanged: (value) {}),
+                          ),
+                          const SizedBox(height: 14),
+
+                           // Product's size
+                          Directionality(
+                            textDirection: TextDirection.rtl,
+                            child: TextFormField(
+                                keyboardType: TextInputType.text,
+                                controller: pSizeController,
+                                decoration: const InputDecoration(
+                                  labelText: "الحجم",
+                                  labelStyle: TextStyle(
+                                      fontSize: 20, color: Colors.black),
+                                  hintText: "أدخل حجم، وزن المنتج ",
+                                  hintStyle: TextStyle(fontSize: 18),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(20.0)),
+                                    borderSide:
+                                        BorderSide(width: 2, color: appColor),
+                                  ),
+                                ),
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'الرجاء كتابة حجم المنتج';
+                                  }
+                                  return null;
+                                },
+                                onChanged: (value) {}),
+                          ),
+
+                          const SizedBox(height: 14),
+                          SizedBox(
+                            height: 14,
+                          ),
+
+                          // Product's location
+                          Directionality(
+                            textDirection: TextDirection.rtl,
+                            child: DropdownButtonFormField(
+                              decoration: InputDecoration(
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(20.0)),
+                                    borderSide:
+                                        BorderSide(width: 2, color: appColor),
+                                  ),
+                                  labelText: 'الموقع',
+                                  labelStyle: TextStyle(
+                                      fontSize: 20, color: Colors.black)),
+                              isExpanded: true,
+                              // Initial Value
+                              value: selectedLocation,
+                              icon: const Icon(
+                                Icons.keyboard_arrow_down,
+                                color: appColor,
+                              ),
+                              // Array list of items
+                              items: Locations.map((String items) {
+                                return DropdownMenuItem(
+                                  value: items,
+                                  child: Text(items),
+                                );
+                              }).toList(),
+                              // After selecting the desired option,it will
+                              // change button value to selected value
+                              onChanged: (String? newLocation) {
+                                setState(() {
+                                  selectedLocation = newLocation!;
+                                });
+                              },
+                            ),
+                          ),
                           const SizedBox(height: 14),
 
                           //Product's price
@@ -271,77 +357,8 @@ class AddNewProductState extends State<AddNewProduct> {
                                 },
                                 onChanged: (value) {}),
                           ),
-                          const SizedBox(height: 14),
-
-                          // Product's quantity
-                          Directionality(
-                            textDirection: TextDirection.rtl,
-                            child: TextFormField(
-                                keyboardType: TextInputType.number,
-                                inputFormatters: <TextInputFormatter>[
-                                  FilteringTextInputFormatter.digitsOnly
-                                ], // Only numbers can be entered
-                                controller: pQuantityController,
-                                decoration: const InputDecoration(
-                                  labelText: "الكمية",
-                                  labelStyle: TextStyle(
-                                      fontSize: 20, color: Colors.black),
-                                  hintText: "أدخل كمية المنتج ",
-                                  hintStyle: TextStyle(fontSize: 18),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(20.0)),
-                                    borderSide:
-                                        BorderSide(width: 2, color: appColor),
-                                  ),
-                                ),
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return 'الرجاء كتابة كمية المنتج';
-                                  }
-                                  if (value.contains(RegExp(r'[A-Z]')) &&
-                                      value.contains(RegExp(r'[a-z]'))) {
-                                    return 'كمية المنتج يجب ان لا تحتوي على احرف';
-                                  }
-                                  return null;
-                                },
-                                onChanged: (value) {}),
-                          ),
-                          const SizedBox(height: 14),
-
-                          // Product's size
-                          Directionality(
-                            textDirection: TextDirection.rtl,
-                            child: TextFormField(
-                                keyboardType: TextInputType.text,
-                                controller: pSizeController,
-                                decoration: const InputDecoration(
-                                  labelText: "الحجم",
-                                  labelStyle: TextStyle(
-                                      fontSize: 20, color: Colors.black),
-                                  hintText: "أدخل حجم، وزن المنتج ",
-                                  hintStyle: TextStyle(fontSize: 18),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(20.0)),
-                                    borderSide:
-                                        BorderSide(width: 2, color: appColor),
-                                  ),
-                                ),
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return 'الرجاء كتابة حجم المنتج';
-                                  }
-                                  return null;
-                                },
-                                onChanged: (value) {}),
-                          ),
-
-                          const SizedBox(height: 14),
-                          SizedBox(
-                            height: 11,
-                          ),
-
+                          const SizedBox(height: 11),
+                         
                           // start of "add new product" button
                           ElevatedButton(
                               style: ButtonStyle(
@@ -398,7 +415,7 @@ class AddNewProductState extends State<AddNewProduct> {
 
 // add new product to the database/stock
   void addProduct(String barcode, String name, String brand, String category,
-      String price, String quantity, String size, String Location) {
+      String quantity, String size, String Location, String price ) {
     var intBarcode = int.tryParse(barcode);
 
 // insert into database
@@ -406,19 +423,20 @@ class AddNewProductState extends State<AddNewProduct> {
       'Name': name,
       'Brand': brand,
       'Category': category,
-      'Price': double.tryParse(price),
       'Quantity': int.tryParse(quantity),
       'Size': size,
       'Location': Location,
+      'Price': double.tryParse(price),
     });
     pbarcodeController.clear();
     pNameController.clear();
     pBrandController.clear();
     pCategoryController.clear();
-    pPriceController.clear();
     pQuantityController.clear();
     pSizeController.clear();
     pLocController.clear();
+    pPriceController.clear();
+  
   }
 }
 
