@@ -212,7 +212,7 @@ class AddNewProductState extends State<AddNewProduct> {
                                       fontSize: 20, color: Colors.black)),
                               isExpanded: true,
                               // Initial Value
-                              value: selectedLocation,
+                              value: selectedBrand,
                               icon: const Icon(
                                 Icons.keyboard_arrow_down,
                                 color: appColor,
@@ -257,7 +257,7 @@ class AddNewProductState extends State<AddNewProduct> {
                                       fontSize: 20, color: Colors.black)),
                               isExpanded: true,
                               // Initial Value
-                              value: selectedLocation,
+                              value: selectedCategory,
                               icon: const Icon(
                                 Icons.keyboard_arrow_down,
                                 color: appColor,
