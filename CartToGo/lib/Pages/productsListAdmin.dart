@@ -22,10 +22,20 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
   TextEditingController second = TextEditingController();
   TextEditingController third = TextEditingController();
   TextEditingController zero = TextEditingController();
+
+  var quantityController  = TextEditingController();
+  var priceController = TextEditingController();
+  var locationController = TextEditingController();
+
   var l;
   var g;
   var k;
-
+  var QUANTITY;
+  var PRICE;
+  var LOCATION;
+  var QQ;
+  var PP;
+  var SS;
   @override
   Widget build(BuildContext context) {
     final ref = fb.ref().child('Products');
@@ -117,85 +127,115 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
             l = g.split(',');
             return GestureDetector(
 
-                // ترتيب الليست واظهار المنتجات للادمن
+              // ترتيب الليست واظهار المنتجات للادمن
                 child: Directionality(
-              textDirection: TextDirection.rtl,
-              child: Container(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ListTile(
-                    shape: RoundedRectangleBorder(
-                      side: BorderSide(
-                        color: Colors.white,
-                      ),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    tileColor: Color.fromARGB(229, 229, 227, 227),
-                    trailing: IconButton(
-                      tooltip: "حذف المنتج",
-                      icon: Icon(
-                        Icons.delete,
-                        color: Color.fromARGB(255, 255, 0, 0),
-                      ),
-                      onPressed: () {
-                        var EE = ref.child(snapshot.key!);
-                        _DeleteOrNot(EE);
-                      },
-                    ),
-                    leading: IconButton(
-                      tooltip: "تعديل المنتج",
-                      icon: Icon(
-                        Icons.edit,
-                        color: Color.fromARGB(255, 94, 90, 90),
-                      ),
-                      onPressed: () async {
-                        setState(() {
-                          k = snapshot.key;
-                        });
-                        _UpdateOrNot();
-                      },
-                    ),
-                    title: Text(
-                      l[3],
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'CartToGo',
-                        fontSize: 17,
-                      ),
-                    ),
-                    subtitle: Text(
-                      "\t" +
-                          "الحجم: " +
-                          l[0] +
-                          "\n"
+                  textDirection: TextDirection.rtl,
+                  child: Container(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: ListTile(
+                        shape: RoundedRectangleBorder(
+                          side: BorderSide(
+                            color: Colors.white,
+                          ),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        tileColor: Color.fromARGB(229, 229, 227, 227),
+
+                        //Delete
+                        trailing: IconButton(
+                          tooltip: "حذف المنتج",
+                          icon: Icon(
+                            Icons.delete,
+                            color: Color.fromARGB(255, 255, 0, 0),
+                          ),
+                          onPressed: () {
+                            var EE = ref.child(snapshot.key!);
+                            _DeleteOrNot(EE);
+                          },
+                        ),
+
+
+                        // Update
+                        leading: IconButton(
+                          tooltip: "تعديل المنتج",
+                          icon: Icon(
+                            Icons.edit,
+                            color: Color.fromARGB(255, 94, 90, 90),
+                          ),
+                          onPressed: () async {
+
+                            setState(() {
+                              k = snapshot.key;
+                            });
+
+                             //Option 1
+                             var v = snapshot.value.toString();
+                              g = v.replaceAll(
+                            RegExp(
+                                "{|}|Name: |Price: |Size: |Quantity: |Category: |Brand: |Barcode: |Location: "),
+                            "");
+                               g.trim();
+
+                            /*
+                            Option 2
+                            DatabaseReference ref1 = FirebaseDatabase.instance.ref("Products/$k");
+                            PP = ref1.child("Price").get().toString();
+                            QQ = ref1.child("Quantity").get().toString();
+                            SS = ref1.child("Size").get().toString();
+*/
+
+
+
+                            QUANTITY= l[4];
+                            PRICE= l[5];
+                            LOCATION =l[2];
+
+                            _UpdateOrNot(QUANTITY,PRICE,LOCATION);
+                          },
+                        ),
+
+                        title: Text(l[3],
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: 'CartToGo',
+                            fontSize: 17,
+                          ),
+                          textAlign: TextAlign.right,
+                        ),
+                        subtitle: Text(
+                          "\t" +
+                              "الحجم: " +
+                              l[0] +
+                              "\n"
+                                  "\t" +
+                              "العلامة التجارية: " +
+                              l[6] +
+                              "\n" +
                               "\t" +
-                          "العلامة التجارية: " +
-                          l[6] +
-                          "\n" +
-                          "\t" +
-                          "السعر:" +
-                          l[5] +
-                          " ريال" +
-                          "\n" +
-                          "\t" +
-                          "الكمية:" +
-                          l[4] +
-                          "\n" +
-                          "\t" +
-                          "الموقع:" +
-                          l[2],
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'CartToGo',
-                        fontSize: 12,
+                              "السعر:" +
+                              l[5] +
+                              " ريال" +
+                              "\n" +
+                              "\t" +
+                              "الكمية:" +
+                              l[4] +
+                              "\n" +
+                              "\t" +
+                              "الموقع:" +
+                              l[2],
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: 'CartToGo',
+                            fontSize: 12,
+                          ),
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ),
-            ));
+                ));
           },
         ),
       ),
@@ -346,7 +386,11 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
   }
 
 // dialog to enter the new product info
-  void _UpdateOrNot() async {
+  void _UpdateOrNot(QUANTITY,PRICE,LOCATION) async {
+    var quantityController = TextEditingController(text: QUANTITY);
+    var priceController = TextEditingController(text: PRICE);
+    var locationController = TextEditingController(text: LOCATION);
+
     return showDialog<void>(
         context: context,
         builder: (BuildContext context) {
@@ -367,7 +411,7 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
                               children: [
                                 Directionality(
                                     textDirection: TextDirection.rtl,
-                                    child: Text(" أدخل بيانات المنتج",
+                                    child: Text("حدث بيانات المنتج",
                                         style: TextStyle(
                                           fontSize: 19,
                                           color: Colors.black,
@@ -384,14 +428,13 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
                                   textDirection: TextDirection.rtl,
                                   child: TextFormField(
                                       keyboardType:
-                                          TextInputType.numberWithOptions(
-                                              decimal: true),
+                                      TextInputType.numberWithOptions(
+                                          decimal: true),
                                       inputFormatters: <TextInputFormatter>[
                                         FilteringTextInputFormatter.allow(
                                             RegExp(r'(^\d*\.?\d*)'))
                                       ], // Only numbers can be entered
-
-                                      controller: third,
+                                      controller: priceController,
                                       decoration: const InputDecoration(
                                         labelText: "السعر",
                                         labelStyle: TextStyle(
@@ -428,7 +471,7 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
                                       inputFormatters: <TextInputFormatter>[
                                         FilteringTextInputFormatter.digitsOnly
                                       ], // Only numbers can be entered
-                                      controller: second,
+                                      controller: quantityController,
                                       decoration: const InputDecoration(
                                         labelText: "الكمية",
                                         labelStyle: TextStyle(
@@ -462,7 +505,7 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
                                   textDirection: TextDirection.rtl,
                                   child: TextFormField(
                                       keyboardType: TextInputType.text,
-                                      controller: zero,
+                                      controller: locationController,
                                       decoration: const InputDecoration(
                                         labelText: "الموقع",
                                         labelStyle: TextStyle(
@@ -499,15 +542,16 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
                                         onTap: () async {
                                           if (_formKey.currentState!
                                               .validate()) {
-                                            if (second.text.isNotEmpty &&
-                                                third.text.isNotEmpty) {
+                                            if (quantityController.text.isNotEmpty &&
+                                                priceController.text.isNotEmpty &&
+                                                locationController.text.isNotEmpty) {
                                               updateProductInfo();
                                             }
                                             Navigator.push(context,
                                                 MaterialPageRoute(
                                                     builder: (context) {
-                                              return ProductsListAdmin();
-                                            }));
+                                                      return ProductsListAdmin();
+                                                    }));
                                           }
                                         },
                                         child: Center(
@@ -533,8 +577,8 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
                                           Navigator.push(context,
                                               MaterialPageRoute(
                                                   builder: (context) {
-                                            return ProductsListAdmin();
-                                          }));
+                                                    return ProductsListAdmin();
+                                                  }));
                                         },
                                         child: Center(
                                             child: Text("إلغاء",
@@ -551,13 +595,13 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
   updateProductInfo() async {
     DatabaseReference ref1 = FirebaseDatabase.instance.ref("Products/$k");
     await ref1.update({
-      "Quantity": int.tryParse(second.text),
-      "Price": double.tryParse(third.text),
-      "Location": zero.text,
+      "Quantity": int.tryParse(quantityController.text),
+      "Price": double.tryParse(priceController.text),
+      "Location": locationController.text,
     });
-    second.clear();
-    third.clear();
-    zero.clear();
+    //quantityController.clear();
+    //priceController.clear();
+    //locationController.clear();
   }
 
   void _showDialog(String pass) async {
