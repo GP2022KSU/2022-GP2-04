@@ -359,7 +359,7 @@ class PaymentCompletionState extends State<PaymentCompletion> {
                                     style: const TextStyle(
                                       color: Colors.red,
                                       fontSize: 16.0,
-                                      fontWeight: FontWeight.w400,
+                                      fontWeight: FontWeight.bold,
                                     )))))
                   ])));
         });

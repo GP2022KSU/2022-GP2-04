@@ -75,7 +75,7 @@ class Cashier extends StatelessWidget {
                                   child: Text("إلغاء",
                                       style: TextStyle(
                                         fontSize: 16.0,
-                                        fontWeight: FontWeight.w400,
+                                        fontWeight: FontWeight.bold,
                                       )))))
                     ])));
           });
@@ -121,8 +121,23 @@ class Cashier extends StatelessWidget {
         body: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
+              Text(
+                'لاتمام عملية الدفع',
+                style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                  color: Color.fromARGB(255, 42, 41, 41),
+                ),
+              ),
+              Text(
+                'قم بمسح الرمز الشريطي للفاتورة',
+                style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                  color: Color.fromARGB(255, 42, 41, 41),
+                ),
+              ),
               Image(image: AssetImage('assets/images/barcode.png')),
-              SizedBox(height: 40.0),
 
               //start scanning invoice butoon
               ElevatedButton(
@@ -182,17 +197,6 @@ class _scanInoviceState extends State<scanInovice> {
         backgroundColor: Colors.white24,
         body: Column(children: <Widget>[
           Expanded(flex: 4, child: _buildQrView(context)),
-          Expanded(
-              flex: 1,
-              child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    Center(
-                        child: const Text(
-                            'قم بمسح الرمز الشريطي للفاتورة لاتمام عملية الدفع',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(fontSize: 21)))
-                  ]))
         ]));
   }
 
