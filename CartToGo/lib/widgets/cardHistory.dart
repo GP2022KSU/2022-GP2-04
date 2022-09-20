@@ -98,8 +98,13 @@ class _CardhistoryState extends State<Cardhistory> {
                 return Container(
                   height: MediaQuery.of(context).size.height * 0.713,
                   child: FirebaseAnimatedList(
-                      query: _fb.ref().child(
-                          "Shopper/${FirebaseAuth.instance.currentUser?.uid}/PointsHistory"),
+                      query: _fb
+                          .ref()
+                          .child(
+                              "Shopper/${FirebaseAuth.instance.currentUser?.uid}/PointsHistory")
+                          .orderByKey()
+                          .limitToLast((user.getnumOfObtPoints() - 1))
+                          .endAt((user.getnumOfObtPoints() - 1).toString()),
                       duration: const Duration(milliseconds: 500),
                       itemBuilder: (BuildContext context, DataSnapshot snapshot,
                           Animation<double> animation, int index) {

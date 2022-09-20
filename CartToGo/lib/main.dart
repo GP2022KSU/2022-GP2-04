@@ -16,6 +16,7 @@ Future main() async {
 }
 
 final navigatorKey = GlobalKey<NavigatorState>();
+
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

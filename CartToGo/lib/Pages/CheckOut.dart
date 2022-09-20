@@ -92,7 +92,7 @@ class _CheckOutState extends State<CheckOut> {
                               Column(mainAxisSize: MainAxisSize.min, children: [
                             const SizedBox(height: 15),
                             Card(
-                                shadowColor: Color.fromARGB(255, 0, 0, 0),
+                                shadowColor: const Color.fromARGB(255, 0, 0, 0),
                                 elevation: 15,
                                 color: const Color.fromARGB(165, 255, 255, 255),
                                 clipBehavior: Clip.antiAlias,
@@ -183,6 +183,16 @@ class _CheckOutState extends State<CheckOut> {
                                           Colors.white)),
                                   onPressed: () async {
                                     if (vis) {
+                                      _database
+                                          .child(
+                                              "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts/TotalAfterPoints")
+                                          .once()
+                                          .then((value) => TotalInCart =
+                                              double.parse(user
+                                                  .getTotalAfterPoints()
+                                                  .toString()));
+                                      print("Total Here: " +
+                                          TotalInCart.toString());
                                       double dpoints = 0;
                                       for (var i = 0;
                                           i < user.getTotalAfterPoints();
@@ -194,6 +204,15 @@ class _CheckOutState extends State<CheckOut> {
                                       print("Points Gained true: " +
                                           GainedPoints.toString());
                                     } else {
+                                      _database
+                                          .child(
+                                              "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts/Total")
+                                          .once()
+                                          .then((value) => TotalInCart =
+                                              double.parse(
+                                                  user.getTotal().toString()));
+                                      print("Total Here: " +
+                                          TotalInCart.toString());
                                       double dpoints = 0;
                                       for (var i = 0;
                                           i < user.getTotal();
@@ -243,11 +262,11 @@ class _CheckOutState extends State<CheckOut> {
                             Container(
                               width: MediaQuery.of(context).size.width * 0.5,
                               height: MediaQuery.of(context).size.height * 0.2,
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
+                              decoration: const BoxDecoration(
+                                image: const DecorationImage(
                                     scale: 10,
-                                    image:
-                                        AssetImage('assets/images/points.png'),
+                                    image: const AssetImage(
+                                        'assets/images/points.png'),
                                     fit: BoxFit.fitHeight),
                               ),
                             ),
@@ -373,7 +392,8 @@ class _CheckOutState extends State<CheckOut> {
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (context) => Navi()));
+                                            builder: (context) =>
+                                                const Navi()));
                                   }
                                 },
                                 child: const Text('الرئيسية')),
@@ -385,6 +405,7 @@ class _CheckOutState extends State<CheckOut> {
   }
 
   bool _activateListeners() {
+    /*
     _streamSubscription4 = _database
         .child(
             "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts/TotalAfterPoints")
@@ -395,7 +416,7 @@ class _CheckOutState extends State<CheckOut> {
         TotalInCart = double.parse(event.snapshot.value.toString());
       });
     });
-
+*/
     if (FirebaseAuth.instance.currentUser != null) {
       _streamSubscription4 = _database
           .child(
@@ -687,8 +708,11 @@ class _CheckOutState extends State<CheckOut> {
                 return Container(
                   height: MediaQuery.of(context).size.height * 0.713,
                   child: FirebaseAnimatedList(
-                      query: _fb.ref().child(
-                          "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts/${asyn.data}"),
+                      query: _fb
+                          .ref()
+                          .child(
+                              "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts/${asyn.data}")
+                          .limitToFirst(user.getnumOfProducts()),
                       duration: const Duration(milliseconds: 500),
                       itemBuilder: (BuildContext context, DataSnapshot snapshot,
                           Animation<double> animation, int index) {

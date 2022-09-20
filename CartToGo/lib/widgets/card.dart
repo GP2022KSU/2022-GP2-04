@@ -98,7 +98,7 @@ class CardWidgetState extends State<CardWidget> {
                             ))),
                     Positioned(
                         top: 10.025157928466797,
-                        left: 70,
+                        left: 75,
                         child: FutureBuilder<int>(
                             future: user.BringPoints(),
                             builder: (BuildContext context,

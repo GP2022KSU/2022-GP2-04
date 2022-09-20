@@ -213,7 +213,10 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
                     textDirection: TextDirection.rtl,
                   ),
                   text: Text(
-                    '   عرض السلة',
+                    '   عرض السلة' +
+                        "  (" +
+                        user.getnumOfProducts().toString() +
+                        ")",
                     style: TextStyle(
                         color: Colors.white,
                         fontSize: 16.0,
@@ -250,8 +253,11 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
               return Container(
                 height: MediaQuery.of(context).size.height * 0.713,
                 child: FirebaseAnimatedList(
-                    query: _fb.ref().child(
-                        "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts/${asyn.data}"),
+                    query: _fb
+                        .ref()
+                        .child(
+                            "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts/${asyn.data}")
+                        .limitToFirst(user.getnumOfProducts()),
                     duration: Duration(milliseconds: 500),
                     itemBuilder: (BuildContext context, DataSnapshot snapshot,
                         Animation<double> animation, int index) {

@@ -24,6 +24,22 @@ getProducts() async {
 }
 
 class _SearchProductListState extends State<SearchProductList> {
+  late bool _isLoading;
+
+  void initState() {
+    _isLoading = true;
+
+    Future.delayed(const Duration(milliseconds: 500), () {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    });
+    user.getProducts();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,22 +70,25 @@ class _SearchProductListState extends State<SearchProductList> {
           )
         ],
       ),
-      body: ListView.builder(
-        itemCount: names.length,
-        itemBuilder: (BuildContext context, int index) {
-          return ListTile(
-            title: Text(
-              names.elementAt(index),
-              style: TextStyle(
-                color: Colors.black,
-                backgroundColor: Color.fromARGB(255, 248, 248, 249),
-                fontWeight: FontWeight.bold,
-                fontFamily: 'CartToGo',
+      body: Container(
+        height: MediaQuery.of(context).size.height * 0.79,
+        child: ListView.builder(
+          itemCount: user.getProducts().length,
+          itemBuilder: (BuildContext context, int index) {
+            return ListTile(
+              title: Text(
+                user.getProducts().elementAt(index),
+                style: TextStyle(
+                  color: Colors.black,
+                  backgroundColor: Color.fromARGB(255, 248, 248, 249),
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'CartToGo',
+                ),
+                textAlign: TextAlign.right,
               ),
-              textAlign: TextAlign.right,
-            ),
-          );
-        },
+            );
+          },
+        ),
       ),
     );
   }
