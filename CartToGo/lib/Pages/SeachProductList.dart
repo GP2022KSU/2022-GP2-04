@@ -24,7 +24,6 @@ getProducts() async {
 }
 
 class _SearchProductListState extends State<SearchProductList> {
-<<<<<<< HEAD
   late bool _isLoading;
 
   void initState() {
@@ -41,9 +40,7 @@ class _SearchProductListState extends State<SearchProductList> {
     super.initState();
   }
 
-=======
   // السيرش بار
->>>>>>> 23b88061e49537e8b15e3f5e01aafc6c0ed972ea
   @override
   Widget build(BuildContext context) {
     return Scaffold(
