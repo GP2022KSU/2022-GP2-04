@@ -1,10 +1,10 @@
 import 'package:carttogo/main.dart';
 import 'package:flutter/material.dart';
 
-class NameSearch extends SearchDelegate<String> {
+class LocationSearch extends SearchDelegate<String> {
   final List<String> names;
 
-  NameSearch(this.names)
+  LocationSearch(this.names)
       : super(
           searchFieldLabel: "     ابحث عن موقع المنتجات         ",
           keyboardType: TextInputType.text,

@@ -105,6 +105,23 @@ Future<int> BringNumOfProducts() async {
   return 0;
 }
 
+Future<List<String>> BringNames() async {
+  if (FirebaseAuth.instance.currentUser != null) {
+    final ref = FirebaseDatabase.instance.ref();
+    final snapshot = await ref.child("Products").get();
+    final map = snapshot.value as Map<dynamic, dynamic>;
+    map.forEach((key, value) {
+      final product = Product.fromMap(value);
+      names.add(product.Name.toString() + " | " + product.Location.toString());
+    });
+    print(names);
+    return names;
+  }
+  return names;
+}
+
+
+//admin
 Future<List<String>> BringProducts() async {
   if (FirebaseAuth.instance.currentUser != null) {
     final ref = FirebaseDatabase.instance.ref();
@@ -112,8 +129,7 @@ Future<List<String>> BringProducts() async {
     final map = snapshot.value as Map<dynamic, dynamic>;
     map.forEach((key, value) {
       final product = Product.fromMap(value);
-      final D = product.Name.toString();
-      names.add(D + " - " + product.Location.toString());
+      names.add(product.Name.toString());
     });
     print(names);
     return names;
@@ -214,7 +230,13 @@ String getUsername() {
   return Username;
 }
 
-List<String> getProducts() {
+List<String> getNames() {
+  BringNames();
+  return names;
+}
+
+//admin
+List<String> getProduct() {
   BringProducts();
   return names;
 }

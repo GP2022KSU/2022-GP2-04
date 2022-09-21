@@ -13,7 +13,7 @@ class SearchProductList extends StatefulWidget {
 
 List<String> names = [];
 
-getProducts() async {
+getNames() async {
   final snapshot = await FirebaseDatabase.instance.ref('Products').get();
   final map = snapshot.value as Map<dynamic, dynamic>;
   map.forEach((key, value) {
@@ -36,7 +36,7 @@ class _SearchProductListState extends State<SearchProductList> {
         });
       }
     });
-    user.getProducts();
+    user.getNames();
     super.initState();
   }
 
@@ -62,7 +62,7 @@ class _SearchProductListState extends State<SearchProductList> {
             onPressed: () async {
               final result = await showSearch<String>(
                 context: context,
-                delegate: NameSearch(user.getProducts()),
+                delegate: NameSearch(user.getNames()),
               );
               print(result);
             },
@@ -74,11 +74,11 @@ class _SearchProductListState extends State<SearchProductList> {
       body: Container(
         height: MediaQuery.of(context).size.height * 0.79,
         child: ListView.builder(
-          itemCount: user.getProducts().length,
+          itemCount: user.getNames().length,
           itemBuilder: (BuildContext context, int index) {
             return ListTile(
               title: Text(
-                user.getProducts().elementAt(index),
+                user.getNames().elementAt(index),
                 style: TextStyle(
                   color: Colors.black,
                   backgroundColor: Color.fromARGB(255, 248, 248, 249),
