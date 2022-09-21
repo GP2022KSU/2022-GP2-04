@@ -248,10 +248,4 @@ class _scanInoviceState extends State<scanInovice> {
           const SnackBar(content: Text('لا يوجد سماح من الكاميرا')));
     }
   }
-
-  @override
-  void dispose() {
-    controller?.dispose();
-    super.dispose();
-  }
 }

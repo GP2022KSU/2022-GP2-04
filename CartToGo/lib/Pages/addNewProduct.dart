@@ -29,7 +29,7 @@ class AddNewProductState extends State<AddNewProduct> {
     'ممر 2',
     'ممر 1'
   ];
-  String? selectedLocation = '';
+  String? selectedLocation;
 
   List<String> Brands = [
     'ديتول',
@@ -49,7 +49,7 @@ class AddNewProductState extends State<AddNewProduct> {
     'البطل',
     'نادك'
   ];
-  String? selectedBrand = '';
+  String? selectedBrand;
 
   List<String> Categories = [
     'منظفات ومطهرات',
@@ -68,7 +68,7 @@ class AddNewProductState extends State<AddNewProduct> {
     'بسكويت',
     'كريمات يدين وجسم'
   ];
-  String? selectedCategory = '';
+  String? selectedCategory;
 
   List<String> Sizes = ['غ', 'مل', 'ل', 'منديل', 'كيس', 'رول', 'ك'];
   String? selectedSize = 'غ';
@@ -199,7 +199,7 @@ class AddNewProductState extends State<AddNewProduct> {
                           // Product's brand
                           Directionality(
                             textDirection: TextDirection.rtl,
-                            child: DropdownButtonFormField(
+                            child: DropdownButtonFormField<String>(
                               decoration: InputDecoration(
                                   enabledBorder: OutlineInputBorder(
                                     borderRadius:
@@ -211,27 +211,22 @@ class AddNewProductState extends State<AddNewProduct> {
                                   labelStyle: TextStyle(
                                       fontSize: 20, color: Colors.black)),
                               isExpanded: true,
-                              // Initial Value
-                              value: selectedBrand,
                               icon: const Icon(
                                 Icons.keyboard_arrow_down,
                                 color: appColor,
                               ),
-                              // Array list of items
+                              // Array list of brands names
                               items: Brands.map((String items) {
                                 return DropdownMenuItem(
                                   value: items,
                                   child: Text(items),
                                 );
                               }).toList(),
-                              validator: (value) {
-                                if (value == null) {
-                                  return 'الرجاء اختيار العلامة التجارية';
-                                }
-                                return null;
-                              },
-                              // After selecting the desired option,it will
-                              // change button value to selected value
+                              validator: (value) => value == null
+                                  ? 'الرجاء اختيار العلامة التجارية'
+                                  : null,
+                              // After selecting the brand name ,it will
+                              // change button value to selected brand name
                               onChanged: (String? newBrand) {
                                 setState(() {
                                   selectedBrand = newBrand!;
@@ -256,27 +251,21 @@ class AddNewProductState extends State<AddNewProduct> {
                                   labelStyle: TextStyle(
                                       fontSize: 20, color: Colors.black)),
                               isExpanded: true,
-                              // Initial Value
-                              value: selectedCategory,
                               icon: const Icon(
                                 Icons.keyboard_arrow_down,
                                 color: appColor,
                               ),
-                              // Array list of items
+                              // Array list of categories
                               items: Categories.map((String items) {
                                 return DropdownMenuItem(
                                   value: items,
                                   child: Text(items),
                                 );
                               }).toList(),
-                              validator: (value) {
-                                if (value == null) {
-                                  return 'الرجاء اختيار فئه المنتج';
-                                }
-                                return null;
-                              },
-                              // After selecting the desired option,it will
-                              // change button value to selected value
+                              validator: (value) =>
+                                  value == null ? 'الرجاء اختيار الفئة' : null,
+                              // After selecting the category ,it will
+                              // change button value to selected category
                               onChanged: (String? newCategory) {
                                 setState(() {
                                   selectedCategory = newCategory!;
@@ -370,27 +359,21 @@ class AddNewProductState extends State<AddNewProduct> {
                                   labelStyle: TextStyle(
                                       fontSize: 20, color: Colors.black)),
                               isExpanded: true,
-                              // Initial Value
-                              value: selectedLocation,
                               icon: const Icon(
                                 Icons.keyboard_arrow_down,
                                 color: appColor,
                               ),
-                              // Array list of items
+                              // Array list of locations
                               items: Locations.map((String items) {
                                 return DropdownMenuItem(
                                   value: items,
                                   child: Text(items),
                                 );
                               }).toList(),
-                              validator: (value) {
-                                if (value == null) {
-                                  return 'الرجاء كتابة حجم المنتج';
-                                }
-                                return null;
-                              },
-                              // After selecting the desired option,it will
-                              // change button value to selected value
+                              validator: (value) =>
+                                  value == null ? 'الرجاء اختيار الموقع' : null,
+                              // After selecting the location ,it will
+                              // change button value to selected location
                               onChanged: (String? newLocation) {
                                 setState(() {
                                   selectedLocation = newLocation!;
@@ -460,14 +443,13 @@ class AddNewProductState extends State<AddNewProduct> {
                               onPressed: () {
                                 if (_formKey.currentState!.validate()) {
                                   if (pbarcodeController.text.isNotEmpty &&
-                                          pNameController.text.isNotEmpty &&
-                                          selectedBrand!.isNotEmpty &&
-                                          selectedCategory!.isNotEmpty &&
-                                          pQuantityController.text.isNotEmpty &&
-                                          pSizeController.text.isNotEmpty &&
-                                          selectedLocation!.isNotEmpty &&
-                                          pPriceController.text.isNotEmpty
-                                      ) {
+                                      pNameController.text.isNotEmpty &&
+                                      selectedBrand!.isNotEmpty &&
+                                      selectedCategory!.isNotEmpty &&
+                                      pQuantityController.text.isNotEmpty &&
+                                      pSizeController.text.isNotEmpty &&
+                                      selectedLocation!.isNotEmpty &&
+                                      pPriceController.text.isNotEmpty) {
                                     addProduct(
                                       pbarcodeController.text,
                                       pNameController.text,
@@ -620,11 +602,5 @@ class _scanProductBarcodeState extends State<scanProductBarcode> {
       ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('لا يوجد سماح من الكاميرا')));
     }
-  }
-
-  @override
-  void dispose() {
-    controller?.dispose();
-    super.dispose();
   }
 }
