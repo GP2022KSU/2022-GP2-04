@@ -23,7 +23,7 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
   TextEditingController third = TextEditingController();
   TextEditingController zero = TextEditingController();
 
-  var quantityController  = TextEditingController();
+  var quantityController = TextEditingController();
   var priceController = TextEditingController();
   var locationController = TextEditingController();
 
@@ -72,6 +72,11 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
               color: Colors.black,
               fontWeight: FontWeight.bold,
             )),
+        leading: IconButton(
+          onPressed: () async {},
+          icon: Icon(Icons.search_outlined),
+          color: appColor,
+        ),
 
         // logout button
         actions: <Widget>[
@@ -127,57 +132,55 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
             l = g.split(',');
             return GestureDetector(
 
-              // ترتيب الليست واظهار المنتجات للادمن
+                // ترتيب الليست واظهار المنتجات للادمن
                 child: Directionality(
-                  textDirection: TextDirection.rtl,
-                  child: Container(
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: ListTile(
-                        shape: RoundedRectangleBorder(
-                          side: BorderSide(
-                            color: Colors.white,
-                          ),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        tileColor: Color.fromARGB(229, 229, 227, 227),
+              textDirection: TextDirection.rtl,
+              child: Container(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ListTile(
+                    shape: RoundedRectangleBorder(
+                      side: BorderSide(
+                        color: Colors.white,
+                      ),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    tileColor: Color.fromARGB(229, 229, 227, 227),
 
-                        //Delete
-                        trailing: IconButton(
-                          tooltip: "حذف المنتج",
-                          icon: Icon(
-                            Icons.delete,
-                            color: Color.fromARGB(255, 255, 0, 0),
-                          ),
-                          onPressed: () {
-                            var EE = ref.child(snapshot.key!);
-                            _DeleteOrNot(EE);
-                          },
-                        ),
+                    //Delete
+                    trailing: IconButton(
+                      tooltip: "حذف المنتج",
+                      icon: Icon(
+                        Icons.delete,
+                        color: Color.fromARGB(255, 255, 0, 0),
+                      ),
+                      onPressed: () {
+                        var EE = ref.child(snapshot.key!);
+                        _DeleteOrNot(EE);
+                      },
+                    ),
 
+                    // Update
+                    leading: IconButton(
+                      tooltip: "تعديل المنتج",
+                      icon: Icon(
+                        Icons.edit,
+                        color: Color.fromARGB(255, 94, 90, 90),
+                      ),
+                      onPressed: () async {
+                        setState(() {
+                          k = snapshot.key;
+                        });
 
-                        // Update
-                        leading: IconButton(
-                          tooltip: "تعديل المنتج",
-                          icon: Icon(
-                            Icons.edit,
-                            color: Color.fromARGB(255, 94, 90, 90),
-                          ),
-                          onPressed: () async {
-
-                            setState(() {
-                              k = snapshot.key;
-                            });
-
-                             //Option 1
-                             var v = snapshot.value.toString();
-                              g = v.replaceAll(
+                        //Option 1
+                        var v = snapshot.value.toString();
+                        g = v.replaceAll(
                             RegExp(
                                 "{|}|Name: |Price: |Size: |Quantity: |Category: |Brand: |Barcode: |Location: "),
                             "");
-                               g.trim();
+                        g.trim();
 
-                            /*
+                        /*
                             Option 2
                             DatabaseReference ref1 = FirebaseDatabase.instance.ref("Products/$k");
                             PP = ref1.child("Price").get().toString();
@@ -185,57 +188,56 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
                             SS = ref1.child("Size").get().toString();
 */
 
+                        QUANTITY = l[4];
+                        PRICE = l[5];
+                        LOCATION = l[2];
 
+                        _UpdateOrNot(QUANTITY, PRICE, LOCATION);
+                      },
+                    ),
 
-                            QUANTITY= l[4];
-                            PRICE= l[5];
-                            LOCATION =l[2];
-
-                            _UpdateOrNot(QUANTITY,PRICE,LOCATION);
-                          },
-                        ),
-
-                        title: Text(l[3],
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: 'CartToGo',
-                            fontSize: 17,
-                          ),
-                          textAlign: TextAlign.right,
-                        ),
-                        subtitle: Text(
+                    title: Text(
+                      l[3],
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'CartToGo',
+                        fontSize: 17,
+                      ),
+                      textAlign: TextAlign.right,
+                    ),
+                    subtitle: Text(
+                      "\t" +
+                          "الحجم: " +
+                          l[0] +
+                          "\n"
+                              "\t" +
+                          "العلامة التجارية: " +
+                          l[6] +
+                          "\n" +
                           "\t" +
-                              "الحجم: " +
-                              l[0] +
-                              "\n"
-                                  "\t" +
-                              "العلامة التجارية: " +
-                              l[6] +
-                              "\n" +
-                              "\t" +
-                              "السعر:" +
-                              l[5] +
-                              " ريال" +
-                              "\n" +
-                              "\t" +
-                              "الكمية:" +
-                              l[4] +
-                              "\n" +
-                              "\t" +
-                              "الموقع:" +
-                              l[2],
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: 'CartToGo',
-                            fontSize: 12,
-                          ),
-                        ),
+                          "السعر:" +
+                          l[5] +
+                          " ريال" +
+                          "\n" +
+                          "\t" +
+                          "الكمية:" +
+                          l[4] +
+                          "\n" +
+                          "\t" +
+                          "الموقع:" +
+                          l[2],
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'CartToGo',
+                        fontSize: 12,
                       ),
                     ),
                   ),
-                ));
+                ),
+              ),
+            ));
           },
         ),
       ),
@@ -386,7 +388,7 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
   }
 
 // dialog to enter the new product info
-  void _UpdateOrNot(QUANTITY,PRICE,LOCATION) async {
+  void _UpdateOrNot(QUANTITY, PRICE, LOCATION) async {
     var quantityController = TextEditingController(text: QUANTITY);
     var priceController = TextEditingController(text: PRICE);
     var locationController = TextEditingController(text: LOCATION);
@@ -428,8 +430,8 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
                                   textDirection: TextDirection.rtl,
                                   child: TextFormField(
                                       keyboardType:
-                                      TextInputType.numberWithOptions(
-                                          decimal: true),
+                                          TextInputType.numberWithOptions(
+                                              decimal: true),
                                       inputFormatters: <TextInputFormatter>[
                                         FilteringTextInputFormatter.allow(
                                             RegExp(r'(^\d*\.?\d*)'))
@@ -542,16 +544,19 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
                                         onTap: () async {
                                           if (_formKey.currentState!
                                               .validate()) {
-                                            if (quantityController.text.isNotEmpty &&
-                                                priceController.text.isNotEmpty &&
-                                                locationController.text.isNotEmpty) {
+                                            if (quantityController
+                                                    .text.isNotEmpty &&
+                                                priceController
+                                                    .text.isNotEmpty &&
+                                                locationController
+                                                    .text.isNotEmpty) {
                                               updateProductInfo();
                                             }
                                             Navigator.push(context,
                                                 MaterialPageRoute(
                                                     builder: (context) {
-                                                      return ProductsListAdmin();
-                                                    }));
+                                              return ProductsListAdmin();
+                                            }));
                                           }
                                         },
                                         child: Center(
@@ -577,8 +582,8 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
                                           Navigator.push(context,
                                               MaterialPageRoute(
                                                   builder: (context) {
-                                                    return ProductsListAdmin();
-                                                  }));
+                                            return ProductsListAdmin();
+                                          }));
                                         },
                                         child: Center(
                                             child: Text("إلغاء",
@@ -589,7 +594,6 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
                               ])))));
         });
   }
-
 
 // add the new product's info to the database
   updateProductInfo() async {
