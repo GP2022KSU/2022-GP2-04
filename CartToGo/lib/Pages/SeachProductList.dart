@@ -1,6 +1,6 @@
 import 'package:carttogo/main.dart';
 import 'package:flutter/material.dart';
-import 'package:carttogo/Pages/searchProduct.dart';
+import 'package:carttogo/Pages/locationSearch.dart';
 import 'Product.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:carttogo/Users/user.dart' as user;
@@ -10,6 +10,7 @@ class SearchProductList extends StatefulWidget {
   @override
   _SearchProductListState createState() => _SearchProductListState();
 }
+
 
 List<String> names = [];
 
@@ -62,7 +63,7 @@ class _SearchProductListState extends State<SearchProductList> {
             onPressed: () async {
               final result = await showSearch<String>(
                 context: context,
-                delegate: NameSearch(user.getNames()),
+                delegate: LocationSearch(user.getNames()),
               );
               print(result);
             },

@@ -7,6 +7,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:carttogo/Pages/welcomePage.dart';
 import 'package:carttogo/Pages/addNewProduct.dart';
 import 'package:flutter/rendering.dart';
+import 'adminSearch.dart';
+import 'package:carttogo/Users/user.dart' as user;
+
 
 class ProductsListAdmin extends StatefulWidget {
   @override
@@ -68,13 +71,19 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white24,
-        title: Text("المنتجات",
+        title: const Text("المنتجات",
             style: TextStyle(
               color: Colors.black,
               fontWeight: FontWeight.bold,
             )),
         leading: IconButton(
-          onPressed: () async {},
+          onPressed: () async {
+              final result = await showSearch<String>(
+                context: context,
+                delegate: AdminSearch(user.getProduct()),
+              );
+              print(result);
+            },
           icon: Icon(Icons.search_outlined),
           color: appColor,
         ),
@@ -173,26 +182,15 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
                           k = snapshot.key;
                         });
 
-                        //Option 1
                         var v = snapshot.value.toString();
                         g = v.replaceAll(
                             RegExp(
                                 "{|}|Name: |Price: |Size: |Quantity: |Category: |Brand: |Barcode: |Location: "),
                             "");
                         g.trim();
-
-                        /*
-                            Option 2
-                            DatabaseReference ref1 = FirebaseDatabase.instance.ref("Products/$k");
-                            PP = ref1.child("Price").get().toString();
-                            QQ = ref1.child("Quantity").get().toString();
-                            SS = ref1.child("Size").get().toString();
-*/
-
                         QUANTITY = l[4];
                         PRICE = l[5];
                         LOCATION = l[2];
-
                         _UpdateOrNot(QUANTITY, PRICE, LOCATION);
                       },
                     ),
@@ -238,6 +236,8 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
                   ),
                 ),
               ),
+
+
             ));
           },
         ),
