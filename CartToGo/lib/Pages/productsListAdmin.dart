@@ -21,24 +21,11 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
   final fb = FirebaseDatabase.instance;
   final _formKey = GlobalKey<FormState>();
 
-  //controller to edit function
-  TextEditingController second = TextEditingController();
-  TextEditingController third = TextEditingController();
-  TextEditingController zero = TextEditingController();
-
-  var quantityController = TextEditingController();
-  var priceController = TextEditingController();
-  var locationController = TextEditingController();
-
   var l;
   var g;
   var k;
-  var QUANTITY;
-  var PRICE;
-  var LOCATION;
-  var QQ;
-  var PP;
-  var SS;
+
+
   @override
   Widget build(BuildContext context) {
     final ref = fb.ref().child('Products');
@@ -180,17 +167,17 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
                       onPressed: () async {
                         setState(() {
                           k = snapshot.key;
+                          var v = snapshot.value.toString();
                         });
-
-                        var v = snapshot.value.toString();
                         g = v.replaceAll(
                             RegExp(
                                 "{|}|Name: |Price: |Size: |Quantity: |Category: |Brand: |Barcode: |Location: "),
                             "");
                         g.trim();
-                        QUANTITY = l[4];
-                        PRICE = l[5];
-                        LOCATION = l[2];
+                        l = g.split(',');
+                        var QUANTITY = l[4];
+                        var PRICE = l[5];
+                        var LOCATION = l[2];
                         _UpdateOrNot(QUANTITY, PRICE, LOCATION);
                       },
                     ),
@@ -390,6 +377,8 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
 
 // dialog to enter the new product info
   void _UpdateOrNot(QUANTITY, PRICE, LOCATION) async {
+
+    //controller to edit function
     var quantityController = TextEditingController(text: QUANTITY);
     var priceController = TextEditingController(text: PRICE);
     var locationController = TextEditingController(text: LOCATION);
@@ -551,7 +540,7 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
                                                     .text.isNotEmpty &&
                                                 locationController
                                                     .text.isNotEmpty) {
-                                              updateProductInfo();
+                                              updateProductInfo(quantityController,priceController,locationController);
                                             }
                                             Navigator.push(context,
                                                 MaterialPageRoute(
@@ -597,16 +586,13 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
   }
 
 // add the new product's info to the database
-  updateProductInfo() async {
+  updateProductInfo(quantityController,priceController,locationController) async {
     DatabaseReference ref1 = FirebaseDatabase.instance.ref("Products/$k");
     await ref1.update({
       "Quantity": int.tryParse(quantityController.text),
       "Price": double.tryParse(priceController.text),
       "Location": locationController.text,
     });
-    //quantityController.clear();
-    //priceController.clear();
-    //locationController.clear();
   }
 
   void _showDialog(String pass) async {
