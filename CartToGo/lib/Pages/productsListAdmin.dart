@@ -506,19 +506,22 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
                                   textDirection: TextDirection.rtl,
                                   child: DropdownButtonFormField(
                                     decoration: InputDecoration(
-                                        enabledBorder: OutlineInputBorder(
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(20.0)),
-                                          borderSide: BorderSide(
-                                              width: 2, color: appColor),
-                                        ),
-                                        labelText: 'الموقع',
-                                        labelStyle: TextStyle(
-                                            fontSize: 20, color: Colors.black)),
+                                      labelText: "الموقع",
+                                      labelStyle: TextStyle(
+                                          fontSize: 16, color: Colors.black),
+                                      hintStyle: TextStyle(fontSize: 14),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(4.0)),
+                                        borderSide: BorderSide(
+                                            width: 1.5,
+                                            color: Color(0xFFAFAEAE)),
+                                      ),
+                                    ),
                                     isExpanded: true,
                                     icon: const Icon(
                                       Icons.keyboard_arrow_down,
-                                      color: appColor,
+                                      color: Color(0xFFAFAEAE),
                                     ),
                                     // Array list of locations
                                     items: Locations.map((String items) {
