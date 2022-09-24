@@ -1,6 +1,5 @@
 import 'package:carttogo/main.dart';
 import 'package:flutter/material.dart';
-
 import '../scanner_icons.dart';
 import 'addNewProduct.dart';
 
@@ -14,10 +13,9 @@ class AdminSearch extends SearchDelegate<String> {
           textInputAction: TextInputAction.search,
         );
 
+// to view the list without a keyboard
   @override
   List<Widget>? buildActions(BuildContext context) {
-    // حتى يرجع لشكل الصفحة الاساسي بدون كيبورد وكذا
-    //right side of search bar
     return [
       IconButton(
           icon: Icon(
@@ -43,9 +41,9 @@ class AdminSearch extends SearchDelegate<String> {
     );
   }
 
+// when the admin chooses a product, the result will be centered on the screen
   @override
   Widget buildResults(BuildContext context) {
-    // لما يضغط المتسوق على النتيجة راح تطلع له بالنص
     return Center(
         child: Text(
       query,
@@ -57,13 +55,12 @@ class AdminSearch extends SearchDelegate<String> {
     ));
   }
 
-//ميثود لظهور الاقتراحات عند البحث
+// suggestions for products when searching for a product
   @override
   Widget buildSuggestions(BuildContext context) {
     final Suggestions = query.isEmpty
         ? names
         : names.where((p) => p.startsWith(query)).toList();
-
     return Suggestions.isEmpty && query.isNotEmpty
         ? Center(
             child: Text(
@@ -87,31 +84,32 @@ class AdminSearch extends SearchDelegate<String> {
                 borderRadius: BorderRadius.circular(10),
               ),
               title: Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: <Widget>[
-                  RichText(
-                      text: TextSpan(
-                          text: Suggestions.elementAt(index)
-                              .substring(0, query.length),
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: 'CartToGo',
-                          ),
-                          children: [
-                        TextSpan(
-                          text: Suggestions.elementAt(index)
-                              .substring(query.length),
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.normal,
-                            fontFamily: 'CartToGo',
-                          ),
-                        )
-                      ])),
-                  Divider() // to arrange them and make it comfortable to eye
-                ],
-              ),
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: <Widget>[
+                    // make the typing letters bold
+                    RichText(
+                        text: TextSpan(
+                            text: Suggestions.elementAt(index)
+                                .substring(0, query.length),
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: 'CartToGo',
+                            ),
+                            // products list
+                            children: [
+                          TextSpan(
+                            text: Suggestions.elementAt(index)
+                                .substring(query.length),
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.normal,
+                              fontFamily: 'CartToGo',
+                            ),
+                          )
+                        ])),
+                    Divider() // to arrange the products list
+                  ]),
             ),
           );
   }
