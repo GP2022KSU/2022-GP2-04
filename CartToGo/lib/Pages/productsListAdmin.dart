@@ -186,7 +186,7 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
                         });
                         g = v.replaceAll(
                             RegExp(
-                                "{|}|Name: |Price: |Size: |Quantity: |Category: |Brand: |Barcode: |Location: "),
+                                "{|}|Name: |Brand: |Category: |Price: |Size: |Quantity: |Barcode: |Location: |PriceAfterOffer: |SearchBarcode: |Offer:"),
                             "");
                         g.trim();
                         l = g.split(',');
@@ -216,7 +216,7 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
                           "العلامة التجارية: " +
                           l[9] +
                           "\n"
-                              "\t" +
+                          "\t" +
                           "الفئه: " +
                           l[4] +
                           "\n" +
@@ -552,7 +552,7 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
                                 ),
                                 SizedBox(height: 15),
 
-// price after offer
+                                // price after offer
                                 Directionality(
                                   textDirection: TextDirection.rtl,
                                   child: TextFormField(
