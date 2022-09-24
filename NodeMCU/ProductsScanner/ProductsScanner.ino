@@ -155,10 +155,10 @@ void FirebaseConnection() {
 
 String LoyaltyCard = "";
 boolean LoyaltyCardConnection() {
-  LoyaltyCard="";
+  LoyaltyCard = "";
   char ID;
   boolean con = false;
-  total=0.0;
+  total = 0.0;
 
   lcd.clear();
   //طباعة عبارة "امسح الQR على الشاشة
@@ -320,11 +320,12 @@ float lastPrice = 0.0;
 void loop()
 {
   String cartsPath = "/Shopper/" + UID.to<String>() + "/Carts";
-  bool ConnectedToCart= true;
+  bool ConnectedToCart = true;
   String barcode = "";
   char readBarcode;
   FirebaseJson json;
   FirebaseJsonData price;
+  FirebaseJsonData HasOffer;
   FirebaseJsonData name1;
   if (WiFi.status() != 3) { //If WiFi Disconnected
     WiFiConnection(); //Begin WiFi Connection
@@ -334,15 +335,15 @@ void loop()
   if (Firebase.ready() == 1 && signupOK && WiFi.status() == 3) {
     String cartsPath = "/Shopper/" + UID.to<String>() + "/Carts";
     if (Firebase.getBool(fbdo, cartsPath + "/DeletingProduct")) checkDelete = fbdo.to<bool>();
-    if(Firebase.getBool(fbdo, cartsPath + "/ConnectedToCart")) ConnectedToCart = fbdo.to<bool>();
+    if (Firebase.getBool(fbdo, cartsPath + "/ConnectedToCart")) ConnectedToCart = fbdo.to<bool>();
     if (countProducts >= 1 && CartConnection != false && checkDelete == true) {
       if (Firebase.getFloat(fbdo, cartsPath + "/Total")) total = fbdo.to<float>();
       if (Firebase.getInt(fbdo, cartsPath + "/NumOfProducts")) NumOfProducts = fbdo.to<int>();
       //if (Firebase.getFloat(fbdo, cartsPath+"/lastPrice")) lastPrice = fbdo.to<float>();
       checkTotalAndCount(total);
     }
-            if(!(ConnectedToCart)){
-    LoyaltyCardConnection();
+    if (!(ConnectedToCart)) {
+      LoyaltyCardConnection();
     }
     if (Gm66Scan.available() && CartConnection != false) { //Check if there is Incoming Data in the Serial Buffer
 
@@ -362,7 +363,13 @@ void loop()
         FirebaseJsonData getQuan;
         FirebaseJson jsonQuan;
         int Qunatity = 0;
-        json.get(price, "/Price");
+        json.get(HasOffer, "/Offer");
+        if (HasOffer.to<bool>() == true) {
+          json.get(price, "/PriceAfterOffer"); //If it has an offer take the offer price
+        }
+        else {
+          json.get(price, "/Price");
+        }
         json.get(name1, "/Name");
         json.get(getQuan, "/Quantity");
         Qunatity = getQuan.to<int>();
