@@ -66,16 +66,20 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
         backgroundColor: appColor,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
       ),
-// end of add new prodcut button
+      // end of add new prodcut button
 
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white24,
+        centerTitle: true,
+        elevation: 0,
         title: const Text("المنتجات",
             style: TextStyle(
               color: Colors.black,
               fontWeight: FontWeight.bold,
             )),
+
+        // search icon to press when searching for a product
         leading: IconButton(
           onPressed: () async {
             final result = await showSearch<String>(
@@ -87,8 +91,8 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
           icon: Icon(Icons.search_outlined),
           color: appColor,
         ),
-        // logout button
 
+        // logout button
         actions: <Widget>[
           Padding(
             padding: const EdgeInsets.all(8.0),
@@ -109,11 +113,9 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
                   _showMyDialog();
                 },
                 child: const Text('خروج')),
-            // end of logout button
           ),
         ],
-        centerTitle: true,
-        elevation: 0,
+        // end of logout button
       ),
       body: NotificationListener<UserScrollNotification>(
         onNotification: (notification) {
@@ -142,7 +144,7 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
             l = g.split(',');
             return GestureDetector(
 
-                // ترتيب الليست واظهار المنتجات للادمن
+                // products list
                 child: Directionality(
               textDirection: TextDirection.rtl,
               child: Container(
@@ -157,7 +159,7 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
                     ),
                     tileColor: Color.fromARGB(229, 229, 227, 227),
 
-                    //Delete
+                    // delete product option
                     trailing: IconButton(
                       tooltip: "حذف المنتج",
                       icon: Icon(
@@ -170,7 +172,7 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
                       },
                     ),
 
-                    // Update
+                    // update product option
                     leading: IconButton(
                       tooltip: "تعديل المنتج",
                       icon: Icon(
@@ -195,6 +197,7 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
                       },
                     ),
 
+                    // product information arrangement in the container
                     title: Text(
                       l[3],
                       style: TextStyle(
@@ -388,7 +391,7 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
 
 // dialog to enter the new product info
   void _UpdateOrNot(QUANTITY, PRICE, LOCATION) async {
-    //controller to edit function
+    // controller to edit function
     var quantityController = TextEditingController(text: QUANTITY);
     var priceController = TextEditingController(text: PRICE);
 

@@ -15,6 +15,8 @@ class AddNewProduct extends StatefulWidget {
 }
 
 class AddNewProductState extends State<AddNewProduct> {
+
+  // Locations list for the dropdown menue
   List<String> Locations = [
     'ممر 12',
     'ممر 11',
@@ -31,6 +33,7 @@ class AddNewProductState extends State<AddNewProduct> {
   ];
   String? selectedLocation;
 
+  // Brands list for the dropdown menue
   List<String> Brands = [
     'ديتول',
     'نوفا',
@@ -51,6 +54,7 @@ class AddNewProductState extends State<AddNewProduct> {
   ];
   String? selectedBrand;
 
+  // Categories list for the dropdown menue
   List<String> Categories = [
     'منظفات ومطهرات',
     'منتجات الشعر',
@@ -70,6 +74,7 @@ class AddNewProductState extends State<AddNewProduct> {
   ];
   String? selectedCategory;
 
+  // Sizes list for the dropdown menue
   List<String> Sizes = ['غ', 'مل', 'ل', 'منديل', 'كيس', 'رول', 'ك'];
   String? selectedSize = 'غ';
 
@@ -493,8 +498,6 @@ class AddNewProductState extends State<AddNewProduct> {
 // insert into database
     databaseRef.child("Products").child("$intBarcode").set({
       'SearchBarcode': searchBarcode,
-      //'SearchBarcode' : int.tryParse(searchBarcode),
-
       'Name': name,
       'Brand': selectedBrand,
       'Category': selectedCategory,
@@ -505,11 +508,8 @@ class AddNewProductState extends State<AddNewProduct> {
     });
     pbarcodeController.clear();
     pNameController.clear();
-    // pBrandController.clear();
-    // pCategoryController.clear();
     pQuantityController.clear();
     pSizeController.clear();
-    //pLocController.clear();
     pPriceController.clear();
   }
 }
