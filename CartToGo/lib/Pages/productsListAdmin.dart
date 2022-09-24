@@ -10,13 +10,28 @@ import 'package:flutter/rendering.dart';
 import 'adminSearch.dart';
 import 'package:carttogo/Users/user.dart' as user;
 
-
 class ProductsListAdmin extends StatefulWidget {
   @override
   State<ProductsListAdmin> createState() => _ProductsListAdmin();
 }
 
 class _ProductsListAdmin extends State<ProductsListAdmin> {
+  List<String> Locations = [
+    'ممر 12',
+    'ممر 11',
+    'ممر 10',
+    'ممر 9',
+    'ممر 8',
+    'ممر 7',
+    'ممر 6',
+    'ممر 5',
+    'ممر 4',
+    'ممر 3',
+    'ممر 2',
+    'ممر 1'
+  ];
+  String? selectedLocation;
+
   bool isScrolled = false;
   final fb = FirebaseDatabase.instance;
   final _formKey = GlobalKey<FormState>();
@@ -25,11 +40,9 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
   var g;
   var k;
 
-
   @override
   Widget build(BuildContext context) {
     final ref = fb.ref().child('Products');
-    //  final ref = fb.ref().child('Products').orderByKey().equalTo("");
 
     return Scaffold(
       // add new product button to navigate the admin to add new product form
@@ -53,24 +66,28 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
         backgroundColor: appColor,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
       ),
-// end of add new prodcut button
+      // end of add new prodcut button
 
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white24,
+        centerTitle: true,
+        elevation: 0,
         title: const Text("المنتجات",
             style: TextStyle(
               color: Colors.black,
               fontWeight: FontWeight.bold,
             )),
+
+        // search icon to press when searching for a product
         leading: IconButton(
           onPressed: () async {
-              final result = await showSearch<String>(
-                context: context,
-                delegate: AdminSearch(user.getProduct()),
-              );
-              print(result);
-            },
+            final result = await showSearch<String>(
+              context: context,
+              delegate: AdminSearch(user.getProduct()),
+            );
+            print(result);
+          },
           icon: Icon(Icons.search_outlined),
           color: appColor,
         ),
@@ -96,11 +113,9 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
                   _showMyDialog();
                 },
                 child: const Text('خروج')),
-            // end of logout button
           ),
         ],
-        centerTitle: true,
-        elevation: 0,
+        // end of logout button
       ),
       body: NotificationListener<UserScrollNotification>(
         onNotification: (notification) {
@@ -129,7 +144,7 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
             l = g.split(',');
             return GestureDetector(
 
-                // ترتيب الليست واظهار المنتجات للادمن
+                // products list
                 child: Directionality(
               textDirection: TextDirection.rtl,
               child: Container(
@@ -144,7 +159,7 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
                     ),
                     tileColor: Color.fromARGB(229, 229, 227, 227),
 
-                    //Delete
+                    // delete product option
                     trailing: IconButton(
                       tooltip: "حذف المنتج",
                       icon: Icon(
@@ -157,7 +172,7 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
                       },
                     ),
 
-                    // Update
+                    // update product option
                     leading: IconButton(
                       tooltip: "تعديل المنتج",
                       icon: Icon(
@@ -171,19 +186,23 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
                         });
                         g = v.replaceAll(
                             RegExp(
-                                "{|}|Name: |Price: |Size: |Quantity: |Category: |Brand: |Barcode: |Location: "),
+                                "{|}|Name: |Brand: |Category: |Price: |Size: |Quantity: |Barcode: |Location: |PriceAfterOffer: |SearchBarcode: |Offer:"),
                             "");
                         g.trim();
                         l = g.split(',');
-                        var QUANTITY = l[4];
-                        var PRICE = l[5];
-                        var LOCATION = l[2];
-                        _UpdateOrNot(QUANTITY, PRICE, LOCATION);
+                        var QUANTITY = l[8];
+                        var PRICE = l[1];
+                        var LOCATION = l[5];
+                        var ONOFFER = l[2];
+                        var NEWPRICE = l[7];
+                        _UpdateOrNot(
+                            QUANTITY, PRICE, LOCATION, ONOFFER, NEWPRICE);
                       },
                     ),
 
+                    // product information arrangement in the container
                     title: Text(
-                      l[3],
+                      l[6],
                       style: TextStyle(
                         color: Colors.black,
                         fontWeight: FontWeight.bold,
@@ -194,25 +213,29 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
                     ),
                     subtitle: Text(
                       "\t" +
-                          "الحجم: " +
-                          l[0] +
-                          "\n"
-                              "\t" +
                           "العلامة التجارية: " +
-                          l[6] +
-                          "\n" +
+                          l[9] +
+                          "\n"
                           "\t" +
-                          "السعر:" +
-                          l[5] +
-                          " ريال" +
-                          "\n" +
-                          "\t" +
-                          "الكمية:" +
+                          "الفئه: " +
                           l[4] +
                           "\n" +
                           "\t" +
+                          "الكمية:" +
+                          l[8] +
+                          "\n" +
+                          "\t" +
+                          "الحجم:" +
+                          l[3] +
+                          "\n" +
+                          "\t" +
                           "الموقع:" +
-                          l[2],
+                          l[5] +
+                          "\n" +
+                          "\t" +
+                          "السعر:" +
+                          l[1] +
+                          " ريال",
                       style: TextStyle(
                         color: Colors.black,
                         fontWeight: FontWeight.bold,
@@ -223,8 +246,6 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
                   ),
                 ),
               ),
-
-
             ));
           },
         ),
@@ -376,12 +397,11 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
   }
 
 // dialog to enter the new product info
-  void _UpdateOrNot(QUANTITY, PRICE, LOCATION) async {
-
-    //controller to edit function
+  void _UpdateOrNot(QUANTITY, PRICE, LOCATION, ONOFFER, NEWPRICE) async {
+    // controller to edit function
     var quantityController = TextEditingController(text: QUANTITY);
     var priceController = TextEditingController(text: PRICE);
-    var locationController = TextEditingController(text: LOCATION);
+    var newPriceController = TextEditingController(text: NEWPRICE);
 
     return showDialog<void>(
         context: context,
@@ -403,7 +423,7 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
                               children: [
                                 Directionality(
                                     textDirection: TextDirection.rtl,
-                                    child: Text("حدث بيانات المنتج",
+                                    child: Text("بيانات المنتج الجديدة",
                                         style: TextStyle(
                                           fontSize: 19,
                                           color: Colors.black,
@@ -435,10 +455,9 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
                                         hintStyle: TextStyle(fontSize: 14),
                                         enabledBorder: OutlineInputBorder(
                                           borderRadius: BorderRadius.all(
-                                              Radius.circular(4.0)),
+                                              Radius.circular(20.0)),
                                           borderSide: BorderSide(
-                                              width: 1.5,
-                                              color: Color(0xFFAFAEAE)),
+                                              width: 2, color: appColor),
                                         ),
                                       ),
                                       validator: (value) {
@@ -472,10 +491,9 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
                                         hintStyle: TextStyle(fontSize: 14),
                                         enabledBorder: OutlineInputBorder(
                                           borderRadius: BorderRadius.all(
-                                              Radius.circular(4.0)),
+                                              Radius.circular(20.0)),
                                           borderSide: BorderSide(
-                                              width: 1.5,
-                                              color: Color(0xFFAFAEAE)),
+                                              width: 2, color: appColor),
                                         ),
                                       ),
                                       validator: (value) {
@@ -495,33 +513,83 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
                                 // new product's location
                                 Directionality(
                                   textDirection: TextDirection.rtl,
+                                  child: DropdownButtonFormField(
+                                    decoration: InputDecoration(
+                                      labelText: "الموقع",
+                                      labelStyle: TextStyle(
+                                          fontSize: 16, color: Colors.black),
+                                      hintStyle: TextStyle(fontSize: 14),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(20.0)),
+                                        borderSide: BorderSide(
+                                            width: 2, color: appColor),
+                                      ),
+                                    ),
+                                    isExpanded: true,
+                                    icon: const Icon(
+                                      Icons.keyboard_arrow_down,
+                                      color: appColor,
+                                    ),
+                                    // Array list of locations
+                                    items: Locations.map((String items) {
+                                      return DropdownMenuItem(
+                                        value: items,
+                                        child: Text(items),
+                                      );
+                                    }).toList(),
+                                    validator: (value) => value == null
+                                        ? 'الرجاء اختيار الموقع'
+                                        : null,
+                                    // After selecting the location ,it will
+                                    // change button value to selected location
+                                    onChanged: (String? newLocation) {
+                                      setState(() {
+                                        selectedLocation = newLocation!;
+                                      });
+                                    },
+                                  ),
+                                ),
+                                SizedBox(height: 15),
+
+                                // price after offer
+                                Directionality(
+                                  textDirection: TextDirection.rtl,
                                   child: TextFormField(
-                                      keyboardType: TextInputType.text,
-                                      controller: locationController,
+                                      keyboardType:
+                                          TextInputType.numberWithOptions(
+                                              decimal: true),
+                                      inputFormatters: <TextInputFormatter>[
+                                        FilteringTextInputFormatter.allow(
+                                            RegExp(r'(^\d*\.?\d*)'))
+                                      ], // Only numbers can be entered
+                                      controller: newPriceController,
                                       decoration: const InputDecoration(
-                                        labelText: "الموقع",
+                                        labelText: "السعر بعد العرض",
                                         labelStyle: TextStyle(
                                             fontSize: 16, color: Colors.black),
-                                        hintText: "أدخل موقع المنتج ",
+                                        hintText: "أدخل سعر المنتج",
                                         hintStyle: TextStyle(fontSize: 14),
                                         enabledBorder: OutlineInputBorder(
                                           borderRadius: BorderRadius.all(
-                                              Radius.circular(4.0)),
+                                              Radius.circular(20.0)),
                                           borderSide: BorderSide(
-                                              width: 1.5,
-                                              color: Color(0xFFAFAEAE)),
+                                              width: 2, color: appColor),
                                         ),
                                       ),
                                       validator: (value) {
                                         if (value == null || value.isEmpty) {
-                                          return 'الرجاء كتابة موقع المنتج';
+                                          return 'الرجاء كتابة سعر المنتج';
+                                        }
+                                        if (value.contains(RegExp(r'[A-Z]')) &&
+                                            value.contains(RegExp(r'[a-z]'))) {
+                                          return 'سعر المنتج يجب ان لا يحتوي على احرف';
                                         }
                                         return null;
                                       },
                                       onChanged: (value) {}),
                                 ),
-                                SizedBox(height: 15),
-
+                                const SizedBox(height: 15),
                                 Divider(
                                   height: 1,
                                   color: Colors.black,
@@ -538,9 +606,12 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
                                                     .text.isNotEmpty &&
                                                 priceController
                                                     .text.isNotEmpty &&
-                                                locationController
-                                                    .text.isNotEmpty) {
-                                              updateProductInfo(quantityController,priceController,locationController);
+                                                selectedLocation!.isNotEmpty) {
+                                              updateProductInfo(
+                                                  quantityController,
+                                                  priceController,
+                                                  selectedLocation.toString(),
+                                                  newPriceController);
                                             }
                                             Navigator.push(context,
                                                 MaterialPageRoute(
@@ -586,12 +657,15 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
   }
 
 // add the new product's info to the database
-  updateProductInfo(quantityController,priceController,locationController) async {
+  updateProductInfo(quantityController, priceController, selectedLocatio,
+      newPriceController) async {
     DatabaseReference ref1 = FirebaseDatabase.instance.ref("Products/$k");
     await ref1.update({
       "Quantity": int.tryParse(quantityController.text),
       "Price": double.tryParse(priceController.text),
-      "Location": locationController.text,
+      "Location": selectedLocation,
+      //"Offer" :
+      "PriceAfterOffer": double.tryParse(newPriceController.text),
     });
   }
 

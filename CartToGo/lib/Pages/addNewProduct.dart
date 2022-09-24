@@ -15,6 +15,8 @@ class AddNewProduct extends StatefulWidget {
 }
 
 class AddNewProductState extends State<AddNewProduct> {
+
+  // Locations list for the dropdown menue
   List<String> Locations = [
     'ممر 12',
     'ممر 11',
@@ -31,6 +33,7 @@ class AddNewProductState extends State<AddNewProduct> {
   ];
   String? selectedLocation;
 
+  // Brands list for the dropdown menue
   List<String> Brands = [
     'ديتول',
     'نوفا',
@@ -51,6 +54,7 @@ class AddNewProductState extends State<AddNewProduct> {
   ];
   String? selectedBrand;
 
+  // Categories list for the dropdown menue
   List<String> Categories = [
     'منظفات ومطهرات',
     'منتجات الشعر',
@@ -70,6 +74,7 @@ class AddNewProductState extends State<AddNewProduct> {
   ];
   String? selectedCategory;
 
+  // Sizes list for the dropdown menue
   List<String> Sizes = ['غ', 'مل', 'ل', 'منديل', 'كيس', 'رول', 'ك'];
   String? selectedSize = 'غ';
 
@@ -452,6 +457,7 @@ class AddNewProductState extends State<AddNewProduct> {
                                       pPriceController.text.isNotEmpty) {
                                     addProduct(
                                       pbarcodeController.text,
+                                      pbarcodeController.text,
                                       pNameController.text,
                                       selectedBrand.toString(),
                                       selectedCategory.toString(),
@@ -479,6 +485,7 @@ class AddNewProductState extends State<AddNewProduct> {
 // add new product to the database/stock
   void addProduct(
       String barcode,
+      String searchBarcode,
       String name,
       String selectedBrand,
       String selectedCategory,
@@ -490,6 +497,7 @@ class AddNewProductState extends State<AddNewProduct> {
 
 // insert into database
     databaseRef.child("Products").child("$intBarcode").set({
+      'SearchBarcode': searchBarcode,
       'Name': name,
       'Brand': selectedBrand,
       'Category': selectedCategory,
@@ -500,11 +508,8 @@ class AddNewProductState extends State<AddNewProduct> {
     });
     pbarcodeController.clear();
     pNameController.clear();
-    // pBrandController.clear();
-    // pCategoryController.clear();
     pQuantityController.clear();
     pSizeController.clear();
-    //pLocController.clear();
     pPriceController.clear();
   }
 }
