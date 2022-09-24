@@ -722,6 +722,10 @@ class _CheckOutState extends State<CheckOut> {
                         bool checker = true;
                         bool checke2 = true;
 
+                        String Name = "";
+                        double Price = 0;
+                        bool HaveOffer = false;
+
                         //print(v[0]);
                         try {
                           if (v[0] == "0" && v[1].isNotEmpty) {}
@@ -754,6 +758,17 @@ class _CheckOutState extends State<CheckOut> {
                         }
 
                         if (!(l[0] == "0") && checker && checke2) {
+                          try {
+                            var map = snapshot.value as Map<dynamic, dynamic>;
+                            Name = map['Name'];
+                            HaveOffer = map['Offer'];
+                            HaveOffer
+                                ? Price = double.parse(
+                                    map['PriceAfterOffer'].toString())
+                                : Price = map['Price'];
+                          } on Exception {
+                            checker = false;
+                          }
                           return AnimationConfiguration.staggeredList(
                             position: index,
                             duration: const Duration(milliseconds: 375),
@@ -762,11 +777,11 @@ class _CheckOutState extends State<CheckOut> {
                               child: FadeInAnimation(
                                 child: ListTile(
                                   trailing: Text(
-                                    l[4],
+                                    Name,
                                     textAlign: TextAlign.center,
                                   ),
                                   leading: Text(
-                                    l[5] + " ريال",
+                                    Price.toString() + " ريال",
                                     textAlign: TextAlign.right,
                                     textDirection: TextDirection.rtl,
                                   ),

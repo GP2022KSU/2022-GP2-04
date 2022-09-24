@@ -100,6 +100,7 @@ class PaymentCompletionState extends State<PaymentCompletion> {
                       children: <Widget>[
                         // review the shopping cart by the cashier which include,
                         // shopper's name, number of products in the cart, and the total price
+                        /*
                         const SizedBox(height: 20),
                         Text(
                           "(" +
@@ -116,8 +117,9 @@ class PaymentCompletionState extends State<PaymentCompletion> {
                                   0 /*percentages not used in flutter. defaulting to zero*/,
                               fontWeight: FontWeight.w700,
                               height: 0.9),
-                        ),
+                        )*/
                         Cart(),
+                        /*
                         const SizedBox(
                           height: 15,
                         ),
@@ -193,6 +195,7 @@ class PaymentCompletionState extends State<PaymentCompletion> {
                             },
                             child: const Text('اتمام الدفع')),
                         // end of payment completion button
+                        */
                       ],
                     );
                   }
@@ -210,74 +213,158 @@ class PaymentCompletionState extends State<PaymentCompletion> {
             if (FirebaseAuth.instance.currentUser != null) {
               uid = asyn.data.toString();
               if (asyn.hasData) {
-                return Container(
-                  height: MediaQuery.of(context).size.height * 0.713,
-                  child: FirebaseAnimatedList(
-                      query: _fb.ref().child(
-                          "Shopper/${uid}/Carts/${splitted[1].toString()}"),
-                      duration: const Duration(milliseconds: 500),
-                      itemBuilder: (BuildContext context, DataSnapshot snapshot,
-                          Animation<double> animation, int index) {
-                        //numOfProducts = user.getnumOfProducts();
-                        var v = snapshot.value
-                            .toString(); //Gets the scanned product and store it in a var
-                        bool checker = true;
-                        bool checke2 = true;
+                return Column(children: [
+                  const SizedBox(height: 20),
+                  Text(
+                    "(" +
+                        cashier
+                            .getnumOfProducts(asyn.data.toString())
+                            .toString() +
+                        ") " +
+                        cashier.getUsername(asyn.data.toString()).toString() +
+                        "السلة الخاصة بـ",
+                    textAlign: TextAlign.right,
+                    textDirection: TextDirection.ltr,
+                    style: const TextStyle(
+                        color: const Color.fromRGBO(32, 26, 37, 1),
+                        fontSize: 20,
+                        letterSpacing:
+                            0 /*percentages not used in flutter. defaulting to zero*/,
+                        fontWeight: FontWeight.w700,
+                        height: 0.9),
+                  ),
+                  Container(
+                    height: MediaQuery.of(context).size.height * 0.713,
+                    child: FirebaseAnimatedList(
+                        query: _fb.ref().child(
+                            "Shopper/${asyn.data.toString()}/Carts/${splitted[1].toString()}"),
+                        duration: const Duration(milliseconds: 500),
+                        itemBuilder: (BuildContext context,
+                            DataSnapshot snapshot,
+                            Animation<double> animation,
+                            int index) {
+                          //numOfProducts = user.getnumOfProducts();
+                          var v = snapshot.value
+                              .toString(); //Gets the scanned product and store it in a var
+                          bool checker = true;
+                          bool checke2 = true;
 
-                        //print(v[0]);
-                        try {
-                          if (v[0] == "0" && v[1].isNotEmpty) {}
-                        } on RangeError {
-                          //If there is any kind of range error to avoid errors on the app
-                          checker = false;
-                          var g = v.replaceAll(RegExp("{|}|0: "), "");
-                        }
-                        var g = v.replaceAll(
-                            //Using RegExp to remove unwanted data
-                            RegExp(
-                                "{|}|Name: |Price: |Size: |Category: |Brand: |Barcode: |Paid:"),
-                            "");
+                          String Name = "";
+                          double Price = 0;
+                          bool HaveOffer = false;
 
-                        g.trim();
-                        var l = g.split(',');
-                        if (l[0] == TotalInCart.toString()) {
-                          checke2 = false;
-                        }
-
-                        if (l.toString() == "[true]" ||
-                            l.toString() == "[false]" ||
-                            l[0] == TotalInCart.toStringAsFixed(0)) {
-                          checke2 = false;
-                          if (l.toString() == "[true]") {
-                            //checkPay = true;
+                          //print(v[0]);
+                          try {
+                            if (v[0] == "0" && v[1].isNotEmpty) {}
+                          } on RangeError {
+                            //If there is any kind of range error to avoid errors on the app
+                            checker = false;
+                            var g = v.replaceAll(RegExp("{|}|0: "), "");
                           }
-                        }
+                          var g = v.replaceAll(
+                              //Using RegExp to remove unwanted data
+                              RegExp(
+                                  "{|}|Name: |Price: |Size: |Category: |Brand: |Barcode: |Paid:"),
+                              "");
 
-                        if (!(l[0] == "0") && checker && checke2) {
-                          return AnimationConfiguration.staggeredList(
-                            position: index,
-                            duration: const Duration(milliseconds: 375),
-                            child: SlideAnimation(
-                              verticalOffset: 0,
-                              child: FadeInAnimation(
-                                child: ListTile(
-                                  trailing: Text(
-                                    l[4],
-                                    textAlign: TextAlign.center,
-                                  ),
-                                  leading: Text(
-                                    l[5] + " ريال",
-                                    textAlign: TextAlign.right,
-                                    textDirection: TextDirection.rtl,
+                          g.trim();
+                          var l = g.split(',');
+                          if (l[0] == TotalInCart.toString()) {
+                            checke2 = false;
+                          }
+
+                          if (l.toString() == "[true]" ||
+                              l.toString() == "[false]" ||
+                              l[0] == TotalInCart.toStringAsFixed(0)) {
+                            checke2 = false;
+                            if (l.toString() == "[true]") {
+                              //checkPay = true;
+                            }
+                          }
+
+                          if (!(l[0] == "0") && checker && checke2) {
+                            try {
+                              var map = snapshot.value as Map<dynamic, dynamic>;
+                              Name = map['Name'];
+                              HaveOffer = map['Offer'];
+                              HaveOffer
+                                  ? Price = double.parse(
+                                      map['PriceAfterOffer'].toString())
+                                  : Price = map['Price'];
+                            } on Exception {
+                              checker = false;
+                            }
+                            return AnimationConfiguration.staggeredList(
+                              position: index,
+                              duration: const Duration(milliseconds: 375),
+                              child: SlideAnimation(
+                                verticalOffset: 0,
+                                child: FadeInAnimation(
+                                  child: ListTile(
+                                    trailing: Text(
+                                      Name,
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    leading: Text(
+                                      Price.toString() + " ريال",
+                                      textAlign: TextAlign.right,
+                                      textDirection: TextDirection.rtl,
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                          );
-                        }
-                        return Container();
-                      }),
-                );
+                            );
+                          }
+                          return Container();
+                        }),
+                  ),
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  Container(
+                      decoration: const BoxDecoration(
+                        color: const Color.fromARGB(255, 242, 240, 240),
+                        //border: Border.all(color: Colors.black),
+                      ),
+                      height: MediaQuery.of(context).size.height * 0.06,
+                      width: MediaQuery.of(context).size.width * 1,
+                      child: Row(
+                        textDirection: TextDirection.rtl,
+                        children: <Widget>[
+                          const Text(
+                            "  المجموع   ",
+                            //textAlign: TextAlign.right,
+                            //textDirection: TextDirection.ltr,
+                            style: TextStyle(
+                                color: Color.fromRGBO(32, 26, 37, 1),
+                                fontSize: 20,
+                                letterSpacing:
+                                    0 /*percentages not used in flutter. defaulting to zero*/,
+                                fontWeight: FontWeight.w700,
+                                height: 0.9),
+                          ),
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.54,
+                          ),
+                          Text(
+                            cashier
+                                    .getTotalAfterPoints(asyn.data.toString(),
+                                        int.parse(splitted[1]))
+                                    .toString() +
+                                " ريال",
+                            textAlign: TextAlign.right,
+                            textDirection: TextDirection.rtl,
+                            style: const TextStyle(
+                                color: const Color.fromARGB(255, 17, 18, 18),
+                                fontSize: 20,
+                                letterSpacing:
+                                    0 /*percentages not used in flutter. defaulting to zero*/,
+                                //fontWeight: FontWeight.w700,
+                                height: 0.9),
+                          ),
+                        ],
+                      ))
+                ]);
               }
               return Container();
             }
@@ -342,7 +429,7 @@ class PaymentCompletionState extends State<PaymentCompletion> {
                       height: 1,
                     ),
 
-                    // if the  shopper doesn't paid, close the dialog and stay in review shopping cart 
+                    // if the  shopper doesn't paid, close the dialog and stay in review shopping cart
                     Container(
                         width: MediaQuery.of(context).size.width,
                         height: 50,

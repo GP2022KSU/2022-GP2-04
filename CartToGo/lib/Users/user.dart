@@ -120,7 +120,6 @@ Future<List<String>> BringNames() async {
   return names;
 }
 
-
 //admin
 Future<List<String>> BringProducts() async {
   if (FirebaseAuth.instance.currentUser != null) {
@@ -192,6 +191,8 @@ double totalPriceAfterPoints() {
     print("Total: " + Total.toString());
     Total = getTotal();
     NewTotal = Total - PointinRiyal;
+    inString = NewTotal.toStringAsFixed(2);
+    NewTotal = double.parse(inString);
     return NewTotal;
   }
 

@@ -11,7 +11,6 @@ class SearchProductList extends StatefulWidget {
   _SearchProductListState createState() => _SearchProductListState();
 }
 
-
 List<String> names = [];
 
 getNames() async {
@@ -65,7 +64,7 @@ class _SearchProductListState extends State<SearchProductList> {
                 context: context,
                 delegate: LocationSearch(user.getNames()),
               );
-              print(result);
+              //print(result);
             },
             icon: Icon(Icons.search_outlined),
             color: appColor,

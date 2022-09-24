@@ -169,7 +169,7 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
   //-----------Listens for FutureCartNumber to show newest cart-----------//
   Future<int> BringLastCartNumber() async {
     if (FirebaseAuth.instance.currentUser != null) {
-      _streamSubscription1 = _database
+      _streamSubscription = _database
           .child(
               "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts/FutureCartNumber")
           .onValue
@@ -253,27 +253,23 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
               return Container(
                 height: MediaQuery.of(context).size.height * 0.713,
                 child: FirebaseAnimatedList(
-                    query: _fb
-                        .ref()
-                        .child(
-                            "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts/${asyn.data}")
-                        .limitToFirst(user.getnumOfProducts()),
+                    query: _fb.ref().child(
+                        "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts/${asyn.data}"),
                     duration: Duration(milliseconds: 500),
                     itemBuilder: (BuildContext context, DataSnapshot snapshot,
                         Animation<double> animation, int index) {
                       numOfProducts = user.getnumOfProducts();
-
+                      final map;
                       var v = snapshot.value
                           .toString(); //Gets the scanned product and store it in a var
                       bool checker = true;
-                      //print(v[0]);
-                      try {
-                        if (v[0] == "0" && v[1].isNotEmpty) {}
-                      } on RangeError {
-                        //If there is any kind of range error to avoid errors on the app
-                        checker = false;
-                        var g = v.replaceAll(RegExp("{|}|0:|false|true|"), "");
-                      }
+                      String Name = "";
+                      String Size = "";
+                      double Price = 0;
+                      String Barcode = "";
+                      bool HaveOffer = false;
+                      double PriceAfterOffer = 0;
+
                       var g = v.replaceAll(
                           //Using RegExp to remove unwanted data
                           RegExp(
@@ -294,15 +290,32 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
                         //print(l.toString());
                         check2 = false;
                       }
+
                       if (!(l[0] == "0") && checker && check2) {
                         //if there is data
-
+                        try {
+                          map = snapshot.value as Map<dynamic, dynamic>;
+                          print(map['Name']);
+                          Name = map['Name'];
+                          Size = map['Size'];
+                          Price = map['Price'];
+                          Barcode = map['Barcode'];
+                          PriceAfterOffer =
+                              double.parse(map['PriceAfterOffer'].toString());
+                          HaveOffer = map['Offer'];
+                        } on Exception {
+                          checker = false;
+                        }
                         //-----------Deletes the swiped product-----------//
                         void deleteProduct(var product) async {
                           final Carts = _fb.ref().child(
                               "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts");
-                          double price =
-                              double.parse(l[5]); //price for IOS 5 android 2
+                          double price;
+                          if (HaveOffer) {
+                            price = PriceAfterOffer; //price for IOS 5 android 2
+                          } else {
+                            price = Price;
+                          }
                           total = total - price;
                           numOfProducts--;
                           await Carts.update({
@@ -310,8 +323,8 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
                             'NumOfProducts': numOfProducts,
                           });
                           l[0].replaceAll(' ', "");
-                          int barcode = (int.parse(
-                              l[2].toString())); //barcode android 3 , IOS 0
+                          int barcode =
+                              (int.parse(Barcode)); //barcode android 3 , IOS 0
                           int newQuantity =
                               await BringProductQuantity(barcode) + 1;
                           if (FirebaseAuth.instance.currentUser != null) {
@@ -364,7 +377,7 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
                                           ),
                                           SizedBox(height: 15),
                                           Text(
-                                            "هل تريد حذف ${l[4]} ؟", //Product name for IOS 4 android 1
+                                            "هل تريد حذف ${Name} ؟", //Product name for IOS 4 android 1
                                             style: TextStyle(
                                               fontSize: 15,
                                               fontWeight: FontWeight.w400,
@@ -523,7 +536,7 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
                                                                 children: <
                                                                     Widget>[
                                                                   Text(
-                                                                    l[4], //Product name 1 android 4 ios
+                                                                    Name, //Product name 1 android 4 ios
                                                                     textAlign:
                                                                         TextAlign
                                                                             .center,
@@ -547,7 +560,7 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
                                                                       height:
                                                                           10),
                                                                   Text(
-                                                                    l[0], //Product Size 4 android 0 ios
+                                                                    Size, //Product Size 4 android 0 ios
                                                                     textAlign:
                                                                         TextAlign
                                                                             .right,
@@ -576,57 +589,60 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
                                                     ],
                                                   ),
                                                 )),
-                                            Align(
-                                                alignment: Alignment.centerLeft,
-                                                child: Container(
-                                                  decoration: BoxDecoration(),
-                                                  padding: EdgeInsets.symmetric(
-                                                      horizontal: 20),
-                                                  child: Row(
-                                                    mainAxisSize:
-                                                        MainAxisSize.min,
-                                                    children: <Widget>[
-                                                      Text(
-                                                        l[5], //Product Price 2 android ios 5
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                        style: TextStyle(
-                                                            color:
-                                                                Color.fromRGBO(
-                                                                    32,
-                                                                    26,
-                                                                    37,
-                                                                    1),
-                                                            fontSize: 20,
-                                                            letterSpacing:
-                                                                0 /*percentages not used in flutter. defaulting to zero*/,
-                                                            fontWeight:
-                                                                FontWeight.w700,
-                                                            height:
-                                                                0.8181818181818182),
+                                            HaveOffer
+                                                ? AfterOffer(
+                                                    Price, PriceAfterOffer)
+                                                : Align(
+                                                    alignment:
+                                                        Alignment.centerLeft,
+                                                    child: Container(
+                                                      decoration:
+                                                          BoxDecoration(),
+                                                      padding:
+                                                          EdgeInsets.symmetric(
+                                                              horizontal: 20),
+                                                      child: Row(
+                                                        mainAxisSize:
+                                                            MainAxisSize.min,
+                                                        children: <Widget>[
+                                                          Text(
+                                                            Price
+                                                                .toString(), //Product Price 2 android ios 5
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                            style: TextStyle(
+                                                                color: Color
+                                                                    .fromRGBO(32,
+                                                                        26, 37, 1),
+                                                                fontSize: 20,
+                                                                letterSpacing:
+                                                                    0 /*percentages not used in flutter. defaulting to zero*/,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w700,
+                                                                height:
+                                                                    0.8181818181818182),
+                                                          ),
+                                                          SizedBox(width: 4),
+                                                          Text(
+                                                            'ريال',
+                                                            textAlign:
+                                                                TextAlign.right,
+                                                            style: TextStyle(
+                                                                color: Color
+                                                                    .fromRGBO(91,
+                                                                        90, 91, 1),
+                                                                fontSize: 15,
+                                                                letterSpacing:
+                                                                    0 /*percentages not used in flutter. defaulting to zero*/,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w600,
+                                                                height: 1.2),
+                                                          ),
+                                                        ],
                                                       ),
-                                                      SizedBox(width: 4),
-                                                      Text(
-                                                        'ريال',
-                                                        textAlign:
-                                                            TextAlign.right,
-                                                        style: TextStyle(
-                                                            color:
-                                                                Color.fromRGBO(
-                                                                    91,
-                                                                    90,
-                                                                    91,
-                                                                    1),
-                                                            fontSize: 15,
-                                                            letterSpacing:
-                                                                0 /*percentages not used in flutter. defaulting to zero*/,
-                                                            fontWeight:
-                                                                FontWeight.w600,
-                                                            height: 1.2),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                )),
+                                                    )),
                                           ])))),
                             ));
                       }
@@ -638,6 +654,59 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
           }
           return Container();
         });
+  }
+
+  Widget AfterOffer(double PriceBefore, double PriceAfter) {
+    return Align(
+      alignment: Alignment.centerLeft,
+      //padding: const EdgeInsets.all(8.0),
+      child: Container(
+        decoration: BoxDecoration(),
+        padding: EdgeInsets.symmetric(horizontal: 30),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Text(
+              PriceBefore.toString(), //Product Price 2 android ios 5
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  decoration: TextDecoration.lineThrough,
+                  color: Color.fromRGBO(91, 90, 91, 1),
+                  fontSize: 20,
+                  letterSpacing:
+                      0 /*percentages not used in flutter. defaulting to zero*/,
+                  fontWeight: FontWeight.w700,
+                  height: 0.8181818181818182),
+            ),
+            SizedBox(height: 10),
+            Text(
+              PriceAfter.toString(), //Product Price 2 android ios 5
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  color: Color.fromRGBO(32, 26, 37, 1),
+                  fontSize: 20,
+                  letterSpacing:
+                      0 /*percentages not used in flutter. defaulting to zero*/,
+                  fontWeight: FontWeight.w700,
+                  height: 0.8181818181818182),
+            ),
+            SizedBox(width: 4),
+            Text(
+              'ريال',
+              textAlign: TextAlign.right,
+              style: TextStyle(
+                  color: Color.fromRGBO(91, 90, 91, 1),
+                  fontSize: 15,
+                  letterSpacing:
+                      0 /*percentages not used in flutter. defaulting to zero*/,
+                  fontWeight: FontWeight.w600,
+                  height: 1.2),
+            ),
+            SizedBox(width: 8),
+          ],
+        ),
+      ),
+    );
   }
 
   Widget Con() {
@@ -771,7 +840,6 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
   @override
   void deactivate() {
     _streamSubscription.cancel();
-    _streamSubscription1.cancel();
     super.deactivate();
   }
 }
