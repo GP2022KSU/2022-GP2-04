@@ -10,7 +10,6 @@ import 'package:flutter/rendering.dart';
 import 'adminSearch.dart';
 import 'package:carttogo/Users/user.dart' as user;
 
-
 class ProductsListAdmin extends StatefulWidget {
   @override
   State<ProductsListAdmin> createState() => _ProductsListAdmin();
@@ -24,7 +23,6 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
   var l;
   var g;
   var k;
-
 
   @override
   Widget build(BuildContext context) {
@@ -65,17 +63,17 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
             )),
         leading: IconButton(
           onPressed: () async {
-              final result = await showSearch<String>(
-                context: context,
-                delegate: AdminSearch(user.getProduct()),
-              );
-              print(result);
-            },
+            final result = await showSearch<String>(
+              context: context,
+              delegate: AdminSearch(user.getProduct()),
+            );
+            print(result);
+          },
           icon: Icon(Icons.search_outlined),
           color: appColor,
         ),
         // logout button
-        
+
         actions: <Widget>[
           Padding(
             padding: const EdgeInsets.all(8.0),
@@ -223,8 +221,6 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
                   ),
                 ),
               ),
-
-
             ));
           },
         ),
@@ -377,7 +373,6 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
 
 // dialog to enter the new product info
   void _UpdateOrNot(QUANTITY, PRICE, LOCATION) async {
-
     //controller to edit function
     var quantityController = TextEditingController(text: QUANTITY);
     var priceController = TextEditingController(text: PRICE);
@@ -540,7 +535,10 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
                                                     .text.isNotEmpty &&
                                                 locationController
                                                     .text.isNotEmpty) {
-                                              updateProductInfo(quantityController,priceController,locationController);
+                                              updateProductInfo(
+                                                  quantityController,
+                                                  priceController,
+                                                  locationController);
                                             }
                                             Navigator.push(context,
                                                 MaterialPageRoute(
@@ -586,7 +584,8 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
   }
 
 // add the new product's info to the database
-  updateProductInfo(quantityController,priceController,locationController) async {
+  updateProductInfo(
+      quantityController, priceController, locationController) async {
     DatabaseReference ref1 = FirebaseDatabase.instance.ref("Products/$k");
     await ref1.update({
       "Quantity": int.tryParse(quantityController.text),

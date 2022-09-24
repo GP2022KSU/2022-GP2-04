@@ -452,7 +452,7 @@ class AddNewProductState extends State<AddNewProduct> {
                                       pPriceController.text.isNotEmpty) {
                                     addProduct(
                                       pbarcodeController.text,
-                                                                          pbarcodeController.text,
+                                      pbarcodeController.text,
                                       pNameController.text,
                                       selectedBrand.toString(),
                                       selectedCategory.toString(),
@@ -492,7 +492,9 @@ class AddNewProductState extends State<AddNewProduct> {
 
 // insert into database
     databaseRef.child("Products").child("$intBarcode").set({
-      'SearchBarcode' : searchBarcode,
+      'SearchBarcode': searchBarcode,
+      //'SearchBarcode' : int.tryParse(searchBarcode),
+
       'Name': name,
       'Brand': selectedBrand,
       'Category': selectedCategory,

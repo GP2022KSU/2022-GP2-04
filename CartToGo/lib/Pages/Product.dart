@@ -6,7 +6,7 @@ class Product {
   //final int Quantity;
   final String Size;
   final String SearchBarcode;
-    final String Barcode;
+  final String Barcode;
   final String Location;
 
   const Product({
@@ -31,7 +31,7 @@ class Product {
       //Quantity: map['Quantity'] ?? '',
       Size: map['Size'] ?? '',
       Barcode: map['Barcode'] ?? '',
-      SearchBarcode: map ['SearchBarcode']?? "Empty",
+      SearchBarcode: map['SearchBarcode'].toString() ?? '',
       Location: map['Location'] ?? '',
     );
   }
