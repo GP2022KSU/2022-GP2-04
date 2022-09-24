@@ -16,6 +16,22 @@ class ProductsListAdmin extends StatefulWidget {
 }
 
 class _ProductsListAdmin extends State<ProductsListAdmin> {
+  List<String> Locations = [
+    'ممر 12',
+    'ممر 11',
+    'ممر 10',
+    'ممر 9',
+    'ممر 8',
+    'ممر 7',
+    'ممر 6',
+    'ممر 5',
+    'ممر 4',
+    'ممر 3',
+    'ممر 2',
+    'ممر 1'
+  ];
+  String? selectedLocation;
+
   bool isScrolled = false;
   final fb = FirebaseDatabase.instance;
   final _formKey = GlobalKey<FormState>();
@@ -27,7 +43,6 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
   @override
   Widget build(BuildContext context) {
     final ref = fb.ref().child('Products');
-    //  final ref = fb.ref().child('Products').orderByKey().equalTo("");
 
     return Scaffold(
       // add new product button to navigate the admin to add new product form
@@ -376,7 +391,6 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
     //controller to edit function
     var quantityController = TextEditingController(text: QUANTITY);
     var priceController = TextEditingController(text: PRICE);
-    var locationController = TextEditingController(text: LOCATION);
 
     return showDialog<void>(
         context: context,
@@ -490,30 +504,40 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
                                 // new product's location
                                 Directionality(
                                   textDirection: TextDirection.rtl,
-                                  child: TextFormField(
-                                      keyboardType: TextInputType.text,
-                                      controller: locationController,
-                                      decoration: const InputDecoration(
-                                        labelText: "الموقع",
-                                        labelStyle: TextStyle(
-                                            fontSize: 16, color: Colors.black),
-                                        hintText: "أدخل موقع المنتج ",
-                                        hintStyle: TextStyle(fontSize: 14),
+                                  child: DropdownButtonFormField(
+                                    decoration: InputDecoration(
                                         enabledBorder: OutlineInputBorder(
                                           borderRadius: BorderRadius.all(
-                                              Radius.circular(4.0)),
+                                              Radius.circular(20.0)),
                                           borderSide: BorderSide(
-                                              width: 1.5,
-                                              color: Color(0xFFAFAEAE)),
+                                              width: 2, color: appColor),
                                         ),
-                                      ),
-                                      validator: (value) {
-                                        if (value == null || value.isEmpty) {
-                                          return 'الرجاء كتابة موقع المنتج';
-                                        }
-                                        return null;
-                                      },
-                                      onChanged: (value) {}),
+                                        labelText: 'الموقع',
+                                        labelStyle: TextStyle(
+                                            fontSize: 20, color: Colors.black)),
+                                    isExpanded: true,
+                                    icon: const Icon(
+                                      Icons.keyboard_arrow_down,
+                                      color: appColor,
+                                    ),
+                                    // Array list of locations
+                                    items: Locations.map((String items) {
+                                      return DropdownMenuItem(
+                                        value: items,
+                                        child: Text(items),
+                                      );
+                                    }).toList(),
+                                    validator: (value) => value == null
+                                        ? 'الرجاء اختيار الموقع'
+                                        : null,
+                                    // After selecting the location ,it will
+                                    // change button value to selected location
+                                    onChanged: (String? newLocation) {
+                                      setState(() {
+                                        selectedLocation = newLocation!;
+                                      });
+                                    },
+                                  ),
                                 ),
                                 SizedBox(height: 15),
 
@@ -533,12 +557,11 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
                                                     .text.isNotEmpty &&
                                                 priceController
                                                     .text.isNotEmpty &&
-                                                locationController
-                                                    .text.isNotEmpty) {
+                                                selectedLocation!.isNotEmpty) {
                                               updateProductInfo(
                                                   quantityController,
                                                   priceController,
-                                                  locationController);
+                                                  selectedLocation.toString());
                                             }
                                             Navigator.push(context,
                                                 MaterialPageRoute(
@@ -585,12 +608,12 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
 
 // add the new product's info to the database
   updateProductInfo(
-      quantityController, priceController, locationController) async {
+      quantityController, priceController, selectedLocation) async {
     DatabaseReference ref1 = FirebaseDatabase.instance.ref("Products/$k");
     await ref1.update({
       "Quantity": int.tryParse(quantityController.text),
       "Price": double.tryParse(priceController.text),
-      "Location": locationController.text,
+      "Location": selectedLocation,
     });
   }
 
