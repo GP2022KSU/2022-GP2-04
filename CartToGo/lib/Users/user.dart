@@ -1,6 +1,7 @@
 library carttogo.globals;
 
-import 'dart:ffi';
+import 'dart:async';
+import 'dart:core';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../Pages/Product.dart';
@@ -120,12 +121,10 @@ Future<List<String>> BringNames() async {
   return names;
 }
 
-<<<<<<< HEAD
 //admin
-=======
 
-//admin search to edit or delete 
->>>>>>> 55e0f33a473e44c55b6322f856d9986e5821236c
+//admin search to edit or delete
+
 Future<List<String>> BringProducts() async {
   if (FirebaseAuth.instance.currentUser != null) {
     final ref = FirebaseDatabase.instance.ref();
@@ -133,7 +132,8 @@ Future<List<String>> BringProducts() async {
     final map = snapshot.value as Map<dynamic, dynamic>;
     map.forEach((key, value) {
       final product = Product.fromMap(value);
-      names.add(product.Name.toString()+ " | " + product.SearchBarcode.toString());
+      names.add(
+          product.Name.toString() + " | " + product.SearchBarcode.toString());
     });
     print(names);
     return names;
