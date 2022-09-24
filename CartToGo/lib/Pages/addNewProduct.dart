@@ -452,6 +452,7 @@ class AddNewProductState extends State<AddNewProduct> {
                                       pPriceController.text.isNotEmpty) {
                                     addProduct(
                                       pbarcodeController.text,
+                                                                          pbarcodeController.text,
                                       pNameController.text,
                                       selectedBrand.toString(),
                                       selectedCategory.toString(),
@@ -479,6 +480,7 @@ class AddNewProductState extends State<AddNewProduct> {
 // add new product to the database/stock
   void addProduct(
       String barcode,
+      String searchBarcode,
       String name,
       String selectedBrand,
       String selectedCategory,
@@ -490,6 +492,7 @@ class AddNewProductState extends State<AddNewProduct> {
 
 // insert into database
     databaseRef.child("Products").child("$intBarcode").set({
+      'SearchBarcode' : searchBarcode,
       'Name': name,
       'Brand': selectedBrand,
       'Category': selectedCategory,

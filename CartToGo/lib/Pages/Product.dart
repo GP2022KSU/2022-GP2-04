@@ -5,7 +5,8 @@ class Product {
   //final double Price;
   //final int Quantity;
   final String Size;
-  final String Barcode;
+  final String SearchBarcode;
+    final String Barcode;
   final String Location;
 
   const Product({
@@ -16,6 +17,7 @@ class Product {
     //required this.Quantity,
     required this.Size,
     required this.Barcode,
+    required this.SearchBarcode,
     required this.Location,
   });
 
@@ -29,6 +31,7 @@ class Product {
       //Quantity: map['Quantity'] ?? '',
       Size: map['Size'] ?? '',
       Barcode: map['Barcode'] ?? '',
+      SearchBarcode: map ['SearchBarcode']?? "Empty",
       Location: map['Location'] ?? '',
     );
   }

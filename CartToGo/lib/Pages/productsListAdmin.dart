@@ -74,8 +74,8 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
           icon: Icon(Icons.search_outlined),
           color: appColor,
         ),
-
         // logout button
+        
         actions: <Widget>[
           Padding(
             padding: const EdgeInsets.all(8.0),
