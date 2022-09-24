@@ -86,7 +86,7 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
               context: context,
               delegate: AdminSearch(user.getProduct()),
             );
-            print(result);
+            //print(result);
           },
           icon: Icon(Icons.search_outlined),
           color: appColor,
@@ -138,7 +138,7 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
             var v = snapshot.value.toString();
             g = v.replaceAll(
                 RegExp(
-                    "{|}|Name: |Price: |Size: |Quantity: |Category: |Brand: |Barcode: |Location: "),
+                    "{|}|Name: |Price: |Size: |Quantity: |Category: |Brand: |Barcode: |Location: |Offer: |PriceAfterOffer: "),
                 "");
             g.trim();
             l = g.split(',');
@@ -216,7 +216,7 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
                           "العلامة التجارية: " +
                           l[9] +
                           "\n"
-                          "\t" +
+                              "\t" +
                           "الفئه: " +
                           l[4] +
                           "\n" +
