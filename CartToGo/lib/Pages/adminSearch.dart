@@ -104,7 +104,8 @@ class AdminSearch extends SearchDelegate<String> {
                             // products list
                             children: [
                           TextSpan(
-                            text: Suggestions.elementAt(index),
+                            text: Suggestions.elementAt(index)
+                                .substring(query.length),
                             style: TextStyle(
                               color: Colors.black,
                               fontWeight: FontWeight.normal,
