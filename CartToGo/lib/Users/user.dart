@@ -113,12 +113,13 @@ Future<List<String>> BringNames() async {
     final map = snapshot.value as Map<dynamic, dynamic>;
     map.forEach((key, value) {
       final product = Product.fromMap(value);
-      names.add(product.Name.toString() + " | " + product.Location.toString());
+      ProductsLocation.add(
+          product.Name.toString() + " | " + product.Location.toString());
     });
     print(names);
-    return names;
+    return ProductsLocation;
   }
-  return names;
+  return ProductsLocation;
 }
 
 //admin
@@ -238,6 +239,11 @@ String getUsername() {
 
 List<String> getNames() {
   BringNames();
+  return ProductsLocation;
+}
+
+List<String> getProductsLocation() {
+  BringNames();
   return names;
 }
 
@@ -300,4 +306,5 @@ double TotalAfterPoints = 0.0;
 double TotalInsideCart = 0.0;
 int PointsAfterPaying = 0;
 bool Paid = false;
+List<String> ProductsLocation = [];
 List<String> names = [];
