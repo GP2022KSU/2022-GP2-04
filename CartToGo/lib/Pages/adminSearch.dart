@@ -1,6 +1,7 @@
 import 'package:carttogo/main.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'productsListAdmin.dart';
 
 class AdminSearch extends SearchDelegate<String> {
   final List<String> barcodes;
@@ -85,7 +86,6 @@ class AdminSearch extends SearchDelegate<String> {
                 borderRadius: BorderRadius.circular(10),
               ),
               title: Row(
-                
                   textDirection: TextDirection.rtl,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
@@ -96,13 +96,15 @@ class AdminSearch extends SearchDelegate<String> {
                         color: Color.fromARGB(255, 255, 0, 0),
                       ),
                       onPressed: () {
-                        var splitted =
-                            Suggestions.elementAt(index).split(" | ");
-                        print(splitted[1]);
-                        _DeleteOrNot(splitted[1].toString(), context);
-                        Suggestions.removeAt(index); //عشان يشيل من اللست ما ضبط
+                       var splitted =
+                             Suggestions.elementAt(index).split(" | ");
+                         print(splitted[1]);
+                         //_DeleteOrNot(splitted[1].toString());
+                         _DeleteOrNot(splitted[1].toString(), context);
+                         //Suggestions.removeAt(index); //عشان يشيل من اللست ما ضبط
                       },
                     ),
+                    
                     // make the typing numbers bold
                     RichText(
                         text: TextSpan(
@@ -128,7 +130,6 @@ class AdminSearch extends SearchDelegate<String> {
                     SizedBox(
                       width: 10,
                     ),
-                    
                     Divider() // to arrange the products list
                   ]),
             ),
@@ -197,9 +198,10 @@ class AdminSearch extends SearchDelegate<String> {
                                 child: Text("لا",
                                     style: TextStyle(
                                       fontSize: 16.0,
-                                      fontWeight: FontWeight.w400,
+                                      fontWeight: FontWeight.bold,
                                     )))))
                   ])));
         });
   }
+  
 }
