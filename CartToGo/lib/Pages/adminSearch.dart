@@ -1,14 +1,12 @@
 import 'package:carttogo/main.dart';
 import 'package:flutter/material.dart';
-import '../scanner_icons.dart';
-import 'addNewProduct.dart';
 import 'package:firebase_database/firebase_database.dart';
 
 class AdminSearch extends SearchDelegate<String> {
-  final List<String> names;
+  final List<String> barcodes;
   var splitted;
   final fb = FirebaseDatabase.instance;
-  AdminSearch(this.names)
+  AdminSearch(this.barcodes)
       : super(
           searchFieldLabel: "  ابحث عن منتج لحذفه أو تعديله  ",
           keyboardType: TextInputType.text,
@@ -30,16 +28,17 @@ class AdminSearch extends SearchDelegate<String> {
     ];
   }
 
-  @override
+  // to delete what in the search bar  
+ @override
   Widget? buildLeading(BuildContext context) {
     return IconButton(
+      icon: Icon(
+        Icons.cancel,
+        color: appColor,
+      ),
       onPressed: () {
-        Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => const scanProductBarcode(),
-        ));
+        query = '';
       },
-      icon: const Icon(Scanner.scanner),
-      color: appColor,
     );
   }
 
@@ -61,12 +60,12 @@ class AdminSearch extends SearchDelegate<String> {
   @override
   Widget buildSuggestions(BuildContext context) {
     final Suggestions = query.isEmpty
-        ? names
-        : names.where((p) => p.startsWith(query)).toList();
+        ? barcodes
+        : barcodes.where((p) => p.startsWith(query)).toList();
     return Suggestions.isEmpty && query.isNotEmpty
         ? Center(
             child: Text(
-            "لا توجد منتجات بهذا الإسم",
+            "لا توجد منتجات بهذا الرمز الشريطي",
             style: TextStyle(
                 color: Colors.black,
                 fontWeight: FontWeight.bold,
@@ -86,10 +85,25 @@ class AdminSearch extends SearchDelegate<String> {
                 borderRadius: BorderRadius.circular(10),
               ),
               title: Row(
+                
                   textDirection: TextDirection.rtl,
-                  crossAxisAlignment: CrossAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    // make the typing letters bold
+                    IconButton(
+                      tooltip: "حذف المنتج",
+                      icon: Icon(
+                        Icons.delete,
+                        color: Color.fromARGB(255, 255, 0, 0),
+                      ),
+                      onPressed: () {
+                        var splitted =
+                            Suggestions.elementAt(index).split(" | ");
+                        print(splitted[1]);
+                        _DeleteOrNot(splitted[1].toString(), context);
+                        Suggestions.removeAt(index); //عشان يشيل من اللست ما ضبط
+                      },
+                    ),
+                    // make the typing numbers bold
                     RichText(
                         text: TextSpan(
                             text: Suggestions.elementAt(index)
@@ -114,20 +128,7 @@ class AdminSearch extends SearchDelegate<String> {
                     SizedBox(
                       width: 10,
                     ),
-                    IconButton(
-                      tooltip: "حذف المنتج",
-                      icon: Icon(
-                        Icons.delete,
-                        color: Color.fromARGB(255, 255, 0, 0),
-                      ),
-                      onPressed: () {
-                        var splitted =
-                            Suggestions.elementAt(index).split(" | ");
-                        print(splitted[1]);
-                        _DeleteOrNot(splitted[1].toString(), context);
-                        Suggestions.removeAt(index); //عشان يشيل من اللست ما ضبط
-                      },
-                    ),
+                    
                     Divider() // to arrange the products list
                   ]),
             ),

@@ -113,13 +113,12 @@ Future<List<String>> BringNames() async {
     final map = snapshot.value as Map<dynamic, dynamic>;
     map.forEach((key, value) {
       final product = Product.fromMap(value);
-      ProductsLocation.add(
-          product.Name.toString() + " | " + product.Location.toString());
+      names.add(product.Name.toString() + " | " + product.Location.toString());
     });
     print(names);
-    return ProductsLocation;
+    return names;
   }
-  return ProductsLocation;
+  return names;
 }
 
 //admin
@@ -133,13 +132,13 @@ Future<List<String>> BringProducts() async {
     final map = snapshot.value as Map<dynamic, dynamic>;
     map.forEach((key, value) {
       final product = Product.fromMap(value);
-      names.add(
-          product.Name.toString() + " | " + product.SearchBarcode.toString());
+      barcodes.add(
+          product.SearchBarcode.toString() + " | " + product.Name.toString());
     });
-    print(names);
-    return names;
+    print(barcodes);
+    return barcodes;
   }
-  return names;
+  return barcodes;
 }
 
 Future<double> BringTotalPrice() async {
@@ -239,18 +238,13 @@ String getUsername() {
 
 List<String> getNames() {
   BringNames();
-  return ProductsLocation;
-}
-
-List<String> getProductsLocation() {
-  BringNames();
   return names;
 }
 
 //admin
-List<String> getProduct() {
+List<String> getBarcode() {
   BringProducts();
-  return names;
+  return barcodes;
 }
 
 int getPoints() {
@@ -306,6 +300,5 @@ double TotalAfterPoints = 0.0;
 double TotalInsideCart = 0.0;
 int PointsAfterPaying = 0;
 bool Paid = false;
-List<String> ProductsLocation = [];
 List<String> names = [];
-//
+List<String> barcodes = [];

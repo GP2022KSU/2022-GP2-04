@@ -84,7 +84,7 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
           onPressed: () async {
             final result = await showSearch<String>(
               context: context,
-              delegate: AdminSearch(user.getProduct()),
+              delegate: AdminSearch(user.getBarcode()),
             );
             //print(result);
           },
