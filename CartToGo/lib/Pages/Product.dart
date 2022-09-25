@@ -31,7 +31,7 @@ class Product {
       //Quantity: map['Quantity'] ?? '',
       Size: map['Size'] ?? '',
       Barcode: map['Barcode'] ?? '',
-      SearchBarcode: map['SearchBarcode'].toString() ?? '',
+      SearchBarcode: map['SearchBarcode'].toString(),
       Location: map['Location'] ?? '',
     );
   }
