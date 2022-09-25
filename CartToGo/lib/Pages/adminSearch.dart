@@ -15,8 +15,6 @@ class AdminSearch extends SearchDelegate<String> {
           textInputAction: TextInputAction.search,
         );
 
-  get context => null;
-
 // to view the list without a keyboard
   @override
   List<Widget>? buildActions(BuildContext context) {
@@ -79,7 +77,7 @@ class AdminSearch extends SearchDelegate<String> {
             itemCount: Suggestions.length,
             itemBuilder: (BuildContext context, int index) => ListTile(
               onTap: () {
-                //showResults(context);
+                showResults(context);
               },
               shape: RoundedRectangleBorder(
                 side: BorderSide(
@@ -126,7 +124,8 @@ class AdminSearch extends SearchDelegate<String> {
                         var splitted =
                             Suggestions.elementAt(index).split(" | ");
                         print(splitted[1]);
-                        //_DeleteOrNot(splitted[1].toString());
+                        _DeleteOrNot(splitted[1].toString(), context);
+                        Suggestions.removeAt(index); //عشان يشيل من اللست ما ضبط
                       },
                     ),
                     Divider() // to arrange the products list
@@ -135,7 +134,7 @@ class AdminSearch extends SearchDelegate<String> {
           );
   }
 
-  void _DeleteOrNot(String barcode) async {
+  void _DeleteOrNot(String barcode, BuildContext context) async {
     final ref = fb.ref().child('Products/${barcode}');
     return showDialog<void>(
         context: context,

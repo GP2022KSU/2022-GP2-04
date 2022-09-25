@@ -43,13 +43,13 @@ class MainPage extends StatelessWidget {
               return Center(child: Text('! مشكلة ما قد حدثت'));
             } else if (snapshot.hasData &&
                 (FirebaseAuth.instance.currentUser?.uid).toString() !=
-                    "jCG3miIP7AdaVVfY20lCn1MVWqR2" &&
+                    "1NH5Wj2RzTXWZxLcTcnDDdKru7I3" &&
                 FirebaseAuth.instance.currentUser?.uid.toString() !=
                     "OMCkaR8mdxNDmDE1O7gkFFd9HyX2") {
               return Navi();
             } else if (snapshot.hasData &&
                 (FirebaseAuth.instance.currentUser?.uid).toString() ==
-                    "jCG3miIP7AdaVVfY20lCn1MVWqR2") {
+                    "1NH5Wj2RzTXWZxLcTcnDDdKru7I3") {
               return ProductsListAdmin();
             } else if (snapshot.hasData &&
                 (FirebaseAuth.instance.currentUser?.uid).toString() ==
