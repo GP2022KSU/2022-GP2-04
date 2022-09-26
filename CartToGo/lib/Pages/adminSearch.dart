@@ -4,6 +4,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/services.dart';
 import 'productsListAdmin.dart';
 
+
 class AdminSearch extends SearchDelegate<String> {
   final List<String> barcodes;
   var splitted;
