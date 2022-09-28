@@ -86,7 +86,7 @@ flutter run
 
 * **Display the product location**
 
-* **Supports Recommender system (An AI algorithm) for products with the same category with less prices and products that have offers based on previous purchases**
+* **Supports Recommender system (An AI algorithm) for products that have offers based on previous purchases**
 
 ## 👩‍💻 Contributors
 <div align="center">
