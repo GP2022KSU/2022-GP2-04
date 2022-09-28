@@ -119,7 +119,7 @@ class PaymentCompletionState extends State<PaymentCompletion> {
                               height: 0.9),
                         )*/
                         Cart(),
-                        /*
+
                         const SizedBox(
                           height: 15,
                         ),
@@ -151,7 +151,8 @@ class PaymentCompletionState extends State<PaymentCompletion> {
                               Text(
                                 cashier
                                         .getTotalAfterPoints(
-                                            uid, int.parse(splitted[1]))
+                                            asyn.data.toString(),
+                                            int.parse(splitted[1]))
                                         .toString() +
                                     " ريال",
                                 textAlign: TextAlign.right,
@@ -195,7 +196,6 @@ class PaymentCompletionState extends State<PaymentCompletion> {
                             },
                             child: const Text('اتمام الدفع')),
                         // end of payment completion button
-                        */
                       ],
                     );
                   }
@@ -318,52 +318,6 @@ class PaymentCompletionState extends State<PaymentCompletion> {
                           return Container();
                         }),
                   ),
-                  const SizedBox(
-                    height: 15,
-                  ),
-                  Container(
-                      decoration: const BoxDecoration(
-                        color: const Color.fromARGB(255, 242, 240, 240),
-                        //border: Border.all(color: Colors.black),
-                      ),
-                      height: MediaQuery.of(context).size.height * 0.06,
-                      width: MediaQuery.of(context).size.width * 1,
-                      child: Row(
-                        textDirection: TextDirection.rtl,
-                        children: <Widget>[
-                          const Text(
-                            "  المجموع   ",
-                            //textAlign: TextAlign.right,
-                            //textDirection: TextDirection.ltr,
-                            style: TextStyle(
-                                color: Color.fromRGBO(32, 26, 37, 1),
-                                fontSize: 20,
-                                letterSpacing:
-                                    0 /*percentages not used in flutter. defaulting to zero*/,
-                                fontWeight: FontWeight.w700,
-                                height: 0.9),
-                          ),
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.54,
-                          ),
-                          Text(
-                            cashier
-                                    .getTotalAfterPoints(asyn.data.toString(),
-                                        int.parse(splitted[1]))
-                                    .toString() +
-                                " ريال",
-                            textAlign: TextAlign.right,
-                            textDirection: TextDirection.rtl,
-                            style: const TextStyle(
-                                color: const Color.fromARGB(255, 17, 18, 18),
-                                fontSize: 20,
-                                letterSpacing:
-                                    0 /*percentages not used in flutter. defaulting to zero*/,
-                                //fontWeight: FontWeight.w700,
-                                height: 0.9),
-                          ),
-                        ],
-                      ))
                 ]);
               }
               return Container();
