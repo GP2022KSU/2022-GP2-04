@@ -4,7 +4,6 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/services.dart';
 import 'productsListAdmin.dart';
 
-
 class AdminSearch extends SearchDelegate<String> {
   final List<String> barcodes;
   var splitted;
@@ -23,7 +22,7 @@ class AdminSearch extends SearchDelegate<String> {
     'ممر 1'
   ];
   late String selectedLocation;
-    final _formKey = GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>();
 
   final fb = FirebaseDatabase.instance;
   AdminSearch(this.barcodes)
@@ -114,23 +113,27 @@ class AdminSearch extends SearchDelegate<String> {
                       onPressed: () async {
                         var splitted =
                             Suggestions.elementAt(index).split(" | ");
-                        DatabaseReference ref =
-                            FirebaseDatabase.instance.ref("Products/${splitted[0].toString()}");
+                        DatabaseReference ref = FirebaseDatabase.instance
+                            .ref("Products/${splitted[0].toString()}");
 
                         DatabaseEvent quan = await ref.child("Quantity").once();
                         DatabaseEvent price = await ref.child("Price").once();
-                        DatabaseEvent location = await ref.child("Location").once();
+                        DatabaseEvent location =
+                            await ref.child("Location").once();
                         DatabaseEvent offer = await ref.child("Offer").once();
-                        DatabaseEvent nprice = await ref.child("PriceAfterOffer").once();
-                        
+                        DatabaseEvent nprice =
+                            await ref.child("PriceAfterOffer").once();
 
-                        var QUANTITY = int.parse(quan.snapshot.value.toString());
-                        var PRICE = double.parse(price.snapshot.value.toString());
+                        var QUANTITY =
+                            int.parse(quan.snapshot.value.toString());
+                        var PRICE =
+                            double.parse(price.snapshot.value.toString());
                         var LOCATION = location.snapshot.value.toString();
                         var OFFER = offer.snapshot.value.toString();
-                        var NEWPRICE = double.parse(nprice.snapshot.value.toString());
-                        _UpdateOrNot(
-                            QUANTITY, PRICE, LOCATION, OFFER, NEWPRICE,context,splitted[0].toString());
+                        var NEWPRICE =
+                            double.parse(nprice.snapshot.value.toString());
+                        _UpdateOrNot(QUANTITY, PRICE, LOCATION, OFFER, NEWPRICE,
+                            context, splitted[0].toString());
                       },
                     ),
                     IconButton(
@@ -247,7 +250,8 @@ class AdminSearch extends SearchDelegate<String> {
         });
   }
 
-    void _UpdateOrNot(QUANTITY, PRICE, LOCATION, ONOFFER, NEWPRICE,BuildContext context, String barcode) async {
+  void _UpdateOrNot(QUANTITY, PRICE, LOCATION, ONOFFER, NEWPRICE,
+      BuildContext context, String barcode) async {
     // controller to edit function
     var quantityController = TextEditingController(text: QUANTITY.toString());
     var priceController = TextEditingController(text: PRICE.toString());
@@ -394,8 +398,7 @@ class AdminSearch extends SearchDelegate<String> {
                                     // After selecting the location ,it will
                                     // change button value to selected location
                                     onChanged: (String? newLocation) {
-                                        selectedLocation = newLocation!;
-                                  
+                                      selectedLocation = newLocation!;
                                     },
                                   ),
                                 ),
@@ -455,12 +458,13 @@ class AdminSearch extends SearchDelegate<String> {
                                                     .text.isNotEmpty &&
                                                 priceController
                                                     .text.isNotEmpty &&
-                                                selectedLocation!.isNotEmpty) {
+                                                selectedLocation.isNotEmpty) {
                                               updateProductInfo(
                                                   quantityController,
                                                   priceController,
                                                   selectedLocation.toString(),
-                                                  newPriceController,barcode);
+                                                  newPriceController,
+                                                  barcode);
                                             }
                                             Navigator.push(context,
                                                 MaterialPageRoute(
@@ -503,7 +507,7 @@ class AdminSearch extends SearchDelegate<String> {
 
 // add the new product's info to the database
   updateProductInfo(quantityController, priceController, selectedLocatio,
-      newPriceController,String barcode) async {
+      newPriceController, String barcode) async {
     DatabaseReference ref1 = FirebaseDatabase.instance.ref("Products/$barcode");
     await ref1.update({
       "Quantity": int.tryParse(quantityController.text),
@@ -513,7 +517,4 @@ class AdminSearch extends SearchDelegate<String> {
       "PriceAfterOffer": double.tryParse(newPriceController.text),
     });
   }
-  
-
-
 }

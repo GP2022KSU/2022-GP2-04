@@ -170,7 +170,7 @@ class PaymentCompletionState extends State<PaymentCompletion> {
                           ),
                         ),
                         const SizedBox(
-                          height: 15,
+                          height: 50,
                         ),
 
                         // payment completion button
@@ -234,7 +234,7 @@ class PaymentCompletionState extends State<PaymentCompletion> {
                         height: 0.9),
                   ),
                   Container(
-                    height: MediaQuery.of(context).size.height * 0.713,
+                    height: MediaQuery.of(context).size.height * 0.2,
                     child: FirebaseAnimatedList(
                         query: _fb.ref().child(
                             "Shopper/${asyn.data.toString()}/Carts/${splitted[1].toString()}"),
