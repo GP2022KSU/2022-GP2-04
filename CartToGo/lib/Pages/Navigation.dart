@@ -24,7 +24,7 @@ class NaviState extends State<Navi> {
   }
 
   void initState() {
-    tab1 = ShoppingCart(setPage, 0);
+    tab1 = ShoppingCart(setPage, 3);
     super.initState();
   }
 
@@ -33,38 +33,42 @@ class NaviState extends State<Navi> {
       case 0:
         return tab1;
       case 1:
-        return SearchProductList();
-      case 2:
-        return LoyaltyCard();
-      case 3:
         return OffersList();
+      case 2:
+        return SearchProductList();
+      case 3:
+        return LoyaltyCard();
     }
     return Container();
   }
 
   @override
   Widget build(BuildContext context) {
-    bool v1 = false;
+    bool v1 = false; //Shopping cart
     double s1 = 0;
-    bool v2 = false;
+    bool v2 = false; //Search
     double s2 = 0;
-    bool v3 = false;
+    bool v3 = false; //Loyalty Card
     double s3 = 0;
 
-    bool v4 = false;
+    bool v4 = false; //Offers
     double s4 = 0;
 
-    Myindex == 1 ? v2 = false : v2 = true;
+    Myindex == 2 ? v2 = false : v2 = true;
 
-    Myindex == 01 ? s2 = 0.04 : s2 = 0.066;
+    Myindex == 0 || Myindex == 1 || Myindex == 3 ? s2 = 0.061 : s2 = 0.04;
 
     Myindex == 0 ? v1 = false : v1 = true;
 
     Myindex == 0 ? s1 = 0.04 : s1 = 0.066;
 
-    Myindex == 2 ? v3 = false : v3 = true;
+    Myindex == 3 ? v3 = false : v3 = true;
 
-    Myindex == 0 || Myindex == 1 ? s3 = 0.065 : s3 = 0.04;
+    Myindex == 2 || Myindex == 0 || Myindex == 3 ? s4 = 0.06 : s4 = 0.04;
+
+    Myindex == 1 ? v4 = false : v4 = true;
+
+    Myindex == 0 || Myindex == 1 || Myindex == 2 ? s3 = 0.065 : s3 = 0.04;
 
     return SafeArea(
       top: false,
@@ -101,32 +105,31 @@ class NaviState extends State<Navi> {
                 ],
               ),
             ),
-// Container(
-//               height: MediaQuery.of(context).size.height * s2,
-//               child: Column(
-//                 children: [
-//                   Visibility(
-//                     child: SizedBox(
-//                       height: MediaQuery.of(context).size.height * 0.0049,
-//                     ),
-//                     visible: v2,
-//                   ),
-//                   Icon(Icons.discount_outlined,
-//                       size: 30,
-//                       color: Myindex == 1
-//                           ? Color.fromARGB(255, 35, 61, 255)
-//                           : Colors.white),
-//                   Visibility(
-//                     child: const Text(
-//                       "العروض",
-//                       style: TextStyle(color: Colors.white, fontSize: 12),
-//                     ),
-//                     visible: v2,
-//                   ),
-//                 ],
-//               ),
-//             ),
-
+            Container(
+              height: MediaQuery.of(context).size.height * s4,
+              child: Column(
+                children: [
+                  Visibility(
+                    child: SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.0049,
+                    ),
+                    visible: v4,
+                  ),
+                  Icon(Icons.discount_outlined,
+                      size: 28,
+                      color: Myindex == 1
+                          ? Color.fromARGB(255, 35, 61, 255)
+                          : Colors.white),
+                  Visibility(
+                    child: const Text(
+                      "العروض",
+                      style: TextStyle(color: Colors.white, fontSize: 12),
+                    ),
+                    visible: v4,
+                  ),
+                ],
+              ),
+            ),
             Container(
               height: MediaQuery.of(context).size.height * s2,
               child: Column(
@@ -139,7 +142,7 @@ class NaviState extends State<Navi> {
                   ),
                   Icon(Icons.search,
                       size: 30,
-                      color: Myindex == 1
+                      color: Myindex == 2
                           ? Color.fromARGB(255, 35, 61, 255)
                           : Colors.white),
                   Visibility(
@@ -164,7 +167,7 @@ class NaviState extends State<Navi> {
                   ),
                   Icon(Icons.credit_card,
                       size: 30,
-                      color: Myindex == 2
+                      color: Myindex == 3
                           ? Color.fromARGB(255, 35, 61, 255)
                           : Colors.white),
                   Visibility(
