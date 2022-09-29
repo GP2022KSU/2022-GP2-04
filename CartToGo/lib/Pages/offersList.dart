@@ -73,93 +73,104 @@ class _OffersListState extends State<OffersList> {
           g.trim();
           l = g.split(',');
 
+          var map;
+          bool isOffer = false;
+
+          try {
+            var map = snapshot.value as Map<dynamic, dynamic>;
+            isOffer = map['Offer'];
+          } on Exception {}
+
           //عرض المنتج اللي عليه عرض
-          // bool isOffer = l[3];
-          //   if كأنه
-          //   isOffer == false?
-          //       Center(
-          //           child: Text(
-          //             "لا توجد عروض",
-          //             style: TextStyle(
-          //                 color: Colors.black,
-          //                 fontWeight: FontWeight.bold,
-          //                 fontFamily: 'CartToGo',
-          //                 fontSize: 18),
-          //           )) : else كأنه
+          // if كأنه
+          // isOffer == false?
+          //     Center(
+          //         child: Text(
+          //           "لا توجد عروض",
+          //           style: TextStyle(
+          //               color: Colors.black,
+          //               fontWeight: FontWeight.bold,
+          //               fontFamily: 'CartToGo',
+          //               fontSize: 18),
+          //         )) : else كأنه
           //     عرض ليست العروض
 
           //box design
-          return GestureDetector(
-            child: Directionality(
-              textDirection: TextDirection.rtl,
-              child: Container(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ListTile(
-                    shape: RoundedRectangleBorder(
-                      side: BorderSide(
-                        color: Colors.white,
-                      ),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    tileColor: Color.fromARGB(229, 229, 227, 227),
-
-                    // product information arrangement in the container
-                    title: Text(
-                      l[6], // name of the product
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'CartToGo',
-                        fontSize: 17,
-                      ),
-                      textAlign: TextAlign.right,
-                    ),
-
-                    // offer icon
-                    leading: Icon(
-                      Icons.local_offer_rounded,
-                      color: Colors.red,
-                    ),
-
-                    //price for the products
-                    trailing: Column(
-                      children: [
-                        Text(
-                          "\t" +
-                              "السعر:" +
-                              l[8] + // price before
-                              " ريال",
-                          style: TextStyle(
-                            decoration: TextDecoration.lineThrough,
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: 'CartToGo',
-                            fontSize: 12,
-                          ),
-                          textAlign: TextAlign.right,
+          //يعرض بس اللي عليهم عروض
+          if (isOffer) {
+            return GestureDetector(
+              child: Directionality(
+                textDirection: TextDirection.rtl,
+                child: Container(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ListTile(
+                      shape: RoundedRectangleBorder(
+                        side: BorderSide(
+                          color: Colors.white,
                         ),
-                        Text(
-                          "\t" +
-                              "السعر بعد العرض:" +
-                              l[0] + // price after offer
-                              " ريال",
-                          textAlign: TextAlign.right,
-                          style: TextStyle(
-                            // decoration: TextDecoration.lineThrough,
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: 'CartToGo',
-                            fontSize: 12,
-                          ),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      tileColor: Color.fromARGB(229, 229, 227, 227),
+
+                      // product information arrangement in the container
+                      title: Text(
+                        l[6], // name of the product
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: 'CartToGo',
+                          fontSize: 17,
                         ),
-                      ],
+                        textAlign: TextAlign.right,
+                      ),
+
+                      // offer icon
+                      leading: Icon(
+                        Icons.local_offer_rounded,
+                        color: Colors.red,
+                      ),
+
+                      //price for the products
+                      trailing: Column(
+                        children: [
+                          Text(
+                            "\t" +
+                                "السعر:" +
+                                l[8] + // price before
+                                " ريال",
+                            style: TextStyle(
+                              decoration: TextDecoration.lineThrough,
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: 'CartToGo',
+                              fontSize: 12,
+                            ),
+                            textAlign: TextAlign.right,
+                          ),
+                          Text(
+                            "\t" +
+                                "السعر بعد العرض:" +
+                                l[0] + // price after offer
+                                " ريال",
+                            textAlign: TextAlign.right,
+                            style: TextStyle(
+                              // decoration: TextDecoration.lineThrough,
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: 'CartToGo',
+                              fontSize: 12,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
-          );
+            );
+          }
+          return Container();
         },
       ),
     );
