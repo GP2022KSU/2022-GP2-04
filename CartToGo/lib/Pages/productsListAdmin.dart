@@ -9,6 +9,7 @@ import 'package:carttogo/Pages/addNewProduct.dart';
 import 'package:flutter/rendering.dart';
 import 'adminSearch.dart';
 import 'package:carttogo/Users/user.dart' as user;
+import 'package:flutter/cupertino.dart';
 
 class ProductsListAdmin extends StatefulWidget {
   @override
@@ -31,6 +32,7 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
     'ممر 1'
   ];
   String? selectedLocation;
+  bool isOffer = false;
 
   bool isScrolled = false;
   final fb = FirebaseDatabase.instance;
@@ -142,6 +144,8 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
                 "");
             g.trim();
             l = g.split(',');
+
+
             return GestureDetector(
 
                 // products list
@@ -190,13 +194,22 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
                             "");
                         g.trim();
                         l = g.split(',');
+
+                        var map;
+                        bool isOffer = false;
+
+                        try {
+                          var map = snapshot.value as Map<dynamic, dynamic>;
+                          isOffer = map['Offer'];
+                        } on Exception {}
+
                         var QUANTITY = l[8];
                         var PRICE = l[1];
                         var LOCATION = l[5];
                         var ONOFFER = l[2];
                         var NEWPRICE = l[7];
                         _UpdateOrNot(
-                            QUANTITY, PRICE, LOCATION, ONOFFER, NEWPRICE);
+                            QUANTITY, PRICE, LOCATION, ONOFFER, NEWPRICE, isOffer);
                       },
                     ),
 
@@ -397,7 +410,7 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
   }
 
 // dialog to enter the new product info
-  void _UpdateOrNot(QUANTITY, PRICE, LOCATION, ONOFFER, NEWPRICE) async {
+  void _UpdateOrNot(QUANTITY, PRICE, LOCATION, ONOFFER, NEWPRICE, isOffer) async {
     // controller to edit function
     var quantityController = TextEditingController(text: QUANTITY);
     var priceController = TextEditingController(text: PRICE);
@@ -552,48 +565,62 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
                                 ),
                                 SizedBox(height: 15),
 
+                                // Ask Admin for Product Offers & Adding, Deleting it
+                                SwitchScreen(),
+                                SizedBox(height: 15),
+
+                                  // will shown only if the product have an offer
+                                if (isOffer)
+
                                 // price after offer
-                                Directionality(
-                                  textDirection: TextDirection.rtl,
-                                  child: TextFormField(
-                                      keyboardType:
-                                          TextInputType.numberWithOptions(
-                                              decimal: true),
-                                      inputFormatters: <TextInputFormatter>[
-                                        FilteringTextInputFormatter.allow(
-                                            RegExp(r'(^\d*\.?\d*)'))
-                                      ], // Only numbers can be entered
-                                      controller: newPriceController,
-                                      decoration: const InputDecoration(
-                                        labelText: "السعر بعد العرض",
-                                        labelStyle: TextStyle(
-                                            fontSize: 16, color: Colors.black),
-                                        hintText: "أدخل سعر المنتج",
-                                        hintStyle: TextStyle(fontSize: 14),
-                                        enabledBorder: OutlineInputBorder(
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(20.0)),
-                                          borderSide: BorderSide(
-                                              width: 2, color: appColor),
+                                  Directionality(
+                                    textDirection: TextDirection.rtl,
+
+                                    child: TextFormField(
+                                        keyboardType:
+                                        TextInputType.numberWithOptions(
+                                            decimal: true),
+                                        inputFormatters: <TextInputFormatter>[
+                                          FilteringTextInputFormatter.allow(
+                                              RegExp(r'(^\d*\.?\d*)'))
+                                        ],
+                                        // Only numbers can be entered
+                                        controller: newPriceController,
+                                        decoration: const InputDecoration(
+                                          labelText: "السعر بعد العرض",
+                                          labelStyle: TextStyle(
+                                              fontSize: 16,
+                                              color: Colors.black),
+                                          hintText: "أدخل سعر المنتج",
+                                          hintStyle: TextStyle(fontSize: 14),
+                                          enabledBorder: OutlineInputBorder(
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(20.0)),
+                                            borderSide: BorderSide(
+                                                width: 2, color: appColor),
+                                          ),
                                         ),
-                                      ),
-                                      validator: (value) {
-                                        if (value == null || value.isEmpty) {
-                                          return 'الرجاء كتابة سعر المنتج';
-                                        }
-                                        if (value.contains(RegExp(r'[A-Z]')) &&
-                                            value.contains(RegExp(r'[a-z]'))) {
-                                          return 'سعر المنتج يجب ان لا يحتوي على احرف';
-                                        }
-                                        return null;
-                                      },
-                                      onChanged: (value) {}),
-                                ),
+                                        validator: (value) {
+                                          if (value == null || value.isEmpty) {
+                                            return 'الرجاء كتابة سعر المنتج';
+                                          }
+                                          if (value.contains(
+                                              RegExp(r'[A-Z]')) &&
+                                              value.contains(
+                                                  RegExp(r'[a-z]'))) {
+                                            return 'سعر المنتج يجب ان لا يحتوي على احرف';
+                                          }
+                                          return null;
+                                        },
+                                        onChanged: (value) {}),
+                                  ),
+                                  const SizedBox(height: 15),
+
                                 const SizedBox(height: 15),
                                 Divider(
-                                  height: 1,
-                                  color: Colors.black,
-                                ),
+                                    height: 1,
+                                    color: Colors.black,
+                                  ),
                                 Container(
                                     width: MediaQuery.of(context).size.width,
                                     height: 50,
@@ -602,6 +629,7 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
                                         onTap: () async {
                                           if (_formKey.currentState!
                                               .validate()) {
+                                            bool state = SwitchClass.Offerstate;
                                             if (quantityController
                                                     .text.isNotEmpty &&
                                                 priceController
@@ -611,7 +639,7 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
                                                   quantityController,
                                                   priceController,
                                                   selectedLocation.toString(),
-                                                  newPriceController);
+                                                  newPriceController, state);
                                             }
                                             Navigator.push(context,
                                                 MaterialPageRoute(
@@ -657,14 +685,14 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
   }
 
 // add the new product's info to the database
-  updateProductInfo(quantityController, priceController, selectedLocatio,
-      newPriceController) async {
+  updateProductInfo(quantityController, priceController, selectedLocation,
+      newPriceController, state) async { //selectedLocatio in arg
     DatabaseReference ref1 = FirebaseDatabase.instance.ref("Products/$k");
     await ref1.update({
       "Quantity": int.tryParse(quantityController.text),
       "Price": double.tryParse(priceController.text),
       "Location": selectedLocation,
-      //"Offer" :
+      "Offer" : state,
       "PriceAfterOffer": double.tryParse(newPriceController.text),
     });
   }
@@ -715,3 +743,78 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
         });
   }
 }
+
+class SwitchScreen extends StatefulWidget { // This class for asking the admin fot offer
+  @override
+  SwitchClass createState() => new SwitchClass();
+}
+
+class SwitchClass extends State {
+
+  static bool Offerstate = false;
+
+  @override
+  Widget build(BuildContext context) {
+
+    return CupertinoPageScaffold(
+
+        child: Column(
+          children: [
+            Container(
+              child: Row(
+                children: [
+
+                  Divider(
+                    height: 1,
+                  ),
+
+                  SizedBox(
+                    child: Text("لدى المنتج عرض  ؟",
+                      style: TextStyle(
+                          fontFamily: 'CartToGo',
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold
+                      ),
+                    ),
+                  ),
+
+                  Text(
+                    Offerstate == true ? "   نعم   " : "   لا   ",
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'CartToGo',
+                        fontSize: 14,
+                        color: Offerstate == true
+                            ? CupertinoColors.activeGreen
+                            : CupertinoColors.destructiveRed
+                    ),
+                  ),
+
+
+                  SizedBox(
+                    width: 240,
+                    child: CupertinoSwitch(
+                      value: Offerstate,
+                      onChanged: (value) {
+                        //Offerstate = value;
+                        setState(() {
+                          Offerstate = value;
+                        });
+                      },
+                    ),
+
+                  ),
+
+                  Divider(
+                    height: 1,
+                  ),
+                ],
+              ),
+            ),
+          ],
+        )
+    );
+
+  }
+}
+
