@@ -13,10 +13,10 @@ import 'package:flutter/cupertino.dart';
 
 class ProductsListAdmin extends StatefulWidget {
   @override
-  State<ProductsListAdmin> createState() => _ProductsListAdmin();
+  State<ProductsListAdmin> createState() => ProductsListAdmins();
 }
 
-class _ProductsListAdmin extends State<ProductsListAdmin> {
+class ProductsListAdmins extends State<ProductsListAdmin> {
   List<String> Locations = [
     'ممر 12',
     'ممر 11',
@@ -33,7 +33,7 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
   ];
   String? selectedLocation;
   bool isOffer = false;
-
+  static bool ShowOfferPrice = false;
   bool isScrolled = false;
   final fb = FirebaseDatabase.instance;
   final _formKey = GlobalKey<FormState>();
@@ -145,7 +145,6 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
             g.trim();
             l = g.split(',');
 
-
             return GestureDetector(
 
                 // products list
@@ -203,13 +202,13 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
                           isOffer = map['Offer'];
                         } on Exception {}
 
-                        var QUANTITY = l[8];
-                        var PRICE = l[1];
+                        var QUANTITY = l[1]; //Quantity on IOS is 1
+                        var PRICE = l[8]; //Price on IOS is 8
                         var LOCATION = l[5];
-                        var ONOFFER = l[2];
-                        var NEWPRICE = l[7];
-                        _UpdateOrNot(
-                            QUANTITY, PRICE, LOCATION, ONOFFER, NEWPRICE, isOffer);
+                        var ONOFFER = l[7]; //offer on IOS is 7
+                        var NEWPRICE = l[0]; //PriceAfterOffer on IOS is 0
+                        _UpdateOrNot(QUANTITY, PRICE, LOCATION, ONOFFER,
+                            NEWPRICE, isOffer);
                       },
                     ),
 
@@ -410,7 +409,8 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
   }
 
 // dialog to enter the new product info
-  void _UpdateOrNot(QUANTITY, PRICE, LOCATION, ONOFFER, NEWPRICE, isOffer) async {
+  void _UpdateOrNot(
+      QUANTITY, PRICE, LOCATION, ONOFFER, NEWPRICE, isOffer) async {
     // controller to edit function
     var quantityController = TextEditingController(text: QUANTITY);
     var priceController = TextEditingController(text: PRICE);
@@ -569,17 +569,16 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
                                 SwitchScreen(),
                                 SizedBox(height: 15),
 
-                                  // will shown only if the product have an offer
-                                if (isOffer)
+                                // will shown only if the product have an offer
+                                if (isOffer || ShowOfferPrice)
 
-                                // price after offer
+                                  // price after offer
                                   Directionality(
                                     textDirection: TextDirection.rtl,
-
                                     child: TextFormField(
                                         keyboardType:
-                                        TextInputType.numberWithOptions(
-                                            decimal: true),
+                                            TextInputType.numberWithOptions(
+                                                decimal: true),
                                         inputFormatters: <TextInputFormatter>[
                                           FilteringTextInputFormatter.allow(
                                               RegExp(r'(^\d*\.?\d*)'))
@@ -604,23 +603,23 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
                                           if (value == null || value.isEmpty) {
                                             return 'الرجاء كتابة سعر المنتج';
                                           }
-                                          if (value.contains(
-                                              RegExp(r'[A-Z]')) &&
-                                              value.contains(
-                                                  RegExp(r'[a-z]'))) {
+                                          if (value
+                                                  .contains(RegExp(r'[A-Z]')) &&
+                                              value
+                                                  .contains(RegExp(r'[a-z]'))) {
                                             return 'سعر المنتج يجب ان لا يحتوي على احرف';
                                           }
                                           return null;
                                         },
                                         onChanged: (value) {}),
                                   ),
-                                  const SizedBox(height: 15),
+                                const SizedBox(height: 15),
 
                                 const SizedBox(height: 15),
                                 Divider(
-                                    height: 1,
-                                    color: Colors.black,
-                                  ),
+                                  height: 1,
+                                  color: Colors.black,
+                                ),
                                 Container(
                                     width: MediaQuery.of(context).size.width,
                                     height: 50,
@@ -639,7 +638,8 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
                                                   quantityController,
                                                   priceController,
                                                   selectedLocation.toString(),
-                                                  newPriceController, state);
+                                                  newPriceController,
+                                                  state);
                                             }
                                             Navigator.push(context,
                                                 MaterialPageRoute(
@@ -686,13 +686,14 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
 
 // add the new product's info to the database
   updateProductInfo(quantityController, priceController, selectedLocation,
-      newPriceController, state) async { //selectedLocatio in arg
+      newPriceController, state) async {
+    //selectedLocatio in arg
     DatabaseReference ref1 = FirebaseDatabase.instance.ref("Products/$k");
     await ref1.update({
       "Quantity": int.tryParse(quantityController.text),
       "Price": double.tryParse(priceController.text),
       "Location": selectedLocation,
-      "Offer" : state,
+      "Offer": state,
       "PriceAfterOffer": double.tryParse(newPriceController.text),
     });
   }
@@ -744,77 +745,71 @@ class _ProductsListAdmin extends State<ProductsListAdmin> {
   }
 }
 
-class SwitchScreen extends StatefulWidget { // This class for asking the admin fot offer
+class SwitchScreen extends StatefulWidget {
+  // This class for asking the admin fot offer
   @override
   SwitchClass createState() => new SwitchClass();
 }
 
 class SwitchClass extends State {
-
   static bool Offerstate = false;
 
   @override
   Widget build(BuildContext context) {
-
     return CupertinoPageScaffold(
-
         child: Column(
-          children: [
-            Container(
-              child: Row(
-                children: [
-
-                  Divider(
-                    height: 1,
-                  ),
-
-                  SizedBox(
-                    child: Text("لدى المنتج عرض  ؟",
+      children: [
+        Container(
+          child: Row(
+            children: [
+              Divider(
+                height: 1,
+              ),
+              SizedBox(
+                width: MediaQuery.of(context).size.width * 0.45,
+                child: Row(
+                  children: [
+                    Text(
+                      "لدى المنتج عرض  ؟",
                       style: TextStyle(
                           fontFamily: 'CartToGo',
                           fontSize: 16,
-                          fontWeight: FontWeight.bold
-                      ),
+                          fontWeight: FontWeight.bold),
                     ),
-                  ),
-
-                  Text(
-                    Offerstate == true ? "   نعم   " : "   لا   ",
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'CartToGo',
-                        fontSize: 14,
-                        color: Offerstate == true
-                            ? CupertinoColors.activeGreen
-                            : CupertinoColors.destructiveRed
+                    Text(
+                      Offerstate == true ? "   نعم   " : "   لا   ",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontFamily: 'CartToGo',
+                          fontSize: 14,
+                          color: Offerstate == true
+                              ? CupertinoColors.activeGreen
+                              : CupertinoColors.destructiveRed),
                     ),
-                  ),
-
-
-                  SizedBox(
-                    width: 240,
-                    child: CupertinoSwitch(
-                      value: Offerstate,
-                      onChanged: (value) {
-                        //Offerstate = value;
-                        setState(() {
-                          Offerstate = value;
-                        });
-                      },
-                    ),
-
-                  ),
-
-                  Divider(
-                    height: 1,
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-          ],
-        )
-    );
-
+              SizedBox(
+                width: MediaQuery.of(context).size.width * 0.3,
+                child: CupertinoSwitch(
+                  value: Offerstate,
+                  onChanged: (value) {
+                    //Offerstate = value;
+                    setState(() {
+                      ProductsListAdmins.ShowOfferPrice = value;
+                      print(ProductsListAdmins.ShowOfferPrice);
+                      Offerstate = value;
+                    });
+                  },
+                ),
+              ),
+              Divider(
+                height: 1,
+              ),
+            ],
+          ),
+        ),
+      ],
+    ));
   }
 }
-
