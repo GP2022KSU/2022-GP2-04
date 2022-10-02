@@ -206,7 +206,7 @@ class ProductsListAdmins extends State<ProductsListAdmin> {
                         var PRICE = l[8]; //Price on IOS is 8
                         var LOCATION = l[5];
                         var ONOFFER = l[7]; //offer on IOS is 7
-                        var NEWPRICE = l[0]; //PriceAfterOffer on IOS is 0
+                        var NEWPRICE = l[2]; //PriceAfterOffer on IOS is 0
                         _UpdateOrNot(QUANTITY, PRICE, LOCATION, ONOFFER,
                             NEWPRICE, isOffer);
                       },

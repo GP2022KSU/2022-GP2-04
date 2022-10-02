@@ -127,7 +127,7 @@ class _OffersListState extends State<OffersList> {
 
                       // offer icon
                       leading: Icon(
-                        Icons.local_offer_rounded,
+                        Icons.discount,
                         color: Colors.red,
                       ),
 
