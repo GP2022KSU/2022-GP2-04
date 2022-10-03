@@ -199,14 +199,14 @@ class ProductsListAdmins extends State<ProductsListAdmin> {
 
                         try {
                           var map = snapshot.value as Map<dynamic, dynamic>;
-                          isOffer = map['Offer'];
+                         if ( map['Offer']== true) isOffer=true;
                         } on Exception {}
 
                         var QUANTITY = l[1]; //Quantity on IOS is 1
-                        var PRICE = l[8]; //Price on IOS is 8
-                        var LOCATION = l[5];
-                        var ONOFFER = l[7]; //offer on IOS is 7
-                        var NEWPRICE = l[2]; //PriceAfterOffer on IOS is 0
+                        var PRICE = l[9]; //Price on IOS is 8
+                        var LOCATION = l[6];
+                        var ONOFFER = l[8]; //offer on IOS is 7
+                        var NEWPRICE = l[0]; //PriceAfterOffer on IOS is 0
                         _UpdateOrNot(QUANTITY, PRICE, LOCATION, ONOFFER,
                             NEWPRICE, isOffer);
                       },
@@ -214,7 +214,7 @@ class ProductsListAdmins extends State<ProductsListAdmin> {
 
                     // product information arrangement in the container
                     title: Text(
-                      l[6],
+                      l[7],
                       style: TextStyle(
                         color: Colors.black,
                         fontWeight: FontWeight.bold,
@@ -226,27 +226,27 @@ class ProductsListAdmins extends State<ProductsListAdmin> {
                     subtitle: Text(
                       "\t" +
                           "العلامة التجارية: " +
-                          l[9] +
+                          l[10] +
                           "\n"
                               "\t" +
                           "الفئه: " +
-                          l[4] +
-                          "\n" +
-                          "\t" +
-                          "الكمية:" +
-                          l[8] +
-                          "\n" +
-                          "\t" +
-                          "الحجم:" +
-                          l[3] +
-                          "\n" +
-                          "\t" +
-                          "الموقع:" +
                           l[5] +
                           "\n" +
                           "\t" +
-                          "السعر:" +
+                          "الكمية:" +
                           l[1] +
+                          "\n" +
+                          "\t" +
+                          "الحجم:" +
+                          l[4] +
+                          "\n" +
+                          "\t" +
+                          "الموقع:" +
+                          l[6] +
+                          "\n" +
+                          "\t" +
+                          "السعر:" +
+                          l[9] +
                           " ريال",
                       style: TextStyle(
                         color: Colors.black,
