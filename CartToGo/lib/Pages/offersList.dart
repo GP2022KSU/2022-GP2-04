@@ -78,7 +78,7 @@ class _OffersListState extends State<OffersList> {
 
           try {
             var map = snapshot.value as Map<dynamic, dynamic>;
-            isOffer = map['Offer'];
+            if (map['Offer'] == true) isOffer = true;
           } on Exception {}
 
           //عرض المنتج اللي عليه عرض
@@ -115,7 +115,7 @@ class _OffersListState extends State<OffersList> {
 
                       // product information arrangement in the container
                       title: Text(
-                        l[6], // name of the product
+                        l[7], // name of the product
                         style: TextStyle(
                           color: Colors.black,
                           fontWeight: FontWeight.bold,
@@ -137,7 +137,7 @@ class _OffersListState extends State<OffersList> {
                           Text(
                             "\t" +
                                 "السعر:" +
-                                l[8] + // price before
+                                l[1] + // price before
                                 " ريال",
                             style: TextStyle(
                               decoration: TextDecoration.lineThrough,

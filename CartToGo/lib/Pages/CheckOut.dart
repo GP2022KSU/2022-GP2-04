@@ -1,15 +1,20 @@
 // ignore_for_file: unnecessary_const
 import 'dart:async';
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:qr_code_scanner/qr_code_scanner.dart';
+
 import '../main.dart';
 import 'Navigation.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:lite_rolling_switch/lite_rolling_switch.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:carttogo/Users/user.dart' as user;
+
+import 'Product.dart';
 
 final _fb = FirebaseDatabase.instance;
 
@@ -32,11 +37,11 @@ class _CheckOutState extends State<CheckOut> {
   late bool _isLoading;
   late StreamSubscription _streamSubscription4;
   final _database = FirebaseDatabase.instance.ref();
-
+  late List<Object> map1;
   void initState() {
     _isLoading = true;
 
-    Future.delayed(const Duration(milliseconds: 500), () {
+    Future.delayed(const Duration(milliseconds: 800), () {
       if (mounted) {
         setState(() {
           _isLoading = false;
@@ -388,6 +393,23 @@ class _CheckOutState extends State<CheckOut> {
                                               checkIfGained)
                                     });
                                   }
+                                  // var map2 = map1 as Map<dynamic, dynamic>;
+                                  // DatabaseReference ref7 =
+                                  //     FirebaseDatabase.instance.ref(
+                                  //         "Shopper/${FirebaseAuth.instance.currentUser?.uid}/PurchaseHistory");
+                                  // print(map2);
+                                  // map2.forEach((key, value) async {
+                                  //   String barcode = value['Barcode'];
+                                  //   String subca = value['SubCategory'];
+                                  //   double price = value['Price'];
+                                  //   await ref7.set({
+                                  //     "${barcode}": {
+                                  //       "SubCategory": subca,
+                                  //       "Price": price,
+                                  //     }
+                                  //   });
+                                  // });
+
                                   if (checkPay) {
                                     Navigator.push(
                                         context,
@@ -760,6 +782,18 @@ class _CheckOutState extends State<CheckOut> {
                         if (!(l[0] == "0") && checker && checke2) {
                           try {
                             var map = snapshot.value as Map<dynamic, dynamic>;
+                            // map1 = json
+                            //     .decode(snapshot.toString())
+                            //     .map((data) =>
+                            //         map[int.parse(map['Barcode'].toString())] =
+                            //             ([map['SubCategory'], map['Price']]))
+                            //     .toList();
+                            // print(map1);
+                            // map1[int.parse(map['Barcode'].toString())] = ([
+                            //   map['SubCategory'],
+                            //   map['Price']
+                            // ]) as Map<dynamic, dynamic>;
+
                             Name = map['Name'];
                             HaveOffer = map['Offer'];
                             HaveOffer

@@ -273,6 +273,12 @@ class _RegisterPageState extends State<RegisterPage> {
       },
       "PointsHistory": {
         "0": 0,
+      },
+      "PurchaseHistory": {
+        "0": 0,
+      },
+      "RecommendedItems": {
+        "0": 0,
       }
     });
     final databaseRef = FirebaseDatabase.instance.ref();

@@ -132,6 +132,7 @@ class AdminSearch extends SearchDelegate<String> {
                         var OFFER = offer.snapshot.value.toString();
                         var NEWPRICE =
                             double.parse(nprice.snapshot.value.toString());
+
                         _UpdateOrNot(QUANTITY, PRICE, LOCATION, OFFER, NEWPRICE,
                             context, splitted[0].toString());
                       },

@@ -199,7 +199,7 @@ class ProductsListAdmins extends State<ProductsListAdmin> {
 
                         try {
                           var map = snapshot.value as Map<dynamic, dynamic>;
-                         if ( map['Offer']== true) isOffer=true;
+                          if (map['Offer'] == true) isOffer = true;
                         } on Exception {}
 
                         var QUANTITY = l[1]; //Quantity on IOS is 1
@@ -570,49 +570,46 @@ class ProductsListAdmins extends State<ProductsListAdmin> {
                                 SizedBox(height: 15),
 
                                 // will shown only if the product have an offer
-                                if (isOffer || ShowOfferPrice)
+                                //if (isOffer || ShowOfferPrice)
 
-                                  // price after offer
-                                  Directionality(
-                                    textDirection: TextDirection.rtl,
-                                    child: TextFormField(
-                                        keyboardType:
-                                            TextInputType.numberWithOptions(
-                                                decimal: true),
-                                        inputFormatters: <TextInputFormatter>[
-                                          FilteringTextInputFormatter.allow(
-                                              RegExp(r'(^\d*\.?\d*)'))
-                                        ],
-                                        // Only numbers can be entered
-                                        controller: newPriceController,
-                                        decoration: const InputDecoration(
-                                          labelText: "السعر بعد العرض",
-                                          labelStyle: TextStyle(
-                                              fontSize: 16,
-                                              color: Colors.black),
-                                          hintText: "أدخل سعر المنتج",
-                                          hintStyle: TextStyle(fontSize: 14),
-                                          enabledBorder: OutlineInputBorder(
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(20.0)),
-                                            borderSide: BorderSide(
-                                                width: 2, color: appColor),
-                                          ),
+                                // price after offer
+                                Directionality(
+                                  textDirection: TextDirection.rtl,
+                                  child: TextFormField(
+                                      keyboardType:
+                                          TextInputType.numberWithOptions(
+                                              decimal: true),
+                                      inputFormatters: <TextInputFormatter>[
+                                        FilteringTextInputFormatter.allow(
+                                            RegExp(r'(^\d*\.?\d*)'))
+                                      ],
+                                      // Only numbers can be entered
+                                      controller: newPriceController,
+                                      decoration: const InputDecoration(
+                                        labelText: "السعر بعد العرض",
+                                        labelStyle: TextStyle(
+                                            fontSize: 16, color: Colors.black),
+                                        hintText: "أدخل سعر المنتج",
+                                        hintStyle: TextStyle(fontSize: 14),
+                                        enabledBorder: OutlineInputBorder(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(20.0)),
+                                          borderSide: BorderSide(
+                                              width: 2, color: appColor),
                                         ),
-                                        validator: (value) {
-                                          if (value == null || value.isEmpty) {
-                                            return 'الرجاء كتابة سعر المنتج';
-                                          }
-                                          if (value
-                                                  .contains(RegExp(r'[A-Z]')) &&
-                                              value
-                                                  .contains(RegExp(r'[a-z]'))) {
-                                            return 'سعر المنتج يجب ان لا يحتوي على احرف';
-                                          }
-                                          return null;
-                                        },
-                                        onChanged: (value) {}),
-                                  ),
+                                      ),
+                                      validator: (value) {
+                                        if (value == null || value.isEmpty) {
+                                          return 'الرجاء كتابة سعر المنتج';
+                                        }
+                                        if (value.contains(RegExp(r'[A-Z]')) &&
+                                            value.contains(RegExp(r'[a-z]'))) {
+                                          return 'سعر المنتج يجب ان لا يحتوي على احرف';
+                                        }
+                                        return null;
+                                      },
+                                      onChanged: (value) {}),
+                                ),
                                 const SizedBox(height: 15),
 
                                 const SizedBox(height: 15),
