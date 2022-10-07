@@ -11,36 +11,38 @@ class SearchProductList extends StatefulWidget {
   _SearchProductListState createState() => _SearchProductListState();
 }
 
-List<String> names = []; // list contains all products' names
+// List<String> names = []; // list contains all products' names
 
-getNames() async {
-  final snapshot = await FirebaseDatabase.instance.ref('Products').get();
-  final map = snapshot.value as Map<dynamic, dynamic>;
-  map.forEach((key, value) {
-    final product = Product.fromMap(value);
-    names.add(product.toString());
-  });
-  return names;
-}
+// getNames() async {
+//   final snapshot = await FirebaseDatabase.instance.ref('Products').get();
+//   final map = snapshot.value as Map<dynamic, dynamic>;
+//   map.forEach((key, value) {
+//     final product = Product.fromMap(value);
+//     names.add(product.toString());
+//   });
+//   return names;
+// }
 
 class _SearchProductListState extends State<SearchProductList> {
-  late bool _isLoading;
+  // to show the all the products names & locations before looking for something specific
 
-  void initState() {
-    _isLoading = true;
+ // اذا شلنا هذا تقل نتايج البحث وما تتكر كثير 
+  // late bool _isLoading;
 
-    Future.delayed(const Duration(milliseconds: 500), () {
-      if (mounted) {
-        setState(() {
-          _isLoading = false;
-        });
-      }
-    });
-    user.getNames();
-    super.initState();
-  }
+  // void initState() {
+  //   _isLoading = true;
+  //   Future.delayed(const Duration(milliseconds: 500), () {
+  //     if (mounted) {
+  //       setState(() {
+  //         _isLoading = false;
+  //       });
+  //     }
+  //   });
+  //   user.getNames();
+  //   super.initState();
+  // }
 
-  // search bar to seach for the product's location
+  // search bar to seach for the pro's location
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -73,7 +75,7 @@ class _SearchProductListState extends State<SearchProductList> {
       body: Container(
         height: MediaQuery.of(context).size.height * 0.79,
         child: ListView.builder(
-          itemCount: user.getNames().length,
+          itemCount: user.getBarcode().length,
           itemBuilder: (BuildContext context, int index) {
             return ListTile(
               title: Text(

@@ -124,7 +124,6 @@ Future<List<String>> BringNames() async {
 //admin
 
 //admin search to edit or delete
-
 Future<List<String>> BringProducts() async {
   if (FirebaseAuth.instance.currentUser != null) {
     final ref = FirebaseDatabase.instance.ref();

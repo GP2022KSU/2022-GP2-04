@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 class LocationSearch extends SearchDelegate<String> {
   final List<String> names;
 
+
   LocationSearch(this.names)
       : super(
           searchFieldLabel: "     ابحث عن موقع المنتجات         ",
