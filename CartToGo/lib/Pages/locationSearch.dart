@@ -11,11 +11,9 @@ class LocationSearch extends SearchDelegate<String> {
           textInputAction: TextInputAction.search,
         );
 
-
   @override
   List<Widget>? buildActions(BuildContext context) {
-    // حتى يرجع لشكل الصفحة الاساسي بدون كيبورد وكذا
-    //right side of search bar
+    // to view the list without a keyboard
     return [
       IconButton(
           icon: Icon(
@@ -30,8 +28,7 @@ class LocationSearch extends SearchDelegate<String> {
 
   @override
   Widget? buildLeading(BuildContext context) {
-    // حتى يمسح الكلام اللي كتبه على السيرش بار يضغط الاكس
-    //left side of search bar
+    // to delete what in the search bar
     return IconButton(
       icon: Icon(
         Icons.cancel,
@@ -45,7 +42,7 @@ class LocationSearch extends SearchDelegate<String> {
 
   @override
   Widget buildResults(BuildContext context) {
-    // لما يضغط المتسوق على النتيجة راح تطلع له بالنص
+    // when the shopper chooses a product by clicking on it or tapping enter, the result will be centered on the screen
     return Center(
         child: Text(
       query,
@@ -57,8 +54,7 @@ class LocationSearch extends SearchDelegate<String> {
     ));
   }
 
-
-//ميثود لظهور الاقتراحات عند البحث
+// suggestions for products when searching for a product
   @override
   Widget buildSuggestions(BuildContext context) {
     final Suggestions = query.isEmpty
@@ -78,7 +74,7 @@ class LocationSearch extends SearchDelegate<String> {
         : ListView.builder(
             itemCount: Suggestions.length,
             itemBuilder: (BuildContext context, int index) => ListTile(
-              onTap: () { 
+              onTap: () {
                 showResults(context);
               },
               shape: RoundedRectangleBorder(
@@ -94,6 +90,7 @@ class LocationSearch extends SearchDelegate<String> {
               title: Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: <Widget>[
+                  // make the typing numbers bold
                   RichText(
                       text: TextSpan(
                           text: Suggestions.elementAt(index)

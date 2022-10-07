@@ -1,7 +1,7 @@
 import 'package:carttogo/main.dart';
 import 'package:flutter/material.dart';
 import 'dart:developer';
-import 'package:qr_code_scanner/qr_code_scanner.dart';
+import 'package:qr_code_scanner/qr_code_scanner.dart'; // A Flutter plugin by Julius Canute https://pub.dev/packages/qr_code_scanner
 import 'package:firebase_auth/firebase_auth.dart';
 import 'welcomePage.dart';
 import 'paymentCompletion.dart';
@@ -163,6 +163,7 @@ class Cashier extends StatelessWidget {
   }
 }
 
+// This is a Flutter plugin by Julius Canute https://pub.dev/packages/qr_code_scanner
 class scanInovice extends StatefulWidget {
   const scanInovice({Key? key}) : super(key: key);
   @override

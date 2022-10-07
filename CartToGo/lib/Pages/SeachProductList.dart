@@ -11,7 +11,7 @@ class SearchProductList extends StatefulWidget {
   _SearchProductListState createState() => _SearchProductListState();
 }
 
-List<String> names = [];
+List<String> names = []; // list contains all products' names
 
 getNames() async {
   final snapshot = await FirebaseDatabase.instance.ref('Products').get();
@@ -40,7 +40,7 @@ class _SearchProductListState extends State<SearchProductList> {
     super.initState();
   }
 
-  // السيرش بار
+  // search bar to seach for the product's location
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -64,7 +64,6 @@ class _SearchProductListState extends State<SearchProductList> {
                 context: context,
                 delegate: LocationSearch(user.getNames()),
               );
-              //print(result);
             },
             icon: Icon(Icons.search_outlined),
             color: appColor,

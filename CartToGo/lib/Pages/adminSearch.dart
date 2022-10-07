@@ -21,7 +21,7 @@ class AdminSearch extends SearchDelegate<String> {
     'ممر 2',
     'ممر 1'
   ];
-  late String selectedLocation;
+  late String selectedLocation; // to save the value of the new location
   final _formKey = GlobalKey<FormState>();
 
   final fb = FirebaseDatabase.instance;
@@ -61,7 +61,7 @@ class AdminSearch extends SearchDelegate<String> {
     );
   }
 
-// when the admin chooses a product, the result will be centered on the screen
+// when the admin chooses a product by clicking on it or tapping enter, the result will be centered on the screen
   @override
   Widget buildResults(BuildContext context) {
     return Center(
@@ -183,6 +183,7 @@ class AdminSearch extends SearchDelegate<String> {
           );
   }
 
+  // delete a product from the database/stock choice
   void _DeleteOrNot(String barcode, BuildContext context) async {
     final ref = fb.ref().child('Products/$barcode');
     return showDialog<void>(
@@ -253,7 +254,7 @@ class AdminSearch extends SearchDelegate<String> {
 
   void _UpdateOrNot(QUANTITY, PRICE, LOCATION, ONOFFER, NEWPRICE,
       BuildContext context, String barcode) async {
-    // controller to edit function
+    // controllers to take/save the new product's information
     var quantityController = TextEditingController(text: QUANTITY.toString());
     var priceController = TextEditingController(text: PRICE.toString());
     var newPriceController = TextEditingController(text: NEWPRICE.toString());
@@ -506,7 +507,7 @@ class AdminSearch extends SearchDelegate<String> {
         });
   }
 
-// add the new product's info to the database
+// add the new product's info to the database/stock
   updateProductInfo(quantityController, priceController, selectedLocatio,
       newPriceController, String barcode) async {
     DatabaseReference ref1 = FirebaseDatabase.instance.ref("Products/$barcode");

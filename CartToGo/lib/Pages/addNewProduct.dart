@@ -3,8 +3,8 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:carttogo/main.dart';
 import 'package:flutter/services.dart';
 import 'package:carttogo/Pages/productsListAdmin.dart';
-import 'package:carttogo/scanner_icons.dart';
-import 'package:qr_code_scanner/qr_code_scanner.dart';
+import 'package:carttogo/scanner_icons.dart'; // import custom icon
+import 'package:qr_code_scanner/qr_code_scanner.dart'; // A Flutter plugin by Julius Canute https://pub.dev/packages/qr_code_scanner
 import 'dart:developer';
 
 class AddNewProduct extends StatefulWidget {
@@ -15,7 +15,6 @@ class AddNewProduct extends StatefulWidget {
 }
 
 class AddNewProductState extends State<AddNewProduct> {
-
   // Locations list for the dropdown menue
   List<String> Locations = [
     'ممر 12',
@@ -31,7 +30,7 @@ class AddNewProductState extends State<AddNewProduct> {
     'ممر 2',
     'ممر 1'
   ];
-  String? selectedLocation;
+  String? selectedLocation; // to save the value of chosen location
 
   // Brands list for the dropdown menue
   List<String> Brands = [
@@ -52,7 +51,7 @@ class AddNewProductState extends State<AddNewProduct> {
     'البطل',
     'نادك'
   ];
-  String? selectedBrand;
+  String? selectedBrand; // to save the value of chosen brand
 
   // Categories list for the dropdown menue
   List<String> Categories = [
@@ -72,11 +71,11 @@ class AddNewProductState extends State<AddNewProduct> {
     'بسكويت',
     'كريمات يدين وجسم'
   ];
-  String? selectedCategory;
+  String? selectedCategory; // to save the value of chosen category
 
   // Sizes list for the dropdown menue
   List<String> Sizes = ['غ', 'مل', 'ل', 'منديل', 'كيس', 'رول', 'ك'];
-  String? selectedSize = 'غ';
+  String? selectedSize; // to save the value of chosen size
 
   late String scanData;
   AddNewProductState(this.scanData);
@@ -241,7 +240,7 @@ class AddNewProductState extends State<AddNewProduct> {
                           ),
                           const SizedBox(height: 14),
 
-// Product's category
+                          // Product's category
                           Directionality(
                             textDirection: TextDirection.rtl,
                             child: DropdownButtonFormField(
@@ -514,6 +513,7 @@ class AddNewProductState extends State<AddNewProduct> {
   }
 }
 
+// This is a Flutter plugin by Julius Canute https://pub.dev/packages/qr_code_scanner
 class scanProductBarcode extends StatefulWidget {
   const scanProductBarcode({Key? key}) : super(key: key);
   @override

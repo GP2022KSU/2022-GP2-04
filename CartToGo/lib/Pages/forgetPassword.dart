@@ -9,7 +9,7 @@ class ForgetPassword extends StatefulWidget {
 }
 
 class _ForgetPasswordState extends State<ForgetPassword> {
-  //create forget password form include the shopper's email
+  //create forget password form include the shopper's email to send a link to create a new password
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
 

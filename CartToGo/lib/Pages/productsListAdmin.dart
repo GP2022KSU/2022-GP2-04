@@ -31,7 +31,7 @@ class ProductsListAdmins extends State<ProductsListAdmin> {
     'ممر 2',
     'ممر 1'
   ];
-  String? selectedLocation;
+  String? selectedLocation; // to save the value of chosen location
   bool isOffer = false;
   static bool ShowOfferPrice = false;
   bool isScrolled = false;
@@ -411,7 +411,7 @@ class ProductsListAdmins extends State<ProductsListAdmin> {
 // dialog to enter the new product info
   void _UpdateOrNot(
       QUANTITY, PRICE, LOCATION, ONOFFER, NEWPRICE, isOffer) async {
-    // controller to edit function
+    // controllers to take/save the new product's information
     var quantityController = TextEditingController(text: QUANTITY);
     var priceController = TextEditingController(text: PRICE);
     var newPriceController = TextEditingController(text: NEWPRICE);

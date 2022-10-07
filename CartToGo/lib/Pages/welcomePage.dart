@@ -32,7 +32,7 @@ class WelcomePage extends StatelessWidget {
 
 //two buttons in welcome page, login and register buttons
 
-          //login button
+          //login button, for shoppers, admins, and cashiers
           ElevatedButton(
               style: ButtonStyle(
                   elevation: MaterialStateProperty.all(8.0),
@@ -53,7 +53,7 @@ class WelcomePage extends StatelessWidget {
           //end of login button
           const SizedBox(height: 15.0),
 
-          //register button
+          //register button, only for shoppers
           ElevatedButton(
               style: ButtonStyle(
                   elevation: MaterialStateProperty.all(8.0),

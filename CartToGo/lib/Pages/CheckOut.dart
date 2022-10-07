@@ -5,16 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:qr_code_scanner/qr_code_scanner.dart';
-
 import '../main.dart';
 import 'Navigation.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:lite_rolling_switch/lite_rolling_switch.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:carttogo/Users/user.dart' as user;
-
-import 'Product.dart';
 
 final _fb = FirebaseDatabase.instance;
 
@@ -36,8 +32,8 @@ class _CheckOutState extends State<CheckOut> {
   late double PriceAfterPoin;
   late bool _isLoading;
   late StreamSubscription _streamSubscription4;
-  final _database = FirebaseDatabase.instance.ref();
   late List<Object> map1;
+  final _database = FirebaseDatabase.instance.ref();
   void initState() {
     _isLoading = true;
 
