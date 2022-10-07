@@ -113,7 +113,7 @@ Future<List<String>> BringNames() async {
     final map = snapshot.value as Map<dynamic, dynamic>;
     map.forEach((key, value) {
       final product = Product.fromMap(value);
-      names.add(product.Name.toString() + " | " + product.Location.toString());
+      names.add(product.Name.toString() + " " + product.Brand.toString() + " | " + product.Location.toString());
     });
     print(names);
     return names;
