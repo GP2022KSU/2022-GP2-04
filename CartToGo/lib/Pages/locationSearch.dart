@@ -1,3 +1,4 @@
+import 'package:carttogo/Users/user.dart';
 import 'package:carttogo/main.dart';
 import 'package:flutter/material.dart';
 
@@ -41,11 +42,13 @@ class LocationSearch extends SearchDelegate<String> {
     );
   }
 
+
   @override
   Widget buildResults(BuildContext context) {
-    // when the shopper chooses a product by clicking on it or tapping enter, the result will be centered on the screen
+    // after the shopper chooses a product tapping enter, the result will be centered on the screen
     return Center(
-        child: Text(
+        child: 
+        Text(
       query,
       style: TextStyle(
           color: Colors.black,
@@ -75,8 +78,9 @@ class LocationSearch extends SearchDelegate<String> {
         : ListView.builder(
             itemCount: Suggestions.length,
             itemBuilder: (BuildContext context, int index) => ListTile(
+               // when the shopper chooses a product by clicking on it the result will be shown in the search bar
               onTap: () {
-                showResults(context);
+                query= names[index];
               },
               shape: RoundedRectangleBorder(
                 side: BorderSide(
