@@ -32,7 +32,8 @@ class _CheckOutState extends State<CheckOut> {
   late double PriceAfterPoin;
   late bool _isLoading;
   late StreamSubscription _streamSubscription4;
-  late List<Object> map1;
+    late List<String> HistoryBarcode=[];
+  int countBarcodes=0;
   final _database = FirebaseDatabase.instance.ref();
   void initState() {
     _isLoading = true;
@@ -183,6 +184,7 @@ class _CheckOutState extends State<CheckOut> {
                                       foregroundColor: MaterialStateProperty.all(
                                           Colors.white)),
                                   onPressed: () async {
+                                    await user.getBringhistoryPurch();
                                     if (vis) {
                                       _database
                                           .child(
@@ -389,23 +391,6 @@ class _CheckOutState extends State<CheckOut> {
                                               checkIfGained)
                                     });
                                   }
-                                  // var map2 = map1 as Map<dynamic, dynamic>;
-                                  // DatabaseReference ref7 =
-                                  //     FirebaseDatabase.instance.ref(
-                                  //         "Shopper/${FirebaseAuth.instance.currentUser?.uid}/PurchaseHistory");
-                                  // print(map2);
-                                  // map2.forEach((key, value) async {
-                                  //   String barcode = value['Barcode'];
-                                  //   String subca = value['SubCategory'];
-                                  //   double price = value['Price'];
-                                  //   await ref7.set({
-                                  //     "${barcode}": {
-                                  //       "SubCategory": subca,
-                                  //       "Price": price,
-                                  //     }
-                                  //   });
-                                  // });
-
                                   if (checkPay) {
                                     Navigator.push(
                                         context,
@@ -688,6 +673,7 @@ class _CheckOutState extends State<CheckOut> {
                         foregroundColor:
                             MaterialStateProperty.all(Colors.white)),
                     onPressed: () async {
+                      await user.getBringhistoryPurch();
                       DatabaseReference ref3 = FirebaseDatabase.instance.ref(
                           "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts");
                       await ref3.update({
@@ -696,6 +682,7 @@ class _CheckOutState extends State<CheckOut> {
                             : await user.getTotal(),
                       });
                       await _showMyDialog(context);
+                      
                     },
                     child: const Text('اتمام الدفع')),
                 //end of login button
@@ -789,7 +776,10 @@ class _CheckOutState extends State<CheckOut> {
                             //   map['SubCategory'],
                             //   map['Price']
                             // ]) as Map<dynamic, dynamic>;
-
+                                        //                             HistoryBarcode.insert(index,map['Barcode'].toString());
+                                        // countBarcodes++;
+                                        // print(countBarcodes);
+                                        // print(HistoryBarcode);
                             Name = map['Name'];
                             HaveOffer = map['Offer'];
                             HaveOffer

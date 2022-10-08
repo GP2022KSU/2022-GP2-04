@@ -8,6 +8,7 @@ class Product {
   final String SearchBarcode;
   final String Barcode;
   final String Location;
+  final String Subcategory;
 
   const Product({
     required this.Name,
@@ -19,6 +20,7 @@ class Product {
     required this.Barcode,
     required this.SearchBarcode,
     required this.Location,
+    required this.Subcategory
   });
 
   //
@@ -30,9 +32,10 @@ class Product {
       //Price: map['Price'] ?? '',
       //Quantity: map['Quantity'] ?? '',
       Size: map['Size'] ?? '',
-      Barcode: map['Barcode'] ?? '',
+      Barcode: map['SearchBarcode'].toString(),
       SearchBarcode: map['SearchBarcode'].toString(),
       Location: map['Location'] ?? '',
+      Subcategory: map['SubCategory'] ?? '',
     );
   }
 }

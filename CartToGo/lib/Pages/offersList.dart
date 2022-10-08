@@ -1,9 +1,13 @@
+import 'dart:convert';
+import 'package:carttogo/Users/user.dart' as user;
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:carttogo/Pages/welcomePage.dart';
 import 'package:flutter/rendering.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class OffersList extends StatefulWidget {
   OffersList({Key? key}) : super(key: key);
@@ -17,12 +21,27 @@ class _OffersListState extends State<OffersList> {
   bool isOffer = false;
   var l;
   var g;
-  var k;
+  late bool _isLoading;
+  late List<String> Recommended = [];
+  void initState() {
+    _isLoading = true;
+    _SeeAPI();
+    Future.delayed(const Duration(milliseconds: 800), () {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    });
+
+    super.initState();
+  }
 
   @override
-  Widget build(BuildContext context) {
-    final ref = fb.ref().child('Products');
+  Widget build(BuildContext context) {    
 
+    print(Recommended);
+    final ref = fb.ref().child('Products');
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -79,7 +98,6 @@ class _OffersListState extends State<OffersList> {
             var map = snapshot.value as Map<dynamic, dynamic>;
             if (map['Offer'] == true) isOffer = true;
           } on Exception {}
-
           //عرض المنتج اللي عليه عرض
           // if كأنه
           // isOffer == false?
@@ -173,6 +191,25 @@ class _OffersListState extends State<OffersList> {
         },
       ),
     );
+  }
+
+  Future<List<String>> _SeeAPI() async {
+    //run python file
+    final url = 'http://192.168.0.215:5000/name'; //local python API
+    var purchasehis = "";
+    final response = await http.post(Uri.parse(url),
+        body: json.encode(user.getPurchaseHistory()));
+    final response1 = await http.get(Uri.parse(url));
+
+    //converting the fetched data from json to key value pair that can be displayed on the screen
+    print(response.body);
+    print(response1.body);
+    List<String> RecomProductsBarcode =
+        user.getRecomProducts(response1.body.toString());
+    Recommended = RecomProductsBarcode;
+    return RecomProductsBarcode;
+    //final decoded = await json.decode(response1.body) as Map<String, dynamic>;
+    //print(decoded);
   }
 
   //logout dialog, to ensure that the admin want to log out or not

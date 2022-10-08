@@ -113,12 +113,79 @@ Future<List<String>> BringNames() async {
     final map = snapshot.value as Map<dynamic, dynamic>;
     map.forEach((key, value) {
       final product = Product.fromMap(value);
-      names.add(product.Name.toString() + " " + product.Brand.toString() + " | " + product.Location.toString());
+      names.add(product.Name.toString() +
+          " " +
+          product.Brand.toString() +
+          " | " +
+          product.Location.toString());
     });
     print(names);
     return names;
   }
   return names;
+}
+
+Future<List<String>> BringhistoryPurch() async {
+  if (FirebaseAuth.instance.currentUser != null) {
+    final ref = FirebaseDatabase.instance.ref();
+    final snapshot = await ref
+        .child(
+            "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts/${getLastCartNum()}")
+        .orderByPriority()
+        .limitToFirst(getnumOfProducts())
+        .get();
+    final map = snapshot.value as Map<dynamic, dynamic>;
+    int count=0;
+                DatabaseReference ref7 = FirebaseDatabase.instance.ref(
+          "Shopper/${FirebaseAuth.instance.currentUser?.uid}/PurchaseHistory");
+    map.forEach((key, value) async {
+      count++;
+      final product = Product.fromMap(value);
+
+      String barcode = value['Barcode'];
+      String subca = value['SubCategory'];
+      double price = value['Price'];
+       await ref7.push().update({
+          "SubCategory": subca,
+          "Price": price,
+      });
+    });
+    return names;
+  }
+  return names;
+}
+
+ Future<Map<dynamic, dynamic>> BringPurchaseHistory() async {
+  if (FirebaseAuth.instance.currentUser != null) {
+    final ref = FirebaseDatabase.instance.ref();
+    final snapshot = await ref.child("Shopper/${FirebaseAuth.instance.currentUser?.uid}/PurchaseHistory").get();
+    final map = snapshot.value as Map<dynamic, dynamic>;
+    Purchasehis=map;
+    return Purchasehis;
+  }
+  return "" as Map<dynamic, dynamic>;
+}
+
+Future<List<String>> BringRecommendProducts(String RecProduct) async {
+  
+  if (FirebaseAuth.instance.currentUser != null) {
+    final ref = FirebaseDatabase.instance.ref();
+    final snapshot = await ref.child("Products").get();
+    final map = snapshot.value as Map<dynamic, dynamic>;
+    RecommendPro=[];
+    map.forEach((key, value) {
+      final product = Product.fromMap(value);
+      if(product.Subcategory.toString() == RecProduct){
+        RecommendPro.add(product.Barcode.toString());
+      }
+      else{
+
+      }
+    });
+    
+    return RecommendPro;
+  }
+  return " " as List<String>;
 }
 
 //admin
@@ -157,7 +224,7 @@ Future<bool> BringPaid() async {
     final ref = FirebaseDatabase.instance.ref();
     final snapshot = await ref
         .child(
-            "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts/${getLastCartNum()}/Paid")
+            "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts/${getLastCartNum()}")
         .get();
     if (snapshot.value.toString() == "true") {
       Paid = true;
@@ -235,14 +302,27 @@ String getUsername() {
   return Username;
 }
 
+Map<dynamic, dynamic> getPurchaseHistory(){
+  BringPurchaseHistory();
+  return Purchasehis;
+}
+
 List<String> getNames() {
   BringNames();
   return names;
 }
-
+List<String> getRecomProducts(String Reco) {
+  BringRecommendProducts(Reco);
+  return RecommendPro;
+}
 //admin
 List<String> getBarcode() {
   BringProducts();
+  return barcodes;
+}
+
+List<String> getBringhistoryPurch() {
+  BringhistoryPurch();
   return barcodes;
 }
 
@@ -301,3 +381,5 @@ int PointsAfterPaying = 0;
 bool Paid = false;
 List<String> names = [];
 List<String> barcodes = [];
+List<String> RecommendPro = [];
+late Map<dynamic, dynamic> Purchasehis = {};
