@@ -121,7 +121,7 @@ class AddNewProductState extends State<AddNewProduct> {
                           Directionality(
                             textDirection: TextDirection.rtl,
                             child: TextFormField(
-                                // #1 the barcode number can be added by typing
+                              // #1 the barcode number can be added by typing
                                 keyboardType: TextInputType.number,
                                 inputFormatters: <TextInputFormatter>[
                                   FilteringTextInputFormatter.digitsOnly
@@ -135,9 +135,9 @@ class AddNewProductState extends State<AddNewProduct> {
                                   hintStyle: TextStyle(fontSize: 18),
                                   enabledBorder: OutlineInputBorder(
                                     borderRadius:
-                                        BorderRadius.all(Radius.circular(20.0)),
+                                    BorderRadius.all(Radius.circular(20.0)),
                                     borderSide:
-                                        BorderSide(width: 2, color: appColor),
+                                    BorderSide(width: 2, color: appColor),
                                   ),
 
                                   // #2 the barcode number can be added by scanning
@@ -147,7 +147,7 @@ class AddNewProductState extends State<AddNewProduct> {
                                       Navigator.of(context)
                                           .push(MaterialPageRoute(
                                         builder: (context) =>
-                                            const scanProductBarcode(),
+                                        const scanProductBarcode(),
                                       ));
                                     },
                                     icon: const Icon(Scanner.scanner),
@@ -182,9 +182,9 @@ class AddNewProductState extends State<AddNewProduct> {
                                   hintStyle: TextStyle(fontSize: 18),
                                   enabledBorder: OutlineInputBorder(
                                     borderRadius:
-                                        BorderRadius.all(Radius.circular(20.0)),
+                                    BorderRadius.all(Radius.circular(20.0)),
                                     borderSide:
-                                        BorderSide(width: 2, color: appColor),
+                                    BorderSide(width: 2, color: appColor),
                                   ),
                                 ),
                                 validator: (value) {
@@ -207,9 +207,9 @@ class AddNewProductState extends State<AddNewProduct> {
                               decoration: InputDecoration(
                                   enabledBorder: OutlineInputBorder(
                                     borderRadius:
-                                        BorderRadius.all(Radius.circular(20.0)),
+                                    BorderRadius.all(Radius.circular(20.0)),
                                     borderSide:
-                                        BorderSide(width: 2, color: appColor),
+                                    BorderSide(width: 2, color: appColor),
                                   ),
                                   labelText: 'العلامة التجارية',
                                   labelStyle: TextStyle(
@@ -247,9 +247,9 @@ class AddNewProductState extends State<AddNewProduct> {
                               decoration: InputDecoration(
                                   enabledBorder: OutlineInputBorder(
                                     borderRadius:
-                                        BorderRadius.all(Radius.circular(20.0)),
+                                    BorderRadius.all(Radius.circular(20.0)),
                                     borderSide:
-                                        BorderSide(width: 2, color: appColor),
+                                    BorderSide(width: 2, color: appColor),
                                   ),
                                   labelText: 'الفئه',
                                   labelStyle: TextStyle(
@@ -267,7 +267,7 @@ class AddNewProductState extends State<AddNewProduct> {
                                 );
                               }).toList(),
                               validator: (value) =>
-                                  value == null ? 'الرجاء اختيار الفئة' : null,
+                              value == null ? 'الرجاء اختيار الفئة' : null,
                               // After selecting the category ,it will
                               // change button value to selected category
                               onChanged: (String? newCategory) {
@@ -296,9 +296,9 @@ class AddNewProductState extends State<AddNewProduct> {
                                   hintStyle: TextStyle(fontSize: 18),
                                   enabledBorder: OutlineInputBorder(
                                     borderRadius:
-                                        BorderRadius.all(Radius.circular(20.0)),
+                                    BorderRadius.all(Radius.circular(20.0)),
                                     borderSide:
-                                        BorderSide(width: 2, color: appColor),
+                                    BorderSide(width: 2, color: appColor),
                                   ),
                                 ),
                                 validator: (value) {
@@ -329,9 +329,9 @@ class AddNewProductState extends State<AddNewProduct> {
                                   hintStyle: TextStyle(fontSize: 18),
                                   enabledBorder: OutlineInputBorder(
                                     borderRadius:
-                                        BorderRadius.all(Radius.circular(20.0)),
+                                    BorderRadius.all(Radius.circular(20.0)),
                                     borderSide:
-                                        BorderSide(width: 2, color: appColor),
+                                    BorderSide(width: 2, color: appColor),
                                   ),
                                 ),
                                 validator: (value) {
@@ -355,9 +355,9 @@ class AddNewProductState extends State<AddNewProduct> {
                               decoration: InputDecoration(
                                   enabledBorder: OutlineInputBorder(
                                     borderRadius:
-                                        BorderRadius.all(Radius.circular(20.0)),
+                                    BorderRadius.all(Radius.circular(20.0)),
                                     borderSide:
-                                        BorderSide(width: 2, color: appColor),
+                                    BorderSide(width: 2, color: appColor),
                                   ),
                                   labelText: 'الموقع',
                                   labelStyle: TextStyle(
@@ -375,7 +375,7 @@ class AddNewProductState extends State<AddNewProduct> {
                                 );
                               }).toList(),
                               validator: (value) =>
-                                  value == null ? 'الرجاء اختيار الموقع' : null,
+                              value == null ? 'الرجاء اختيار الموقع' : null,
                               // After selecting the location ,it will
                               // change button value to selected location
                               onChanged: (String? newLocation) {
@@ -406,9 +406,9 @@ class AddNewProductState extends State<AddNewProduct> {
                                   hintStyle: TextStyle(fontSize: 18),
                                   enabledBorder: OutlineInputBorder(
                                     borderRadius:
-                                        BorderRadius.all(Radius.circular(20.0)),
+                                    BorderRadius.all(Radius.circular(20.0)),
                                     borderSide:
-                                        BorderSide(width: 2, color: appColor),
+                                    BorderSide(width: 2, color: appColor),
                                   ),
                                 ),
                                 validator: (value) {
@@ -436,14 +436,14 @@ class AddNewProductState extends State<AddNewProduct> {
                                   fixedSize: MaterialStateProperty.all(
                                       const Size(270, 50)),
                                   shape: MaterialStateProperty.all<
-                                          RoundedRectangleBorder>(
+                                      RoundedRectangleBorder>(
                                       RoundedRectangleBorder(
                                           borderRadius:
-                                              BorderRadius.circular(90.0))),
+                                          BorderRadius.circular(90.0))),
                                   backgroundColor:
-                                      MaterialStateProperty.all(appColor),
+                                  MaterialStateProperty.all(appColor),
                                   foregroundColor:
-                                      MaterialStateProperty.all(Colors.white)),
+                                  MaterialStateProperty.all(Colors.white)),
                               onPressed: () {
                                 if (_formKey.currentState!.validate()) {
                                   if (pbarcodeController.text.isNotEmpty &&
@@ -470,15 +470,15 @@ class AddNewProductState extends State<AddNewProduct> {
                                   //navigate to "ProductsListAdmin" to show the product in the products' list
                                   Navigator.push(context,
                                       MaterialPageRoute(builder: (context) {
-                                    return ProductsListAdmin();
-                                  }));
+                                        return ProductsListAdmin();
+                                      }));
                                 }
                               },
                               child: const Text('إضافة المنتج')),
                           // end of "add new product" button
                         ]))
-                // end of add new product form
-                )));
+              // end of add new product form
+            )));
   }
 
 // add new product to the database/stock
@@ -504,6 +504,10 @@ class AddNewProductState extends State<AddNewProduct> {
       'Size': size,
       'Location': selectedLocation,
       'Price': double.tryParse(price),
+      "Offer": false,
+      "PriceAfterOffer": 0,
+      "SubCategory": "Test",
+
     });
     pbarcodeController.clear();
     pNameController.clear();
@@ -539,8 +543,8 @@ class _scanProductBarcodeState extends State<scanProductBarcode> {
                   onPressed: () {
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) {
-                      return ProductsListAdmin();
-                    }));
+                          return ProductsListAdmin();
+                        }));
                   },
                   icon: Icon(Icons.keyboard_arrow_right)))
         ]),
@@ -565,7 +569,7 @@ class _scanProductBarcodeState extends State<scanProductBarcode> {
   Widget _buildQrView(BuildContext context) {
     // check device's size and change the scanArea and overlay accordingly.
     var scanArea = (MediaQuery.of(context).size.width < 400 ||
-            MediaQuery.of(context).size.height < 400)
+        MediaQuery.of(context).size.height < 400)
         ? 150.0
         : 300.0;
     // To ensure the Scanner view is properly sizes after rotation,
