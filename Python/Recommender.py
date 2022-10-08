@@ -53,7 +53,7 @@ def nameRoute():
         Products=Products.reset_index(drop=True)
 
         HistoryCart = DataFrameHistory.dropna()
-        print(HistoryCart)
+
         popular_products = pd.DataFrame(HistoryCart.groupby('SubCategory')['Count'].count())
         popular_products.reset_index(level=0, inplace=True)
 
@@ -62,7 +62,6 @@ def nameRoute():
             #plt.bar(popular_products['SubCategory'], popular_products['Count'])
             #plt.show()
 
-        print(popular_products.head)
 
         tfidf = TfidfVectorizer(stop_words='english')
 
@@ -74,11 +73,9 @@ def nameRoute():
         global MostPurchased
 
         MostPurchased = popular_products.loc[popular_products['Count']. idxmax()]
-        print(MostPurchased['SubCategory'])
         global mapping
         mapping = pd.Series(Products.index,index = Products['SubCategory'])
-        print(mapping)
-        return "Been Here"
+        return "History received"
     else:
         return MostPurchased['SubCategory']
         def recommend_Products(Products_SubCategory):

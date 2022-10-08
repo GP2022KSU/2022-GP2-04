@@ -8,6 +8,7 @@ import 'package:carttogo/Pages/welcomePage.dart';
 import 'package:flutter/rendering.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class OffersList extends StatefulWidget {
   OffersList({Key? key}) : super(key: key);
@@ -22,7 +23,7 @@ class _OffersListState extends State<OffersList> {
   var l;
   var g;
   late bool _isLoading;
-  late List<String> Recommended = [];
+  List<String> Recommended = [];
   void initState() {
     _isLoading = true;
     _SeeAPI();
@@ -38,9 +39,7 @@ class _OffersListState extends State<OffersList> {
   }
 
   @override
-  Widget build(BuildContext context) {    
-
-    print(Recommended);
+  Widget build(BuildContext context) {
     final ref = fb.ref().child('Products');
     return Scaffold(
       backgroundColor: Colors.white,
@@ -78,117 +77,239 @@ class _OffersListState extends State<OffersList> {
           ),
         ],
       ),
-      body: FirebaseAnimatedList(
-        padding: const EdgeInsets.all(8.0),
-        query: ref,
-        shrinkWrap: true,
-        itemBuilder: (context, snapshot, animation, index) {
-          var v = snapshot.value.toString();
-          g = v.replaceAll(
-              RegExp(
-                  "{|}|Name: |Price: |Size: |Quantity: |Category: |Brand: |Barcode: |Location: |Offer: |PriceAfterOffer: "),
-              "");
-          g.trim();
-          l = g.split(',');
+      body: Column(
+        children: [
+          FutureBuilder<List<String>>(
+              future: _SeeAPI(),
+              builder:
+                  (BuildContext context, AsyncSnapshot<List<String>> asyn) {
+                if (asyn.data != null) {
+                  Recommended = asyn.data as List<String>;
+                  return Column(
+                    children: [
+                      Text("العروض على المنتجات التي اشتريتها مسبقا"),
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.3,
+                        child: FirebaseAnimatedList(
+                          padding: const EdgeInsets.all(8.0),
+                          query: ref,
+                          shrinkWrap: true,
+                          itemBuilder: (context, snapshot, animation, index) {
+                            bool SameBarcode = false;
+                            var map;
+                            bool isOffer = false;
+                            String Name = "";
+                            double price = 0.0;
+                            double offerprice = 0.0;
+                            try {
+                              var map = snapshot.value as Map<dynamic, dynamic>;
+                              if (map['Offer'] == true) isOffer = true;
+                              Name = map['Name'];
+                              price = double.parse(map['Price'].toString());
+                              offerprice = double.parse(
+                                  map['PriceAfterOffer'].toString());
+                              for (int i = 0; i < Recommended.length; i++) {
+                                if (map['SearchBarcode'] == Recommended[i]) {
+                                  SameBarcode = true;
+                                }
+                              }
+                            } on Exception {}
 
-          var map;
-          bool isOffer = false;
+                            if (isOffer & SameBarcode) {
+                              return GestureDetector(
+                                child: Directionality(
+                                  textDirection: TextDirection.rtl,
+                                  child: Container(
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: ListTile(
+                                        shape: RoundedRectangleBorder(
+                                          side: const BorderSide(
+                                            color: Colors.white,
+                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                        ),
+                                        //tileColor: const Color.fromARGB(
+                                        //    229, 229, 227, 227),
 
-          try {
-            var map = snapshot.value as Map<dynamic, dynamic>;
-            if (map['Offer'] == true) isOffer = true;
-          } on Exception {}
-          //عرض المنتج اللي عليه عرض
-          // if كأنه
-          // isOffer == false?
-          //     Center(
-          //         child: Text(
-          //           "لا توجد عروض",
-          //           style: TextStyle(
-          //               color: Colors.black,
-          //               fontWeight: FontWeight.bold,
-          //               fontFamily: 'CartToGo',
-          //               fontSize: 18),
-          //         )) : else كأنه
-          //     عرض ليست العروض
+                                        // product information arrangement in the container
+                                        title: Text(
+                                          Name, // name of the product
+                                          style: const TextStyle(
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: 'CartToGo',
+                                            fontSize: 17,
+                                          ),
+                                          textAlign: TextAlign.right,
+                                        ),
 
-          //box design
-          //يعرض بس اللي عليهم عروض
-          if (isOffer) {
-            return GestureDetector(
-              child: Directionality(
-                textDirection: TextDirection.rtl,
-                child: Container(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: ListTile(
-                      shape: RoundedRectangleBorder(
-                        side: BorderSide(
-                          color: Colors.white,
+                                        // offer icon
+                                        leading: const Icon(
+                                          Icons.discount,
+                                          color: Color.fromARGB(255, 76, 54, 244),
+                                        ),
+
+                                        //price for the products
+                                        trailing: Column(
+                                          children: [
+                                            Text(
+                                              "\t" +
+                                                  "السعر:" +
+                                                  price
+                                                      .toString() + // price before
+                                                  " ريال",
+                                              style: const TextStyle(
+                                                decoration:
+                                                    TextDecoration.lineThrough,
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.bold,
+                                                fontFamily: 'CartToGo',
+                                                fontSize: 12,
+                                              ),
+                                              textAlign: TextAlign.right,
+                                            ),
+                                            Text(
+                                              "\t" +
+                                                  "السعر بعد العرض:" +
+                                                  offerprice
+                                                      .toString() + // price after offer
+                                                  " ريال",
+                                              textAlign: TextAlign.right,
+                                              style: const TextStyle(
+                                                // decoration: TextDecoration.lineThrough,
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.bold,
+                                                fontFamily: 'CartToGo',
+                                                fontSize: 12,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              );
+                            }
+                            return Container();
+                          },
                         ),
-                        borderRadius: BorderRadius.circular(10),
                       ),
-                      tileColor: Color.fromARGB(229, 229, 227, 227),
+                      Text("العروض"),
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.44,
+                        child: FirebaseAnimatedList(
+                          padding: const EdgeInsets.all(8.0),
+                          query: ref,
+                          shrinkWrap: true,
+                          itemBuilder: (context, snapshot, animation, index) {
+                            var map;
+                            bool isOffer = false;
+                            String Name = "";
+                            double price = 0.0;
+                            double offerprice = 0.0;
+                            try {
+                              var map = snapshot.value as Map<dynamic, dynamic>;
+                              if (map['Offer'] == true) isOffer = true;
+                              Name = map['Name'];
+                              price = double.parse(map['Price'].toString());
+                              offerprice = double.parse(
+                                  map['PriceAfterOffer'].toString());
+                            } on Exception {}
 
-                      // product information arrangement in the container
-                      title: Text(
-                        l[7], // name of the product
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                          fontFamily: 'CartToGo',
-                          fontSize: 17,
+                            if (isOffer) {
+                              return Directionality(
+                                textDirection: TextDirection.rtl,
+                                child: Container(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: ListTile(
+                                      shape: RoundedRectangleBorder(
+                                        side: const BorderSide(
+                                          color: Colors.white,
+                                        ),
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      //tileColor:
+                                      //    Color.fromARGB(150, 255, 254, 254),
+
+                                      // product information arrangement in the container
+                                      title: Text(
+                                        Name, // name of the product
+                                        style: const TextStyle(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.bold,
+                                          fontFamily: 'CartToGo',
+                                          fontSize: 17,
+                                        ),
+                                        textAlign: TextAlign.right,
+                                      ),
+
+                                      // offer icon
+                                      leading: const Icon(
+                                        Icons.discount,
+                                        color: Colors.red,
+                                      ),
+
+                                      //price for the products
+                                      trailing: Column(
+                                        children: [
+                                          Text(
+                                            "\t" +
+                                                "السعر:" +
+                                                price
+                                                    .toString() + // price before
+                                                " ريال",
+                                            style: const TextStyle(
+                                              decoration:
+                                                  TextDecoration.lineThrough,
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.bold,
+                                              fontFamily: 'CartToGo',
+                                              fontSize: 12,
+                                            ),
+                                            textAlign: TextAlign.right,
+                                          ),
+                                          Text(
+                                            "\t" +
+                                                "السعر بعد العرض:" +
+                                                offerprice
+                                                    .toString() + // price after offer
+                                                " ريال",
+                                            textAlign: TextAlign.right,
+                                            style: const TextStyle(
+                                              // decoration: TextDecoration.lineThrough,
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.bold,
+                                              fontFamily: 'CartToGo',
+                                              fontSize: 12,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              );
+                            }
+                            return Container();
+                          },
                         ),
-                        textAlign: TextAlign.right,
                       ),
-
-                      // offer icon
-                      leading: Icon(
-                        Icons.discount,
-                        color: Colors.red,
-                      ),
-
-                      //price for the products
-                      trailing: Column(
-                        children: [
-                          Text(
-                            "\t" +
-                                "السعر:" +
-                                l[1] + // price before
-                                " ريال",
-                            style: TextStyle(
-                              decoration: TextDecoration.lineThrough,
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                              fontFamily: 'CartToGo',
-                              fontSize: 12,
-                            ),
-                            textAlign: TextAlign.right,
-                          ),
-                          Text(
-                            "\t" +
-                                "السعر بعد العرض:" +
-                                l[0] + // price after offer
-                                " ريال",
-                            textAlign: TextAlign.right,
-                            style: TextStyle(
-                              // decoration: TextDecoration.lineThrough,
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                              fontFamily: 'CartToGo',
-                              fontSize: 12,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            );
-          }
-          return Container();
-        },
+                    ],
+                  );
+                } else if (asyn.connectionState == ConnectionState.waiting) {
+                  return Container(
+                    height: MediaQuery.of(context).size.height * 0.89,
+                      child: SpinKitWave(
+                    color: Color.fromARGB(255, 35, 61, 255),
+                  ));
+                }
+                return Container();
+              }),
+        ],
       ),
     );
   }
@@ -206,7 +327,6 @@ class _OffersListState extends State<OffersList> {
     print(response1.body);
     List<String> RecomProductsBarcode =
         user.getRecomProducts(response1.body.toString());
-    Recommended = RecomProductsBarcode;
     return RecomProductsBarcode;
     //final decoded = await json.decode(response1.body) as Map<String, dynamic>;
     //print(decoded);
@@ -221,19 +341,19 @@ class _OffersListState extends State<OffersList> {
               textDirection: TextDirection.rtl,
               child: Dialog(
                   elevation: 0,
-                  backgroundColor: Color(0xffffffff),
+                  backgroundColor: const Color(0xffffffff),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15.0),
                   ),
                   child: Column(mainAxisSize: MainAxisSize.min, children: [
-                    SizedBox(height: 15),
-                    Text("هل تريد تسجيل الخروج؟",
-                        style: TextStyle(
+                    const SizedBox(height: 15),
+                    const Text("هل تريد تسجيل الخروج؟",
+                        style: const TextStyle(
                           fontSize: 19,
                           fontWeight: FontWeight.bold,
                         )),
-                    SizedBox(height: 15),
-                    Divider(
+                    const SizedBox(height: 15),
+                    const Divider(
                       height: 1,
                       color: Colors.black,
                     ),
@@ -249,33 +369,34 @@ class _OffersListState extends State<OffersList> {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => WelcomePage()));
+                                      builder: (context) =>
+                                          const WelcomePage()));
                             },
-                            child: Center(
-                                child: Text("خروج",
+                            child: const Center(
+                                child: const Text("خروج",
                                     style: TextStyle(
                                       fontSize: 18.0,
                                       color: Color(0xFFFE4A49),
                                       fontWeight: FontWeight.bold,
                                     ))))),
-                    Divider(
+                    const Divider(
                       height: 1,
                     ),
                     Container(
                         width: MediaQuery.of(context).size.width,
                         height: 50,
                         child: InkWell(
-                            borderRadius: BorderRadius.only(
-                              bottomLeft: Radius.circular(15.0),
+                            borderRadius: const BorderRadius.only(
+                              bottomLeft: const Radius.circular(15.0),
                               bottomRight: Radius.circular(15.0),
                             ),
                             highlightColor: Colors.grey[200],
                             onTap: () {
                               Navigator.of(context).pop();
                             },
-                            child: Center(
+                            child: const Center(
                                 child: Text("إلغاء",
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       fontSize: 16.0,
                                       fontWeight: FontWeight.bold,
                                     )))))
