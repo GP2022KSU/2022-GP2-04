@@ -87,7 +87,15 @@ class _OffersListState extends State<OffersList> {
                   Recommended = asyn.data as List<String>;
                   return Column(
                     children: [
-                      Text("العروض على المنتجات التي اشتريتها مسبقا"),
+                      Text(
+                        "العروض على المنتجات التي اشتريتها مسبقا",
+                        style: TextStyle(
+                          color: Color.fromARGB(255, 3, 0, 188),
+                          fontWeight: FontWeight.bold,
+                          fontFamily: 'CartToGo',
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
                       SizedBox(
                         height: MediaQuery.of(context).size.height * 0.3,
                         child: FirebaseAnimatedList(
@@ -148,7 +156,7 @@ class _OffersListState extends State<OffersList> {
                                         // offer icon
                                         leading: const Icon(
                                           Icons.discount,
-                                          color: Color.fromARGB(255, 76, 54, 244),
+                                          color: Colors.red,
                                         ),
 
                                         //price for the products
@@ -197,7 +205,15 @@ class _OffersListState extends State<OffersList> {
                           },
                         ),
                       ),
-                      Text("العروض"),
+                      Text(
+                        "العروض",
+                        style: TextStyle(
+                          color: Color.fromARGB(255, 3, 0, 188),
+                          fontWeight: FontWeight.bold,
+                          fontFamily: 'CartToGo',
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
                       SizedBox(
                         height: MediaQuery.of(context).size.height * 0.44,
                         child: FirebaseAnimatedList(
@@ -302,10 +318,10 @@ class _OffersListState extends State<OffersList> {
                   );
                 } else if (asyn.connectionState == ConnectionState.waiting) {
                   return Container(
-                    height: MediaQuery.of(context).size.height * 0.89,
+                      height: MediaQuery.of(context).size.height * 0.8,
                       child: SpinKitWave(
-                    color: Color.fromARGB(255, 35, 61, 255),
-                  ));
+                        color: Color.fromARGB(255, 35, 61, 255),
+                      ));
                 }
                 return Container();
               }),
@@ -316,7 +332,7 @@ class _OffersListState extends State<OffersList> {
 
   Future<List<String>> _SeeAPI() async {
     //run python file
-    final url = 'http://192.168.0.215:5000/name'; //local python API
+    final url = 'http://172.20.10.3:5000/name'; //local python API
     var purchasehis = "";
     final response = await http.post(Uri.parse(url),
         body: json.encode(user.getPurchaseHistory()));

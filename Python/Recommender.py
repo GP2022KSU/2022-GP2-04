@@ -1,16 +1,9 @@
 import pandas as pd
 import numpy as np
 import s3fs
-from sklearn.metrics.pairwise import cosine_similarity
 import datetime
-from sklearn.metrics import mean_squared_error
-from sklearn.model_selection import train_test_split
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import linear_kernel
-from pandas import json_normalize
-from unicodedata import category
-from sklearn.metrics.pairwise import sigmoid_kernel
-import matplotlib.pyplot as plt
 from flask import Flask, jsonify, request
 import json
 
@@ -33,7 +26,7 @@ def nameRoute():
         ProductsHistory = request.data #getting the response data
         print(request.data)
         ProductsHistory_data = json.loads(ProductsHistory.decode('utf-8')) #converting it from json to key value pair
-        JsonFileProducts = open('C:\\Users\\reema\\Downloads\\RecomOffers\\RecomOffers\\Products.json',encoding="utf8")
+        JsonFileProducts = open('Products.json',encoding="utf8")
 
 
     #dictHistory= json.load(JsonFileHistoryCarts)

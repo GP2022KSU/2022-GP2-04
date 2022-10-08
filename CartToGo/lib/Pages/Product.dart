@@ -3,7 +3,7 @@ class Product {
   final String Brand;
   final String Category;
   //final double Price;
-  //final int Quantity;
+  final String Quantity;
   final String Size;
   final String SearchBarcode;
   final String Barcode;
@@ -15,7 +15,7 @@ class Product {
     required this.Brand,
     required this.Category,
     //required this.Price,
-    //required this.Quantity,
+    required this.Quantity,
     required this.Size,
     required this.Barcode,
     required this.SearchBarcode,
@@ -30,7 +30,7 @@ class Product {
       Brand: map['Brand'] ?? '',
       Category: map['Category'] ?? '',
       //Price: map['Price'] ?? '',
-      //Quantity: map['Quantity'] ?? '',
+      Quantity: map['Quantity'].toString(),
       Size: map['Size'] ?? '',
       Barcode: map['SearchBarcode'].toString(),
       SearchBarcode: map['SearchBarcode'].toString(),
