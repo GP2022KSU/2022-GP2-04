@@ -207,6 +207,7 @@ Future<List<String>> BringProducts() async {
   return barcodes;
 }
 
+
 Future<double> BringTotalPrice() async {
   if (FirebaseAuth.instance.currentUser != null) {
     final ref = FirebaseDatabase.instance.ref();
