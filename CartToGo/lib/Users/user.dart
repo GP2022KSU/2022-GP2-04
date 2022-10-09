@@ -201,7 +201,7 @@ Future<List<String>> BringProducts() async {
       barcodes.add(
           product.SearchBarcode.toString() + " | " + product.Name.toString());
     });
-    print(barcodes);
+
     return barcodes;
   }
   return barcodes;
@@ -381,7 +381,7 @@ double TotalAfterPoints = 0.0;
 double TotalInsideCart = 0.0;
 int PointsAfterPaying = 0;
 bool Paid = false;
-List<String> names = [];
+ List<String> names = [];
 List<String> barcodes = [];
 List<String> RecommendPro = [];
 late Map<dynamic, dynamic> Purchasehis = {};

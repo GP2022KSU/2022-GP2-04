@@ -298,7 +298,7 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
                           print(map['Name']);
                           Name = map['Name'];
                           Size = map['Size'];
-                          Price = map['Price'];
+                          Price = double.parse(map['Price'].toString());
                           Barcode = map['Barcode'];
                           PriceAfterOffer =
                               double.parse(map['PriceAfterOffer'].toString());

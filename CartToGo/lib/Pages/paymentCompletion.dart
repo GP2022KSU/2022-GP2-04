@@ -290,7 +290,8 @@ class PaymentCompletionState extends State<PaymentCompletion> {
                               HaveOffer
                                   ? Price = double.parse(
                                       map['PriceAfterOffer'].toString())
-                                  : Price = map['Price'];
+                                  :Price = double.parse(map['Price'].toString()
+                                );
                             } on Exception {
                               checker = false;
                             }

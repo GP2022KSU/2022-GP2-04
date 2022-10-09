@@ -27,20 +27,20 @@ class _SearchProductListState extends State<SearchProductList> {
   // to show the all the products names & locations before looking for something specific
 
  // اذا شلنا هذا تقل نتايج البحث وما تتكر كثير 
-  // late bool _isLoading;
+  late bool _isLoading;
 
-  // void initState() {
-  //   _isLoading = true;
-  //   Future.delayed(const Duration(milliseconds: 500), () {
-  //     if (mounted) {
-  //       setState(() {
-  //         _isLoading = false;
-  //       });
-  //     }
-  //   });
-  //   user.getNames();
-  //   super.initState();
-  // }
+  void initState() {
+    _isLoading = true;
+    Future.delayed(const Duration(milliseconds: 500), () {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    });
+    //user.getNames();
+    super.initState();
+  }
 
   // search bar to seach for the pro's location
   @override
@@ -79,7 +79,8 @@ class _SearchProductListState extends State<SearchProductList> {
           itemBuilder: (BuildContext context, int index) {
             return ListTile(
               title: Text(
-                user.getNames().elementAt(index),
+                //user.getNames().elementAt(index),
+                "s",
                 style: TextStyle(
                   color: Colors.black,
                   backgroundColor: Color.fromARGB(255, 248, 248, 249),

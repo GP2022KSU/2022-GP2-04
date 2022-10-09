@@ -785,7 +785,8 @@ class _CheckOutState extends State<CheckOut> {
                             HaveOffer
                                 ? Price = double.parse(
                                     map['PriceAfterOffer'].toString())
-                                : Price = map['Price'];
+                                : Price = double.parse(map['Price'].toString()
+                                );
                           } on Exception {
                             checker = false;
                           }

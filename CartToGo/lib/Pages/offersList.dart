@@ -332,8 +332,8 @@ class _OffersListState extends State<OffersList> {
 
   Future<List<String>> _SeeAPI() async {
     //run python file
-    final url = 'http://172.20.10.3:5000/name'; //local python API
-    var purchasehis = "";
+  final url = 'http://172.20.10.3:5000/name'; //local python API
+      var purchasehis = "";
     final response = await http.post(Uri.parse(url),
         body: json.encode(user.getPurchaseHistory()));
     final response1 = await http.get(Uri.parse(url));

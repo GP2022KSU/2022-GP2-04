@@ -1,9 +1,9 @@
-import 'package:carttogo/Users/user.dart';
+import 'package:carttogo/Users/user.dart' as user;
 import 'package:carttogo/main.dart';
 import 'package:flutter/material.dart';
 
 class LocationSearch extends SearchDelegate<String> {
-  final List<String> names;
+    List<String> names;
 
 
   LocationSearch(this.names)
@@ -61,6 +61,7 @@ class LocationSearch extends SearchDelegate<String> {
 // suggestions for products when searching for a product
   @override
   Widget buildSuggestions(BuildContext context) {
+    
     final Suggestions = query.isEmpty
         ? names
         : names.where((p) => p.startsWith(query)).toList();

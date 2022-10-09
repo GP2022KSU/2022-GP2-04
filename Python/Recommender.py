@@ -26,7 +26,7 @@ def nameRoute():
         ProductsHistory = request.data #getting the response data
         print(request.data)
         ProductsHistory_data = json.loads(ProductsHistory.decode('utf-8')) #converting it from json to key value pair
-        JsonFileProducts = open('Products.json',encoding="utf8")
+        JsonFileProducts = open('\\Users\\haya\\Desktop\\CartToGo_GP2\\2022-GP1-04\\Python\\Products.json',encoding="utf8")
 
 
     #dictHistory= json.load(JsonFileHistoryCarts)
