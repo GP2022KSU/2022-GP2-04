@@ -364,12 +364,13 @@ void loop()
         FirebaseJson jsonQuan;
         int Qunatity = 0;
         json.get(HasOffer, "/Offer");
-        if (HasOffer.to<bool>() == true) {
+        if (HasOffer.to<String>() == "true") {
           json.get(price, "/PriceAfterOffer"); //If it has an offer take the offer price
         }
         else {
           json.get(price, "/Price");
         }
+        Serial.println("Price is after checking Offer: "+String(price.to<float>()));
         json.get(name1, "/Name");
         json.get(getQuan, "/Quantity");
         Qunatity = getQuan.to<int>();
