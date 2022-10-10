@@ -88,7 +88,7 @@ class ProductsListAdmins extends State<ProductsListAdmin> {
               context: context,
               delegate: AdminSearch(user.getBarcode()),
             );
-            //print(result);
+
           },
           icon: Icon(Icons.search_outlined),
           color: appColor,

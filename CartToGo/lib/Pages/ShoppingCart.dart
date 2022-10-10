@@ -1,5 +1,7 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
+import 'package:carttogo/Pages/locationSearch.dart';
 import 'package:carttogo/Pages/welcomePage.dart';
+import 'package:carttogo/main.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'dart:async';
@@ -7,6 +9,7 @@ import 'package:carttogo/widgets/ShoppingCartWidget.dart';
 import 'package:animated_button/animated_button.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:carttogo/Users/user.dart' as user;
 
 class ShoppingCart extends StatefulWidget {
   Function callback;
@@ -76,6 +79,18 @@ class ShoppingCartState extends State<ShoppingCart> {
               fontFamily: 'CartToGo',
             ),
           ),
+           leading: IconButton(
+          onPressed: () async {
+            final result = await showSearch<String>(
+              context: context,
+              delegate: LocationSearch(user.getNames()),
+            );
+          },
+          icon: Icon(Icons.search_outlined),
+          color: appColor,
+        ),
+
+
           actions: <Widget>[
             Padding(
               padding: const EdgeInsets.all(8.0),

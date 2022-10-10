@@ -33,11 +33,10 @@ class NaviState extends State<Navi> {
       case 0:
         return tab1;
       case 1:
-        return OffersList();
-      case 2:
-        return SearchProductList();
-      case 3:
         return LoyaltyCard();
+       
+      case 2:
+        return  OffersList();
     }
     return Container();
   }
@@ -46,29 +45,22 @@ class NaviState extends State<Navi> {
   Widget build(BuildContext context) {
     bool v1 = false; //Shopping cart
     double s1 = 0;
-    bool v2 = false; //Search
+    bool v2 = false; //Loyalty Card
     double s2 = 0;
-    bool v3 = false; //Loyalty Card
+    bool v3 = false; //Offers
     double s3 = 0;
-
-    bool v4 = false; //Offers
-    double s4 = 0;
-
-    Myindex == 2 ? v2 = false : v2 = true;
-
-    Myindex == 0 || Myindex == 1 || Myindex == 3 ? s2 = 0.061 : s2 = 0.04;
 
     Myindex == 0 ? v1 = false : v1 = true;
 
     Myindex == 0 ? s1 = 0.04 : s1 = 0.066;
 
-    Myindex == 3 ? v3 = false : v3 = true;
+    Myindex == 3 ? v2 = false : v2 = true;
 
-    Myindex == 2 || Myindex == 0 || Myindex == 3 ? s4 = 0.06 : s4 = 0.04;
+    Myindex == 2 || Myindex == 0 || Myindex == 3 ? s3 = 0.06 : s3 = 0.04;
 
-    Myindex == 1 ? v4 = false : v4 = true;
+    Myindex == 1 ? v3 = false : v3 = true;
 
-    Myindex == 0 || Myindex == 1 || Myindex == 2 ? s3 = 0.065 : s3 = 0.04;
+    Myindex == 0 || Myindex == 1 || Myindex == 2 ? s2 = 0.065 : s2 = 0.04;
 
     return SafeArea(
       top: false,
@@ -106,31 +98,6 @@ class NaviState extends State<Navi> {
               ),
             ),
             Container(
-              height: MediaQuery.of(context).size.height * s4,
-              child: Column(
-                children: [
-                  Visibility(
-                    child: SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.0049,
-                    ),
-                    visible: v4,
-                  ),
-                  Icon(Icons.discount_outlined,
-                      size: 28,
-                      color: Myindex == 1
-                          ? Color.fromARGB(255, 35, 61, 255)
-                          : Colors.white),
-                  Visibility(
-                    child: const Text(
-                      "العروض",
-                      style: TextStyle(color: Colors.white, fontSize: 12),
-                    ),
-                    visible: v4,
-                  ),
-                ],
-              ),
-            ),
-            Container(
               height: MediaQuery.of(context).size.height * s2,
               child: Column(
                 children: [
@@ -140,14 +107,14 @@ class NaviState extends State<Navi> {
                     ),
                     visible: v2,
                   ),
-                  Icon(Icons.search,
-                      size: 30,
-                      color: Myindex == 2
+                  Icon(Icons.credit_card,
+                      size: 28,
+                      color: Myindex == 1
                           ? Color.fromARGB(255, 35, 61, 255)
                           : Colors.white),
                   Visibility(
                     child: const Text(
-                      "بحث",
+                      "بطاقة الولاء",
                       style: TextStyle(color: Colors.white, fontSize: 12),
                     ),
                     visible: v2,
@@ -165,14 +132,15 @@ class NaviState extends State<Navi> {
                     ),
                     visible: v3,
                   ),
-                  Icon(Icons.credit_card,
+                  Icon(Icons.discount_outlined
+                    ,
                       size: 30,
-                      color: Myindex == 3
+                      color: Myindex == 2
                           ? Color.fromARGB(255, 35, 61, 255)
                           : Colors.white),
                   Visibility(
                     child: const Text(
-                      "بطاقة الولاء",
+                      "العروض",
                       style: TextStyle(color: Colors.white, fontSize: 12),
                     ),
                     visible: v3,
