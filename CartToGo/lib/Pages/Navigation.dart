@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:carttogo/Pages/loyaltyCard.dart';
 import 'package:carttogo/Pages/shoppingCart.dart';
-import 'seachProductList.dart';
 import 'locationSearch.dart';
 import 'package:carttogo/Users/user.dart' as user;
 

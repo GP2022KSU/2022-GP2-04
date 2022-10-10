@@ -88,9 +88,10 @@ class ProductsListAdmins extends State<ProductsListAdmin> {
               context: context,
               delegate: AdminSearch(user.getBarcode()),
             );
-
           },
-          icon: Icon(Icons.search_outlined),
+          icon: Icon(
+            Icons.search_outlined,
+          ),
           color: appColor,
         ),
 
@@ -214,7 +215,7 @@ class ProductsListAdmins extends State<ProductsListAdmin> {
 
                     // product information arrangement in the container
                     title: Text(
-                      l[7],
+                      l[7]+l[10],
                       style: TextStyle(
                         color: Colors.black,
                         fontWeight: FontWeight.bold,
