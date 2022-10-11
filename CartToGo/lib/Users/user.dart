@@ -135,11 +135,10 @@ Future<List<String>> BringhistoryPurch() async {
         .limitToFirst(getnumOfProducts())
         .get();
     final map = snapshot.value as Map<dynamic, dynamic>;
-    int count = 0;
     DatabaseReference ref7 = FirebaseDatabase.instance.ref(
         "Shopper/${FirebaseAuth.instance.currentUser?.uid}/PurchaseHistory");
     map.forEach((key, value) async {
-      count++;
+
       final product = Product.fromMap(value);
 
       String barcode = value['Barcode'];

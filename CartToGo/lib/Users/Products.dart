@@ -25,7 +25,7 @@ class Product {
       Name: map['Name:'] ?? '',
       Brand: map['Brand:'] ?? '',
       Category: map['Category'] ?? '',
-      Price: map['Price:'] ?? '',
+      Price: double.parse(map['Price'].toString()),
       Size: map['Size:'] ?? '',
       Barcode: map['Barcode:'] ?? '',
       Location: map['Location:'] ?? '',

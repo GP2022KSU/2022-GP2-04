@@ -61,7 +61,7 @@ def nameRoute():
 
         overview_matrix = tfidf.fit_transform(Products['SubCategory'])
 
-
+        print(popular_products)
         similarity_matrix = linear_kernel(overview_matrix,overview_matrix) #Finds all category that matches each other 
 
         global MostPurchased

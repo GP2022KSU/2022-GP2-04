@@ -116,12 +116,12 @@ class _OffersListState extends State<OffersList> {
                           query: ref,
                           shrinkWrap: true,
                           itemBuilder: (context, snapshot, animation, index) {
-                            bool Noimg=true;
+                            bool Noimg = true;
                             bool SameBarcode = false;
                             var map;
                             bool isOffer = false;
                             String Name = "";
-                            String Brand="";
+                            String Brand = "";
                             String imgUrl = '';
                             double price = 0.0;
                             double offerprice = 0.0;
@@ -129,11 +129,11 @@ class _OffersListState extends State<OffersList> {
                               var map = snapshot.value as Map<dynamic, dynamic>;
                               if (map['Offer'] == true) isOffer = true;
                               Name = map['Name'];
-                              Brand=map['Brand'];
+                              Brand = map['Brand'];
                               if (map['ImgUrl'] == "") {
-                                Noimg=true;
+                                Noimg = true;
                               } else {
-                                Noimg=false;
+                                Noimg = false;
                                 imgUrl = map['ImgUrl'];
                               }
 
@@ -167,7 +167,9 @@ class _OffersListState extends State<OffersList> {
 
                                         // product information arrangement in the container
                                         title: Text(
-                                          Name+" "+Brand, // name of the product
+                                          Name +
+                                              " " +
+                                              Brand, // name of the product
                                           style: const TextStyle(
                                             color: Colors.black,
                                             fontWeight: FontWeight.bold,
@@ -178,10 +180,12 @@ class _OffersListState extends State<OffersList> {
                                         ),
 
                                         // offer icon
-                                        leading: Noimg == true? const Icon(
-                                          Icons.discount,
-                                          color: Colors.red,
-                                        ): Image.network(imgUrl),
+                                        leading: Noimg == true
+                                            ? const Icon(
+                                                Icons.discount,
+                                                color: Colors.red,
+                                              )
+                                            : Image.network(imgUrl),
 
                                         //price for the products
                                         trailing: Column(
@@ -259,16 +263,24 @@ class _OffersListState extends State<OffersList> {
                           shrinkWrap: true,
                           itemBuilder: (context, snapshot, animation, index) {
                             var map;
+                            bool Noimg = true;
+                            String imgUrl = '';
                             bool isOffer = false;
                             String Name = "";
-                            String Brand="";
+                            String Brand = "";
                             double price = 0.0;
                             double offerprice = 0.0;
                             try {
                               var map = snapshot.value as Map<dynamic, dynamic>;
                               if (map['Offer'] == true) isOffer = true;
                               Name = map['Name'];
-                              Brand=map['Brand'];
+                              Brand = map['Brand'];
+                              if (map['ImgUrl'] == "") {
+                                Noimg = true;
+                              } else {
+                                Noimg = false;
+                                imgUrl = map['ImgUrl'];
+                              }
                               price = double.parse(map['Price'].toString());
                               offerprice = double.parse(
                                   map['PriceAfterOffer'].toString());
@@ -292,7 +304,9 @@ class _OffersListState extends State<OffersList> {
 
                                       // product information arrangement in the container
                                       title: Text(
-                                        Name+" "+Brand, // name of the product
+                                        Name +
+                                            " " +
+                                            Brand, // name of the product
                                         style: const TextStyle(
                                           color: Colors.black,
                                           fontWeight: FontWeight.bold,
@@ -303,10 +317,12 @@ class _OffersListState extends State<OffersList> {
                                       ),
 
                                       // offer icon
-                                      leading: const Icon(
-                                        Icons.discount,
-                                        color: Colors.red,
-                                      ),
+                                        leading: Noimg == true
+                                            ? const Icon(
+                                                Icons.discount,
+                                                color: Colors.red,
+                                              )
+                                            : Image.network(imgUrl),
 
                                       //price for the products
                                       trailing: Column(

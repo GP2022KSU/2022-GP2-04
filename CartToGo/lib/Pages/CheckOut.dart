@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:firebase_database/firebase_database.dart';
+import '../Users/Products.dart';
 import '../main.dart';
 import 'Navigation.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
@@ -32,8 +33,8 @@ class _CheckOutState extends State<CheckOut> {
   late double PriceAfterPoin;
   late bool _isLoading;
   late StreamSubscription _streamSubscription4;
-    late List<String> HistoryBarcode=[];
-  int countBarcodes=0;
+  late List<String> HistoryBarcode = [];
+  int countBarcodes = 0;
   final _database = FirebaseDatabase.instance.ref();
   void initState() {
     _isLoading = true;
@@ -184,7 +185,47 @@ class _CheckOutState extends State<CheckOut> {
                                       foregroundColor: MaterialStateProperty.all(
                                           Colors.white)),
                                   onPressed: () async {
-                                    await user.getBringhistoryPurch();
+                                                          final ref = FirebaseDatabase.instance.ref();
+                      final snapshot = await ref
+                          .child(
+                              "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts/${user.getLastCartNum()}")
+                          .get();
+                      print(snapshot.value);
+                      final map = snapshot.value as Map<dynamic, dynamic>;
+                      DatabaseReference ref7 = FirebaseDatabase.instance.ref(
+                          "Shopper/${FirebaseAuth.instance.currentUser?.uid}/PurchaseHistory");
+                      map.forEach((key, value) async {
+                        final product = Product.fromMap(value);
+
+                        String barcode = value['Barcode'];
+                        String subca = value['SubCategory'];
+                        double price = value['Price'];
+                        await ref7.push().update({
+                          "SubCategory": subca,
+                          "Price": price,
+                        });
+                      });
+                                    //                                     final ref = FirebaseDatabase.instance.ref();
+                                    // final snapshot = await ref
+                                    //     .child(
+                                    //         "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts/${user.getLastCartNum()}")
+                                    //     .orderByPriority()
+                                    //     .limitToFirst(user.getnumOfProducts())
+                                    //     .get();
+                                    // final map = snapshot.value as Map<dynamic, dynamic>;
+                                    // DatabaseReference ref7 = FirebaseDatabase.instance.ref(
+                                    //     "Shopper/${FirebaseAuth.instance.currentUser?.uid}/PurchaseHistory");
+                                    // map.forEach((key, value) async {
+                                    //   final product = Product.fromMap(value);
+
+                                    //   String barcode = value['Barcode'];
+                                    //   String subca = value['SubCategory'];
+                                    //   double price = value['Price'];
+                                    //   await ref7.push().update({
+                                    //     "SubCategory": subca,
+                                    //     "Price": price,
+                                    //   });
+                                    // });
                                     if (vis) {
                                       _database
                                           .child(
@@ -673,7 +714,6 @@ class _CheckOutState extends State<CheckOut> {
                         foregroundColor:
                             MaterialStateProperty.all(Colors.white)),
                     onPressed: () async {
-                      await user.getBringhistoryPurch();
                       DatabaseReference ref3 = FirebaseDatabase.instance.ref(
                           "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts");
                       await ref3.update({
@@ -682,7 +722,6 @@ class _CheckOutState extends State<CheckOut> {
                             : await user.getTotal(),
                       });
                       await _showMyDialog(context);
-                      
                     },
                     child: const Text('اتمام الدفع')),
                 //end of login button
@@ -726,7 +765,7 @@ class _CheckOutState extends State<CheckOut> {
                             .toString(); //Gets the scanned product and store it in a var
                         bool checker = true;
                         bool checke2 = true;
-                        String Brand="";
+                        String Brand = "";
                         String Name = "";
                         double Price = 0;
                         bool HaveOffer = false;
@@ -776,18 +815,17 @@ class _CheckOutState extends State<CheckOut> {
                             //   map['SubCategory'],
                             //   map['Price']
                             // ]) as Map<dynamic, dynamic>;
-                                        //                             HistoryBarcode.insert(index,map['Barcode'].toString());
-                                        // countBarcodes++;
-                                        // print(countBarcodes);
-                                        // print(HistoryBarcode);
+                            //                             HistoryBarcode.insert(index,map['Barcode'].toString());
+                            // countBarcodes++;
+                            // print(countBarcodes);
+                            // print(HistoryBarcode);
                             Name = map['Name'];
                             HaveOffer = map['Offer'];
-                            Brand=map['Brand'];
+                            Brand = map['Brand'];
                             HaveOffer
                                 ? Price = double.parse(
                                     map['PriceAfterOffer'].toString())
-                                : Price = double.parse(map['Price'].toString()
-                                );
+                                : Price = double.parse(map['Price'].toString());
                           } on Exception {
                             checker = false;
                           }
@@ -799,7 +837,7 @@ class _CheckOutState extends State<CheckOut> {
                               child: FadeInAnimation(
                                 child: ListTile(
                                   trailing: Text(
-                                    Name+" "+Brand,
+                                    Name + " " + Brand,
                                     textAlign: TextAlign.center,
                                   ),
                                   leading: Text(

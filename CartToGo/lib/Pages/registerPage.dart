@@ -275,11 +275,11 @@ class _RegisterPageState extends State<RegisterPage> {
         "0": 0,
       },
       "PurchaseHistory": {
-        "0": 0,
+        "New": {
+          "Price":1,
+          "SubCategory":"Test"
+        }
       },
-      "RecommendedItems": {
-        "0": 0,
-      }
     });
     final databaseRef = FirebaseDatabase.instance.ref();
     databaseRef.child("QRUidFinder").child("$LoyaltyCardID").set({
