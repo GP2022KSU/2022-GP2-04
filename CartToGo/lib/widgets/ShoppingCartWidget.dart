@@ -213,7 +213,7 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
                     textDirection: TextDirection.rtl,
                   ),
                   text: Text(
-                    '   عرض السلة' +
+                    '  اتمام الدفع' +
                         "  (" +
                         user.getnumOfProducts().toString() +
                         ")",
