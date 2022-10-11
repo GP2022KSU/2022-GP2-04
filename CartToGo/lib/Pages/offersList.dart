@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:carttogo/Users/user.dart' as user;
+import 'package:carttogo/main.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
@@ -87,17 +88,30 @@ class _OffersListState extends State<OffersList> {
                   Recommended = asyn.data as List<String>;
                   return Column(
                     children: [
-                      Text(
+                                            const Divider(
+                        indent: 40,
+                        endIndent: 40,
+                      height: 1,
+                      color: Color.fromARGB(255, 3, 0, 188),
+                    ),
+                      const Text(
                         "العروض على المنتجات التي اشتريتها مسبقا",
                         style: TextStyle(
                           color: Color.fromARGB(255, 3, 0, 188),
                           fontWeight: FontWeight.bold,
                           fontFamily: 'CartToGo',
                         ),
+                                    
                         textAlign: TextAlign.center,
                       ),
+                      const Divider(
+                        indent: 40,
+                        endIndent: 40,
+                      height: 1,
+                      color: Color.fromARGB(255, 3, 0, 188),
+                    ),
                       SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.3,
+                        height: MediaQuery.of(context).size.height * 0.25,
                         child: FirebaseAnimatedList(
                           padding: const EdgeInsets.all(8.0),
                           query: ref,
@@ -205,7 +219,13 @@ class _OffersListState extends State<OffersList> {
                           },
                         ),
                       ),
-                      Text(
+                                            const Divider(
+                        indent: 40,
+                        endIndent: 40,
+                      height: 1,
+                      color: Color.fromARGB(255, 3, 0, 188),
+                    ),
+                      const Text(
                         "العروض",
                         style: TextStyle(
                           color: Color.fromARGB(255, 3, 0, 188),
@@ -214,8 +234,14 @@ class _OffersListState extends State<OffersList> {
                         ),
                         textAlign: TextAlign.center,
                       ),
+                                            const Divider(
+                        indent: 40,
+                        endIndent: 40,
+                      height: 1,
+                      color: Color.fromARGB(255, 3, 0, 188),
+                    ),
                       SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.44,
+                        height: MediaQuery.of(context).size.height * 0.49,
                         child: FirebaseAnimatedList(
                           padding: const EdgeInsets.all(8.0),
                           query: ref,
@@ -332,7 +358,7 @@ class _OffersListState extends State<OffersList> {
 
   Future<List<String>> _SeeAPI() async {
     //run python file
-  final url = 'http://172.20.10.3:5000/name'; //local python API
+  final url = 'http://10.6.196.180:5000/name'; //local python API
       var purchasehis = "";
     final response = await http.post(Uri.parse(url),
         body: json.encode(user.getPurchaseHistory()));

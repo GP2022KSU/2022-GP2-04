@@ -26,9 +26,10 @@ def nameRoute():
         ProductsHistory = request.data #getting the response data
         print(request.data)
         ProductsHistory_data = json.loads(ProductsHistory.decode('utf-8')) #converting it from json to key value pair
-        JsonFileProducts = open('\\Users\\haya\\Desktop\\CartToGo_GP2\\2022-GP1-04\\Python\\Products.json',encoding="utf8")
+        JsonFileProducts = open('/Users/haya/Documents/2022-GP1-04/Python/Products.json',encoding="utf8")
 
-
+    #/Users/haya/Documents/2022-GP1-04/Python/Products.json Haya's path
+    
     #dictHistory= json.load(JsonFileHistoryCarts)
         dictProducts=json.load(JsonFileProducts)
 
@@ -66,6 +67,7 @@ def nameRoute():
         global MostPurchased
 
         MostPurchased = popular_products.loc[popular_products['Count']. idxmax()]
+        print(MostPurchased)
         global mapping
         mapping = pd.Series(Products.index,index = Products['SubCategory'])
         return "History received"

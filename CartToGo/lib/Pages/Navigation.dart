@@ -53,13 +53,13 @@ class NaviState extends State<Navi> {
 
     Myindex == 0 ? s1 = 0.04 : s1 = 0.066;
 
-    Myindex == 3 ? v2 = false : v2 = true;
+    Myindex == 1 ? v2 = false : v2 = true;
 
-    Myindex == 2 || Myindex == 0 || Myindex == 3 ? s3 = 0.06 : s3 = 0.04;
+    Myindex == 1 || Myindex == 0  ? s3 = 0.06 : s3 = 0.04;
 
-    Myindex == 1 ? v3 = false : v3 = true;
+    Myindex == 2 ? v3 = false : v3 = true;
 
-    Myindex == 0 || Myindex == 1 || Myindex == 2 ? s2 = 0.065 : s2 = 0.04;
+    Myindex == 0 ||Myindex == 2 ? s2 = 0.065 : s2 = 0.04;
 
     return SafeArea(
       top: false,
