@@ -248,7 +248,7 @@ class PaymentCompletionState extends State<PaymentCompletion> {
                               .toString(); //Gets the scanned product and store it in a var
                           bool checker = true;
                           bool checke2 = true;
-
+                          String Brand="";
                           String Name = "";
                           double Price = 0;
                           bool HaveOffer = false;
@@ -286,6 +286,7 @@ class PaymentCompletionState extends State<PaymentCompletion> {
                             try {
                               var map = snapshot.value as Map<dynamic, dynamic>;
                               Name = map['Name'];
+                              Brand=map['Brand'];
                               HaveOffer = map['Offer'];
                               HaveOffer
                                   ? Price = double.parse(
@@ -303,7 +304,7 @@ class PaymentCompletionState extends State<PaymentCompletion> {
                                 child: FadeInAnimation(
                                   child: ListTile(
                                     trailing: Text(
-                                      Name,
+                                      Name+" "+Brand,
                                       textAlign: TextAlign.center,
                                     ),
                                     leading: Text(

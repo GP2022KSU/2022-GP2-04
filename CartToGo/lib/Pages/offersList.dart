@@ -88,12 +88,12 @@ class _OffersListState extends State<OffersList> {
                   Recommended = asyn.data as List<String>;
                   return Column(
                     children: [
-                                            const Divider(
+                      const Divider(
                         indent: 40,
                         endIndent: 40,
-                      height: 1,
-                      color: Color.fromARGB(255, 3, 0, 188),
-                    ),
+                        height: 1,
+                        color: Color.fromARGB(255, 3, 0, 188),
+                      ),
                       const Text(
                         "العروض على المنتجات التي اشتريتها مسبقا",
                         style: TextStyle(
@@ -101,15 +101,14 @@ class _OffersListState extends State<OffersList> {
                           fontWeight: FontWeight.bold,
                           fontFamily: 'CartToGo',
                         ),
-                                    
                         textAlign: TextAlign.center,
                       ),
                       const Divider(
                         indent: 40,
                         endIndent: 40,
-                      height: 1,
-                      color: Color.fromARGB(255, 3, 0, 188),
-                    ),
+                        height: 1,
+                        color: Color.fromARGB(255, 3, 0, 188),
+                      ),
                       SizedBox(
                         height: MediaQuery.of(context).size.height * 0.25,
                         child: FirebaseAnimatedList(
@@ -117,16 +116,27 @@ class _OffersListState extends State<OffersList> {
                           query: ref,
                           shrinkWrap: true,
                           itemBuilder: (context, snapshot, animation, index) {
+                            bool Noimg=true;
                             bool SameBarcode = false;
                             var map;
                             bool isOffer = false;
                             String Name = "";
+                            String Brand="";
+                            String imgUrl = '';
                             double price = 0.0;
                             double offerprice = 0.0;
                             try {
                               var map = snapshot.value as Map<dynamic, dynamic>;
                               if (map['Offer'] == true) isOffer = true;
                               Name = map['Name'];
+                              Brand=map['Brand'];
+                              if (map['ImgUrl'] == "") {
+                                Noimg=true;
+                              } else {
+                                Noimg=false;
+                                imgUrl = map['ImgUrl'];
+                              }
+
                               price = double.parse(map['Price'].toString());
                               offerprice = double.parse(
                                   map['PriceAfterOffer'].toString());
@@ -157,7 +167,7 @@ class _OffersListState extends State<OffersList> {
 
                                         // product information arrangement in the container
                                         title: Text(
-                                          Name, // name of the product
+                                          Name+" "+Brand, // name of the product
                                           style: const TextStyle(
                                             color: Colors.black,
                                             fontWeight: FontWeight.bold,
@@ -168,10 +178,10 @@ class _OffersListState extends State<OffersList> {
                                         ),
 
                                         // offer icon
-                                        leading: const Icon(
+                                        leading: Noimg == true? const Icon(
                                           Icons.discount,
                                           color: Colors.red,
-                                        ),
+                                        ): Image.network(imgUrl),
 
                                         //price for the products
                                         trailing: Column(
@@ -219,12 +229,12 @@ class _OffersListState extends State<OffersList> {
                           },
                         ),
                       ),
-                                            const Divider(
+                      const Divider(
                         indent: 40,
                         endIndent: 40,
-                      height: 1,
-                      color: Color.fromARGB(255, 3, 0, 188),
-                    ),
+                        height: 1,
+                        color: Color.fromARGB(255, 3, 0, 188),
+                      ),
                       const Text(
                         "العروض",
                         style: TextStyle(
@@ -234,15 +244,16 @@ class _OffersListState extends State<OffersList> {
                         ),
                         textAlign: TextAlign.center,
                       ),
-                                            const Divider(
+                      const Divider(
                         indent: 40,
                         endIndent: 40,
-                      height: 1,
-                      color: Color.fromARGB(255, 3, 0, 188),
-                    ),
+                        height: 1,
+                        color: Color.fromARGB(255, 3, 0, 188),
+                      ),
                       SizedBox(
                         height: MediaQuery.of(context).size.height * 0.49,
                         child: FirebaseAnimatedList(
+                          scrollDirection: Axis.vertical,
                           padding: const EdgeInsets.all(8.0),
                           query: ref,
                           shrinkWrap: true,
@@ -250,12 +261,14 @@ class _OffersListState extends State<OffersList> {
                             var map;
                             bool isOffer = false;
                             String Name = "";
+                            String Brand="";
                             double price = 0.0;
                             double offerprice = 0.0;
                             try {
                               var map = snapshot.value as Map<dynamic, dynamic>;
                               if (map['Offer'] == true) isOffer = true;
                               Name = map['Name'];
+                              Brand=map['Brand'];
                               price = double.parse(map['Price'].toString());
                               offerprice = double.parse(
                                   map['PriceAfterOffer'].toString());
@@ -279,7 +292,7 @@ class _OffersListState extends State<OffersList> {
 
                                       // product information arrangement in the container
                                       title: Text(
-                                        Name, // name of the product
+                                        Name+" "+Brand, // name of the product
                                         style: const TextStyle(
                                           color: Colors.black,
                                           fontWeight: FontWeight.bold,
@@ -358,8 +371,8 @@ class _OffersListState extends State<OffersList> {
 
   Future<List<String>> _SeeAPI() async {
     //run python file
-  final url = 'http://10.6.196.180:5000/name'; //local python API
-      var purchasehis = "";
+    final url = 'http://192.168.0.215:5000/name'; //local python API
+    var purchasehis = "";
     final response = await http.post(Uri.parse(url),
         body: json.encode(user.getPurchaseHistory()));
     final response1 = await http.get(Uri.parse(url));

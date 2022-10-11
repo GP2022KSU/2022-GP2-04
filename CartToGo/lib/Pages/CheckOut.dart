@@ -726,7 +726,7 @@ class _CheckOutState extends State<CheckOut> {
                             .toString(); //Gets the scanned product and store it in a var
                         bool checker = true;
                         bool checke2 = true;
-
+                        String Brand="";
                         String Name = "";
                         double Price = 0;
                         bool HaveOffer = false;
@@ -782,6 +782,7 @@ class _CheckOutState extends State<CheckOut> {
                                         // print(HistoryBarcode);
                             Name = map['Name'];
                             HaveOffer = map['Offer'];
+                            Brand=map['Brand'];
                             HaveOffer
                                 ? Price = double.parse(
                                     map['PriceAfterOffer'].toString())
@@ -798,7 +799,7 @@ class _CheckOutState extends State<CheckOut> {
                               child: FadeInAnimation(
                                 child: ListTile(
                                   trailing: Text(
-                                    Name,
+                                    Name+" "+Brand,
                                     textAlign: TextAlign.center,
                                   ),
                                   leading: Text(

@@ -263,13 +263,16 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
                       var v = snapshot.value
                           .toString(); //Gets the scanned product and store it in a var
                       bool checker = true;
+                      String Brand="";
                       String Name = "";
                       String Size = "";
                       double Price = 0;
                       String Barcode = "";
                       bool HaveOffer = false;
                       double PriceAfterOffer = 0;
-
+                      bool Noimg = true;
+                      String imgUrl = '';
+                      int spaceForImage = 0;
                       var g = v.replaceAll(
                           //Using RegExp to remove unwanted data
                           RegExp(
@@ -295,9 +298,17 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
                         //if there is data
                         try {
                           map = snapshot.value as Map<dynamic, dynamic>;
-                          print(map['Name']);
+                          if (map['ImgUrl'] == "") {
+                            spaceForImage=0;
+                            Noimg = true;
+                          } else {
+                            spaceForImage=20;
+                            Noimg = false;
+                            imgUrl = map['ImgUrl'];
+                          }
                           Name = map['Name'];
                           Size = map['Size'];
+                          Brand=map['Brand'];
                           Price = double.parse(map['Price'].toString());
                           Barcode = map['Barcode'];
                           PriceAfterOffer =
@@ -377,7 +388,7 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
                                           ),
                                           SizedBox(height: 15),
                                           Text(
-                                            "هل تريد حذف ${Name} ؟", //Product name for IOS 4 android 1
+                                            "هل تريد حذف ${Name+" "+Brand} ؟", //Product name for IOS 4 android 1
                                             style: TextStyle(
                                               fontSize: 15,
                                               fontWeight: FontWeight.w400,
@@ -520,6 +531,11 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
                                                           mainAxisSize:
                                                               MainAxisSize.min,
                                                           children: <Widget>[
+                                                            Noimg == true
+                                                                ? Container()
+                                                                : Image.network(
+                                                                    imgUrl),
+                                                            SizedBox(width: double.parse(spaceForImage.toString())),
                                                             Container(
                                                               decoration:
                                                                   BoxDecoration(),
@@ -536,7 +552,7 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
                                                                 children: <
                                                                     Widget>[
                                                                   Text(
-                                                                    Name, //Product name 1 android 4 ios
+                                                                    Name+" "+Brand, //Product name 1 android 4 ios
                                                                     textAlign:
                                                                         TextAlign
                                                                             .center,
