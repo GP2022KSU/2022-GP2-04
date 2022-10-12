@@ -8,7 +8,7 @@ import 'package:firebase_database/ui/firebase_animated_list.dart';
 import '../main.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:carttogo/Users/Cashier.dart' as cashier;
-
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 final _fb = FirebaseDatabase.instance;
 
 class PaymentCompletion extends StatefulWidget {
@@ -120,82 +120,82 @@ class PaymentCompletionState extends State<PaymentCompletion> {
                         )*/
                         Cart(),
 
-                        const SizedBox(
-                          height: 15,
-                        ),
-                        Container(
-                          decoration: const BoxDecoration(
-                            color: const Color.fromARGB(255, 242, 240, 240),
-                            //border: Border.all(color: Colors.black),
-                          ),
-                          height: MediaQuery.of(context).size.height * 0.06,
-                          width: MediaQuery.of(context).size.width * 1,
-                          child: Row(
-                            textDirection: TextDirection.rtl,
-                            children: <Widget>[
-                              const Text(
-                                "  المجموع   ",
-                                //textAlign: TextAlign.right,
-                                //textDirection: TextDirection.ltr,
-                                style: TextStyle(
-                                    color: Color.fromRGBO(32, 26, 37, 1),
-                                    fontSize: 20,
-                                    letterSpacing:
-                                        0 /*percentages not used in flutter. defaulting to zero*/,
-                                    fontWeight: FontWeight.w700,
-                                    height: 0.9),
-                              ),
-                              SizedBox(
-                                width: MediaQuery.of(context).size.width * 0.54,
-                              ),
-                              Text(
-                                cashier
-                                        .getTotalAfterPoints(
-                                            asyn.data.toString(),
-                                            int.parse(splitted[1]))
-                                        .toString() +
-                                    " ريال",
-                                textAlign: TextAlign.right,
-                                textDirection: TextDirection.rtl,
-                                style: const TextStyle(
-                                    color:
-                                        const Color.fromARGB(255, 17, 18, 18),
-                                    fontSize: 20,
-                                    letterSpacing:
-                                        0 /*percentages not used in flutter. defaulting to zero*/,
-                                    //fontWeight: FontWeight.w700,
-                                    height: 0.9),
-                              ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 50,
-                        ),
+                        // const SizedBox(
+                        //   height: 15,
+                        // ),
+                        // Container(
+                        //   decoration: const BoxDecoration(
+                        //     color: const Color.fromARGB(255, 242, 240, 240),
+                        //     //border: Border.all(color: Colors.black),
+                        //   ),
+                        //   height: MediaQuery.of(context).size.height * 0.06,
+                        //   width: MediaQuery.of(context).size.width * 1,
+                        //   child: Row(
+                        //     textDirection: TextDirection.rtl,
+                        //     children: <Widget>[
+                        //       const Text(
+                        //         "  المجموع   ",
+                        //         //textAlign: TextAlign.right,
+                        //         //textDirection: TextDirection.ltr,
+                        //         style: TextStyle(
+                        //             color: Color.fromRGBO(32, 26, 37, 1),
+                        //             fontSize: 20,
+                        //             letterSpacing:
+                        //                 0 /*percentages not used in flutter. defaulting to zero*/,
+                        //             fontWeight: FontWeight.w700,
+                        //             height: 0.9),
+                        //       ),
+                        //       SizedBox(
+                        //         width: MediaQuery.of(context).size.width * 0.54,
+                        //       ),
+                        //       Text(
+                        //         cashier
+                        //                 .getTotalAfterPoints(
+                        //                     asyn.data.toString(),
+                        //                     int.parse(splitted[1]))
+                        //                 .toString() +
+                        //             " ريال",
+                        //         textAlign: TextAlign.right,
+                        //         textDirection: TextDirection.rtl,
+                        //         style: const TextStyle(
+                        //             color:
+                        //                 const Color.fromARGB(255, 17, 18, 18),
+                        //             fontSize: 20,
+                        //             letterSpacing:
+                        //                 0 /*percentages not used in flutter. defaulting to zero*/,
+                        //             //fontWeight: FontWeight.w700,
+                        //             height: 0.9),
+                        //       ),
+                        //     ],
+                        //   ),
+                        // ),
+                        // const SizedBox(
+                        //   height: 50,
+                        // ),
 
-                        // payment completion button
-                        ElevatedButton(
-                            style: ButtonStyle(
-                                elevation: MaterialStateProperty.all(8.0),
-                                textStyle: MaterialStateProperty.all(
-                                    const TextStyle(
-                                        fontSize: 20, fontFamily: 'CartToGo')),
-                                fixedSize: MaterialStateProperty.all(
-                                    const Size(200, 50)),
-                                shape: MaterialStateProperty.all<
-                                        RoundedRectangleBorder>(
-                                    RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(30.0))),
-                                backgroundColor:
-                                    MaterialStateProperty.all(appColor),
-                                foregroundColor:
-                                    MaterialStateProperty.all(Colors.white)),
-                            onPressed: () {
-                              return _showMyDialog();
-                            },
-                            child: const Text('اتمام الدفع')),
-                        // end of payment completion button
+                        // // payment completion button
+                        // ElevatedButton(
+                        //     style: ButtonStyle(
+                        //         elevation: MaterialStateProperty.all(8.0),
+                        //         textStyle: MaterialStateProperty.all(
+                        //             const TextStyle(
+                        //                 fontSize: 20, fontFamily: 'CartToGo')),
+                        //         fixedSize: MaterialStateProperty.all(
+                        //             const Size(200, 50)),
+                        //         shape: MaterialStateProperty.all<
+                        //                 RoundedRectangleBorder>(
+                        //             RoundedRectangleBorder(
+                        //                 borderRadius:
+                        //                     BorderRadius.circular(30.0))),
+                        //         backgroundColor:
+                        //             MaterialStateProperty.all(appColor),
+                        //         foregroundColor:
+                        //             MaterialStateProperty.all(Colors.white)),
+                        //     onPressed: () {
+                        //       return _showMyDialog();
+                        //     },
+                        //     child: const Text('اتمام الدفع')),
+                        // // end of payment completion button
                       ],
                     );
                   }
@@ -205,7 +205,7 @@ class PaymentCompletionState extends State<PaymentCompletion> {
 
   Widget Cart() {
     return SizedBox(
-      height: MediaQuery.of(context).size.height * 0.3,
+      height: MediaQuery.of(context).size.height * 0.6,
       width: MediaQuery.of(context).size.width * 1,
       child: FutureBuilder<String>(
           future: cashier.BringUID(splitted[0].toString()),
@@ -221,7 +221,7 @@ class PaymentCompletionState extends State<PaymentCompletion> {
                             .getnumOfProducts(asyn.data.toString())
                             .toString() +
                         ") " +
-                        cashier.getUsername(asyn.data.toString()).toString() +
+                         cashier.getUsername(asyn.data.toString()).toString() +
                         "السلة الخاصة بـ",
                     textAlign: TextAlign.right,
                     textDirection: TextDirection.ltr,
@@ -234,7 +234,8 @@ class PaymentCompletionState extends State<PaymentCompletion> {
                         height: 0.9),
                   ),
                   Container(
-                    height: MediaQuery.of(context).size.height * 0.2,
+                    height: MediaQuery.of(context).size.height * 0.3,
+                    width: MediaQuery.of(context).size.width * 0.9,
                     child: FirebaseAnimatedList(
                         query: _fb.ref().child(
                             "Shopper/${asyn.data.toString()}/Carts/${splitted[1].toString()}"),
@@ -320,9 +321,91 @@ class PaymentCompletionState extends State<PaymentCompletion> {
                           return Container();
                         }),
                   ),
+                                          const SizedBox(
+                          height: 30,
+                        ),
+                        Container(
+                          decoration: const BoxDecoration(
+                            color: const Color.fromARGB(255, 242, 240, 240),
+                            //border: Border.all(color: Colors.black),
+                          ),
+                          height: MediaQuery.of(context).size.height * 0.06,
+                          width: MediaQuery.of(context).size.width * 1,
+                          child: Row(
+                            textDirection: TextDirection.rtl,
+                            children: <Widget>[
+                              const Text(
+                                "  المجموع   ",
+                                //textAlign: TextAlign.right,
+                                //textDirection: TextDirection.ltr,
+                                style: TextStyle(
+                                    color: Color.fromRGBO(32, 26, 37, 1),
+                                    fontSize: 20,
+                                    letterSpacing:
+                                        0 /*percentages not used in flutter. defaulting to zero*/,
+                                    fontWeight: FontWeight.w700,
+                                    height: 0.9),
+                              ),
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.54,
+                              ),
+                              Text(
+                                cashier
+                                        .getTotalAfterPoints(
+                                            asyn.data.toString(),
+                                            int.parse(splitted[1]))
+                                        .toString() +
+                                    " ريال",
+                                textAlign: TextAlign.right,
+                                textDirection: TextDirection.rtl,
+                                style: const TextStyle(
+                                    color:
+                                        const Color.fromARGB(255, 17, 18, 18),
+                                    fontSize: 20,
+                                    letterSpacing:
+                                        0 /*percentages not used in flutter. defaulting to zero*/,
+                                    //fontWeight: FontWeight.w700,
+                                    height: 0.9),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 50,
+                        ),
+
+                        // payment completion button
+                        ElevatedButton(
+                            style: ButtonStyle(
+                                elevation: MaterialStateProperty.all(8.0),
+                                textStyle: MaterialStateProperty.all(
+                                    const TextStyle(
+                                        fontSize: 20, fontFamily: 'CartToGo')),
+                                fixedSize: MaterialStateProperty.all(
+                                    const Size(200, 50)),
+                                shape: MaterialStateProperty.all<
+                                        RoundedRectangleBorder>(
+                                    RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(30.0))),
+                                backgroundColor:
+                                    MaterialStateProperty.all(appColor),
+                                foregroundColor:
+                                    MaterialStateProperty.all(Colors.white)),
+                            onPressed: () {
+                              return _showMyDialog();
+                            },
+                            child: const Text('اتمام الدفع')),
+                        // end of payment completion button
                 ]);
               }
-              return Container();
+              else if (asyn.connectionState == ConnectionState.waiting) {
+                  return Container(
+                      height: MediaQuery.of(context).size.height * 0.8,
+                      child: SpinKitWave(
+                        color: Color.fromARGB(255, 35, 61, 255),
+                      ));
+                }
             }
             return Container();
           }),

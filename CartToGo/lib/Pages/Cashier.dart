@@ -154,7 +154,7 @@ class Cashier extends StatelessWidget {
                   onPressed: () {
                     Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => const scanInovice(),
-                      //builder: (context) => PaymentCompletion("175996441S - 5"),
+                      //builder: (context) => PaymentCompletion("175996441S - 20"),
                     ));
                   },
                   child: const Text('البدأ بدفع الفاتورة')),
