@@ -317,12 +317,12 @@ class _OffersListState extends State<OffersList> {
                                       ),
 
                                       // offer icon
-                                        leading: Noimg == true
-                                            ? const Icon(
-                                                Icons.discount,
-                                                color: Colors.red,
-                                              )
-                                            : Image.network(imgUrl),
+                                      leading: Noimg == true
+                                          ? const Icon(
+                                              Icons.discount,
+                                              color: Colors.red,
+                                            )
+                                          : Image.network(imgUrl),
 
                                       //price for the products
                                       trailing: Column(
@@ -387,7 +387,7 @@ class _OffersListState extends State<OffersList> {
 
   Future<List<String>> _SeeAPI() async {
     //run python file
-    final url = 'http://192.168.0.215:5000/name'; //local python API
+    final url = 'http://192.168.0.220:5000/name'; //local python API
     var purchasehis = "";
     final response = await http.post(Uri.parse(url),
         body: json.encode(user.getPurchaseHistory()));
