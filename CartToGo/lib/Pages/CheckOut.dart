@@ -185,26 +185,29 @@ class _CheckOutState extends State<CheckOut> {
                                       foregroundColor: MaterialStateProperty.all(
                                           Colors.white)),
                                   onPressed: () async {
-                                                          final ref = FirebaseDatabase.instance.ref();
-                      final snapshot = await ref
-                          .child(
-                              "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts/${user.getLastCartNum()}")
-                          .get();
-                      print(snapshot.value);
-                      final map = snapshot.value as Map<dynamic, dynamic>;
-                      DatabaseReference ref7 = FirebaseDatabase.instance.ref(
-                          "Shopper/${FirebaseAuth.instance.currentUser?.uid}/PurchaseHistory");
-                      map.forEach((key, value) async {
-                        final product = Product.fromMap(value);
+                                    final ref = FirebaseDatabase.instance.ref();
+                                    final snapshot = await ref
+                                        .child(
+                                            "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts/${user.getLastCartNum()}")
+                                        .get();
+                                    print(snapshot.value);
+                                    final map =
+                                        snapshot.value as Map<dynamic, dynamic>;
+                                    DatabaseReference ref7 =
+                                        FirebaseDatabase.instance.ref(
+                                            "Shopper/${FirebaseAuth.instance.currentUser?.uid}/PurchaseHistory");
+                                    map.forEach((key, value) async {
+                                      final product = Product.fromMap(value);
 
-                        String barcode = value['Barcode'];
-                        String subca = value['SubCategory'];
-                        double price = value['Price'];
-                        await ref7.push().update({
-                          "SubCategory": subca,
-                          "Price": price,
-                        });
-                      });
+                                      String barcode = value['Barcode'];
+                                      String subca = value['SubCategory'];
+                                      double price = double.parse(
+                                          value['Price'].toString());
+                                      await ref7.push().update({
+                                        "SubCategory": subca,
+                                        "Price": price,
+                                      });
+                                    });
                                     //                                     final ref = FirebaseDatabase.instance.ref();
                                     // final snapshot = await ref
                                     //     .child(
@@ -304,28 +307,44 @@ class _CheckOutState extends State<CheckOut> {
                               Column(mainAxisSize: MainAxisSize.min, children: [
                             const SizedBox(height: 15),
                             Container(
-                              width: MediaQuery.of(context).size.width * 0.5,
-                              height: MediaQuery.of(context).size.height * 0.2,
-                              decoration: const BoxDecoration(
-                                image: const DecorationImage(
-                                    scale: 10,
-                                    image: const AssetImage(
-                                        'assets/images/points.png'),
-                                    fit: BoxFit.fitHeight),
-                              ),
-                            ),
+                                width: MediaQuery.of(context).size.width * 0.5,
+                                height:
+                                    MediaQuery.of(context).size.height * 0.2,
+                                decoration: BoxDecoration(
+                                    image: !(GainedPoints <= 0)
+                                        ? const DecorationImage(
+                                            scale: 10,
+                                            image: const AssetImage(
+                                                'assets/images/points.png'),
+                                            fit: BoxFit.fitHeight)
+                                        : const DecorationImage(
+                                            scale: 10,
+                                            image: const AssetImage(
+                                                'assets/images/cartcheck.png'),
+                                            fit: BoxFit.fitHeight))),
                             const SizedBox(height: 15),
-                            const Text("لقد كسبت",
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                )),
-                            Text(GainedPoints.toString(), //POINTS HERE
-                                style: const TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
-                                    color: Color.fromARGB(255, 10, 70, 175))),
-                            const SizedBox(height: 15),
+                            !(GainedPoints <= 0)
+                                ? Text("لقد كسبت",
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                    ))
+                                : Text("تمت العملية",
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                    )),
+                            !(GainedPoints <= 0)
+                                ? Text(GainedPoints.toString(), //POINTS HERE
+                                    style: const TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                        color:
+                                            Color.fromARGB(255, 10, 70, 175)))
+                                : Text(""),
+                            !(GainedPoints <= 0)
+                                ? const SizedBox(height: 15)
+                                : const SizedBox(height: 0),
                             ElevatedButton(
                                 style: ButtonStyle(
                                     elevation: MaterialStateProperty.all(8.0),
