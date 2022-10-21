@@ -9,18 +9,18 @@ class AdminSearch extends SearchDelegate<String> {
   final List<String> barcodes;
   var splitted;
   List<String> Locations = [
-    'ممر 12',
-    'ممر 11',
-    'ممر 10',
-    'ممر 9',
-    'ممر 8',
-    'ممر 7',
-    'ممر 6',
-    'ممر 5',
-    'ممر 4',
-    'ممر 3',
+    'ممر 1',
     'ممر 2',
-    'ممر 1'
+    'ممر 3',
+    'ممر 4',
+    'ممر 5',
+    'ممر 6',
+    'ممر 7',
+    'ممر 8',
+    'ممر 9',
+    'ممر 10',
+    'ممر 11',
+    'ممر 12'
   ];
   bool isOffer = false;
   static bool ShowOfferPrice = false;
@@ -394,7 +394,7 @@ class AdminSearch extends SearchDelegate<String> {
                                     // Array list of locations
                                     items: Locations.map((String items) {
                                       return DropdownMenuItem(
-                                        alignment: Alignment.center,
+                                        alignment: Alignment.topRight,
                                         value: items,
                                         child: Text(items),
                                       );

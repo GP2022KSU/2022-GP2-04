@@ -17,89 +17,106 @@ class AddNewProduct extends StatefulWidget {
 class AddNewProductState extends State<AddNewProduct> {
   // Locations list for the dropdown menue
   List<String> Locations = [
-    'ممر 12',
-    'ممر 11',
-    'ممر 10',
-    'ممر 9',
-    'ممر 8',
-    'ممر 7',
-    'ممر 6',
-    'ممر 5',
-    'ممر 4',
-    'ممر 3',
+    'ممر 1',
     'ممر 2',
-    'ممر 1'
+    'ممر 3',
+    'ممر 4',
+    'ممر 5',
+    'ممر 6',
+    'ممر 7',
+    'ممر 8',
+    'ممر 9',
+    'ممر 10',
+    'ممر 11',
+    'ممر 12'
   ];
   String? selectedLocation; // to save the value of chosen location
 
   // Brands list for the dropdown menue
   List<String> Brands = [
-    'ديتول',
-    'نوفا',
-    'بيرين',
-    'اوريو',
+    'أبو كأس',
     'السعودية',
-    'هاينز',
-    'لفانا',
-    'دايجستف',
-    'غارنييه',
-    'سانيتا',
-    'كوكاكولا',
-    'نيفيا',
     'المراعي',
-    'لوزين',
+    'الصافي',
     'البطل',
-    'نادك'
+    'الطائي',
+    'اوريو',
+    'اوكيفس',
+    'بيرين',
+    'بيبسي',
+    'تويكس',
+    'تريفا',
+    'جود',
+    'جيوفاني',
+    'ديتول',
+    'دايجستف',
+    'سانيتا',
+    'سولين',
+    'غارنييه',
+    'فاين',
+    'كوكاكولا',
+    'كادينا',
+    'كيندر',
+    'لفانا',
+    'لوزين',
+    'لون',
+    'لايون',
+    'نيفيا',
+    'نوفا',
+    'نادك',
+    'هاينز',
+    'ووتر وايبس',
   ];
   String? selectedBrand; // to save the value of chosen brand
 
   // Categories list for the dropdown menue
   List<String> Categories = [
-    'منظفات ومطهرات',
-    'منتجات الشعر',
-    'عسل',
-    'شوكولاته',
-    'مشروبات غازية',
-    'مناديل ومناديل مبلله',
-    'مخبوزات',
-    'حليب ومنتجات الألبان',
+    'العناية بالبشرة',
+    'العناية بالشعر',
+    'العناية بالأقدام',
     'أطعمة معلبة',
-    'وجبات خفيفة',
-    'مياه',
-    'صلصات طعام',
+    'حلويات و بسكويتات',
+    'سيزر',
     'شاي وقهوة',
-    'بسكويت',
-    'كريمات يدين وجسم'
+    'عسل',
+    'لوازم الصحة والعناية الشخصية',
+    'صلصات طعام',
+    'منظفات ومطهرات',
+    'مناديل',
+    'مشروبات',
+    'مياه',
+    'مخبوزات',
+    'منتجات الألبان',
+    'وجبات خفيفة',
   ];
   String? selectedCategory; // to save the value of chosen category
 
   // Sub ategories list for the dropdown menue, to use with the offers recommendations
   List<String> SubCategories = [
-    'شوكولاته',
-    'مناديل مبللة',
-    'مشروب غازي',
-    'كريم يدين',
-    'مناديل جيب',
-    'خبز',
-    'حليب',
     'أسماك معلبة',
-    'فشار',
-    'مناديل مطبخ',
-    'مياه شرب',
-    'حليب',
-    'عصائر',
     'بقوليات معلبة',
-    'معقم',
-    'مايونيز',
+    'بسكويت',
+    'حليب',
+    'خبز',
+    'شوكولاته',
     'شاي',
     'شامبو',
+    'عصائر',
+    'فشار',
     'كريم قدمين',
-    'بسكويت',
+    'كريم يدين',
+    'مناديل مبللة',
+    'مناديل جيب',
+    'مناديل مطبخ',
+    'مشروب غازي',
+    'مياه شرب',
+    'معقم',
+    'مايونيز',
   ];
   String? selectedSubCategory; // to save the value of chosen sub category
 
   // Sizes list for the dropdown menue
-  List<String> Sizes = ['غ', 'مل', 'ل', 'منديل', 'كيس', 'رول', 'ك'];
+  List<String> Sizes = ['غرام', 'مليلتر', 'لتر', 'منديل', 'كيس', 'رول', 'كيلو'];
   String? selectedSize; // to save the value of chosen size
 
   late String scanData;
@@ -240,17 +257,15 @@ class AddNewProductState extends State<AddNewProduct> {
                                   labelText: 'العلامة التجارية',
                                   labelStyle: TextStyle(
                                       fontSize: 20, color: Colors.black)),
-
                               icon: const Icon(
                                 Icons.keyboard_arrow_down,
                                 color: appColor,
                               ),
 
                               // Array list of brands names
-
                               items: Brands.map((String items) {
                                 return DropdownMenuItem(
-                                  alignment: Alignment.center,
+                                  alignment: Alignment.topRight,
                                   value: items,
                                   child: Text(items),
                                 );
@@ -291,7 +306,7 @@ class AddNewProductState extends State<AddNewProduct> {
                               // Array list of categories
                               items: Categories.map((String items) {
                                 return DropdownMenuItem(
-                                  alignment: Alignment.center,
+                                  alignment: Alignment.topRight,
                                   value: items,
                                   child: Text(items),
                                 );
@@ -331,7 +346,7 @@ class AddNewProductState extends State<AddNewProduct> {
                               // Array list of categories
                               items: SubCategories.map((String items) {
                                 return DropdownMenuItem(
-                                  alignment: Alignment.center,
+                                  alignment: Alignment.topRight,
                                   value: items,
                                   child: Text(items),
                                 );
@@ -371,7 +386,7 @@ class AddNewProductState extends State<AddNewProduct> {
                               // Array list of locations
                               items: Locations.map((String items) {
                                 return DropdownMenuItem(
-                                  alignment: Alignment.center,
+                                  alignment: Alignment.topRight,
                                   value: items,
                                   child: Text(items),
                                 );
@@ -386,6 +401,81 @@ class AddNewProductState extends State<AddNewProduct> {
                                 });
                               },
                             ),
+                          ),
+                          const SizedBox(height: 10),
+
+                          // Product's size
+                          Row(
+                            children: [
+                              Directionality(
+                                textDirection: TextDirection.rtl,
+                                child: Flexible(
+                                  child: DropdownButtonFormField(
+                                    decoration: InputDecoration(
+                                        enabledBorder: OutlineInputBorder(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(20.0)),
+                                          borderSide: BorderSide(
+                                              width: 2, color: appColor),
+                                        ),
+                                        labelText: 'وحدة القياس',
+                                        labelStyle: TextStyle(
+                                            fontSize: 20, color: Colors.black)),
+                                    isExpanded: true,
+                                    icon: const Icon(
+                                      Icons.keyboard_arrow_down,
+                                      color: appColor,
+                                    ),
+                                    // Array list of locations
+                                    items: Sizes.map((String items) {
+                                      return DropdownMenuItem(
+                                        alignment: Alignment.topRight,
+                                        value: items,
+                                        child: Text(items),
+                                      );
+                                    }).toList(),
+                                    validator: (value) => value == null
+                                        ? 'الرجاء اختيار وحدة قياس الحجم'
+                                        : null,
+                                    // After selecting the location ,it will
+                                    // change button value to selected location
+                                    onChanged: (String? newSize) {
+                                      setState(() {
+                                        selectedSize = newSize!;
+                                      });
+                                    },
+                                  ),
+                                ),
+                              ),
+                              Directionality(
+                                textDirection: TextDirection.rtl,
+                                child: Flexible(
+                                  child: TextFormField(
+                                      keyboardType: TextInputType.number,
+                                      controller: pSizeController,
+                                      decoration: const InputDecoration(
+                                        labelText: "الحجم",
+                                        labelStyle: TextStyle(
+                                            fontSize: 20, color: Colors.black),
+                                        hintText: "أدخل حجم/وزن المنتج ",
+                                        hintStyle: TextStyle(fontSize: 13),
+                                        enabledBorder: OutlineInputBorder(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(20.0)),
+                                          borderSide: BorderSide(
+                                              width: 2, color: appColor),
+                                        ),
+                                      ),
+                                      validator: (value) {
+                                        if (value == null || value.isEmpty) {
+                                          return 'الرجاء كتابة حجم/وزن المنتج';
+                                        }
+                                        return null;
+                                      },
+                                      onChanged: (value) {}),
+                                ),
+                              ),
+                            ],
                           ),
                           const SizedBox(height: 10),
 
@@ -418,35 +508,6 @@ class AddNewProductState extends State<AddNewProduct> {
                                   if (value.contains(RegExp(r'[A-Z]')) &&
                                       value.contains(RegExp(r'[a-z]'))) {
                                     return 'كمية المنتج يجب ان لا تحتوي على احرف';
-                                  }
-                                  return null;
-                                },
-                                onChanged: (value) {}),
-                          ),
-                          const SizedBox(height: 10),
-
-                          // Product's size
-                          Directionality(
-                            textDirection: TextDirection.rtl,
-                            child: TextFormField(
-                                keyboardType: TextInputType.text,
-                                controller: pSizeController,
-                                decoration: const InputDecoration(
-                                  labelText: "الحجم",
-                                  labelStyle: TextStyle(
-                                      fontSize: 20, color: Colors.black),
-                                  hintText: "أدخل حجم، وزن المنتج ",
-                                  hintStyle: TextStyle(fontSize: 18),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(20.0)),
-                                    borderSide:
-                                        BorderSide(width: 2, color: appColor),
-                                  ),
-                                ),
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return 'الرجاء كتابة حجم المنتج';
                                   }
                                   return null;
                                 },
@@ -519,8 +580,9 @@ class AddNewProductState extends State<AddNewProduct> {
                                       selectedCategory!.isNotEmpty &&
                                       selectedSubCategory!.isNotEmpty &&
                                       selectedLocation!.isNotEmpty &&
-                                      pQuantityController.text.isNotEmpty &&
+                                      selectedSize!.isNotEmpty &&
                                       pSizeController.text.isNotEmpty &&
+                                      pQuantityController.text.isNotEmpty &&
                                       pPriceController.text.isNotEmpty) {
                                     addProduct(
                                       pbarcodeController.text,
@@ -530,8 +592,9 @@ class AddNewProductState extends State<AddNewProduct> {
                                       selectedCategory.toString(),
                                       selectedSubCategory.toString(),
                                       selectedLocation.toString(),
-                                      pQuantityController.text,
+                                      selectedSize.toString(),
                                       pSizeController.text,
+                                      pQuantityController.text,
                                       pPriceController.text,
                                     );
                                   }
@@ -559,8 +622,9 @@ class AddNewProductState extends State<AddNewProduct> {
       String selectedCategory,
       String selectedSubCategory,
       String selectedLocation,
-      String quantity,
+      String selectedSize,
       String size,
+      String quantity,
       String price) {
     var intBarcode = int.tryParse(barcode);
 
@@ -572,8 +636,8 @@ class AddNewProductState extends State<AddNewProduct> {
       'Category': selectedCategory,
       'SubCategory': selectedSubCategory,
       'Location': selectedLocation,
+      'Size': size + " " + selectedSize,
       'Quantity': int.tryParse(quantity),
-      'Size': size,
       'Price': double.tryParse(price),
       "Offer": false,
       "PriceAfterOffer": 0,

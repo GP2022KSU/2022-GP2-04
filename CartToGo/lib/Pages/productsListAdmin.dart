@@ -18,18 +18,18 @@ class ProductsListAdmin extends StatefulWidget {
 
 class ProductsListAdmins extends State<ProductsListAdmin> {
   List<String> Locations = [
-    'ممر 12',
-    'ممر 11',
-    'ممر 10',
-    'ممر 9',
-    'ممر 8',
-    'ممر 7',
-    'ممر 6',
-    'ممر 5',
-    'ممر 4',
-    'ممر 3',
+    'ممر 1',
     'ممر 2',
-    'ممر 1'
+    'ممر 3',
+    'ممر 4',
+    'ممر 5',
+    'ممر 6',
+    'ممر 7',
+    'ممر 8',
+    'ممر 9',
+    'ممر 10',
+    'ممر 11',
+    'ممر 12'
   ];
   String? selectedLocation; // to save the value of chosen location
   bool isOffer = false;
@@ -548,7 +548,7 @@ class ProductsListAdmins extends State<ProductsListAdmin> {
                                     // Array list of locations
                                     items: Locations.map((String items) {
                                       return DropdownMenuItem(
-                                        alignment: Alignment.center,
+                                        alignment: Alignment.topRight,
                                         value: items,
                                         child: Text(items),
                                       );
