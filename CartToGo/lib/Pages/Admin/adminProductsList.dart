@@ -5,8 +5,8 @@ import 'package:carttogo/main.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:carttogo/Pages/welcomePage.dart';
-import 'package:carttogo/Pages/addNewProduct.dart';
-import 'package:carttogo/Pages/adminOffers.dart';
+import 'package:carttogo/Pages/Admin/addNewProduct.dart';
+import 'package:carttogo/Pages/Admin/adminOffers.dart';
 
 import 'package:flutter/rendering.dart';
 import 'adminSearch.dart';
@@ -75,47 +75,50 @@ class ProductsListAdmins extends State<ProductsListAdmin> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white24,
-        //centerTitle: true,
+        centerTitle: true,
         elevation: 0,
-        title: Row(children: <Widget>[
-          IconButton(
-            onPressed: () async {
-              final result = await showSearch<String>(
-                context: context,
-                delegate: AdminSearch(user.getBarcode()),
-              );
-            },
-            icon: Icon(
-              Icons.search_outlined,
-            ),
-            color: appColor,
-          ),
-          Stack(
-            alignment: Alignment.center,
+        title: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               IconButton(
-                icon: Icon(Icons.discount_outlined),
-                color: appColor,
-                onPressed: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => AdminOffers(),
-                  ));
+                onPressed: () async {
+                  final result = await showSearch<String>(
+                    context: context,
+                    delegate: AdminSearch(user.getBarcode()),
+                  );
                 },
+                icon: Icon(
+                  Icons.search_outlined,
+                ),
+                color: appColor,
               ),
-            ],
-          ),
-          Expanded(
-            child: Center(
-              child: Text("المنتجات        ",
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                  )),
-            ),
-          )
+              Stack(
+                alignment: Alignment.center,
+                children: <Widget>[
+                  IconButton(
+                    icon: Icon(Icons.discount_outlined),
+                    color: appColor,
+                    onPressed: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => AdminOffers(),
+                      ));
+                    },
+                  ),
+                ],
+              ),
+              Expanded(
+                child: Center(
+                  child: Text("المنتجات        ",
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                      )),
+                ),
+              )
 
-          // search icon to press when searching for a product
-        ]),
+              // search icon to press when searching for a product
+            ]),
 
         // logout button
         actions: <Widget>[

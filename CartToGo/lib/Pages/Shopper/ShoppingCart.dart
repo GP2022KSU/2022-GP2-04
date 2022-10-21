@@ -1,5 +1,5 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
-import 'package:carttogo/Pages/locationSearch.dart';
+import 'locationSearch.dart';
 import 'package:carttogo/Pages/welcomePage.dart';
 import 'package:carttogo/main.dart';
 import 'package:flutter/material.dart';

@@ -2,7 +2,7 @@ import 'package:carttogo/main.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/services.dart';
-import 'productsListAdmin.dart';
+import 'adminProductsList.dart';
 import 'package:flutter/cupertino.dart';
 
 class AdminSearch extends SearchDelegate<String> {

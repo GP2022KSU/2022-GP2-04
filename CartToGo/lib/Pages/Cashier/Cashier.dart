@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'dart:developer';
 import 'package:qr_code_scanner/qr_code_scanner.dart'; // A Flutter plugin by Julius Canute https://pub.dev/packages/qr_code_scanner
 import 'package:firebase_auth/firebase_auth.dart';
-import 'welcomePage.dart';
+import 'package:carttogo/Pages/welcomePage.dart';
 import 'paymentCompletion.dart';
 
 class Cashier extends StatelessWidget {

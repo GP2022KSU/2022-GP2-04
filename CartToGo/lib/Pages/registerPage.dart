@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:carttogo/main.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:carttogo/Pages/loginPage.dart';
-import 'package:carttogo/Pages/Navigation.dart';
+import 'package:carttogo/Pages/Shopper/Navigation.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'dart:math' as math;
 

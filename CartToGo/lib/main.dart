@@ -1,11 +1,11 @@
-import 'package:carttogo/Pages/Cashier.dart';
-import 'package:carttogo/Pages/productsListAdmin.dart';
+import 'package:carttogo/Pages/Cashier/Cashier.dart';
+import 'package:carttogo/Pages/Admin/adminProductsList.dart';
 import 'package:carttogo/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:carttogo/Pages/welcomePage.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:carttogo/Pages/Navigation.dart';
+import 'package:carttogo/Pages/Shopper/Navigation.dart';
 
 const appColor = Color.fromARGB(255, 20, 77, 220);
 

@@ -1,7 +1,7 @@
 import 'package:carttogo/Pages/welcomePage.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import '../main.dart';
+import 'package:carttogo/main.dart';
 
 class AdminOffers extends StatefulWidget {
   AdminOffers({Key? key}) : super(key: key);

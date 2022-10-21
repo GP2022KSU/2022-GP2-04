@@ -3,7 +3,7 @@
 import 'dart:async';
 import 'package:carttogo/Pages/checkOut.dart';
 import 'package:carttogo/Pages/shoppingCart.dart';
-import 'package:carttogo/Pages/Cashier.dart';
+import 'package:carttogo/Pages/Cashier/Cashier.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';

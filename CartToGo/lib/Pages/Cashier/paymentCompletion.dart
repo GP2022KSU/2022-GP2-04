@@ -1,11 +1,11 @@
-import 'package:carttogo/Pages/Cashier.dart';
+import 'package:carttogo/Pages/Cashier/Cashier.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:carttogo/main.dart';
 import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
-import '../main.dart';
+import 'package:carttogo/main.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:carttogo/Users/Cashier.dart' as cashier;
 import 'package:flutter_spinkit/flutter_spinkit.dart';

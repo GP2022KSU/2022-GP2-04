@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:carttogo/main.dart';
 import 'package:flutter/services.dart';
-import 'package:carttogo/Pages/productsListAdmin.dart';
+import 'package:carttogo/Pages/Admin/adminProductsList.dart';
 import 'package:carttogo/scanner_icons.dart'; // import custom icon
 import 'package:qr_code_scanner/qr_code_scanner.dart'; // A Flutter plugin by Julius Canute https://pub.dev/packages/qr_code_scanner
 import 'dart:developer';

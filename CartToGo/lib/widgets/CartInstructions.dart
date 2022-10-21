@@ -1,8 +1,8 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
-import 'package:carttogo/Pages/loyaltyCard.dart';
+import 'package:carttogo/Pages/Shopper/loyaltyCard.dart';
 import 'package:flutter/material.dart';
-import 'package:carttogo/Pages/Navigation.dart';
+import 'package:carttogo/Pages/Shopper/Navigation.dart';
 
 class CartInstructions extends StatefulWidget {
   const CartInstructions({Key? key}) : super(key: key);
