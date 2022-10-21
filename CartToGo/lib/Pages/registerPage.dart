@@ -262,7 +262,6 @@ class _RegisterPageState extends State<RegisterPage> {
       "Points": 0,
       "Username": _userNameController.text,
       "Email": _emailController.text,
-      "numOfObtPoints": 1,
       "Carts": {
         "ConnectedToCart": false, //always false
         "DeletingProduct": false, //always false
@@ -271,14 +270,8 @@ class _RegisterPageState extends State<RegisterPage> {
         "TotalAfterPoints": 0,
         "NumOfProducts": 0, //always 0
       },
-      "PointsHistory": {
-        "0": 0,
-      },
       "PurchaseHistory": {
-        "New": {
-          "Price":1,
-          "SubCategory":"Test"
-        }
+        "New": {"NoPurchase": true, "Price": 1, "SubCategory": "Test"}
       },
     });
     final databaseRef = FirebaseDatabase.instance.ref();
