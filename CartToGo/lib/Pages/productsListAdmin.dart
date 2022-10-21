@@ -548,6 +548,7 @@ class ProductsListAdmins extends State<ProductsListAdmin> {
                                     // Array list of locations
                                     items: Locations.map((String items) {
                                       return DropdownMenuItem(
+                                        alignment: Alignment.center,
                                         value: items,
                                         child: Text(items),
                                       );

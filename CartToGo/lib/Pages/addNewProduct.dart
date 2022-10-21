@@ -229,6 +229,7 @@ class AddNewProductState extends State<AddNewProduct> {
                           Directionality(
                             textDirection: TextDirection.rtl,
                             child: DropdownButtonFormField<String>(
+                              isExpanded: true,
                               decoration: InputDecoration(
                                   enabledBorder: OutlineInputBorder(
                                     borderRadius:
@@ -239,14 +240,17 @@ class AddNewProductState extends State<AddNewProduct> {
                                   labelText: 'العلامة التجارية',
                                   labelStyle: TextStyle(
                                       fontSize: 20, color: Colors.black)),
-                              isExpanded: true,
+
                               icon: const Icon(
                                 Icons.keyboard_arrow_down,
                                 color: appColor,
                               ),
+
                               // Array list of brands names
+
                               items: Brands.map((String items) {
                                 return DropdownMenuItem(
+                                  alignment: Alignment.center,
                                   value: items,
                                   child: Text(items),
                                 );
@@ -287,6 +291,7 @@ class AddNewProductState extends State<AddNewProduct> {
                               // Array list of categories
                               items: Categories.map((String items) {
                                 return DropdownMenuItem(
+                                  alignment: Alignment.center,
                                   value: items,
                                   child: Text(items),
                                 );
@@ -326,6 +331,7 @@ class AddNewProductState extends State<AddNewProduct> {
                               // Array list of categories
                               items: SubCategories.map((String items) {
                                 return DropdownMenuItem(
+                                  alignment: Alignment.center,
                                   value: items,
                                   child: Text(items),
                                 );
@@ -365,6 +371,7 @@ class AddNewProductState extends State<AddNewProduct> {
                               // Array list of locations
                               items: Locations.map((String items) {
                                 return DropdownMenuItem(
+                                  alignment: Alignment.center,
                                   value: items,
                                   child: Text(items),
                                 );

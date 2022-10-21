@@ -31,10 +31,10 @@ class AdminSearch extends SearchDelegate<String> {
   final fb = FirebaseDatabase.instance;
   AdminSearch(this.barcodes)
       : super(
-    searchFieldLabel: "  ابحث عن منتج لحذفه أو تعديله  ",
-    keyboardType: TextInputType.text,
-    textInputAction: TextInputAction.search,
-  );
+          searchFieldLabel: "  ابحث عن منتج لحذفه أو تعديله  ",
+          keyboardType: TextInputType.text,
+          textInputAction: TextInputAction.search,
+        );
 
 // to view the list without a keyboard
   @override
@@ -70,13 +70,13 @@ class AdminSearch extends SearchDelegate<String> {
   Widget buildResults(BuildContext context) {
     return Center(
         child: Text(
-          query,
-          style: TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.bold,
-              fontFamily: 'CartToGo',
-              fontSize: 18),
-        ));
+      query,
+      style: TextStyle(
+          color: Colors.black,
+          fontWeight: FontWeight.bold,
+          fontFamily: 'CartToGo',
+          fontSize: 18),
+    ));
   }
 
 // suggestions for products when searching for a product
@@ -87,104 +87,104 @@ class AdminSearch extends SearchDelegate<String> {
         : barcodes.where((p) => p.startsWith(query)).toList();
     return Suggestions.isEmpty && query.isNotEmpty
         ? Center(
-        child: Text(
-          "لا توجد منتجات بهذا الرمز الشريطي",
-          style: TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.bold,
-              fontFamily: 'CartToGo',
-              fontSize: 18),
-        ))
+            child: Text(
+            "لا توجد منتجات بهذا الرمز الشريطي",
+            style: TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'CartToGo',
+                fontSize: 18),
+          ))
         : ListView.builder(
-      itemCount: Suggestions.length,
-      itemBuilder: (BuildContext context, int index) => ListTile(
-        shape: RoundedRectangleBorder(
-          side: BorderSide(
-            color: Colors.white,
-          ),
-          borderRadius: BorderRadius.circular(10),
-        ),
-        title: Row(
-            textDirection: TextDirection.rtl,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              IconButton(
-                tooltip: "تعديل المنتج",
-                icon: Icon(
-                  Icons.edit,
-                  color: Color.fromARGB(255, 94, 90, 90),
+            itemCount: Suggestions.length,
+            itemBuilder: (BuildContext context, int index) => ListTile(
+              shape: RoundedRectangleBorder(
+                side: BorderSide(
+                  color: Colors.white,
                 ),
-                onPressed: () async {
-                  var splitted =
-                  Suggestions.elementAt(index).split(" | ");
-                  DatabaseReference ref = FirebaseDatabase.instance
-                      .ref("Products/${splitted[0].toString()}");
-
-                  DatabaseEvent quan = await ref.child("Quantity").once();
-                  DatabaseEvent price = await ref.child("Price").once();
-                  DatabaseEvent location =
-                  await ref.child("Location").once();
-                  DatabaseEvent offer = await ref.child("Offer").once();
-                  DatabaseEvent nprice =
-                  await ref.child("PriceAfterOffer").once();
-
-                  var QUANTITY =
-                  int.parse(quan.snapshot.value.toString());
-                  var PRICE =
-                  double.parse(price.snapshot.value.toString());
-                  var LOCATION = location.snapshot.value.toString();
-                  var OFFER = offer.snapshot.value.toString();
-                  var NEWPRICE =
-                  double.parse(nprice.snapshot.value.toString());
-
-                  _UpdateOrNot(QUANTITY, PRICE, LOCATION, OFFER, NEWPRICE,
-                      context, splitted[0].toString());
-                },
+                borderRadius: BorderRadius.circular(10),
               ),
-              IconButton(
-                tooltip: "حذف المنتج",
-                icon: Icon(
-                  Icons.delete,
-                  color: Color.fromARGB(255, 255, 0, 0),
-                ),
-                onPressed: () {
-                  var splitted =
-                  Suggestions.elementAt(index).split(" | ");
-                  print(splitted[0]);
-                  _DeleteOrNot(splitted[0].toString(), context);
-                  barcodes.removeAt(index); //عشان يشيل من اللست ما ضبط
-                },
-              ),
-
-              // make the typing numbers bold
-              RichText(
-                  text: TextSpan(
-                      text: Suggestions.elementAt(index)
-                          .substring(0, query.length),
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'CartToGo',
+              title: Row(
+                  textDirection: TextDirection.rtl,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    IconButton(
+                      tooltip: "تعديل المنتج",
+                      icon: Icon(
+                        Icons.edit,
+                        color: Color.fromARGB(255, 94, 90, 90),
                       ),
-                      // products list
-                      children: [
-                        TextSpan(
-                          text: Suggestions.elementAt(index)
-                              .substring(query.length),
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.normal,
-                            fontFamily: 'CartToGo',
-                          ),
-                        )
-                      ])),
-              SizedBox(
-                width: 10,
-              ),
-              Divider() // to arrange the products list
-            ]),
-      ),
-    );
+                      onPressed: () async {
+                        var splitted =
+                            Suggestions.elementAt(index).split(" | ");
+                        DatabaseReference ref = FirebaseDatabase.instance
+                            .ref("Products/${splitted[0].toString()}");
+
+                        DatabaseEvent quan = await ref.child("Quantity").once();
+                        DatabaseEvent price = await ref.child("Price").once();
+                        DatabaseEvent location =
+                            await ref.child("Location").once();
+                        DatabaseEvent offer = await ref.child("Offer").once();
+                        DatabaseEvent nprice =
+                            await ref.child("PriceAfterOffer").once();
+
+                        var QUANTITY =
+                            int.parse(quan.snapshot.value.toString());
+                        var PRICE =
+                            double.parse(price.snapshot.value.toString());
+                        var LOCATION = location.snapshot.value.toString();
+                        var OFFER = offer.snapshot.value.toString();
+                        var NEWPRICE =
+                            double.parse(nprice.snapshot.value.toString());
+
+                        _UpdateOrNot(QUANTITY, PRICE, LOCATION, OFFER, NEWPRICE,
+                            context, splitted[0].toString());
+                      },
+                    ),
+                    IconButton(
+                      tooltip: "حذف المنتج",
+                      icon: Icon(
+                        Icons.delete,
+                        color: Color.fromARGB(255, 255, 0, 0),
+                      ),
+                      onPressed: () {
+                        var splitted =
+                            Suggestions.elementAt(index).split(" | ");
+                        print(splitted[0]);
+                        _DeleteOrNot(splitted[0].toString(), context);
+                        barcodes.removeAt(index); //عشان يشيل من اللست ما ضبط
+                      },
+                    ),
+
+                    // make the typing numbers bold
+                    RichText(
+                        text: TextSpan(
+                            text: Suggestions.elementAt(index)
+                                .substring(0, query.length),
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: 'CartToGo',
+                            ),
+                            // products list
+                            children: [
+                          TextSpan(
+                            text: Suggestions.elementAt(index)
+                                .substring(query.length),
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.normal,
+                              fontFamily: 'CartToGo',
+                            ),
+                          )
+                        ])),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Divider() // to arrange the products list
+                  ]),
+            ),
+          );
   }
 
   // delete a product from the database/stock choice
@@ -300,8 +300,8 @@ class AdminSearch extends SearchDelegate<String> {
                                   textDirection: TextDirection.rtl,
                                   child: TextFormField(
                                       keyboardType:
-                                      TextInputType.numberWithOptions(
-                                          decimal: true),
+                                          TextInputType.numberWithOptions(
+                                              decimal: true),
                                       inputFormatters: <TextInputFormatter>[
                                         FilteringTextInputFormatter.allow(
                                             RegExp(r'(^\d*\.?\d*)'))
@@ -394,6 +394,7 @@ class AdminSearch extends SearchDelegate<String> {
                                     // Array list of locations
                                     items: Locations.map((String items) {
                                       return DropdownMenuItem(
+                                        alignment: Alignment.center,
                                         value: items,
                                         child: Text(items),
                                       );
@@ -410,7 +411,6 @@ class AdminSearch extends SearchDelegate<String> {
                                 ),
                                 SizedBox(height: 15),
 
-
                                 // Ask Admin for Product Offers & Adding, Deleting it
                                 SwitchScreen(),
                                 SizedBox(height: 15),
@@ -418,14 +418,13 @@ class AdminSearch extends SearchDelegate<String> {
                                 // will shown only if the product have an offer
                                 //if (isOffer || ShowOfferPrice)
 
-
                                 // price after offer
                                 Directionality(
                                   textDirection: TextDirection.rtl,
                                   child: TextFormField(
                                       keyboardType:
-                                      TextInputType.numberWithOptions(
-                                          decimal: true),
+                                          TextInputType.numberWithOptions(
+                                              decimal: true),
                                       inputFormatters: <TextInputFormatter>[
                                         FilteringTextInputFormatter.allow(
                                             RegExp(r'(^\d*\.?\d*)'))
@@ -471,7 +470,7 @@ class AdminSearch extends SearchDelegate<String> {
                                               .validate()) {
                                             bool state = SwitchClass.Offerstate;
                                             if (quantityController
-                                                .text.isNotEmpty &&
+                                                    .text.isNotEmpty &&
                                                 priceController
                                                     .text.isNotEmpty &&
                                                 selectedLocation.isNotEmpty) {
@@ -480,13 +479,14 @@ class AdminSearch extends SearchDelegate<String> {
                                                   priceController,
                                                   selectedLocation.toString(),
                                                   newPriceController,
-                                                  barcode, state);
+                                                  barcode,
+                                                  state);
                                             }
                                             Navigator.push(context,
                                                 MaterialPageRoute(
                                                     builder: (context) {
-                                                      return ProductsListAdmin();
-                                                    }));
+                                              return ProductsListAdmin();
+                                            }));
                                           }
                                         },
                                         child: Center(
@@ -535,7 +535,6 @@ class AdminSearch extends SearchDelegate<String> {
   }
 }
 
-
 class SwitchScreen extends StatefulWidget {
   // This class for asking the admin fot offer
   @override
@@ -549,58 +548,58 @@ class SwitchClass extends State {
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
         child: Column(
-          children: [
-            Container(
-              child: Row(
-                children: [
-                  Divider(
-                    height: 1,
-                  ),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.45,
-                    child: Row(
-                      children: [
-                        Text(
-                          "لدى المنتج عرض  ؟",
-                          style: TextStyle(
-                              fontFamily: 'CartToGo',
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold),
-                        ),
-                        Text(
-                          Offerstate == true ? "   نعم   " : "   لا   ",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontFamily: 'CartToGo',
-                              fontSize: 14,
-                              color: Offerstate == true
-                                  ? CupertinoColors.activeGreen
-                                  : CupertinoColors.destructiveRed),
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.3,
-                    child: CupertinoSwitch(
-                      value: Offerstate,
-                      onChanged: (value) {
-                        //Offerstate = value;
-                        setState(() {
-                          ProductsListAdmins.ShowOfferPrice = value;
-                          print(ProductsListAdmins.ShowOfferPrice);
-                          Offerstate = value;
-                        });
-                      },
-                    ),
-                  ),
-                  Divider(
-                    height: 1,
-                  ),
-                ],
+      children: [
+        Container(
+          child: Row(
+            children: [
+              Divider(
+                height: 1,
               ),
-            ),
-          ],
-        ));
+              SizedBox(
+                width: MediaQuery.of(context).size.width * 0.45,
+                child: Row(
+                  children: [
+                    Text(
+                      "لدى المنتج عرض  ؟",
+                      style: TextStyle(
+                          fontFamily: 'CartToGo',
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    Text(
+                      Offerstate == true ? "   نعم   " : "   لا   ",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontFamily: 'CartToGo',
+                          fontSize: 14,
+                          color: Offerstate == true
+                              ? CupertinoColors.activeGreen
+                              : CupertinoColors.destructiveRed),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(
+                width: MediaQuery.of(context).size.width * 0.3,
+                child: CupertinoSwitch(
+                  value: Offerstate,
+                  onChanged: (value) {
+                    //Offerstate = value;
+                    setState(() {
+                      ProductsListAdmins.ShowOfferPrice = value;
+                      print(ProductsListAdmins.ShowOfferPrice);
+                      Offerstate = value;
+                    });
+                  },
+                ),
+              ),
+              Divider(
+                height: 1,
+              ),
+            ],
+          ),
+        ),
+      ],
+    ));
   }
 }
