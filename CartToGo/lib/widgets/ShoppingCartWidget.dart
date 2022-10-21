@@ -213,10 +213,7 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
                     textDirection: TextDirection.rtl,
                   ),
                   text: Text(
-                    '  اتمام الدفع' +
-                        "  (" +
-                        user.getnumOfProducts().toString() +
-                        ")",
+                    '  اتمام الدفع' + "  (" + numOfProducts.toString() + ")",
                     style: TextStyle(
                         color: Colors.white,
                         fontSize: 16.0,
@@ -259,11 +256,12 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
                     itemBuilder: (BuildContext context, DataSnapshot snapshot,
                         Animation<double> animation, int index) {
                       numOfProducts = user.getnumOfProducts();
-                      final map;
+                      final map = snapshot.value as Map<dynamic, dynamic>;
+                      ;
                       var v = snapshot.value
                           .toString(); //Gets the scanned product and store it in a var
                       bool checker = true;
-                      String Brand="";
+                      String Brand = "";
                       String Name = "";
                       String Size = "";
                       double Price = 0;
@@ -273,42 +271,23 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
                       bool Noimg = true;
                       String imgUrl = '';
                       int spaceForImage = 0;
-                      var g = v.replaceAll(
-                          //Using RegExp to remove unwanted data
-                          RegExp(
-                              "{|}|Name: |Price: |Size: |Category: |Brand: |Barcode: "),
-                          "");
 
-                      g.trim();
-
-                      var l = g.split(',');
-                      bool check2 = true;
-                      if (l[0] == TotalInCart.toString()) {
-                        check2 = false;
-                      }
-                      if (l.toString() == "[true]" ||
-                          l.toString() == "[false]" ||
-                          l[0] == TotalInCart.toStringAsFixed(0) ||
-                          l[0] == "0") {
-                        //print(l.toString());
-                        check2 = false;
-                      }
-
-                      if (!(l[0] == "0") && checker && check2) {
+                      //So the list does not read the cart's info only products
+                      if (map["Paid"] == null) {
                         //if there is data
                         try {
-                          map = snapshot.value as Map<dynamic, dynamic>;
+                          print(map);
                           if (map['ImgUrl'] == "") {
-                            spaceForImage=0;
+                            spaceForImage = 0;
                             Noimg = true;
                           } else {
-                            spaceForImage=20;
+                            spaceForImage = 20;
                             Noimg = false;
                             imgUrl = map['ImgUrl'];
                           }
                           Name = map['Name'];
                           Size = map['Size'];
-                          Brand=map['Brand'];
+                          Brand = map['Brand'];
                           Price = double.parse(map['Price'].toString());
                           Barcode = map['Barcode'];
                           PriceAfterOffer =
@@ -333,7 +312,6 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
                             'Total': (double.parse(total.toStringAsFixed(2))),
                             'NumOfProducts': numOfProducts,
                           });
-                          l[0].replaceAll(' ', "");
                           int barcode =
                               (int.parse(Barcode)); //barcode android 3 , IOS 0
                           int newQuantity =
@@ -388,7 +366,7 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
                                           ),
                                           SizedBox(height: 15),
                                           Text(
-                                            "هل تريد حذف ${Name+" "+Brand} ؟", //Product name for IOS 4 android 1
+                                            "هل تريد حذف ${Name + " " + Brand} ؟", //Product name for IOS 4 android 1
                                             style: TextStyle(
                                               fontSize: 15,
                                               fontWeight: FontWeight.w400,
@@ -535,7 +513,10 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
                                                                 ? Container()
                                                                 : Image.network(
                                                                     imgUrl),
-                                                            SizedBox(width: double.parse(spaceForImage.toString())),
+                                                            SizedBox(
+                                                                width: double.parse(
+                                                                    spaceForImage
+                                                                        .toString())),
                                                             Container(
                                                               decoration:
                                                                   BoxDecoration(),
@@ -552,7 +533,9 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
                                                                 children: <
                                                                     Widget>[
                                                                   Text(
-                                                                    Name+" "+Brand, //Product name 1 android 4 ios
+                                                                    Name +
+                                                                        " " +
+                                                                        Brand, //Product name 1 android 4 ios
                                                                     textAlign:
                                                                         TextAlign
                                                                             .center,

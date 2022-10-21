@@ -9,6 +9,7 @@ import '../main.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:carttogo/Users/Cashier.dart' as cashier;
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+
 final _fb = FirebaseDatabase.instance;
 
 class PaymentCompletion extends StatefulWidget {
@@ -71,9 +72,11 @@ class PaymentCompletionState extends State<PaymentCompletion> {
 */
   @override
   Widget build(BuildContext context) {
-    setState(() => splitted = scanData.split(' - '));
-    uid = cashier.getUID(splitted[0]);
-    TotalBefore = cashier.getTotalAfterPoints(uid, int.parse(splitted[1]));
+    setState(() {
+      splitted = scanData.split(' - ');
+      uid = cashier.getUID(splitted[0]);
+      TotalBefore = cashier.getTotalAfterPoints(uid, int.parse(splitted[1]));
+    });
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
@@ -120,209 +123,8 @@ class PaymentCompletionState extends State<PaymentCompletion> {
                         )*/
                         Cart(),
 
-                        // const SizedBox(
-                        //   height: 15,
-                        // ),
-                        // Container(
-                        //   decoration: const BoxDecoration(
-                        //     color: const Color.fromARGB(255, 242, 240, 240),
-                        //     //border: Border.all(color: Colors.black),
-                        //   ),
-                        //   height: MediaQuery.of(context).size.height * 0.06,
-                        //   width: MediaQuery.of(context).size.width * 1,
-                        //   child: Row(
-                        //     textDirection: TextDirection.rtl,
-                        //     children: <Widget>[
-                        //       const Text(
-                        //         "  المجموع   ",
-                        //         //textAlign: TextAlign.right,
-                        //         //textDirection: TextDirection.ltr,
-                        //         style: TextStyle(
-                        //             color: Color.fromRGBO(32, 26, 37, 1),
-                        //             fontSize: 20,
-                        //             letterSpacing:
-                        //                 0 /*percentages not used in flutter. defaulting to zero*/,
-                        //             fontWeight: FontWeight.w700,
-                        //             height: 0.9),
-                        //       ),
-                        //       SizedBox(
-                        //         width: MediaQuery.of(context).size.width * 0.54,
-                        //       ),
-                        //       Text(
-                        //         cashier
-                        //                 .getTotalAfterPoints(
-                        //                     asyn.data.toString(),
-                        //                     int.parse(splitted[1]))
-                        //                 .toString() +
-                        //             " ريال",
-                        //         textAlign: TextAlign.right,
-                        //         textDirection: TextDirection.rtl,
-                        //         style: const TextStyle(
-                        //             color:
-                        //                 const Color.fromARGB(255, 17, 18, 18),
-                        //             fontSize: 20,
-                        //             letterSpacing:
-                        //                 0 /*percentages not used in flutter. defaulting to zero*/,
-                        //             //fontWeight: FontWeight.w700,
-                        //             height: 0.9),
-                        //       ),
-                        //     ],
-                        //   ),
-                        // ),
-                        // const SizedBox(
-                        //   height: 50,
-                        // ),
-
-                        // // payment completion button
-                        // ElevatedButton(
-                        //     style: ButtonStyle(
-                        //         elevation: MaterialStateProperty.all(8.0),
-                        //         textStyle: MaterialStateProperty.all(
-                        //             const TextStyle(
-                        //                 fontSize: 20, fontFamily: 'CartToGo')),
-                        //         fixedSize: MaterialStateProperty.all(
-                        //             const Size(200, 50)),
-                        //         shape: MaterialStateProperty.all<
-                        //                 RoundedRectangleBorder>(
-                        //             RoundedRectangleBorder(
-                        //                 borderRadius:
-                        //                     BorderRadius.circular(30.0))),
-                        //         backgroundColor:
-                        //             MaterialStateProperty.all(appColor),
-                        //         foregroundColor:
-                        //             MaterialStateProperty.all(Colors.white)),
-                        //     onPressed: () {
-                        //       return _showMyDialog();
-                        //     },
-                        //     child: const Text('اتمام الدفع')),
-                        // // end of payment completion button
-                      ],
-                    );
-                  }
-                  return Container();
-                })));
-  }
-
-  Widget Cart() {
-    return SizedBox(
-      height: MediaQuery.of(context).size.height * 0.6,
-      width: MediaQuery.of(context).size.width * 1,
-      child: FutureBuilder<String>(
-          future: cashier.BringUID(splitted[0].toString()),
-          builder: (BuildContext context, AsyncSnapshot<String> asyn) {
-            if (FirebaseAuth.instance.currentUser != null) {
-              uid = asyn.data.toString();
-              if (asyn.hasData) {
-                return Column(children: [
-                  const SizedBox(height: 20),
-                  Text(
-                    "(" +
-                        cashier
-                            .getnumOfProducts(asyn.data.toString())
-                            .toString() +
-                        ") " +
-                         cashier.getUsername(asyn.data.toString()).toString() +
-                        "السلة الخاصة بـ",
-                    textAlign: TextAlign.right,
-                    textDirection: TextDirection.ltr,
-                    style: const TextStyle(
-                        color: const Color.fromRGBO(32, 26, 37, 1),
-                        fontSize: 20,
-                        letterSpacing:
-                            0 /*percentages not used in flutter. defaulting to zero*/,
-                        fontWeight: FontWeight.w700,
-                        height: 0.9),
-                  ),
-                  Container(
-                    height: MediaQuery.of(context).size.height * 0.3,
-                    width: MediaQuery.of(context).size.width * 0.9,
-                    child: FirebaseAnimatedList(
-                        query: _fb.ref().child(
-                            "Shopper/${asyn.data.toString()}/Carts/${splitted[1].toString()}"),
-                        duration: const Duration(milliseconds: 500),
-                        itemBuilder: (BuildContext context,
-                            DataSnapshot snapshot,
-                            Animation<double> animation,
-                            int index) {
-                          //numOfProducts = user.getnumOfProducts();
-                          var v = snapshot.value
-                              .toString(); //Gets the scanned product and store it in a var
-                          bool checker = true;
-                          bool checke2 = true;
-                          String Brand="";
-                          String Name = "";
-                          double Price = 0;
-                          bool HaveOffer = false;
-
-                          //print(v[0]);
-                          try {
-                            if (v[0] == "0" && v[1].isNotEmpty) {}
-                          } on RangeError {
-                            //If there is any kind of range error to avoid errors on the app
-                            checker = false;
-                            var g = v.replaceAll(RegExp("{|}|0: "), "");
-                          }
-                          var g = v.replaceAll(
-                              //Using RegExp to remove unwanted data
-                              RegExp(
-                                  "{|}|Name: |Price: |Size: |Category: |Brand: |Barcode: |Paid:"),
-                              "");
-
-                          g.trim();
-                          var l = g.split(',');
-                          if (l[0] == TotalInCart.toString()) {
-                            checke2 = false;
-                          }
-
-                          if (l.toString() == "[true]" ||
-                              l.toString() == "[false]" ||
-                              l[0] == TotalInCart.toStringAsFixed(0)) {
-                            checke2 = false;
-                            if (l.toString() == "[true]") {
-                              //checkPay = true;
-                            }
-                          }
-
-                          if (!(l[0] == "0") && checker && checke2) {
-                            try {
-                              var map = snapshot.value as Map<dynamic, dynamic>;
-                              Name = map['Name'];
-                              Brand=map['Brand'];
-                              HaveOffer = map['Offer'];
-                              HaveOffer
-                                  ? Price = double.parse(
-                                      map['PriceAfterOffer'].toString())
-                                  :Price = double.parse(map['Price'].toString()
-                                );
-                            } on Exception {
-                              checker = false;
-                            }
-                            return AnimationConfiguration.staggeredList(
-                              position: index,
-                              duration: const Duration(milliseconds: 375),
-                              child: SlideAnimation(
-                                verticalOffset: 0,
-                                child: FadeInAnimation(
-                                  child: ListTile(
-                                    trailing: Text(
-                                      Name+" "+Brand,
-                                      textAlign: TextAlign.center,
-                                    ),
-                                    leading: Text(
-                                      Price.toString() + " ريال",
-                                      textAlign: TextAlign.right,
-                                      textDirection: TextDirection.rtl,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            );
-                          }
-                          return Container();
-                        }),
-                  ),
-                                          const SizedBox(
-                          height: 30,
+                        const SizedBox(
+                          height: 15,
                         ),
                         Container(
                           decoration: const BoxDecoration(
@@ -373,7 +175,6 @@ class PaymentCompletionState extends State<PaymentCompletion> {
                         const SizedBox(
                           height: 50,
                         ),
-
                         // payment completion button
                         ElevatedButton(
                             style: ButtonStyle(
@@ -397,15 +198,109 @@ class PaymentCompletionState extends State<PaymentCompletion> {
                             },
                             child: const Text('اتمام الدفع')),
                         // end of payment completion button
+                      ],
+                    );
+                  }
+                  return Container();
+                })));
+  }
+
+  Widget Cart() {
+    return SizedBox(
+      height: MediaQuery.of(context).size.height * 0.38,
+      width: MediaQuery.of(context).size.width * 2,
+      child: FutureBuilder<String>(
+          future: cashier.BringUID(splitted[0].toString()),
+          builder: (BuildContext context, AsyncSnapshot<String> asyn) {
+            if (FirebaseAuth.instance.currentUser != null) {
+              uid = asyn.data.toString();
+              if (asyn.hasData) {
+                return Column(children: [
+                  const SizedBox(height: 20),
+                  Text(
+                    "(" +
+                        cashier
+                            .getnumOfProducts(asyn.data.toString())
+                            .toString() +
+                        ") " +
+                        cashier.getUsername(asyn.data.toString()).toString() +
+                        "السلة الخاصة بـ",
+                    textAlign: TextAlign.right,
+                    textDirection: TextDirection.ltr,
+                    style: const TextStyle(
+                        color: const Color.fromRGBO(32, 26, 37, 1),
+                        fontSize: 20,
+                        letterSpacing:
+                            0 /*percentages not used in flutter. defaulting to zero*/,
+                        fontWeight: FontWeight.w700,
+                        height: 0.9),
+                  ),
+                  Container(
+                    height: MediaQuery.of(context).size.height * 0.3,
+                    width: MediaQuery.of(context).size.width * 0.9,
+                    child: FirebaseAnimatedList(
+                        query: _fb.ref().child(
+                            "Shopper/${asyn.data.toString()}/Carts/${splitted[1].toString()}"),
+                        duration: const Duration(milliseconds: 500),
+                        itemBuilder: (BuildContext context,
+                            DataSnapshot snapshot,
+                            Animation<double> animation,
+                            int index) {
+                          //numOfProducts = user.getnumOfProducts();
+                          var v = snapshot.value
+                              .toString(); //Gets the scanned product and store it in a var
+                          bool checker = true;
+                          bool checke2 = true;
+                          String Brand = "";
+                          String Name = "";
+                          double Price = 0;
+                          bool HaveOffer = false;
+                          var map = snapshot.value as Map<dynamic, dynamic>;
+                          if (map['Paid'] == null) {
+                            try {
+                              Name = map['Name'];
+                              Brand = map['Brand'];
+                              HaveOffer = map['Offer'];
+                              HaveOffer
+                                  ? Price = double.parse(
+                                      map['PriceAfterOffer'].toString())
+                                  : Price =
+                                      double.parse(map['Price'].toString());
+                            } on Exception {
+                              checker = false;
+                            }
+                            return AnimationConfiguration.staggeredList(
+                              position: index,
+                              duration: const Duration(milliseconds: 375),
+                              child: SlideAnimation(
+                                verticalOffset: 0,
+                                child: FadeInAnimation(
+                                  child: ListTile(
+                                    trailing: Text(
+                                      Name + " " + Brand,
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    leading: Text(
+                                      Price.toString() + " ريال",
+                                      textAlign: TextAlign.right,
+                                      textDirection: TextDirection.rtl,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            );
+                          }
+                          return Container();
+                        }),
+                  ),
                 ]);
+              } else if (asyn.connectionState == ConnectionState.waiting) {
+                return Container(
+                    height: MediaQuery.of(context).size.height * 0.8,
+                    child: SpinKitWave(
+                      color: Color.fromARGB(255, 35, 61, 255),
+                    ));
               }
-              else if (asyn.connectionState == ConnectionState.waiting) {
-                  return Container(
-                      height: MediaQuery.of(context).size.height * 0.8,
-                      child: SpinKitWave(
-                        color: Color.fromARGB(255, 35, 61, 255),
-                      ));
-                }
             }
             return Container();
           }),
@@ -448,7 +343,7 @@ class PaymentCompletionState extends State<PaymentCompletion> {
                             onTap: () async {
                               DatabaseReference ref3 = FirebaseDatabase.instance
                                   .ref(
-                                      "Shopper/${uid}/Carts/${splitted[1].toString()}");
+                                      "Shopper/${uid}/Carts/${splitted[1].toString()}/CartInfo");
                               await ref3.update({
                                 "Paid": true,
                               });

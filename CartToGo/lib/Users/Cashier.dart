@@ -61,7 +61,7 @@ Future<double> BringTotalAfterPoints(String uid3, int cartNumber) async {
     final ref = FirebaseDatabase.instance.ref();
     final snapshot =
         await ref.child("Shopper/${uid3}/Carts/TotalAfterPoints").get();
-    TotalAfterPoints = await (double.parse(snapshot.value.toString()));
+    TotalAfterPoints = (double.parse(snapshot.value.toString()));
     return TotalAfterPoints;
   }
   return TotalAfterPoints;

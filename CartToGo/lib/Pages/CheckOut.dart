@@ -63,7 +63,7 @@ class _CheckOutState extends State<CheckOut> {
                 if (!(checkPay)) {
                   _streamSubscription4 = _database
                       .child(
-                          "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts/${user.getLastCartNum()}/Paid")
+                          "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts/${user.getLastCartNum()}/CartInfo/Paid")
                       .onValue
                       .listen((event) {
                     final data = event.snapshot.value;
@@ -364,6 +364,13 @@ class _CheckOutState extends State<CheckOut> {
                                     foregroundColor: MaterialStateProperty.all(
                                         Colors.white)),
                                 onPressed: () async {
+                                  var currDt = DateTime.now();
+                                  String date = currDt.day.toString() +
+                                      "-" +
+                                      currDt.month.toString() +
+                                      "-" +
+                                      currDt.year.toString();
+                                  String hour = currDt.hour.toString();
                                   DatabaseReference ref2 =
                                       FirebaseDatabase.instance.ref(
                                           "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts");
@@ -375,82 +382,24 @@ class _CheckOutState extends State<CheckOut> {
                                   });
                                   DatabaseReference ref3 =
                                       FirebaseDatabase.instance.ref(
-                                          "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts/${user.getLastCartNum()}");
+                                          "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts/${user.getLastCartNum()}/CartInfo");
                                   await ref3.update({
                                     "Total": vis
                                         ? user.getTotalAfterPoints()
                                         : Total,
+                                    "Date": date,
+                                    "Hour": hour,
+                                    "GainedPoints": GainedPoints,
+                                    "UsedPoints": vis
+                                        ? pointsChange: 0
                                   });
-                                  var currDt = DateTime.now();
-                                  String date = currDt.day.toString() +
-                                      "-" +
-                                      currDt.month.toString() +
-                                      "-" +
-                                      currDt.year.toString();
-                                  if (vis) {
-                                    int checkIfGained = 1;
-                                    //if points are used
-                                    DatabaseReference ref4 =
-                                        FirebaseDatabase.instance.ref(
-                                            "Shopper/${FirebaseAuth.instance.currentUser?.uid}/PointsHistory/${user.getnumOfObtPoints()}");
-                                    await ref4.set({
-                                      "Date": date,
-                                      "GainedPoints":
-                                          "-" + pointsChange.toString(),
-                                    });
-                                    if (GainedPoints > 0) {
-                                      DatabaseReference ref5 =
-                                          FirebaseDatabase.instance.ref(
-                                              "Shopper/${FirebaseAuth.instance.currentUser?.uid}/PointsHistory/${user.getnumOfObtPoints() + 1}");
-                                      await ref5.set({
-                                        "Date": date,
-                                        "GainedPoints":
-                                            "+" + GainedPoints.toString(),
-                                      });
-                                      checkIfGained++;
-                                    }
-                                    DatabaseReference ref6 =
-                                        FirebaseDatabase.instance.ref(
-                                            "Shopper/${FirebaseAuth.instance.currentUser?.uid}");
-                                    await ref6.update({
-                                      "numOfObtPoints":
-                                          (user.getnumOfObtPoints() +
-                                              checkIfGained)
-                                    });
-                                    DatabaseReference ref7 =
-                                        FirebaseDatabase.instance.ref(
-                                            "Shopper/${FirebaseAuth.instance.currentUser?.uid}");
-                                    await ref7.update({
-                                      "Points": GainedPoints,
-                                    });
-                                  } else {
-                                    int checkIfGained = 0;
-                                    if (GainedPoints > 0) {
-                                      checkIfGained++;
-                                      DatabaseReference ref5 =
-                                          FirebaseDatabase.instance.ref(
-                                              "Shopper/${FirebaseAuth.instance.currentUser?.uid}/PointsHistory/${user.getnumOfObtPoints()}");
-                                      await ref5.set({
-                                        "Date": date,
-                                        "GainedPoints":
-                                            "+" + GainedPoints.toString(),
-                                      });
-                                    }
-                                    DatabaseReference ref7 =
-                                        FirebaseDatabase.instance.ref(
-                                            "Shopper/${FirebaseAuth.instance.currentUser?.uid}");
-                                    await ref7.update({
-                                      "Points": GainedPoints + user.getPoints(),
-                                    });
-                                    DatabaseReference ref6 =
-                                        FirebaseDatabase.instance.ref(
-                                            "Shopper/${FirebaseAuth.instance.currentUser?.uid}");
-                                    await ref6.update({
-                                      "numOfObtPoints":
-                                          (user.getnumOfObtPoints() +
-                                              checkIfGained)
-                                    });
-                                  }
+                                  DatabaseReference ref7 =
+                                      FirebaseDatabase.instance.ref(
+                                          "Shopper/${FirebaseAuth.instance.currentUser?.uid}");
+                                  await ref7.update({
+                                    "Points": vis? GainedPoints:GainedPoints + user.getPoints(),
+                                  });
+                                  
                                   if (checkPay) {
                                     Navigator.push(
                                         context,
@@ -483,7 +432,7 @@ class _CheckOutState extends State<CheckOut> {
     if (FirebaseAuth.instance.currentUser != null) {
       _streamSubscription4 = _database
           .child(
-              "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts/${user.getLastCartNum()}/Paid")
+              "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts/${user.getLastCartNum()}/CartInfo/Paid")
           .onValue
           .listen((event) {
         final data = event.snapshot.value;
@@ -788,56 +737,10 @@ class _CheckOutState extends State<CheckOut> {
                         String Name = "";
                         double Price = 0;
                         bool HaveOffer = false;
+                        var map = snapshot.value as Map<dynamic, dynamic>;
 
-                        //print(v[0]);
-                        try {
-                          if (v[0] == "0" && v[1].isNotEmpty) {}
-                        } on RangeError {
-                          //If there is any kind of range error to avoid errors on the app
-                          checker = false;
-                          var g = v.replaceAll(RegExp("{|}|0: "), "");
-                        }
-                        var g = v.replaceAll(
-                            //Using RegExp to remove unwanted data
-                            RegExp(
-                                "{|}|Name: |Price: |Size: |Category: |Brand: |Barcode: |Paid: | Total:"),
-                            "");
-
-                        g.trim();
-
-                        var l = g.split(',');
-                        String checkInsideNum = user
-                            .getTotalAfterPoints()
-                            .toStringAsFixed(0)
-                            .toString();
-                        if (l[0] == TotalInCart.toStringAsFixed(0)) {
-                          checke2 = false;
-                        }
-                        if (l.toString() == "[true]" ||
-                            l.toString() == "[false]" ||
-                            l[0] == TotalInCart.toStringAsFixed(0)) {
-                          //print(l.toString());
-                          checke2 = false;
-                        }
-
-                        if (!(l[0] == "0") && checker && checke2) {
+                        if (map['Paid'] == null) {
                           try {
-                            var map = snapshot.value as Map<dynamic, dynamic>;
-                            // map1 = json
-                            //     .decode(snapshot.toString())
-                            //     .map((data) =>
-                            //         map[int.parse(map['Barcode'].toString())] =
-                            //             ([map['SubCategory'], map['Price']]))
-                            //     .toList();
-                            // print(map1);
-                            // map1[int.parse(map['Barcode'].toString())] = ([
-                            //   map['SubCategory'],
-                            //   map['Price']
-                            // ]) as Map<dynamic, dynamic>;
-                            //                             HistoryBarcode.insert(index,map['Barcode'].toString());
-                            // countBarcodes++;
-                            // print(countBarcodes);
-                            // print(HistoryBarcode);
                             Name = map['Name'];
                             HaveOffer = map['Offer'];
                             Brand = map['Brand'];
@@ -857,7 +760,6 @@ class _CheckOutState extends State<CheckOut> {
                                 child: ListTile(
                                   trailing: Text(
                                     Name + " " + Brand,
-                                    textAlign: TextAlign.center,
                                   ),
                                   leading: Text(
                                     Price.toString() + " ريال",

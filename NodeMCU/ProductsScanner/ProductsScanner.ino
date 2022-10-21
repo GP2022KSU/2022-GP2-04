@@ -141,8 +141,6 @@ void FirebaseConnection() {
     Serial.printf("%s\n", config.signer.signupError.message.c_str());
   }
 
-  config.service_account.json.path = "/carttogo-411c2-default-rtdb-export.json"; //Json File
-
   config.token_status_callback = tokenStatusCallback; //TokenHelper.h
 
   config.max_token_generation_retry = 5;
@@ -255,14 +253,6 @@ boolean LoyaltyCardConnection() {
         lcd.write(5);
         lcd.write(6);
 
-
-
-        //lcd.clear();
-        //lcd.setCursor(0, 0);
-        //lcd.print("LoyaltyCard not");
-        //lcd.setCursor(0, 1);
-        //lcd.print("found,TryAgain");
-
         LoyaltyCard = "";
         con = false;
       }
@@ -295,8 +285,8 @@ boolean LoyaltyCardConnectionFirebase(String QRid) {
         Firebase.setInt(fbdo, "/Shopper/" + UID.to<String>() + "/Carts/FutureCartNumber", CartNumber + 1);
         delay(200);
         Serial.print("Add Cart: " + GetUid);
-        if (Firebase.setInt(fbdo, GetUid + "/" + CartNumber + "/Total", 0)) {
-          if (Firebase.setInt(fbdo, GetUid + "/" + CartNumber + "/Paid", false)) {
+        if (Firebase.setInt(fbdo, GetUid + "/" + CartNumber + "CartInfo/Total", 0)) {
+          if (Firebase.setInt(fbdo, GetUid + "/" + CartNumber + "CartInfo/Paid", false)) {
             if (Firebase.setBool(fbdo, GetUid + "/ConnectedToCart", true)) {
               if (Firebase.setBool(fbdo, GetUid + "/DeletingProduct", false));
               if (Firebase.setInt(fbdo, GetUid + "/NumOfProducts", 0 ));
