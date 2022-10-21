@@ -2,8 +2,7 @@ import 'package:carttogo/Pages/Shopper/offersList.dart';
 import 'package:flutter/material.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:carttogo/Pages/Shopper/loyaltyCard.dart';
-import 'package:carttogo/Pages/shoppingCart.dart';
-import 'locationSearch.dart';
+import 'package:carttogo/Pages//Shopper/shoppingCart.dart';
 import 'package:carttogo/Users/user.dart' as user;
 
 class Navi extends StatefulWidget {

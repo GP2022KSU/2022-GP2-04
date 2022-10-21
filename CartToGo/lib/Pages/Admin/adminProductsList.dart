@@ -75,11 +75,9 @@ class ProductsListAdmins extends State<ProductsListAdmin> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white24,
-        centerTitle: true,
+       centerTitle: true,
         elevation: 0,
         title: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               IconButton(
                 onPressed: () async {
@@ -98,7 +96,7 @@ class ProductsListAdmins extends State<ProductsListAdmin> {
                 children: <Widget>[
                   IconButton(
                     icon: Icon(Icons.discount_outlined),
-                    color: appColor,
+                    color:appColor,
                     onPressed: () {
                       Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => AdminOffers(),
