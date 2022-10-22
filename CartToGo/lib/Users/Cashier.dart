@@ -35,8 +35,9 @@ Future<String> BirngUsername(String uid1) async {
 Future<int> BringNumOfProducts(String uid2) async {
   if (FirebaseAuth.instance.currentUser != null) {
     final ref = FirebaseDatabase.instance.ref();
-    final snapshot =
-        await ref.child("Shopper/${uid2}/Carts/NumOfProducts").get();
+    final snapshot = await ref
+        .child("Shopper/${uid2}/Carts/CartsStatus/NumOfProducts")
+        .get();
     numOfProducts = await (int.parse(snapshot.value.toString()));
     return numOfProducts;
   }
@@ -59,8 +60,9 @@ Future<double> BringTotalPrice(String uid3, int cartNumber) async {
 Future<double> BringTotalAfterPoints(String uid3, int cartNumber) async {
   if (FirebaseAuth.instance.currentUser != null) {
     final ref = FirebaseDatabase.instance.ref();
-    final snapshot =
-        await ref.child("Shopper/${uid3}/Carts/TotalAfterPoints").get();
+    final snapshot = await ref
+        .child("Shopper/${uid3}/Carts/CartsStatus/TotalAfterPoints")
+        .get();
     TotalAfterPoints = (double.parse(snapshot.value.toString()));
     return TotalAfterPoints;
   }

@@ -65,12 +65,25 @@ Future<int> BringPoints() async {
   return 0;
 }
 
+Future<int> BringPaidCarts() async {
+  if (FirebaseAuth.instance.currentUser != null) {
+    final ref = FirebaseDatabase.instance.ref();
+    final snapshot = await ref
+        .child(
+            "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts/CartsStatus/PaidCarts")
+        .get();
+    PaidCarts = int.parse(snapshot.value.toString());
+    return PaidCarts;
+  }
+  return PaidCarts;
+}
+
 Future<int> BringLastCartNumber() async {
   if (FirebaseAuth.instance.currentUser != null) {
     final ref = FirebaseDatabase.instance.ref();
     final snapshot = await ref
         .child(
-            "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts/FutureCartNumber")
+            "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts/CartsStatus/FutureCartNumber")
         .get();
     print("Last Cart Number: $LastCartNumber");
     LastCartNumber = await (int.parse(snapshot.value.toString())) - 1;
@@ -79,25 +92,12 @@ Future<int> BringLastCartNumber() async {
   return 0;
 }
 
-Future<int> BringnumOfObtPoints() async {
-  if (FirebaseAuth.instance.currentUser != null) {
-    final ref = FirebaseDatabase.instance.ref();
-    final snapshot = await ref
-        .child(
-            "Shopper/${FirebaseAuth.instance.currentUser?.uid}/numOfObtPoints")
-        .get();
-    numOfObtPoints = int.parse(snapshot.value.toString());
-    return numOfObtPoints;
-  }
-  return numOfObtPoints;
-}
-
 Future<int> BringNumOfProducts() async {
   if (FirebaseAuth.instance.currentUser != null) {
     final ref = FirebaseDatabase.instance.ref();
     final snapshot = await ref
         .child(
-            "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts/NumOfProducts")
+            "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts/CartsStatus/NumOfProducts")
         .get();
     numOfProducts = await (int.parse(snapshot.value.toString()));
     return numOfProducts;
@@ -138,7 +138,6 @@ Future<List<String>> BringhistoryPurch() async {
     DatabaseReference ref7 = FirebaseDatabase.instance.ref(
         "Shopper/${FirebaseAuth.instance.currentUser?.uid}/PurchaseHistory");
     map.forEach((key, value) async {
-
       final product = Product.fromMap(value);
 
       String barcode = value['Barcode'];
@@ -205,12 +204,12 @@ Future<List<String>> BringProducts() async {
   return barcodes;
 }
 
-
 Future<double> BringTotalPrice() async {
   if (FirebaseAuth.instance.currentUser != null) {
     final ref = FirebaseDatabase.instance.ref();
     final snapshot = await ref
-        .child("Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts/Total")
+        .child(
+            "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts/CartsStatus/Total")
         .get();
     Total = await (double.parse(snapshot.value.toString()));
     return Total;
@@ -223,7 +222,7 @@ Future<bool> BringPaid() async {
     final ref = FirebaseDatabase.instance.ref();
     final snapshot = await ref
         .child(
-            "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts/${getLastCartNum()}")
+            "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts/${getLastCartNum()}/CartInfo/Paid")
         .get();
     if (snapshot.value.toString() == "true") {
       Paid = true;
@@ -239,7 +238,7 @@ Future<double> BringTotalInsideCart() async {
     final ref = FirebaseDatabase.instance.ref();
     final snapshot = await ref
         .child(
-            "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts/${getLastCartNum()}/Total")
+            "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts/${getLastCartNum()}/CartInfo/Total")
         .get();
     TotalInsideCart = await (double.parse(snapshot.value.toString()));
     return TotalInsideCart;
@@ -293,6 +292,11 @@ int getLastCartNum() {
   return LastCartNumber;
 }
 
+int getPaidCarts() {
+  BringPaidCarts();
+  return PaidCarts;
+}
+
 String getUsername() {
   if (_U1 == 0) {
     BirngUsername();
@@ -340,11 +344,6 @@ int getnumOfProducts() {
   return numOfProducts;
 }
 
-int getnumOfObtPoints() {
-  BringnumOfObtPoints();
-  return numOfObtPoints;
-}
-
 double getTotal() {
   BringTotalPrice();
   return Total;
@@ -379,8 +378,9 @@ double Total = 0.0;
 double TotalAfterPoints = 0.0;
 double TotalInsideCart = 0.0;
 int PointsAfterPaying = 0;
+int PaidCarts = 0;
 bool Paid = false;
- List<String> names = [];
+List<String> names = [];
 List<String> barcodes = [];
 List<String> RecommendPro = [];
 late Map<dynamic, dynamic> Purchasehis = {};

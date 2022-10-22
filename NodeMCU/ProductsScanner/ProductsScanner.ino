@@ -276,21 +276,21 @@ boolean LoyaltyCardConnectionFirebase(String QRid) {
     json.get(UID, "/shopperID");
     if (UID.success) //if fetched database for UID success
     {
-      String FutureCartNumber = "/Shopper/" + UID.to<String>() + "/Carts/FutureCartNumber";
+      String FutureCartNumber = "/Shopper/" + UID.to<String>() + "/Carts/CartsStatus/FutureCartNumber";
       Serial.println("Path FutureCartNumber: " + FutureCartNumber);
       if (Firebase.getInt(fbdo, FutureCartNumber)) { //if UID is avaliable
         CartNumber = fbdo.to<int>();
         Serial.println("Cart Number: " + CartNumber);
         String GetUid = "/Shopper/" + UID.to<String>() + "/Carts";
-        Firebase.setInt(fbdo, "/Shopper/" + UID.to<String>() + "/Carts/FutureCartNumber", CartNumber + 1);
+        Firebase.setInt(fbdo, "/Shopper/" + UID.to<String>() + "/Carts/CartsStatus/FutureCartNumber", CartNumber + 1);
         delay(200);
         Serial.print("Add Cart: " + GetUid);
-        if (Firebase.setInt(fbdo, GetUid + "/" + CartNumber + "CartInfo/Total", 0)) {
-          if (Firebase.setInt(fbdo, GetUid + "/" + CartNumber + "CartInfo/Paid", false)) {
-            if (Firebase.setBool(fbdo, GetUid + "/ConnectedToCart", true)) {
-              if (Firebase.setBool(fbdo, GetUid + "/DeletingProduct", false));
-              if (Firebase.setInt(fbdo, GetUid + "/NumOfProducts", 0 ));
-              if (Firebase.setInt(fbdo, GetUid + "/Total", 0.0)) { //Set a new total variable for the cart
+        if (Firebase.setInt(fbdo, GetUid + "/" + CartNumber + "/CartInfo/Total", 0)) {
+          if (Firebase.setInt(fbdo, GetUid + "/" + CartNumber + "/CartInfo/Paid", false)) {
+            if (Firebase.setBool(fbdo, GetUid + "/CartsStatus/ConnectedToCart", true)) {
+              if (Firebase.setBool(fbdo, GetUid + "/CartsStatus/DeletingProduct", false));
+              if (Firebase.setInt(fbdo, GetUid + "/CartsStatus/NumOfProducts", 0 ));
+              if (Firebase.setInt(fbdo, GetUid + "/CartsStatus/Total", 0.0)) { //Set a new total variable for the cart
                 return true;
               }
             }
@@ -324,11 +324,11 @@ void loop()
   }
   if (Firebase.ready() == 1 && signupOK && WiFi.status() == 3) {
     String cartsPath = "/Shopper/" + UID.to<String>() + "/Carts";
-    if (Firebase.getBool(fbdo, cartsPath + "/DeletingProduct")) checkDelete = fbdo.to<bool>();
-    if (Firebase.getBool(fbdo, cartsPath + "/ConnectedToCart")) ConnectedToCart = fbdo.to<bool>();
+    if (Firebase.getBool(fbdo, cartsPath + "/CartsStatus/DeletingProduct")) checkDelete = fbdo.to<bool>();
+    if (Firebase.getBool(fbdo, cartsPath + "/CartsStatus/ConnectedToCart")) ConnectedToCart = fbdo.to<bool>();
     if (countProducts >= 1 && CartConnection != false && checkDelete == true) {
-      if (Firebase.getFloat(fbdo, cartsPath + "/Total")) total = fbdo.to<float>();
-      if (Firebase.getInt(fbdo, cartsPath + "/NumOfProducts")) NumOfProducts = fbdo.to<int>();
+      if (Firebase.getFloat(fbdo, cartsPath + "/CartsStatus/Total")) total = fbdo.to<float>();
+      if (Firebase.getInt(fbdo, cartsPath + "/CartsStatus/NumOfProducts")) NumOfProducts = fbdo.to<int>();
       //if (Firebase.getFloat(fbdo, cartsPath+"/lastPrice")) lastPrice = fbdo.to<float>();
       checkTotalAndCount(total);
     }
@@ -442,8 +442,8 @@ void loop()
 
           String PathCart = "/Shopper/" + UID.to<String>() + "/Carts/" + CartNumber + "/" + countProducts;
           Serial.println("ShopperID: " + cartsPath);
-          Firebase.setInt(fbdo, cartsPath + "/Total", total);
-          Firebase.setInt(fbdo, cartsPath + "/NumOfProducts", NumOfProducts );
+          Firebase.setInt(fbdo, cartsPath + "/CartsStatus/Total", total);
+          Firebase.setInt(fbdo, cartsPath + "/CartsStatus/NumOfProducts", NumOfProducts );
           Firebase.setJSON(fbdo, PathCart, json);
 
 

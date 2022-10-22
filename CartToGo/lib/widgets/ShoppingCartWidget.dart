@@ -1,8 +1,8 @@
 // ignore_for_file: prefer_const_constructors, unnecessary_new, prefer_const_literals_to_create_immutables, nullable_type_in_catch_clause
 
 import 'dart:async';
-import 'package:carttogo/Pages/checkOut.dart';
-import 'package:carttogo/Pages/shoppingCart.dart';
+import 'package:carttogo/Pages/Shopper/checkOut.dart';
+import 'package:carttogo/Pages/Shopper/shoppingCart.dart';
 import 'package:carttogo/Pages/Cashier/Cashier.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -85,7 +85,7 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
     if (FirebaseAuth.instance.currentUser != null) {
       _streamSubscription = _database
           .child(
-              "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts/ConnectedToCart")
+              "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts/CartsStatus/ConnectedToCart")
           .onValue
           .listen((event) {
         final data = event.snapshot.value;
@@ -134,7 +134,7 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
     if (FirebaseAuth.instance.currentUser != null) {
       _streamSubscription1 = _database
           .child(
-              "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts/NumOfProducts")
+              "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts/CartsStatus/NumOfProducts")
           .onValue
           .listen((event) {
         final data = event.snapshot.value;
@@ -152,7 +152,7 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
     if (FirebaseAuth.instance.currentUser != null) {
       _streamSubscription2 = _database
           .child(
-              "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts/Total")
+              "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts/CartsStatus/Total")
           .onValue
           .listen((event) {
         final data = event.snapshot.value;
@@ -171,7 +171,7 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
     if (FirebaseAuth.instance.currentUser != null) {
       _streamSubscription = _database
           .child(
-              "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts/FutureCartNumber")
+              "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts/CartsStatus/FutureCartNumber")
           .onValue
           .listen((event) {
         final data = event.snapshot.value;
@@ -299,7 +299,7 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
                         //-----------Deletes the swiped product-----------//
                         void deleteProduct(var product) async {
                           final Carts = _fb.ref().child(
-                              "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts");
+                              "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts/CartsStatus");
                           double price;
                           if (HaveOffer) {
                             price = PriceAfterOffer; //price for IOS 5 android 2

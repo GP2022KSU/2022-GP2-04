@@ -45,7 +45,7 @@ class ShoppingCartState extends State<ShoppingCart> {
     if (FirebaseAuth.instance.currentUser != null) {
       _streamSubscription4 = _database
           .child(
-              "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts/ConnectedToCart")
+              "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts/CartsStatus/ConnectedToCart")
           .onValue
           .listen((event) {
         final data = event.snapshot.value;
@@ -79,18 +79,16 @@ class ShoppingCartState extends State<ShoppingCart> {
               fontFamily: 'CartToGo',
             ),
           ),
-           leading: IconButton(
-          onPressed: () async {
-            final result = await showSearch<String>(
-              context: context,
-              delegate: LocationSearch(user.getNames()),
-            );
-          },
-          icon: Icon(Icons.search_outlined),
-          color: appColor,
-        ),
-
-
+          leading: IconButton(
+            onPressed: () async {
+              final result = await showSearch<String>(
+                context: context,
+                delegate: LocationSearch(user.getNames()),
+              );
+            },
+            icon: Icon(Icons.search_outlined),
+            color: appColor,
+          ),
           actions: <Widget>[
             Padding(
               padding: const EdgeInsets.all(8.0),

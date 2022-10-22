@@ -373,7 +373,7 @@ class _CheckOutState extends State<CheckOut> {
                                   String hour = currDt.hour.toString();
                                   DatabaseReference ref2 =
                                       FirebaseDatabase.instance.ref(
-                                          "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts");
+                                          "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts/CartsStatus");
                                   await ref2.update({
                                     "ConnectedToCart": false,
                                     "Total": 0,
@@ -390,16 +390,17 @@ class _CheckOutState extends State<CheckOut> {
                                     "Date": date,
                                     "Hour": hour,
                                     "GainedPoints": GainedPoints,
-                                    "UsedPoints": vis
-                                        ? pointsChange: 0
+                                    "UsedPoints": vis ? pointsChange : 0
                                   });
                                   DatabaseReference ref7 =
                                       FirebaseDatabase.instance.ref(
                                           "Shopper/${FirebaseAuth.instance.currentUser?.uid}");
                                   await ref7.update({
-                                    "Points": vis? GainedPoints:GainedPoints + user.getPoints(),
+                                    "Points": vis
+                                        ? GainedPoints
+                                        : GainedPoints + user.getPoints(),
                                   });
-                                  
+
                                   if (checkPay) {
                                     Navigator.push(
                                         context,
@@ -683,7 +684,7 @@ class _CheckOutState extends State<CheckOut> {
                             MaterialStateProperty.all(Colors.white)),
                     onPressed: () async {
                       DatabaseReference ref3 = FirebaseDatabase.instance.ref(
-                          "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts");
+                          "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts/CartsStatus");
                       await ref3.update({
                         "TotalAfterPoints": vis
                             ? await user.getTotalAfterPoints()

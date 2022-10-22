@@ -263,12 +263,15 @@ class _RegisterPageState extends State<RegisterPage> {
       "Username": _userNameController.text,
       "Email": _emailController.text,
       "Carts": {
-        "ConnectedToCart": false, //always false
-        "DeletingProduct": false, //always false
-        "FutureCartNumber": 1, //always 1
-        "Total": 0, //always 0
-        "TotalAfterPoints": 0,
-        "NumOfProducts": 0, //always 0
+        "CartsStatus": {
+          "ConnectedToCart": false, //always false
+          "DeletingProduct": false, //always false
+          "FutureCartNumber": 1, //always 1
+          "Total": 0, //always 0
+          "TotalAfterPoints": 0,
+          "NumOfProducts": 0, //always 0
+          "PaidCarts": 0,
+        }
       },
       "PurchaseHistory": {
         "New": {"NoPurchase": true, "Price": 1, "SubCategory": "Test"}

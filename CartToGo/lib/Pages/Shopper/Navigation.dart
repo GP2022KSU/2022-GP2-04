@@ -2,7 +2,7 @@ import 'package:carttogo/Pages/Shopper/offersList.dart';
 import 'package:flutter/material.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:carttogo/Pages/Shopper/loyaltyCard.dart';
-import 'package:carttogo/Pages/shoppingCart.dart';
+import 'package:carttogo/Pages/Shopper/shoppingCart.dart';
 import 'locationSearch.dart';
 import 'package:carttogo/Users/user.dart' as user;
 
@@ -33,9 +33,9 @@ class NaviState extends State<Navi> {
         return tab1;
       case 1:
         return LoyaltyCard();
-       
+
       case 2:
-        return  OffersList();
+        return OffersList();
     }
     return Container();
   }
@@ -55,11 +55,11 @@ class NaviState extends State<Navi> {
 
     Myindex == 1 ? v2 = false : v2 = true;
 
-    Myindex == 1 || Myindex == 0  ? s3 = 0.06 : s3 = 0.04;
+    Myindex == 1 || Myindex == 0 ? s3 = 0.06 : s3 = 0.04;
 
     Myindex == 2 ? v3 = false : v3 = true;
 
-    Myindex == 0 ||Myindex == 2 ? s2 = 0.065 : s2 = 0.04;
+    Myindex == 0 || Myindex == 2 ? s2 = 0.065 : s2 = 0.04;
 
     return SafeArea(
       top: false,
@@ -131,8 +131,7 @@ class NaviState extends State<Navi> {
                     ),
                     visible: v3,
                   ),
-                  Icon(Icons.discount_outlined
-                    ,
+                  Icon(Icons.discount_outlined,
                       size: 30,
                       color: Myindex == 2
                           ? Color.fromARGB(255, 35, 61, 255)

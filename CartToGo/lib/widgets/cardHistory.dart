@@ -29,17 +29,17 @@ class _CardhistoryState extends State<Cardhistory> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              CheckPoints(),
+              CheckCarts(),
             ],
           ),
         ));
   }
 
-  Widget CheckPoints() {
+  Widget CheckCarts() {
     return FutureBuilder<int>(
-        future: user.BringnumOfObtPoints(),
+        future: user.BringPaidCarts(),
         builder: (BuildContext context, AsyncSnapshot<int> asyn) {
-          if (asyn.data == 0 || asyn.data == 1) {
+          if (user.getPaidCarts() <= 0) {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -78,95 +78,64 @@ class _CardhistoryState extends State<Cardhistory> {
               ],
             );
           } else {
-            return PointsHistory();
+            return InvoiceHistory();
           }
         });
   }
 
-  Widget PointsHistory() {
-    return SizedBox(
-      height: MediaQuery.of(context).size.height * 0.45,
-      width: MediaQuery.of(context).size.width * 0.9,
-      //color: Colors.black,
-      child: FutureBuilder<int>(
-          future: user.BringnumOfObtPoints(),
-          builder: (BuildContext context, AsyncSnapshot<int> asyn) {
-            if (FirebaseAuth.instance.currentUser != null) {
-              //user.getProducts();
-              String a = asyn.data.toString();
-              if (asyn.hasData) {
-                return Container(
-                  height: MediaQuery.of(context).size.height * 0.713,
-                  child: FirebaseAnimatedList(
-                      query: _fb
-                          .ref()
-                          .child(
-                              "Shopper/${FirebaseAuth.instance.currentUser?.uid}/PointsHistory")
-                          .orderByKey()
-                          .limitToLast((user.getnumOfObtPoints() - 1))
-                          .endAt((user.getnumOfObtPoints() - 1).toString()),
-                      duration: const Duration(milliseconds: 500),
-                      itemBuilder: (BuildContext context, DataSnapshot snapshot,
-                          Animation<double> animation, int index) {
-                        bool check = true;
-                        //numOfProducts = user.getnumOfProducts();
-                        var v = snapshot.value
-                            .toString(); //Gets the scanned product and store it in a var
-                        var g = v.replaceAll(
-                            //Using RegExp to remove unwanted data
-                            RegExp("{|}|Date:|GainedPoints:|numOfObtPoints:"),
-                            "");
-                        g.trim();
-
-                        var l = g.split(',');
-                        print(l.toString());
-                        if (l[0] == user.getnumOfObtPoints().toString()) {
-                          check = false;
-                        }
-                        /*
-                        String word = l[0];
-                        if (word[1] == "+") {
-                          color = "green";
-                        }
-                        */
-                        if (check && !(l[0] == "0")) {
-                          return AnimationConfiguration.staggeredList(
-                            position: index,
-                            duration: const Duration(milliseconds: 375),
-                            child: SlideAnimation(
-                              verticalOffset: 0,
-                              child: FadeInAnimation(
-                                child: ListTile(
-                                  trailing: Text(
-                                    l[1].toString(),
-                                    textAlign: TextAlign.center,
-                                    style: const TextStyle(
-                                      fontSize: 20,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                  leading: Text(
-                                    l[0].toString(),
-                                    style: const TextStyle(
-                                      fontSize: 15,
-                                      color: Colors.black,
-                                    ),
-                                    textAlign: TextAlign.right,
-                                    textDirection: TextDirection.rtl,
-                                  ),
-                                ),
-                              ),
+  Widget InvoiceHistory() {
+    return Container(
+        height: MediaQuery.of(context).size.height * 0.45,
+        width: MediaQuery.of(context).size.width * 0.9,
+        //padding: EdgeInsets.symmetric(horizontal: 24, vertical: 4),
+        child: Container(
+          height: MediaQuery.of(context).size.height * 0.713,
+          child: FirebaseAnimatedList(
+              query: _fb.ref().child(
+                  "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts"),
+              duration: const Duration(milliseconds: 500),
+              itemBuilder: (BuildContext context, DataSnapshot snapshot,
+                  Animation<double> animation, int index) {
+                final map = snapshot.value as Map<dynamic, dynamic>;
+                String InvoiceNumber = snapshot.key.toString();
+                double total = 0;
+                map.forEach((key, value) {
+                  if (key == "CartInfo") {
+                    total = double.parse(value['Total'].toString());
+                  }
+                });
+                if (map['NumOfProducts'] == null) {
+                  return AnimationConfiguration.staggeredList(
+                    position: index,
+                    duration: const Duration(milliseconds: 375),
+                    child: SlideAnimation(
+                      verticalOffset: 0,
+                      child: FadeInAnimation(
+                        child: ListTile(
+                          trailing: Text(
+                            InvoiceNumber + " #",
+                            textAlign: TextAlign.left,
+                            style: const TextStyle(
+                              fontSize: 20,
+                              color: Colors.black,
                             ),
-                          );
-                        }
-                        return Container();
-                      }),
-                );
-              }
-              return Container();
-            }
-            return Container();
-          }),
-    );
+                          ),
+                          leading: Text(
+                            total.toString(),
+                            style: const TextStyle(
+                              fontSize: 15,
+                              color: Colors.black,
+                            ),
+                            textAlign: TextAlign.right,
+                            textDirection: TextDirection.rtl,
+                          ),
+                        ),
+                      ),
+                    ),
+                  );
+                }
+                return Container();
+              }),
+        ));
   }
 }
