@@ -274,7 +274,7 @@ class _RegisterPageState extends State<RegisterPage> {
         }
       },
       "PurchaseHistory": {
-        "New": {"NoPurchase": true, "Price": 1, "SubCategory": "Test"}
+        "New": {"Price": 1, "SubCategory": "Test"}
       },
     });
     final databaseRef = FirebaseDatabase.instance.ref();

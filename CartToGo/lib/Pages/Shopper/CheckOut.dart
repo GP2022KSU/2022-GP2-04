@@ -379,6 +379,7 @@ class _CheckOutState extends State<CheckOut> {
                                     "Total": 0,
                                     "NumOfProducts": 0,
                                     "TotalAfterPoints": 0,
+                                    "PaidCarts": user.getPaidCarts() + 1,
                                   });
                                   DatabaseReference ref3 =
                                       FirebaseDatabase.instance.ref(

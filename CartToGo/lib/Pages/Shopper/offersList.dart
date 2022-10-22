@@ -112,6 +112,7 @@ class _OffersListState extends State<OffersList> {
                       SizedBox(
                         height: MediaQuery.of(context).size.height * 0.25,
                         child: FirebaseAnimatedList(
+                          scrollDirection: Axis.horizontal,
                           padding: const EdgeInsets.all(8.0),
                           query: ref,
                           shrinkWrap: true,
@@ -148,85 +149,82 @@ class _OffersListState extends State<OffersList> {
                             } on Exception {}
 
                             if (isOffer & SameBarcode) {
-                              return GestureDetector(
-                                child: Directionality(
-                                  textDirection: TextDirection.rtl,
-                                  child: Container(
+                              return Container(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.5,
+                                width: MediaQuery.of(context).size.width * 0.4,
+                                child: Card(
+                                    shadowColor: Color.fromARGB(255, 8, 8, 8),
+                                    elevation: 1,
+                                    color: Color.fromARGB(255, 255, 255, 255),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(16)),
                                     child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: ListTile(
-                                        shape: RoundedRectangleBorder(
-                                          side: const BorderSide(
-                                            color: Colors.white,
-                                          ),
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                        ),
-                                        //tileColor: const Color.fromARGB(
-                                        //    229, 229, 227, 227),
-
-                                        // product information arrangement in the container
-                                        title: Text(
-                                          Name +
-                                              " " +
-                                              Brand, // name of the product
-                                          style: const TextStyle(
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.bold,
-                                            fontFamily: 'CartToGo',
-                                            fontSize: 17,
-                                          ),
-                                          textAlign: TextAlign.right,
-                                        ),
-
-                                        // offer icon
-                                        leading: Noimg == true
-                                            ? const Icon(
-                                                Icons.discount,
-                                                color: Colors.red,
-                                              )
-                                            : Image.network(imgUrl),
-
-                                        //price for the products
-                                        trailing: Column(
-                                          children: [
-                                            Text(
-                                              "\t" +
-                                                  "السعر:" +
-                                                  price
-                                                      .toString() + // price before
-                                                  " ريال",
-                                              style: const TextStyle(
-                                                decoration:
-                                                    TextDecoration.lineThrough,
-                                                color: Colors.black,
-                                                fontWeight: FontWeight.bold,
-                                                fontFamily: 'CartToGo',
-                                                fontSize: 12,
-                                              ),
-                                              textAlign: TextAlign.right,
+                                      padding: const EdgeInsets.all(4),
+                                      child: Column(
+                                        children: [
+                                          Container(
+                                              height: MediaQuery.of(context)
+                                                      .size
+                                                      .height *
+                                                  0.13,
+                                              alignment: Alignment.center,
+                                              child: Image.network(
+                                                imgUrl,
+                                                fit: BoxFit.contain,
+                                                width: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.4,
+                                              )),
+                                          Text(
+                                            Name +
+                                                " " +
+                                                Brand, // name of the product
+                                            style: const TextStyle(
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.bold,
+                                              fontFamily: 'CartToGo',
+                                              fontSize: 14,
                                             ),
-                                            Text(
-                                              "\t" +
-                                                  "السعر بعد العرض:" +
-                                                  offerprice
-                                                      .toString() + // price after offer
-                                                  " ريال",
-                                              textAlign: TextAlign.right,
-                                              style: const TextStyle(
-                                                // decoration: TextDecoration.lineThrough,
-                                                color: Colors.black,
-                                                fontWeight: FontWeight.bold,
-                                                fontFamily: 'CartToGo',
-                                                fontSize: 12,
-                                              ),
+                                            textAlign: TextAlign.right,
+                                          ),
+                                          Text(
+                                            "\t" +
+                                                "السعر:" +
+                                                price
+                                                    .toString() + // price before
+                                                " ريال",
+                                            style: const TextStyle(
+                                              decoration:
+                                                  TextDecoration.lineThrough,
+                                              color: Color.fromARGB(
+                                                  255, 110, 110, 110),
+                                              fontWeight: FontWeight.bold,
+                                              fontFamily: 'CartToGo',
+                                              fontSize: 12,
                                             ),
-                                          ],
-                                        ),
+                                            textAlign: TextAlign.right,
+                                          ),
+                                          Text(
+                                            "\t" +
+                                                "السعر بعد العرض: " +
+                                                offerprice
+                                                    .toString() + // price after offer
+                                                " ريال",
+                                            textAlign: TextAlign.right,
+                                            style: const TextStyle(
+                                              // decoration: TextDecoration.lineThrough,
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.bold,
+                                              fontFamily: 'CartToGo',
+                                              fontSize: 12,
+                                            ),
+                                          ),
+                                        ],
                                       ),
-                                    ),
-                                  ),
-                                ),
+                                    )),
                               );
                             }
                             return Container();
@@ -239,7 +237,6 @@ class _OffersListState extends State<OffersList> {
                         height: 1,
                         color: Color.fromARGB(255, 3, 0, 188),
                       ),
-                      
                       const Text(
                         "العروض",
                         style: TextStyle(
@@ -388,7 +385,7 @@ class _OffersListState extends State<OffersList> {
 
   Future<List<String>> _SeeAPI() async {
     //run python file
-    final url = 'http://192.168.8.155:5000/name'; //local python API
+    final url = 'http://192.168.0.211:5000/name'; //local python API
     var purchasehis = "";
     final response = await http.post(Uri.parse(url),
         body: json.encode(user.getPurchaseHistory()));
