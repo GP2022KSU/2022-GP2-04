@@ -239,6 +239,7 @@ class _OffersListState extends State<OffersList> {
                         height: 1,
                         color: Color.fromARGB(255, 3, 0, 188),
                       ),
+                      
                       const Text(
                         "العروض",
                         style: TextStyle(

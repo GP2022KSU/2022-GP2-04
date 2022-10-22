@@ -2,6 +2,8 @@ import 'package:carttogo/Pages/welcomePage.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:carttogo/main.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_database/ui/firebase_animated_list.dart';
 
 class AdminOffers extends StatefulWidget {
   AdminOffers({Key? key}) : super(key: key);
@@ -10,8 +12,26 @@ class AdminOffers extends StatefulWidget {
 }
 
 class _AdminOffersState extends State<AdminOffers> {
+  final fb = FirebaseDatabase.instance;
+  bool isOffer = false;
+  var l;
+  var g;
+  late bool _isLoading;
+  void initState() {
+    _isLoading = true;
+    Future.delayed(const Duration(milliseconds: 800), () {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
+    final ref = fb.ref().child('Products');
     return Scaffold(
       appBar: AppBar(
         iconTheme: IconThemeData(color: appColor),
@@ -48,6 +68,113 @@ class _AdminOffersState extends State<AdminOffers> {
           ),
         ],
       ),
+      body: Column(children: [
+        SizedBox(
+          height: MediaQuery.of(context).size.height * 0.49,
+          child: FirebaseAnimatedList(
+            scrollDirection: Axis.vertical,
+            padding: const EdgeInsets.all(8.0),
+            query: ref,
+            shrinkWrap: true,
+            itemBuilder: (context, snapshot, animation, index) {
+              var map;
+              bool Noimg = true;
+              String imgUrl = '';
+              bool isOffer = false;
+              String Name = "";
+              String Brand = "";
+              try {
+                var map = snapshot.value as Map<dynamic, dynamic>;
+                if (map['Offer'] == true) isOffer = true;
+                Name = map['Name'];
+                Brand = map['Brand'];
+                if (map['ImgUrl'] == "") {
+                  Noimg = true;
+                } else {
+                  Noimg = false;
+                  imgUrl = map['ImgUrl'];
+                }
+              } on Exception {}
+
+              if (isOffer) {
+                return Directionality(
+                  textDirection: TextDirection.rtl,
+                  child: Container(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: ListTile(
+                        shape: RoundedRectangleBorder(
+                          side: const BorderSide(
+                            width: 2,
+                            color: appColor,
+                          ),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+
+                        // product information arrangement in the container
+                        title: Text(
+                          Name + " " + Brand,
+                          // name of the product
+                          style: const TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: 'CartToGo',
+                            fontSize: 17,
+                          ),
+                          textAlign: TextAlign.right,
+                        ),
+
+                        // offer icon
+                        leading: Noimg == true
+                            ? const Icon(
+                                Icons.discount,
+                                color: Colors.red,
+                              )
+                            : Image.network(imgUrl),
+
+                        //price for the products
+                        trailing: Column(
+                          children: [
+                            // Text(
+                            //   "\t" +
+                            //       "السعر:" +
+                            //       price.toString() + // price before
+                            //       " ريال",
+                            //   style: const TextStyle(
+                            //     decoration: TextDecoration.lineThrough,
+                            //     color: Colors.black,
+                            //     fontWeight: FontWeight.bold,
+                            //     fontFamily: 'CartToGo',
+                            //     fontSize: 12,
+                            //   ),
+                            //   textAlign: TextAlign.right,
+                            // ),
+                            // Text(
+                            //   "\t" +
+                            //       "السعر بعد العرض:" +
+                            //       offerprice.toString() + // price after offer
+                            //       " ريال",
+                            //   textAlign: TextAlign.right,
+                            //   style: const TextStyle(
+                            //     // decoration: TextDecoration.lineThrough,
+                            //     color: Colors.black,
+                            //     fontWeight: FontWeight.bold,
+                            //     fontFamily: 'CartToGo',
+                            //     fontSize: 12,
+                            //   ),
+                            // ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              }
+              return Container();
+            },
+          ),
+        ),
+      ]),
     );
   }
 
