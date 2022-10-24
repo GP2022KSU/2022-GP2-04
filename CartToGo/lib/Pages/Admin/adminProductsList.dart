@@ -6,8 +6,6 @@ import 'package:flutter/services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:carttogo/Pages/welcomePage.dart';
 import 'package:carttogo/Pages/Admin/addNewProduct.dart';
-import 'package:carttogo/Pages/Admin/adminOffers.dart';
-
 import 'package:flutter/rendering.dart';
 import 'adminSearch.dart';
 import 'package:carttogo/Users/user.dart' as user;
@@ -19,6 +17,14 @@ class ProductsListAdmin extends StatefulWidget {
 }
 
 class ProductsListAdmins extends State<ProductsListAdmin> {
+  bool onOffer = false;
+
+  void showOffers() {
+    setState(() {
+      onOffer = !onOffer;
+    });
+  }
+
   List<String> Locations = [
     'ممر 1',
     'ممر 2',
@@ -75,48 +81,45 @@ class ProductsListAdmins extends State<ProductsListAdmin> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white24,
-       centerTitle: true,
+        centerTitle: true,
         elevation: 0,
-        title: Row(
+        title: Row(children: <Widget>[
+          IconButton(
+            onPressed: () async {
+              final result = await showSearch<String>(
+                context: context,
+                delegate: AdminSearch(user.getBarcode()),
+              );
+            },
+            icon: Icon(
+              Icons.search_outlined,
+            ),
+            color: appColor,
+          ),
+          Stack(
+            alignment: Alignment.center,
             children: <Widget>[
               IconButton(
-                onPressed: () async {
-                  final result = await showSearch<String>(
-                    context: context,
-                    delegate: AdminSearch(user.getBarcode()),
-                  );
-                },
-                icon: Icon(
-                  Icons.search_outlined,
-                ),
+                icon: Icon(Icons.discount_outlined),
                 color: appColor,
+                onPressed: () {
+                  showOffers();
+                },
               ),
-              Stack(
-                alignment: Alignment.center,
-                children: <Widget>[
-                  IconButton(
-                    icon: Icon(Icons.discount_outlined),
-                    color:appColor,
-                    onPressed: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => AdminOffers(),
-                      ));
-                    },
-                  ),
-                ],
-              ),
-              Expanded(
-                child: Center(
-                  child: Text("المنتجات        ",
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                      )),
-                ),
-              )
+            ],
+          ),
+          Expanded(
+            child: Center(
+              child: Text("المنتجات        ",
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                  )),
+            ),
+          )
 
-              // search icon to press when searching for a product
-            ]),
+          // search icon to press when searching for a product
+        ]),
 
         // logout button
         actions: <Widget>[
@@ -174,109 +177,112 @@ class ProductsListAdmins extends State<ProductsListAdmin> {
                 // products list
                 child: Directionality(
               textDirection: TextDirection.rtl,
-              child: Container(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ListTile(
-                    shape: RoundedRectangleBorder(
-                      side: BorderSide(
-                        color: Colors.white,
+              child: Visibility(
+                visible: onOffer,
+                child: Container(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ListTile(
+                      shape: RoundedRectangleBorder(
+                        side: BorderSide(
+                          color: Colors.white,
+                        ),
+                        borderRadius: BorderRadius.circular(10),
                       ),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    tileColor: Color.fromARGB(229, 229, 227, 227),
+                      tileColor: Color.fromARGB(229, 229, 227, 227),
 
-                    // delete product option
-                    trailing: IconButton(
-                      tooltip: "حذف المنتج",
-                      icon: Icon(
-                        Icons.delete,
-                        color: Color.fromARGB(255, 255, 0, 0),
+                      // delete product option
+                      trailing: IconButton(
+                        tooltip: "حذف المنتج",
+                        icon: Icon(
+                          Icons.delete,
+                          color: Color.fromARGB(255, 255, 0, 0),
+                        ),
+                        onPressed: () {
+                          var EE = ref.child(snapshot.key!);
+                          _DeleteOrNot(EE);
+                        },
                       ),
-                      onPressed: () {
-                        var EE = ref.child(snapshot.key!);
-                        _DeleteOrNot(EE);
-                      },
-                    ),
 
-                    // update product option
-                    leading: IconButton(
-                      tooltip: "تعديل المنتج",
-                      icon: Icon(
-                        Icons.edit,
-                        color: Color.fromARGB(255, 94, 90, 90),
+                      // update product option
+                      leading: IconButton(
+                        tooltip: "تعديل المنتج",
+                        icon: Icon(
+                          Icons.edit,
+                          color: Color.fromARGB(255, 94, 90, 90),
+                        ),
+                        onPressed: () async {
+                          setState(() {
+                            k = snapshot.key;
+                            var v = snapshot.value.toString();
+                          });
+                          g = v.replaceAll(
+                              RegExp(
+                                  "{|}|Name: |Brand: |Category: |Price: |Size: |Quantity: |Barcode: |Location: |PriceAfterOffer: |SearchBarcode: |Offer:"),
+                              "");
+                          g.trim();
+                          l = g.split(',');
+
+                          var map;
+                          bool isOffer = false;
+
+                          try {
+                            var map = snapshot.value as Map<dynamic, dynamic>;
+                            if (map['Offer'] == true) isOffer = true;
+                          } on Exception {}
+
+                          var QUANTITY = l[10]; //Quantity on IOS is 1
+                          var PRICE = l[7]; //Price on IOS is 8
+                          var LOCATION = l[3];
+                          var ONOFFER = l[8]; //offer on IOS is 7
+                          var NEWPRICE = l[11]; //PriceAfterOffer on IOS is 0
+                          _UpdateOrNot(QUANTITY, PRICE, LOCATION, ONOFFER,
+                              NEWPRICE, isOffer);
+                        },
                       ),
-                      onPressed: () async {
-                        setState(() {
-                          k = snapshot.key;
-                          var v = snapshot.value.toString();
-                        });
-                        g = v.replaceAll(
-                            RegExp(
-                                "{|}|Name: |Brand: |Category: |Price: |Size: |Quantity: |Barcode: |Location: |PriceAfterOffer: |SearchBarcode: |Offer:"),
-                            "");
-                        g.trim();
-                        l = g.split(',');
 
-                        var map;
-                        bool isOffer = false;
-
-                        try {
-                          var map = snapshot.value as Map<dynamic, dynamic>;
-                          if (map['Offer'] == true) isOffer = true;
-                        } on Exception {}
-
-                        var QUANTITY = l[10]; //Quantity on IOS is 1
-                        var PRICE = l[7]; //Price on IOS is 8
-                        var LOCATION = l[3];
-                        var ONOFFER = l[8]; //offer on IOS is 7
-                        var NEWPRICE = l[11]; //PriceAfterOffer on IOS is 0
-                        _UpdateOrNot(QUANTITY, PRICE, LOCATION, ONOFFER,
-                            NEWPRICE, isOffer);
-                      },
-                    ),
-
-                    // product information arrangement in the container
-                    title: Text(
-                      l[2] + l[4],
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'CartToGo',
-                        fontSize: 17,
+                      // product information arrangement in the container
+                      title: Text(
+                        l[2] + l[4],
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: 'CartToGo',
+                          fontSize: 17,
+                        ),
+                        textAlign: TextAlign.right,
                       ),
-                      textAlign: TextAlign.right,
-                    ),
-                    subtitle: Text(
-                      "\t" +
-                          "العلامة التجارية: " +
-                          l[4] +
-                          "\n"
-                              "\t" +
-                          "الفئه: " +
-                          l[9] +
-                          "\n" +
-                          "\t" +
-                          "الكمية:" +
-                          l[10] +
-                          "\n" +
-                          "\t" +
-                          "الحجم:" +
-                          l[6] +
-                          "\n" +
-                          "\t" +
-                          "الموقع:" +
-                          l[3] +
-                          "\n" +
-                          "\t" +
-                          "السعر:" +
-                          l[7] +
-                          " ريال",
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'CartToGo',
-                        fontSize: 12,
+                      subtitle: Text(
+                        "\t" +
+                            "العلامة التجارية: " +
+                            l[4] +
+                            "\n"
+                                "\t" +
+                            "الفئه: " +
+                            l[9] +
+                            "\n" +
+                            "\t" +
+                            "الكمية:" +
+                            l[10] +
+                            "\n" +
+                            "\t" +
+                            "الحجم:" +
+                            l[6] +
+                            "\n" +
+                            "\t" +
+                            "الموقع:" +
+                            l[3] +
+                            "\n" +
+                            "\t" +
+                            "السعر:" +
+                            l[7] +
+                            " ريال",
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: 'CartToGo',
+                          fontSize: 12,
+                        ),
                       ),
                     ),
                   ),

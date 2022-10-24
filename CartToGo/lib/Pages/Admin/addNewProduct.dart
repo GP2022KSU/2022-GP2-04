@@ -159,6 +159,8 @@ class AddNewProductState extends State<AddNewProduct> {
                     child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
+//here eill be the image
+
                           // Product's barcode number
                           Directionality(
                             textDirection: TextDirection.rtl,
@@ -283,87 +285,6 @@ class AddNewProductState extends State<AddNewProduct> {
                             ),
                           ),
                           const SizedBox(height: 10),
-
-                          // Product's category
-                          Directionality(
-                            textDirection: TextDirection.rtl,
-                            child: DropdownButtonFormField(
-                              decoration: InputDecoration(
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(20.0)),
-                                    borderSide:
-                                        BorderSide(width: 2, color: appColor),
-                                  ),
-                                  labelText: 'الفئه',
-                                  labelStyle: TextStyle(
-                                      fontSize: 20, color: Colors.black)),
-                              isExpanded: true,
-                              icon: const Icon(
-                                Icons.keyboard_arrow_down,
-                                color: appColor,
-                              ),
-                              // Array list of categories
-                              items: Categories.map((String items) {
-                                return DropdownMenuItem(
-                                  alignment: Alignment.topRight,
-                                  value: items,
-                                  child: Text(items),
-                                );
-                              }).toList(),
-                              validator: (value) =>
-                                  value == null ? 'الرجاء اختيار الفئة' : null,
-                              // After selecting the category ,it will
-                              // change button value to selected category
-                              onChanged: (String? newCategory) {
-                                setState(() {
-                                  selectedCategory = newCategory!;
-                                });
-                              },
-                            ),
-                          ),
-                          const SizedBox(height: 10),
-
-                          // Product's dub category
-                          Directionality(
-                            textDirection: TextDirection.rtl,
-                            child: DropdownButtonFormField(
-                              decoration: InputDecoration(
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(20.0)),
-                                    borderSide:
-                                        BorderSide(width: 2, color: appColor),
-                                  ),
-                                  labelText: 'الفئة الفرعية',
-                                  labelStyle: TextStyle(
-                                      fontSize: 20, color: Colors.black)),
-                              isExpanded: true,
-                              icon: const Icon(
-                                Icons.keyboard_arrow_down,
-                                color: appColor,
-                              ),
-                              // Array list of categories
-                              items: SubCategories.map((String items) {
-                                return DropdownMenuItem(
-                                  alignment: Alignment.topRight,
-                                  value: items,
-                                  child: Text(items),
-                                );
-                              }).toList(),
-                              validator: (value) => value == null
-                                  ? 'الرجاء اختيار الفئة الفرعية'
-                                  : null,
-                              // After selecting the category ,it will
-                              // change button value to selected category
-                              onChanged: (String? newSubCategory) {
-                                setState(() {
-                                  selectedSubCategory = newSubCategory!;
-                                });
-                              },
-                            ),
-                          ),
-                          const SizedBox(height: 10),
                           // Product's location
                           Directionality(
                             textDirection: TextDirection.rtl,
@@ -401,6 +322,92 @@ class AddNewProductState extends State<AddNewProduct> {
                                 });
                               },
                             ),
+                          ),
+                          const SizedBox(height: 10),
+                          // Product's category
+                          Row(
+                            children: [
+                              Directionality(
+                                textDirection: TextDirection.rtl,
+                                child: Flexible(
+                                  child: DropdownButtonFormField(
+                                    decoration: InputDecoration(
+                                        enabledBorder: OutlineInputBorder(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(20.0)),
+                                          borderSide: BorderSide(
+                                              width: 2, color: appColor),
+                                        ),
+                                        labelText: 'الفئة الفرعية',
+                                        labelStyle: TextStyle(
+                                            fontSize: 20, color: Colors.black)),
+                                    isExpanded: true,
+                                    icon: const Icon(
+                                      Icons.keyboard_arrow_down,
+                                      color: appColor,
+                                    ),
+                                    // Array list of categories
+                                    items: SubCategories.map((String items) {
+                                      return DropdownMenuItem(
+                                        alignment: Alignment.topRight,
+                                        value: items,
+                                        child: Text(items),
+                                      );
+                                    }).toList(),
+                                    validator: (value) => value == null
+                                        ? 'الرجاء اختيار الفئة الفرعية'
+                                        : null,
+                                    // After selecting the category ,it will
+                                    // change button value to selected category
+                                    onChanged: (String? newSubCategory) {
+                                      setState(() {
+                                        selectedSubCategory = newSubCategory!;
+                                      });
+                                    },
+                                  ),
+                                ),
+                              ),
+                              Directionality(
+                                textDirection: TextDirection.rtl,
+                                child: Flexible(
+                                  child: DropdownButtonFormField(
+                                    decoration: InputDecoration(
+                                        enabledBorder: OutlineInputBorder(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(20.0)),
+                                          borderSide: BorderSide(
+                                              width: 2, color: appColor),
+                                        ),
+                                        labelText: 'الفئه',
+                                        labelStyle: TextStyle(
+                                            fontSize: 20, color: Colors.black)),
+                                    isExpanded: true,
+                                    icon: const Icon(
+                                      Icons.keyboard_arrow_down,
+                                      color: appColor,
+                                    ),
+                                    // Array list of categories
+                                    items: Categories.map((String items) {
+                                      return DropdownMenuItem(
+                                        alignment: Alignment.topRight,
+                                        value: items,
+                                        child: Text(items),
+                                      );
+                                    }).toList(),
+                                    validator: (value) => value == null
+                                        ? 'الرجاء اختيار الفئة'
+                                        : null,
+                                    // After selecting the category ,it will
+                                    // change button value to selected category
+                                    onChanged: (String? newCategory) {
+                                      setState(() {
+                                        selectedCategory = newCategory!;
+                                      });
+                                    },
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                           const SizedBox(height: 10),
 
@@ -577,9 +584,9 @@ class AddNewProductState extends State<AddNewProduct> {
                                   if (pbarcodeController.text.isNotEmpty &&
                                       pNameController.text.isNotEmpty &&
                                       selectedBrand!.isNotEmpty &&
-                                      selectedCategory!.isNotEmpty &&
-                                      selectedSubCategory!.isNotEmpty &&
                                       selectedLocation!.isNotEmpty &&
+                                      selectedSubCategory!.isNotEmpty &&
+                                      selectedCategory!.isNotEmpty &&
                                       selectedSize!.isNotEmpty &&
                                       pSizeController.text.isNotEmpty &&
                                       pQuantityController.text.isNotEmpty &&
@@ -589,9 +596,9 @@ class AddNewProductState extends State<AddNewProduct> {
                                       pbarcodeController.text,
                                       pNameController.text,
                                       selectedBrand.toString(),
-                                      selectedCategory.toString(),
-                                      selectedSubCategory.toString(),
                                       selectedLocation.toString(),
+                                      selectedSubCategory.toString(),
+                                      selectedCategory.toString(),
                                       selectedSize.toString(),
                                       pSizeController.text,
                                       pQuantityController.text,
@@ -619,9 +626,9 @@ class AddNewProductState extends State<AddNewProduct> {
       String searchBarcode,
       String name,
       String selectedBrand,
-      String selectedCategory,
-      String selectedSubCategory,
       String selectedLocation,
+      String selectedSubCategory,
+      String selectedCategory,
       String selectedSize,
       String size,
       String quantity,
@@ -633,9 +640,9 @@ class AddNewProductState extends State<AddNewProduct> {
       'SearchBarcode': searchBarcode,
       'Name': name,
       'Brand': selectedBrand,
+      'Location': selectedLocation,
       'Category': selectedCategory,
       'SubCategory': selectedSubCategory,
-      'Location': selectedLocation,
       'Size': size + " " + selectedSize,
       'Quantity': int.tryParse(quantity),
       'Price': double.tryParse(price),
@@ -746,3 +753,4 @@ class _scanProductBarcodeState extends State<scanProductBarcode> {
     }
   }
 }
+
