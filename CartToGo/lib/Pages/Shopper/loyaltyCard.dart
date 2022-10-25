@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:carttogo/widgets/cardHistory.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:carttogo/Users/user.dart' as user;
+import 'package:flip_card/flip_card.dart';
 
 class LoyaltyCard extends StatelessWidget {
+  GlobalKey<FlipCardState> cardKey = GlobalKey<FlipCardState>();
   String checkPointText() {
     if (user.getPoints() == 2) {
       return "نقطتان";
@@ -27,20 +29,20 @@ class LoyaltyCard extends StatelessWidget {
                 textDirection: TextDirection.rtl,
                 child: Dialog(
                     elevation: 0,
-                    backgroundColor: Color(0xffffffff),
+                    backgroundColor: const Color(0xffffffff),
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(15.0)),
                     child: Column(mainAxisSize: MainAxisSize.min, children: [
-                      SizedBox(height: 15),
-                      Text(
+                      const SizedBox(height: 15),
+                      const Text(
                         "هل تريد تسجيل الخروج؟",
                         style: TextStyle(
                           fontSize: 19,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      SizedBox(height: 15),
-                      Divider(
+                      const SizedBox(height: 15),
+                      const Divider(
                         height: 1,
                         color: Colors.black,
                       ),
@@ -56,30 +58,31 @@ class LoyaltyCard extends StatelessWidget {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => WelcomePage()));
+                                        builder: (context) =>
+                                            const WelcomePage()));
                               },
-                              child: Center(
+                              child: const Center(
                                   child: Text("خروج",
                                       style: TextStyle(
                                         fontSize: 14.0,
                                         color: Color(0xFFFE4A49),
                                         fontWeight: FontWeight.bold,
                                       ))))),
-                      Divider(
+                      const Divider(
                         height: 1,
                       ),
                       Container(
                           width: MediaQuery.of(context).size.width,
                           height: 50,
                           child: InkWell(
-                              borderRadius: BorderRadius.only(
+                              borderRadius: const BorderRadius.only(
                                   bottomLeft: Radius.circular(15.0),
                                   bottomRight: Radius.circular(15.0)),
                               highlightColor: Colors.grey[200],
                               onTap: () {
                                 Navigator.of(context).pop();
                               },
-                              child: Center(
+                              child: const Center(
                                   child: Text("إلغاء",
                                       style: TextStyle(
                                         fontSize: 16.0,
@@ -129,14 +132,63 @@ class LoyaltyCard extends StatelessWidget {
         body: ListView(children: <Widget>[
           Column(children: <Widget>[
             Center(
-              heightFactor: 1,
-              child: CardWidget(),
-            ),
+                heightFactor: 1,
+                child: FlipCard(
+                  fill: Fill
+                      .fillBack, // Fill the back side of the card to make in the same size as the front.
+                  direction: FlipDirection.HORIZONTAL, // default
+                  front: CardWidget(),
+                  back: Container(
+                    child: CardsBack(context),
+                  ),
+                )),
             Center(
               heightFactor: 1.04,
               child: Cardhistory(),
             )
           ])
+        ]));
+  }
+
+  Widget CardsBack(BuildContext context) {
+    return Container(
+        width: MediaQuery.of(context).size.width * 0.94,
+        height: MediaQuery.of(context).size.height * 0.25,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(15),
+          gradient: const LinearGradient(
+            colors: [
+              Color.fromARGB(255, 37, 9, 179),
+              Color.fromARGB(255, 63, 60, 255)
+            ],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          boxShadow: [
+            const BoxShadow(
+                color: Color.fromARGB(62, 129, 129, 129),
+                offset: Offset(8, 8),
+                blurRadius: 25)
+          ],
+          image: DecorationImage(
+              colorFilter: new ColorFilter.mode(
+                  const Color.fromARGB(255, 37, 9, 179).withOpacity(0.2),
+                  BlendMode.dstATop),
+              image: const AssetImage('assets/images/Cart21.png'),
+              fit: BoxFit.fitWidth),
+        ),
+        child: Column(children: const [
+          SizedBox(
+            height: 170,
+          ),
+          Padding(
+            padding: EdgeInsets.only(right: 300),
+            child: Icon(
+              Icons.flip_to_back_rounded,
+              size: 30,
+              color: Colors.white,
+            ),
+          ),
         ]));
   }
 }

@@ -95,7 +95,8 @@ class _CardhistoryState extends State<Cardhistory> {
               query: _fb
                   .ref()
                   .child(
-                      "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts").limitToFirst(user.getPaidCarts()),
+                      "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts")
+                  .limitToFirst(user.getPaidCarts()),
               duration: const Duration(milliseconds: 300),
               itemBuilder: (BuildContext context, DataSnapshot snapshot,
                   Animation<double> animation, int index) {
@@ -106,10 +107,14 @@ class _CardhistoryState extends State<Cardhistory> {
                 int usedPoints = 0;
                 String datePlaced = "";
                 List<String> ImagesofCart = [];
+                bool NoPoints = false;
+                String timeBought = "";
                 map.forEach((key, value) {
+                  //Iterate through each cart product image
                   if (value['ImgUrl'] != null) {
-                    for (int i=0; i<ImagesofCart.length;i++){ // to check img duplicates 
-                      if(value['ImgUrl'] == ImagesofCart[i]){
+                    for (int i = 0; i < ImagesofCart.length; i++) {
+                      // to check img duplicates
+                      if (value['ImgUrl'] == ImagesofCart[i]) {
                         ImagesofCart.removeAt(i);
                       }
                     }
@@ -120,8 +125,10 @@ class _CardhistoryState extends State<Cardhistory> {
                     gainedPoints = int.parse(value['GainedPoints'].toString());
                     usedPoints = int.parse(value['UsedPoints'].toString());
                     datePlaced = value['Date'].toString();
+                    timeBought = value['Time'].toString();
                   }
                 });
+                if (gainedPoints > 0) NoPoints = true;
 
                 if (map['NumOfProducts'] == null) {
                   return AnimationConfiguration.staggeredList(
@@ -135,40 +142,29 @@ class _CardhistoryState extends State<Cardhistory> {
                             Directionality(
                               textDirection: TextDirection.rtl,
                               child: SizedBox(
-                                height: MediaQuery.of(context).size.height * 0.1,
+                                height:
+                                    MediaQuery.of(context).size.height * 0.1,
                                 child: ListTile(
-                                  
                                   style: ListTileStyle.drawer,
                                   subtitle: SingleChildScrollView(
-                                    dragStartBehavior : DragStartBehavior.start,
-                                          scrollDirection: Axis.horizontal,
-                                            child: Row(
-                                              children: ImagesofCart.map(
-                                                  (url) => CircleAvatar(
-                                                        radius: 17,
-                                                        backgroundColor:
-                                                            const Color.fromARGB(
-                                                                255, 248, 245, 245),
-                                                        child: Image.network(url),
-                                                      )).toList(),
-                                            ),
-                                          ),
-                                  title: Text(
-                                    " تم شرائه : " + datePlaced,
-                                    style: const TextStyle(
-                                      fontSize: 15,
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold,
-                                      fontFamily: 'CartToGo',
+                                    dragStartBehavior: DragStartBehavior.start,
+                                    scrollDirection: Axis.horizontal,
+                                    child: Row(
+                                      children: ImagesofCart.map(
+                                          (url) => CircleAvatar(
+                                                radius: 17,
+                                                backgroundColor:
+                                                    const Color.fromARGB(
+                                                        255, 248, 245, 245),
+                                                child: Image.network(url),
+                                              )).toList(),
                                     ),
-                                    textAlign: TextAlign.right,
-                                    textDirection: TextDirection.rtl,
                                   ),
-                                  trailing: Column(
+                                  title: Row(
                                     children: [
-                                      Text(
-                                        total.toString() + " ريال",
-                                        style: const TextStyle(
+                                      const Text(
+                                        " تم شرائه : ",
+                                        style: TextStyle(
                                           fontSize: 15,
                                           color: Colors.black,
                                           fontWeight: FontWeight.bold,
@@ -178,15 +174,45 @@ class _CardhistoryState extends State<Cardhistory> {
                                         textDirection: TextDirection.rtl,
                                       ),
                                       Text(
-                                        gainedPoints.toString() + " + ",
+                                        datePlaced + " - " + timeBought,
                                         style: const TextStyle(
                                           fontSize: 15,
-                                          color: Color.fromARGB(255, 75, 236, 43),
+                                          color: Color.fromARGB(
+                                              255, 148, 148, 148),
+                                          fontFamily: 'CartToGo',
+                                        ),
+                                        textAlign: TextAlign.right,
+                                        textDirection: TextDirection.rtl,
+                                      ),
+                                    ],
+                                  ),
+                                  trailing: Column(
+                                    children: [
+                                      Text(
+                                        total.toString() + " ريال",
+                                        style: const TextStyle(
+                                          fontSize: 16,
+                                          color: Colors.black,
                                           fontWeight: FontWeight.bold,
                                           fontFamily: 'CartToGo',
                                         ),
                                         textAlign: TextAlign.right,
                                         textDirection: TextDirection.rtl,
+                                      ),
+                                      Visibility(
+                                        visible: NoPoints,
+                                        child: Text(
+                                          gainedPoints.toString() + " + ",
+                                          style: const TextStyle(
+                                            fontSize: 15,
+                                            color: Color.fromARGB(
+                                                255, 75, 236, 43),
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: 'CartToGo',
+                                          ),
+                                          textAlign: TextAlign.right,
+                                          textDirection: TextDirection.rtl,
+                                        ),
                                       ),
                                       // Expanded(
                                       //   flex: 1,
@@ -205,21 +231,21 @@ class _CardhistoryState extends State<Cardhistory> {
                                     ],
                                   ),
                                   leading: Text(
-                                    InvoiceNumber+" #",
+                                    InvoiceNumber + "#",
                                     textAlign: TextAlign.left,
                                     textDirection: TextDirection.ltr,
                                     style: const TextStyle(
                                       fontSize: 20,
-                                      color: Colors.black,
-                                      //fontWeight: FontWeight.bold,
+                                      color: Color.fromARGB(255, 35, 61, 255),
+                                      fontWeight: FontWeight.w500,
                                       fontFamily: 'CartToGo',
                                     ),
                                   ),
                                 ),
                               ),
                             ),
-                            Divider(thickness:1),
-                            const SizedBox(height: 10)
+                            Divider(thickness: 1),
+                            //const SizedBox(height: 2)
                           ],
                         ),
                       ),

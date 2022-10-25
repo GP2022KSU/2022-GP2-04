@@ -259,6 +259,14 @@ class CardWidgetState extends State<CardWidget> {
                   );
                 },
               )),
+          Positioned(
+              top: 170,
+              left: 27,
+              child:Icon(
+                    Icons.flip_to_back,
+                    size: 30,
+                    color: Colors.white,
+                  )),
         ],
       ),
     );

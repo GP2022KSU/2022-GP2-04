@@ -309,7 +309,7 @@ class _OffersListState extends State<OffersList> {
                                           color: Colors.black,
                                           fontWeight: FontWeight.bold,
                                           fontFamily: 'CartToGo',
-                                          fontSize: 17,
+                                          fontSize: 14,
                                         ),
                                         textAlign: TextAlign.right,
                                       ),
@@ -397,8 +397,6 @@ class _OffersListState extends State<OffersList> {
     List<String> RecomProductsBarcode =
         user.getRecomProducts(response1.body.toString());
     return RecomProductsBarcode;
-    //final decoded = await json.decode(response1.body) as Map<String, dynamic>;
-    //print(decoded);
   }
 
   //logout dialog, to ensure that the admin want to log out or not

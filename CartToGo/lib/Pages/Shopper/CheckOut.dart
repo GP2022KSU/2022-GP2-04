@@ -1,6 +1,5 @@
 // ignore_for_file: unnecessary_const
 import 'dart:async';
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
@@ -324,12 +323,12 @@ class _CheckOutState extends State<CheckOut> {
                                             fit: BoxFit.fitHeight))),
                             const SizedBox(height: 15),
                             !(GainedPoints <= 0)
-                                ? Text("لقد كسبت",
+                                ? const Text("لقد كسبت",
                                     style: TextStyle(
                                       fontSize: 20,
                                       fontWeight: FontWeight.bold,
                                     ))
-                                : Text("تمت العملية",
+                                : const Text("تمت العملية",
                                     style: TextStyle(
                                       fontSize: 20,
                                       fontWeight: FontWeight.bold,
@@ -341,7 +340,7 @@ class _CheckOutState extends State<CheckOut> {
                                         fontWeight: FontWeight.bold,
                                         color:
                                             Color.fromARGB(255, 10, 70, 175)))
-                                : Text(""),
+                                : const Text(""),
                             !(GainedPoints <= 0)
                                 ? const SizedBox(height: 15)
                                 : const SizedBox(height: 0),
@@ -370,17 +369,13 @@ class _CheckOutState extends State<CheckOut> {
                                       currDt.month.toString() +
                                       "-" +
                                       currDt.year.toString();
-                                  String hour = currDt.hour.toString();
-                                  DatabaseReference ref2 =
-                                      FirebaseDatabase.instance.ref(
-                                          "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts/CartsStatus");
-                                  await ref2.update({
-                                    "ConnectedToCart": false,
-                                    "Total": 0,
-                                    "NumOfProducts": 0,
-                                    "TotalAfterPoints": 0,
-                                    "PaidCarts": user.getPaidCarts() + 1,
-                                  });
+                                  String time = currDt.hour.toString();
+                                  if (currDt.minute < 10)
+                                    time =
+                                        time + ':0' + currDt.minute.toString();
+                                  else
+                                    time =
+                                        time + ':' + currDt.minute.toString();
                                   DatabaseReference ref3 =
                                       FirebaseDatabase.instance.ref(
                                           "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts/${user.getLastCartNum()}/CartInfo");
@@ -389,7 +384,7 @@ class _CheckOutState extends State<CheckOut> {
                                         ? user.getTotalAfterPoints()
                                         : Total,
                                     "Date": date,
-                                    "Hour": hour,
+                                    "Time": time,
                                     "GainedPoints": GainedPoints,
                                     "UsedPoints": vis ? pointsChange : 0
                                   });
@@ -401,7 +396,16 @@ class _CheckOutState extends State<CheckOut> {
                                         ? GainedPoints
                                         : GainedPoints + user.getPoints(),
                                   });
-
+                                  DatabaseReference ref2 =
+                                      FirebaseDatabase.instance.ref(
+                                          "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts/CartsStatus");
+                                  await ref2.update({
+                                    "ConnectedToCart": false,
+                                    "Total": 0,
+                                    "NumOfProducts": 0,
+                                    "TotalAfterPoints": 0,
+                                    "PaidCarts": user.getPaidCarts() + 1,
+                                  });
                                   if (checkPay) {
                                     Navigator.push(
                                         context,
