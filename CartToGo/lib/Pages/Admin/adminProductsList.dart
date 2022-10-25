@@ -10,6 +10,7 @@ import 'package:flutter/rendering.dart';
 import 'adminSearch.dart';
 import 'package:carttogo/Users/user.dart' as user;
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 
 class ProductsListAdmin extends StatefulWidget {
   @override
@@ -171,14 +172,17 @@ class ProductsListAdmins extends State<ProductsListAdmin> {
                 "");
             g.trim();
             l = g.split(',');
+            var map = snapshot.value as Map<dynamic, dynamic>;
 
-            return GestureDetector(
-
-                // products list
-                child: Directionality(
-              textDirection: TextDirection.rtl,
-              child: Visibility(
-                visible: onOffer,
+            if (onOffer == false) {
+              return AnimationConfiguration.staggeredList(
+                    position: index,
+                    duration: const Duration(milliseconds: 100),
+                    child: SlideAnimation(
+                      verticalOffset: 0,
+                      child: FadeInAnimation(
+                  child: Directionality(
+                textDirection: TextDirection.rtl,
                 child: Container(
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -228,7 +232,7 @@ class ProductsListAdmins extends State<ProductsListAdmin> {
 
                           try {
                             var map = snapshot.value as Map<dynamic, dynamic>;
-                            if (map['Offer'] == true) isOffer = true;
+                            if (map['Offer'] == "true") isOffer = true;
                           } on Exception {}
 
                           var QUANTITY = l[10]; //Quantity on IOS is 1
@@ -287,8 +291,127 @@ class ProductsListAdmins extends State<ProductsListAdmin> {
                     ),
                   ),
                 ),
-              ),
-            ));
+              ))));
+            }
+            if (map['Offer'] == true && onOffer) {
+              return AnimationConfiguration.staggeredList(
+                    position: index,
+                    duration: const Duration(milliseconds: 300),
+                    child: SlideAnimation(
+                      verticalOffset: 0,
+                      child: FadeInAnimation(
+                  child: Directionality(
+                textDirection: TextDirection.rtl,
+                child: Container(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ListTile(
+                      shape: RoundedRectangleBorder(
+                        side: BorderSide(
+                          color: Colors.white,
+                        ),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      tileColor: Color.fromARGB(229, 229, 227, 227),
+
+                      // delete product option
+                      trailing: IconButton(
+                        tooltip: "حذف المنتج",
+                        icon: Icon(
+                          Icons.delete,
+                          color: Color.fromARGB(255, 255, 0, 0),
+                        ),
+                        onPressed: () {
+                          var EE = ref.child(snapshot.key!);
+                          _DeleteOrNot(EE);
+                        },
+                      ),
+
+                      // update product option
+                      leading: IconButton(
+                        tooltip: "تعديل المنتج",
+                        icon: Icon(
+                          Icons.edit,
+                          color: Color.fromARGB(255, 94, 90, 90),
+                        ),
+                        onPressed: () async {
+                          setState(() {
+                            k = snapshot.key;
+                            var v = snapshot.value.toString();
+                          });
+                          g = v.replaceAll(
+                              RegExp(
+                                  "{|}|Name: |Brand: |Category: |Price: |Size: |Quantity: |Barcode: |Location: |PriceAfterOffer: |SearchBarcode: |Offer:"),
+                              "");
+                          g.trim();
+                          l = g.split(',');
+
+                          var map;
+
+                          try {
+                            var map = snapshot.value as Map<dynamic, dynamic>;
+                            if (map['Offer'] == "true") isOffer = true;
+                          } on Exception {}
+
+                          var QUANTITY = l[10]; //Quantity on IOS is 1
+                          var PRICE = l[7]; //Price on IOS is 8
+                          var LOCATION = l[3];
+                          var ONOFFER = l[8]; //offer on IOS is 7
+                          var NEWPRICE = l[11]; //PriceAfterOffer on IOS is 0
+                          _UpdateOrNot(QUANTITY, PRICE, LOCATION, ONOFFER,
+                              NEWPRICE, isOffer);
+                        },
+                      ),
+
+                      // product information arrangement in the container
+                      title: Text(
+                        l[2] + l[4],
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: 'CartToGo',
+                          fontSize: 17,
+                        ),
+                        textAlign: TextAlign.right,
+                      ),
+                      subtitle: Text(
+                        "\t" +
+                            "العلامة التجارية: " +
+                            l[4] +
+                            "\n"
+                                "\t" +
+                            "الفئه: " +
+                            l[9] +
+                            "\n" +
+                            "\t" +
+                            "الكمية:" +
+                            l[10] +
+                            "\n" +
+                            "\t" +
+                            "الحجم:" +
+                            l[6] +
+                            "\n" +
+                            "\t" +
+                            "الموقع:" +
+                            l[3] +
+                            "\n" +
+                            "\t" +
+                            "السعر:" +
+                            l[7] +
+                            " ريال",
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: 'CartToGo',
+                          fontSize: 12,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ))));
+            }
+            return Container();
           },
         ),
       ),

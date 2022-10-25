@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
@@ -91,12 +92,10 @@ class _CardhistoryState extends State<Cardhistory> {
         child: Container(
           height: MediaQuery.of(context).size.height * 0.9,
           child: FirebaseAnimatedList(
-              sort: (a, b) => 10,
               query: _fb
                   .ref()
                   .child(
-                      "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts")
-                  .limitToFirst(user.getPaidCarts()),
+                      "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts").limitToFirst(user.getPaidCarts()),
               duration: const Duration(milliseconds: 300),
               itemBuilder: (BuildContext context, DataSnapshot snapshot,
                   Animation<double> animation, int index) {
@@ -109,6 +108,11 @@ class _CardhistoryState extends State<Cardhistory> {
                 List<String> ImagesofCart = [];
                 map.forEach((key, value) {
                   if (value['ImgUrl'] != null) {
+                    for (int i=0; i<ImagesofCart.length;i++){ // to check img duplicates 
+                      if(value['ImgUrl'] == ImagesofCart[i]){
+                        ImagesofCart.removeAt(i);
+                      }
+                    }
                     ImagesofCart.add(value['ImgUrl']);
                   }
                   if (key == "CartInfo") {
@@ -118,47 +122,39 @@ class _CardhistoryState extends State<Cardhistory> {
                     datePlaced = value['Date'].toString();
                   }
                 });
-                print(ImagesofCart);
+
                 if (map['NumOfProducts'] == null) {
                   return AnimationConfiguration.staggeredList(
                     position: index,
-                    duration: const Duration(milliseconds: 375),
+                    duration: const Duration(milliseconds: 200),
                     child: SlideAnimation(
                       verticalOffset: 0,
                       child: FadeInAnimation(
-                        child: Directionality(
-                          textDirection: TextDirection.rtl,
-                          child: SizedBox(
-                            height: MediaQuery.of(context).size.height * 0.1,
-                            child: ListTile(
-                              subtitle: Expanded(
-                                  child: SingleChildScrollView(
-                                      scrollDirection: Axis.horizontal,
-                                      child: Row(
-                                        children: ImagesofCart.map(
-                                            (url) => new CircleAvatar(
-                                                  radius: 17,
-                                                  backgroundColor:
-                                                      Color.fromARGB(
-                                                          255, 248, 245, 245),
-                                                  child: Image.network(url),
-                                                )).toList(),
-                                      ))),
-                              title: Text(
-                                " تم شرائه : " + datePlaced,
-                                style: const TextStyle(
-                                  fontSize: 15,
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: 'CartToGo',
-                                ),
-                                textAlign: TextAlign.right,
-                                textDirection: TextDirection.rtl,
-                              ),
-                              trailing: Column(
-                                children: [
-                                  Text(
-                                    total.toString() + " ريال",
+                        child: Column(
+                          children: [
+                            Directionality(
+                              textDirection: TextDirection.rtl,
+                              child: SizedBox(
+                                height: MediaQuery.of(context).size.height * 0.1,
+                                child: ListTile(
+                                  
+                                  style: ListTileStyle.drawer,
+                                  subtitle: SingleChildScrollView(
+                                    dragStartBehavior : DragStartBehavior.start,
+                                          scrollDirection: Axis.horizontal,
+                                            child: Row(
+                                              children: ImagesofCart.map(
+                                                  (url) => CircleAvatar(
+                                                        radius: 17,
+                                                        backgroundColor:
+                                                            const Color.fromARGB(
+                                                                255, 248, 245, 245),
+                                                        child: Image.network(url),
+                                                      )).toList(),
+                                            ),
+                                          ),
+                                  title: Text(
+                                    " تم شرائه : " + datePlaced,
                                     style: const TextStyle(
                                       fontSize: 15,
                                       color: Colors.black,
@@ -168,45 +164,63 @@ class _CardhistoryState extends State<Cardhistory> {
                                     textAlign: TextAlign.right,
                                     textDirection: TextDirection.rtl,
                                   ),
-                                  Text(
-                                    gainedPoints.toString() + " + ",
+                                  trailing: Column(
+                                    children: [
+                                      Text(
+                                        total.toString() + " ريال",
+                                        style: const TextStyle(
+                                          fontSize: 15,
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.bold,
+                                          fontFamily: 'CartToGo',
+                                        ),
+                                        textAlign: TextAlign.right,
+                                        textDirection: TextDirection.rtl,
+                                      ),
+                                      Text(
+                                        gainedPoints.toString() + " + ",
+                                        style: const TextStyle(
+                                          fontSize: 15,
+                                          color: Color.fromARGB(255, 75, 236, 43),
+                                          fontWeight: FontWeight.bold,
+                                          fontFamily: 'CartToGo',
+                                        ),
+                                        textAlign: TextAlign.right,
+                                        textDirection: TextDirection.rtl,
+                                      ),
+                                      // Expanded(
+                                      //   flex: 1,
+                                      //   child: Text(
+                                      //     usedPoints.toString() + " - ",
+                                      //     style: const TextStyle(
+                                      //       fontSize: 15,
+                                      //       color: Color.fromARGB(255, 235, 36, 36),
+                                      //       fontWeight: FontWeight.bold,
+                                      //       fontFamily: 'CartToGo',
+                                      //     ),
+                                      //     textAlign: TextAlign.right,
+                                      //     textDirection: TextDirection.rtl,
+                                      //   ),
+                                      // ),
+                                    ],
+                                  ),
+                                  leading: Text(
+                                    InvoiceNumber+" #",
+                                    textAlign: TextAlign.left,
+                                    textDirection: TextDirection.ltr,
                                     style: const TextStyle(
-                                      fontSize: 15,
-                                      color: Color.fromARGB(255, 75, 236, 43),
-                                      fontWeight: FontWeight.bold,
+                                      fontSize: 20,
+                                      color: Colors.black,
+                                      //fontWeight: FontWeight.bold,
                                       fontFamily: 'CartToGo',
                                     ),
-                                    textAlign: TextAlign.right,
-                                    textDirection: TextDirection.rtl,
                                   ),
-                                  Expanded(
-                                    flex: 0,
-                                    child: Text(
-                                      usedPoints.toString() + " - ",
-                                      style: const TextStyle(
-                                        fontSize: 15,
-                                        color: Color.fromARGB(255, 235, 36, 36),
-                                        fontWeight: FontWeight.bold,
-                                        fontFamily: 'CartToGo',
-                                      ),
-                                      textAlign: TextAlign.right,
-                                      textDirection: TextDirection.rtl,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              leading: Text(
-                                InvoiceNumber + " #",
-                                textAlign: TextAlign.left,
-                                style: const TextStyle(
-                                  fontSize: 20,
-                                  color: Colors.black,
-                                  //fontWeight: FontWeight.bold,
-                                  fontFamily: 'CartToGo',
                                 ),
                               ),
                             ),
-                          ),
+                            Divider(thickness:1),
+                            const SizedBox(height: 10)
+                          ],
                         ),
                       ),
                     ),
