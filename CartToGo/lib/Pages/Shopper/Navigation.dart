@@ -34,7 +34,6 @@ class NaviState extends State<Navi> {
         return OffersList();
       case 2:
         return Lists();
-
       case 3:
         return LoyaltyCard();
     }
@@ -56,13 +55,17 @@ class NaviState extends State<Navi> {
 
     Myindex == 0 ? s1 = 0.04 : s1 = 0.066;
 
+    Myindex == 0 || Myindex == 2 || Myindex == 3 ? s2 = 0.066 : s2 = 0.04;
+
+    Myindex == 1 ? v2 = false : v2 = true;
+
+    Myindex == 3 || Myindex == 0 || Myindex == 1 ? s3 = 0.066 : s3 = 0.04;
+
+    Myindex == 2 ? v3 = false : v3 = true;
+
+    Myindex == 0 || Myindex == 2 || Myindex == 1 ? s4 = 0.065 : s4 = 0.04;
+
     Myindex == 3 ? v4 = false : v4 = true;
-
-    Myindex == 3 || Myindex == 0 ? s3 = 0.06 : s3 = 0.04;
-
-    Myindex == 1 ? v3 = false : v3 = true;
-
-    Myindex == 0 || Myindex == 2 ? s4 = 0.065 : s4 = 0.04;
 
     return SafeArea(
       top: false,
@@ -109,7 +112,7 @@ class NaviState extends State<Navi> {
                     visible: v2,
                   ),
                   Icon(Icons.discount_outlined,
-                      size: 30,
+                      size: 29,
                       color: Myindex == 1
                           ? Color.fromARGB(255, 35, 61, 255)
                           : Colors.white),
@@ -180,7 +183,6 @@ class NaviState extends State<Navi> {
           onTap: (index) {
             setState(() {
               Myindex = index;
-              print(Myindex);
             });
           },
           animationCurve: Curves.fastLinearToSlowEaseIn,

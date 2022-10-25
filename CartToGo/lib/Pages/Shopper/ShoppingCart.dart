@@ -257,7 +257,7 @@ class ShoppingCartState extends State<ShoppingCart> {
                     ),
                   ),
                   onPressed: () {
-                    widget.callback(1);
+                    widget.callback(3);
                   },
                   width: MediaQuery.of(context).size.width * 0.3,
                   height: MediaQuery.of(context).size.width * 0.1,
