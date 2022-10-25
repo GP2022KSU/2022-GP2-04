@@ -1,9 +1,9 @@
-import 'package:carttogo/Pages/Shopper/offersList.dart';
 import 'package:flutter/material.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
-import 'package:carttogo/Pages/Shopper/loyaltyCard.dart';
-import 'package:carttogo/Pages/Shopper/shoppingCart.dart';
-import 'locationSearch.dart';
+import 'loyaltyCard.dart';
+import 'offersList.dart';
+import 'shoppingCart.dart';
+import 'Lists.dart';
 import 'package:carttogo/Users/user.dart' as user;
 
 class Navi extends StatefulWidget {
@@ -15,7 +15,6 @@ class Navi extends StatefulWidget {
 class NaviState extends State<Navi> {
   int Myindex = 0;
   GlobalKey<CurvedNavigationBarState> _NavKey = GlobalKey();
-  //var Pages = [ShoppingCart(), LoyaltyCard()];
   late ShoppingCart tab1;
   void setPage(index) {
     final CurvedNavigationBarState? navigationBarState = _NavKey.currentState;
@@ -23,19 +22,21 @@ class NaviState extends State<Navi> {
   }
 
   void initState() {
-    tab1 = ShoppingCart(setPage, 3);
+    tab1 = ShoppingCart(setPage, 4);
     super.initState();
   }
 
   Widget pageChooser(int page) {
     switch (page) {
       case 0:
-        return tab1;
+        return tab1; //shoppingCart
       case 1:
-        return LoyaltyCard();
-
-      case 2:
         return OffersList();
+      case 2:
+        return Lists();
+
+      case 3:
+        return LoyaltyCard();
     }
     return Container();
   }
@@ -44,28 +45,29 @@ class NaviState extends State<Navi> {
   Widget build(BuildContext context) {
     bool v1 = false; //Shopping cart
     double s1 = 0;
-    bool v2 = false; //Loyalty Card
+    bool v2 = false; //Offers
     double s2 = 0;
-    bool v3 = false; //Offers
+    bool v3 = false; //Lists
     double s3 = 0;
+    bool v4 = false; //Loyalty Card
+    double s4 = 0;
 
     Myindex == 0 ? v1 = false : v1 = true;
 
     Myindex == 0 ? s1 = 0.04 : s1 = 0.066;
 
-    Myindex == 1 ? v2 = false : v2 = true;
+    Myindex == 3 ? v4 = false : v4 = true;
 
-    Myindex == 1 || Myindex == 0 ? s3 = 0.06 : s3 = 0.04;
+    Myindex == 3 || Myindex == 0 ? s3 = 0.06 : s3 = 0.04;
 
-    Myindex == 2 ? v3 = false : v3 = true;
+    Myindex == 1 ? v3 = false : v3 = true;
 
-    Myindex == 0 || Myindex == 2 ? s2 = 0.065 : s2 = 0.04;
+    Myindex == 0 || Myindex == 2 ? s4 = 0.065 : s4 = 0.04;
 
     return SafeArea(
       top: false,
       bottom: false,
       child: Scaffold(
-        //backgroundColor: Colors.white,
         extendBody: true,
         extendBodyBehindAppBar: true,
         bottomNavigationBar: CurvedNavigationBar(
@@ -106,14 +108,14 @@ class NaviState extends State<Navi> {
                     ),
                     visible: v2,
                   ),
-                  Icon(Icons.credit_card,
-                      size: 28,
+                  Icon(Icons.discount_outlined,
+                      size: 30,
                       color: Myindex == 1
                           ? Color.fromARGB(255, 35, 61, 255)
                           : Colors.white),
                   Visibility(
                     child: const Text(
-                      "بطاقة الولاء",
+                      "العروض",
                       style: TextStyle(color: Colors.white, fontSize: 12),
                     ),
                     visible: v2,
@@ -131,17 +133,42 @@ class NaviState extends State<Navi> {
                     ),
                     visible: v3,
                   ),
-                  Icon(Icons.discount_outlined,
+                  Icon(Icons.list_alt_outlined,
                       size: 30,
                       color: Myindex == 2
                           ? Color.fromARGB(255, 35, 61, 255)
                           : Colors.white),
                   Visibility(
                     child: const Text(
-                      "العروض",
+                      "القوائم",
                       style: TextStyle(color: Colors.white, fontSize: 12),
                     ),
                     visible: v3,
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              height: MediaQuery.of(context).size.height * s4,
+              child: Column(
+                children: [
+                  Visibility(
+                    child: SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.0049,
+                    ),
+                    visible: v4,
+                  ),
+                  Icon(Icons.credit_card,
+                      size: 28,
+                      color: Myindex == 3
+                          ? Color.fromARGB(255, 35, 61, 255)
+                          : Colors.white),
+                  Visibility(
+                    child: const Text(
+                      "بطاقة الولاء",
+                      style: TextStyle(color: Colors.white, fontSize: 12),
+                    ),
+                    visible: v4,
                   ),
                 ],
               ),
