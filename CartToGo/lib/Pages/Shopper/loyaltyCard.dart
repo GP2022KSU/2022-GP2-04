@@ -186,18 +186,28 @@ class LoyaltyCard extends StatelessWidget {
           Text(
             "لكل 100 ريال تنفقها = تحصل على 10 نقاط",
             style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-            ),
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+                shadows: <Shadow>[
+                  Shadow(
+                      color: Colors.black,
+                      offset: Offset(-5.0, 5.0),
+                      blurRadius: 15)
+                ]),
           ),
           Text(
             "لكل 10 نقاط تستبدلها = تحصل على 1 ريال",
             style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-            ),
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+                shadows: <Shadow>[
+                  Shadow(
+                      color: Colors.black,
+                      offset: Offset(-5.0, 5.0),
+                      blurRadius: 15)
+                ]),
           ),
           SizedBox(
             height: 25,

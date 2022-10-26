@@ -86,12 +86,12 @@ class _ListsState extends State<Lists> with SingleTickerProviderStateMixin {
                 unselectedLabelColor: Colors.black,
                 tabs: [
                   Tab(
-                    icon: Icon(Icons.favorite_border_outlined),
-                    text: 'قائمة الأمنيات',
-                  ),
-                  Tab(
                     icon: Icon(Icons.list_outlined),
                     text: 'قائمة التسوق',
+                  ),
+                  Tab(
+                    icon: Icon(Icons.favorite_border_outlined),
+                    text: 'قائمة الأمنيات',
                   ),
                 ],
               ),
@@ -105,7 +105,7 @@ class _ListsState extends State<Lists> with SingleTickerProviderStateMixin {
                   // Wish list tab view
                   Center(
                     child: Text(
-                      'تجربة قائمة الأمنيات',
+                      'تجربة قائمة التسوق',
                       style: TextStyle(
                         fontSize: 25,
                         fontWeight: FontWeight.w600,
@@ -116,7 +116,7 @@ class _ListsState extends State<Lists> with SingleTickerProviderStateMixin {
                   // Shopping list tab view
                   Center(
                     child: Text(
-                      'تجربة قائمة التسوق',
+                      'تجربة قائمة الأمنيات',
                       style: TextStyle(
                         fontSize: 25,
                         fontWeight: FontWeight.w600,
