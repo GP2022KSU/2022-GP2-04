@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:carttogo/Users/user.dart' as user;
-import 'package:carttogo/main.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
@@ -18,13 +17,13 @@ class OffersList extends StatefulWidget {
 }
 
 class _OffersListState extends State<OffersList> {
-  final fb = FirebaseDatabase.instance;
-
+  List<String> Recommended = [];
   bool isOffer = false;
+  final fb = FirebaseDatabase.instance;
   var l;
   var g;
   late bool _isLoading;
-  List<String> Recommended = [];
+
   void initState() {
     _isLoading = true;
     _SeeAPI();
@@ -80,6 +79,8 @@ class _OffersListState extends State<OffersList> {
       ),
       body: Column(
         children: [
+          // if the shopper has previous purchases, and there are offers,
+          // recommendations of the same product subcategory will appear
           FutureBuilder<List<String>>(
               future: _SeeAPI(),
               builder:
@@ -230,6 +231,8 @@ class _OffersListState extends State<OffersList> {
                             return Container();
                           },
                         ),
+
+                        //General offers for all shoppers
                       ),
                       const Divider(
                         indent: 40,
@@ -399,7 +402,7 @@ class _OffersListState extends State<OffersList> {
     return RecomProductsBarcode;
   }
 
-  //logout dialog, to ensure that the admin want to log out or not
+  //logout dialog, to ensure that the shopper want to log out or not
   void _showMyDialog() async {
     return showDialog<void>(
         context: context,

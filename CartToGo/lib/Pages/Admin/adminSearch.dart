@@ -51,7 +51,7 @@ class AdminSearch extends SearchDelegate<String> {
     ];
   }
 
-  // to delete what in the search bar
+  // to clear the search bar
   @override
   Widget? buildLeading(BuildContext context) {
     return IconButton(
@@ -98,6 +98,9 @@ class AdminSearch extends SearchDelegate<String> {
         : ListView.builder(
             itemCount: Suggestions.length,
             itemBuilder: (BuildContext context, int index) => ListTile(
+              onTap: () {
+                query = barcodes[index];
+              },
               shape: RoundedRectangleBorder(
                 side: BorderSide(
                   color: Colors.white,
@@ -119,7 +122,6 @@ class AdminSearch extends SearchDelegate<String> {
                             Suggestions.elementAt(index).split(" | ");
                         DatabaseReference ref = FirebaseDatabase.instance
                             .ref("Products/${splitted[0].toString()}");
-
                         DatabaseEvent quan = await ref.child("Quantity").once();
                         DatabaseEvent price = await ref.child("Price").once();
                         DatabaseEvent location =

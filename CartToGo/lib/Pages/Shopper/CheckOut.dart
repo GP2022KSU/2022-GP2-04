@@ -25,6 +25,7 @@ class CheckOut extends StatefulWidget {
 class _CheckOutState extends State<CheckOut> {
   int pointsChange = user.getPoints();
   int GainedPoints = 0;
+  int countBarcodes = 0;
   bool checkPay = false;
   bool vis = false;
   double Total = user.getTotal();
@@ -33,8 +34,8 @@ class _CheckOutState extends State<CheckOut> {
   late bool _isLoading;
   late StreamSubscription _streamSubscription4;
   late List<String> HistoryBarcode = [];
-  int countBarcodes = 0;
   final _database = FirebaseDatabase.instance.ref();
+
   void initState() {
     _isLoading = true;
 

@@ -118,6 +118,8 @@ class Cashier extends StatelessWidget {
           centerTitle: true,
           elevation: 0,
         ),
+
+        // instruction to the cashier to scan the invoice
         body: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[

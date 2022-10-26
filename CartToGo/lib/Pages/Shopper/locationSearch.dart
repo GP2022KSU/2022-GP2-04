@@ -8,16 +8,14 @@ class LocationSearch extends SearchDelegate<String> {
 
   LocationSearch(this.names)
       : super(
-    searchFieldLabel:
-    "     ابحث عن موقع المنتجات         ",
-    keyboardType: TextInputType.text,
-    textInputAction: TextInputAction.search,
-  );
+          searchFieldLabel: "     ابحث عن موقع المنتجات         ",
+          keyboardType: TextInputType.text,
+          textInputAction: TextInputAction.search,
+        );
 
   @override
   List<Widget>? buildActions(BuildContext context) {
-    // حتى يرجع لشكل الصفحة الاساسي بدون كيبورد وكذا
-    //right side of search bar
+// to view the list without a keyboard
     return [
       IconButton(
           icon: Icon(
@@ -32,8 +30,7 @@ class LocationSearch extends SearchDelegate<String> {
 
   @override
   Widget? buildLeading(BuildContext context) {
-    // حتى يمسح الكلام اللي كتبه على السيرش بار يضغط الاكس
-    //left side of search bar
+    // to clear the search bar
     return IconButton(
       icon: Icon(
         Icons.cancel,
@@ -50,76 +47,74 @@ class LocationSearch extends SearchDelegate<String> {
     // after the shopper chooses a product tapping enter, the result will be centered on the screen
     return Center(
         child: Text(
-          query,
-          style: TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.bold,
-              fontFamily: 'CartToGo',
-              fontSize: 18),
-        ));
+      query,
+      style: TextStyle(
+          color: Colors.black,
+          fontWeight: FontWeight.bold,
+          fontFamily: 'CartToGo',
+          fontSize: 18),
+    ));
   }
 
+  // suggestions for products when searching for a product
   @override
   Widget buildSuggestions(BuildContext context) {
     final Suggestions = query.isEmpty
         ? names
-        : names
-        .where((p) => p.startsWith(query))
-        .toList(); // maybe we will remove it
-
+        : names.where((p) => p.startsWith(query)).toList();
     return Suggestions.isEmpty && query.isNotEmpty
         ? Center(
-        child: Text(
-          "لا توجد منتجات بهذا الإسم",
-          style: TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.bold,
-              fontFamily: 'CartToGo',
-              fontSize: 18),
-        ))
+            child: Text(
+            "لا توجد منتجات بهذا الإسم",
+            style: TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'CartToGo',
+                fontSize: 18),
+          ))
         : ListView.builder(
-      itemCount: Suggestions.length,
-      itemBuilder: (BuildContext context, int index) => ListTile(
-        onTap: () {
-          query= names[index];
-        },
-        shape: RoundedRectangleBorder(
-          side: BorderSide(
-            color: Colors.white,
-          ),
-          borderRadius: BorderRadius.circular(10),
-        ),
-        trailing: Icon(
-          Icons.location_on_outlined,
-          color: appColor,
-        ),
-        title: Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: <Widget>[
-            RichText(
-                text: TextSpan(
-                    text: Suggestions.elementAt(index)
-                        .substring(0, query.length),
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: 'CartToGo',
-                    ),
-                    children: [
-                      TextSpan(
-                        text: Suggestions.elementAt(index)
-                            .substring(query.length),
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.normal,
-                          fontFamily: 'CartToGo',
-                        ),
-                      )
-                    ])),
-            Divider() // to arrange them and make it comfortable to eye
-          ],
-        ),
-      ),
-    );
+            itemCount: Suggestions.length,
+            itemBuilder: (BuildContext context, int index) => ListTile(
+              onTap: () {
+                query = names[index];
+              },
+              shape: RoundedRectangleBorder(
+                side: BorderSide(
+                  color: Colors.white,
+                ),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              trailing: Icon(
+                Icons.location_on_outlined,
+                color: appColor,
+              ),
+              title: Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: <Widget>[
+                  RichText(
+                      text: TextSpan(
+                          text: Suggestions.elementAt(index)
+                              .substring(0, query.length),
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: 'CartToGo',
+                          ),
+                          children: [
+                        TextSpan(
+                          text: Suggestions.elementAt(index)
+                              .substring(query.length),
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.normal,
+                            fontFamily: 'CartToGo',
+                          ),
+                        )
+                      ])),
+                  Divider() // to arrange them and make it comfortable to eye
+                ],
+              ),
+            ),
+          );
   }
 }

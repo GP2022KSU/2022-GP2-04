@@ -19,6 +19,7 @@ class LoyaltyCard extends StatelessWidget {
     return "نقطة";
   }
 
+  //logout dialog, to ensure that the shopper want to log out or not
   @override
   Widget build(BuildContext context) {
     void _showMyDialog() async {
@@ -150,6 +151,7 @@ class LoyaltyCard extends StatelessWidget {
         ]));
   }
 
+  // When flipping the card, the collect/redeem points policy is shown
   Widget CardsBack(BuildContext context) {
     return Container(
         width: MediaQuery.of(context).size.width * 0.94,
@@ -179,7 +181,26 @@ class LoyaltyCard extends StatelessWidget {
         ),
         child: Column(children: const [
           SizedBox(
-            height: 170,
+            height: 90,
+          ),
+          Text(
+            "لكل 100 ريال تنفقها = تحصل على 10 نقاط",
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
+          ),
+          Text(
+            "لكل 10 نقاط تستبدلها = تحصل على 1 ريال",
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
+          ),
+          SizedBox(
+            height: 25,
           ),
           Padding(
             padding: EdgeInsets.only(right: 300),

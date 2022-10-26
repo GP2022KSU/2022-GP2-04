@@ -43,11 +43,10 @@ class ProductsListAdmins extends State<ProductsListAdmin> {
   ];
   String? selectedLocation; // to save the value of chosen location
   bool isOffer = false;
-  static bool ShowOfferPrice = false;
   bool isScrolled = false;
+  static bool ShowOfferPrice = false;
   final fb = FirebaseDatabase.instance;
   final _formKey = GlobalKey<FormState>();
-
   var l;
   var g;
   var k;
@@ -146,6 +145,7 @@ class ProductsListAdmins extends State<ProductsListAdmin> {
         ],
         // end of logout button
       ),
+
       body: NotificationListener<UserScrollNotification>(
         onNotification: (notification) {
           if (notification.direction == ScrollDirection.forward) {
@@ -294,6 +294,8 @@ class ProductsListAdmins extends State<ProductsListAdmin> {
                         ),
                       ))));
             }
+
+            // To show only products that are on offer
             if (map['Offer'] == true && onOffer) {
               return AnimationConfiguration.staggeredList(
                   position: index,
@@ -347,7 +349,6 @@ class ProductsListAdmins extends State<ProductsListAdmin> {
                                   l = g.split(',');
 
                                   var map;
-
                                   try {
                                     var map =
                                         snapshot.value as Map<dynamic, dynamic>;
@@ -365,7 +366,7 @@ class ProductsListAdmins extends State<ProductsListAdmin> {
                                 },
                               ),
 
-                              // product information arrangement in the container
+                              // product information arrangement in the list
                               title: Text(
                                 l[2] + l[4],
                                 style: TextStyle(
@@ -899,7 +900,7 @@ class ProductsListAdmins extends State<ProductsListAdmin> {
 }
 
 class SwitchScreen extends StatefulWidget {
-  // This class for asking the admin fot offer
+  // This class for asking the admin for offer
   @override
   SwitchClass createState() => new SwitchClass();
 }

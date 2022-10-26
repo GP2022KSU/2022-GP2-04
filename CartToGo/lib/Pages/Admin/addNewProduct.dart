@@ -116,7 +116,15 @@ class AddNewProductState extends State<AddNewProduct> {
   String? selectedSubCategory; // to save the value of chosen sub category
 
   // Sizes list for the dropdown menue
-  List<String> Sizes = ['غرام', 'مليلتر', 'لتر', 'منديل', 'كيس', 'رول', 'كيلو'];
+  List<String> Sizes = [
+    'غرام',
+    'مليلتر',
+    'لتر',
+    'منديل',
+    'كيس',
+    'رول',
+    'كيلو',
+  ];
   String? selectedSize; // to save the value of chosen size
 
   late String scanData;
@@ -263,7 +271,6 @@ class AddNewProductState extends State<AddNewProduct> {
                                 Icons.keyboard_arrow_down,
                                 color: appColor,
                               ),
-
                               // Array list of brands names
                               items: Brands.map((String items) {
                                 return DropdownMenuItem(
@@ -285,6 +292,7 @@ class AddNewProductState extends State<AddNewProduct> {
                             ),
                           ),
                           const SizedBox(height: 10),
+
                           // Product's location
                           Directionality(
                             textDirection: TextDirection.rtl,
@@ -324,7 +332,8 @@ class AddNewProductState extends State<AddNewProduct> {
                             ),
                           ),
                           const SizedBox(height: 10),
-                          // Product's category
+
+                          // Product's sub category
                           Row(
                             children: [
                               Directionality(
@@ -346,7 +355,7 @@ class AddNewProductState extends State<AddNewProduct> {
                                       Icons.keyboard_arrow_down,
                                       color: appColor,
                                     ),
-                                    // Array list of categories
+                                    // Array list of sub categories
                                     items: SubCategories.map((String items) {
                                       return DropdownMenuItem(
                                         alignment: Alignment.topRight,
@@ -357,8 +366,8 @@ class AddNewProductState extends State<AddNewProduct> {
                                     validator: (value) => value == null
                                         ? 'الرجاء اختيار الفئة الفرعية'
                                         : null,
-                                    // After selecting the category ,it will
-                                    // change button value to selected category
+                                    // After selecting the sub category ,it will
+                                    // change button value to selected sub category
                                     onChanged: (String? newSubCategory) {
                                       setState(() {
                                         selectedSubCategory = newSubCategory!;
@@ -367,6 +376,8 @@ class AddNewProductState extends State<AddNewProduct> {
                                   ),
                                 ),
                               ),
+
+                              // Product's category
                               Directionality(
                                 textDirection: TextDirection.rtl,
                                 child: Flexible(
@@ -411,7 +422,7 @@ class AddNewProductState extends State<AddNewProduct> {
                           ),
                           const SizedBox(height: 10),
 
-                          // Product's size
+                          // Product's measuring unit
                           Row(
                             children: [
                               Directionality(
@@ -433,7 +444,7 @@ class AddNewProductState extends State<AddNewProduct> {
                                       Icons.keyboard_arrow_down,
                                       color: appColor,
                                     ),
-                                    // Array list of locations
+                                    // Array list of units
                                     items: Sizes.map((String items) {
                                       return DropdownMenuItem(
                                         alignment: Alignment.topRight,
@@ -444,8 +455,8 @@ class AddNewProductState extends State<AddNewProduct> {
                                     validator: (value) => value == null
                                         ? 'الرجاء اختيار وحدة قياس الحجم'
                                         : null,
-                                    // After selecting the location ,it will
-                                    // change button value to selected location
+                                    // After selecting the unit ,it will
+                                    // change button value to selected unit
                                     onChanged: (String? newSize) {
                                       setState(() {
                                         selectedSize = newSize!;
@@ -454,11 +465,17 @@ class AddNewProductState extends State<AddNewProduct> {
                                   ),
                                 ),
                               ),
+
+                              // Product's size text field
                               Directionality(
                                 textDirection: TextDirection.rtl,
                                 child: Flexible(
                                   child: TextFormField(
                                       keyboardType: TextInputType.number,
+                                      inputFormatters: <TextInputFormatter>[
+                                        FilteringTextInputFormatter.allow(
+                                            RegExp(r'(^\d*\.?\d*)'))
+                                      ], // Only numbers can be entered
                                       controller: pSizeController,
                                       decoration: const InputDecoration(
                                         labelText: "الحجم",
@@ -605,7 +622,7 @@ class AddNewProductState extends State<AddNewProduct> {
                                       pPriceController.text,
                                     );
                                   }
-                                  // if the form completed correctly،
+                                  // if the form is filled correctly،
                                   //navigate to "ProductsListAdmin" to show the product in the products' list
                                   Navigator.push(context,
                                       MaterialPageRoute(builder: (context) {
@@ -753,4 +770,3 @@ class _scanProductBarcodeState extends State<scanProductBarcode> {
     }
   }
 }
-

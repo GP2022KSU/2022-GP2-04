@@ -22,11 +22,11 @@ class ShoppingCart extends StatefulWidget {
 class ShoppingCartState extends State<ShoppingCart> {
   int number;
   ShoppingCartState(this.number);
-
   late bool ConnectedToCart = true;
   late bool _isLoading1;
-  final _database = FirebaseDatabase.instance.ref();
   late StreamSubscription _streamSubscription4;
+  final _database = FirebaseDatabase.instance.ref();
+
   @override
   void initState() {
     _isLoading1 = true;

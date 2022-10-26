@@ -76,6 +76,7 @@ class NaviState extends State<Navi> {
         bottomNavigationBar: CurvedNavigationBar(
           key: _NavKey,
           items: <Widget>[
+            // shopping list in navigation
             Container(
               height: MediaQuery.of(context).size.height * s1,
               child: Column(
@@ -101,6 +102,8 @@ class NaviState extends State<Navi> {
                 ],
               ),
             ),
+
+            // offers list in navigation
             Container(
               height: MediaQuery.of(context).size.height * s2,
               child: Column(
@@ -126,6 +129,8 @@ class NaviState extends State<Navi> {
                 ],
               ),
             ),
+
+            // lists in navigation
             Container(
               height: MediaQuery.of(context).size.height * s3,
               child: Column(
@@ -151,6 +156,8 @@ class NaviState extends State<Navi> {
                 ],
               ),
             ),
+
+            // loyalty card in navigation
             Container(
               height: MediaQuery.of(context).size.height * s4,
               child: Column(
