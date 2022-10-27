@@ -2,6 +2,8 @@ import 'package:carttogo/main.dart';
 import 'package:flutter/material.dart';
 import 'package:carttogo/Pages/welcomePage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:carttogo/widgets/shoppingListItem.dart';
+import 'package:carttogo/Componentss/item.dart';
 
 class Lists extends StatefulWidget {
   @override
@@ -10,6 +12,8 @@ class Lists extends StatefulWidget {
 
 class _ListsState extends State<Lists> with SingleTickerProviderStateMixin {
   @override
+  final ShoppingList = ShoppingItem.shoppingList();
+  final _newProductController = TextEditingController();
   late TabController _tabController;
 
   @override
@@ -102,15 +106,96 @@ class _ListsState extends State<Lists> with SingleTickerProviderStateMixin {
               child: TabBarView(
                 controller: _tabController,
                 children: [
-                  // Wish list tab view
-                  Center(
-                    child: Text(
-                      'تجربة قائمة التسوق',
-                      style: TextStyle(
-                        fontSize: 25,
-                        fontWeight: FontWeight.w600,
+                  Stack(
+                    children: [
+                      Container(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 20,
+                          vertical: 15,
+                        ),
+                        child: Column(
+                          children: [
+                            Expanded(
+                              child: ListView(
+                                children: [
+                                  Container(
+                                    margin: EdgeInsets.only(
+                                      top: 5,
+                                      bottom: 20,
+                                    ),
+                                  ),
+                                  for (ShoppingItem myItem in ShoppingList)
+                                    shoppingListItem(
+                                      item: myItem,
+                                      onItemChanged: _handleItemChange,
+                                      onDeleteItem: _deleteItem,
+                                    ),
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
                       ),
-                    ),
+                      // const SizedBox(height: 100),
+                      Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Row(children: [
+                          Expanded(
+                            child: Container(
+                              margin: EdgeInsets.only(
+                                bottom: 80,
+                                right: 20,
+                                left: 20,
+                              ),
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 20,
+                                vertical: 5,
+                              ),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                boxShadow: const [
+                                  BoxShadow(
+                                    color: Colors.grey,
+                                    offset: Offset(0.0, 0.0),
+                                    blurRadius: 10.0,
+                                    spreadRadius: 0.0,
+                                  ),
+                                ],
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: TextField(
+                                controller: _newProductController,
+                                decoration: InputDecoration(
+                                    hintText: 'اضف منتج جديد',
+                                    border: InputBorder.none),
+                              ),
+                            ),
+                          ),
+                          Container(
+                            margin: EdgeInsets.only(
+                              bottom: 80,
+                              right: 20,
+                            ),
+                            child: ElevatedButton(
+                              child: Text(
+                                '+',
+                                style: TextStyle(
+                                  fontSize: 40,
+                                ),
+                              ),
+                              onPressed: () {
+                                _addItem(_newProductController.text);
+                              },
+                              style: ElevatedButton.styleFrom(
+                                primary: appColor,
+                                minimumSize: Size(60, 60),
+                                elevation: 10,
+                              ),
+                            ),
+                          ),
+                        ]),
+                      ),
+                    ],
                   ),
 
                   // Shopping list tab view
@@ -130,6 +215,28 @@ class _ListsState extends State<Lists> with SingleTickerProviderStateMixin {
         ),
       ),
     );
+  }
+
+  void _handleItemChange(ShoppingItem item) {
+    setState(() {
+      item.isBuyed = !item.isBuyed;
+    });
+  }
+
+  void _deleteItem(String id) {
+    setState(() {
+      ShoppingList.removeWhere((item) => item.id == id);
+    });
+  }
+
+  void _addItem(String shoppingItem) {
+    setState(() {
+      ShoppingList.add(ShoppingItem(
+        id: DateTime.now().millisecondsSinceEpoch.toString(),
+        productName: shoppingItem,
+      ));
+    });
+    _newProductController.clear();
   }
 
   //logout dialog, to ensure that the shopper want to log out or not
