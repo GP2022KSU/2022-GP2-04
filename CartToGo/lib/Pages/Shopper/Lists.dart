@@ -120,8 +120,7 @@ class _ListsState extends State<Lists> with SingleTickerProviderStateMixin {
                                 children: [
                                   Container(
                                     margin: EdgeInsets.only(
-                                      top: 5,
-                                      bottom: 20,
+                                      bottom: 10,
                                     ),
                                   ),
                                   for (ShoppingItem myItem in ShoppingList)
@@ -136,14 +135,13 @@ class _ListsState extends State<Lists> with SingleTickerProviderStateMixin {
                           ],
                         ),
                       ),
-                      // const SizedBox(height: 100),
                       Align(
                         alignment: Alignment.bottomCenter,
                         child: Row(children: [
                           Expanded(
                             child: Container(
                               margin: EdgeInsets.only(
-                                bottom: 80,
+                                bottom: 85,
                                 right: 20,
                                 left: 20,
                               ),
@@ -173,7 +171,7 @@ class _ListsState extends State<Lists> with SingleTickerProviderStateMixin {
                           ),
                           Container(
                             margin: EdgeInsets.only(
-                              bottom: 80,
+                              bottom: 85,
                               right: 20,
                             ),
                             child: ElevatedButton(

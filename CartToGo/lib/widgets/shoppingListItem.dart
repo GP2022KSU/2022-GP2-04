@@ -18,7 +18,7 @@ class shoppingListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(bottom: 20),
+      margin: EdgeInsets.only(bottom: 5),
       child: ListTile(
         onTap: () {
           onItemChanged(item);
@@ -47,7 +47,7 @@ class shoppingListItem extends StatelessWidget {
           width: 35,
           child: IconButton(
             color: Colors.red,
-            iconSize: 18,
+            iconSize: 20,
             icon: Icon(Icons.delete),
             onPressed: () {
               onDeleteItem(item.id);
