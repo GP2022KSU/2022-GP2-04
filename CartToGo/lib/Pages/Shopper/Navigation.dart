@@ -56,17 +56,17 @@ class NaviState extends State<Navi> {
 
     Myindex == 0 ? v1 = false : v1 = true;
 
-    Myindex == 0 ? s1 = 0.04 : s1 = 0.066;
+    Myindex == 0 ? s1 = 0.04 : s1 = 0.067;
 
-    Myindex == 0 || Myindex == 2 || Myindex == 3 ? s2 = 0.066 : s2 = 0.04;
+    Myindex == 0 || Myindex == 2 || Myindex == 3 ? s2 = 0.066 : s2 = 0.037;
 
     Myindex == 1 ? v2 = false : v2 = true;
 
-    Myindex == 3 || Myindex == 0 || Myindex == 1 ? s3 = 0.066 : s3 = 0.04;
+    Myindex == 3 || Myindex == 0 || Myindex == 1 ? s3 = 0.067 : s3 = 0.04;
 
     Myindex == 2 ? v3 = false : v3 = true;
 
-    Myindex == 0 || Myindex == 2 || Myindex == 1 ? s4 = 0.065 : s4 = 0.04;
+    Myindex == 0 || Myindex == 2 || Myindex == 1 ? s4 = 0.065 : s4 = 0.037;
 
     Myindex == 3 ? v4 = false : v4 = true;
 

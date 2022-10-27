@@ -37,7 +37,7 @@ dependencies:
   qr_code_scanner: ^0.7.0
   font_awesome_flutter: ^10.2.1
   flip_card: ^0.6.0
-  flutter_hooks: ^0.18.5+1
+  flutter_hooks: ^0.18.3
 
 dev_dependencies:
   flutter_test:

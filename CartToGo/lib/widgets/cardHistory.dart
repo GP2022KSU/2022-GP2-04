@@ -195,7 +195,7 @@ class CardhistoryState extends State<Cardhistory> {
                                       const Text(
                                         " تم شرائه : ",
                                         style: TextStyle(
-                                          fontSize: 15,
+                                          fontSize: 13,
                                           color: Colors.black,
                                           fontWeight: FontWeight.bold,
                                           fontFamily: 'CartToGo',
@@ -206,7 +206,7 @@ class CardhistoryState extends State<Cardhistory> {
                                       Text(
                                         datePlaced + " - " + timeBought,
                                         style: const TextStyle(
-                                          fontSize: 15,
+                                          fontSize: 13,
                                           color: Color.fromARGB(
                                               255, 148, 148, 148),
                                           fontFamily: 'CartToGo',
@@ -221,7 +221,7 @@ class CardhistoryState extends State<Cardhistory> {
                                       Text(
                                         total.toString() + " ريال",
                                         style: const TextStyle(
-                                          fontSize: 16,
+                                          fontSize: 13,
                                           color: Colors.black,
                                           fontWeight: FontWeight.bold,
                                           fontFamily: 'CartToGo',
@@ -234,7 +234,7 @@ class CardhistoryState extends State<Cardhistory> {
                                         child: Text(
                                           gainedPoints.toString() + " + ",
                                           style: const TextStyle(
-                                            fontSize: 15,
+                                            fontSize: 13,
                                             color: Color.fromARGB(
                                                 255, 75, 236, 43),
                                             fontWeight: FontWeight.bold,
@@ -305,7 +305,7 @@ class CardhistoryState extends State<Cardhistory> {
             Row(
               children: [
                 const SizedBox(
-                  width: 20,
+                  width: 5,
                 ),
                 Image.asset(
                   'assets/images/CartInvoice.png',
@@ -314,7 +314,7 @@ class CardhistoryState extends State<Cardhistory> {
                   width: 80,
                 ),
                 SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.4,
+                  width: MediaQuery.of(context).size.width * 0.37,
                 ),
                 Text(
                   CartID + "#",
@@ -458,7 +458,7 @@ class CardhistoryState extends State<Cardhistory> {
                               height: 0.9),
                         ),
                         SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.4,
+                          width: MediaQuery.of(context).size.width * 0.37,
                         ),
                         Text(
                           usedpoints.toString() + " - ",
@@ -495,7 +495,7 @@ class CardhistoryState extends State<Cardhistory> {
                       textDirection: TextDirection.rtl,
                       children: <Widget>[
                         const Text(
-                          "  النقاط المكتسبة  ",
+                          "     النقاط المكتسبة  ",
                           //textAlign: TextAlign.right,
                           //textDirection: TextDirection.ltr,
                           style: TextStyle(
@@ -507,7 +507,7 @@ class CardhistoryState extends State<Cardhistory> {
                               height: 0.9),
                         ),
                         SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.45,
+                          width: MediaQuery.of(context).size.width * 0.37,
                         ),
                         Text(
                           gainedpoints.toString() + " + ",
@@ -551,7 +551,7 @@ class CardhistoryState extends State<Cardhistory> {
                         height: 0.9),
                   ),
                   SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.54,
+                    width: MediaQuery.of(context).size.width * 0.46,
                   ),
                   Text(
                     total.toString() + " ريال",
