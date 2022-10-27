@@ -6,27 +6,29 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:carttogo/Users/user.dart' as user;
+import 'package:carttogo/Pages/Shopper/InvoicePage.dart';
+import 'package:carttogo/Pages/Shopper/Navigation.dart';
 
 class Cardhistory extends StatefulWidget {
   @override
-  _CardhistoryState createState() => _CardhistoryState();
+  CardhistoryState createState() => CardhistoryState();
 }
 
 final _fb = FirebaseDatabase.instance;
 
-class _CardhistoryState extends State<Cardhistory> {
+class CardhistoryState extends State<Cardhistory> {
   @override
   Widget build(BuildContext context) {
     return Card(
-        shadowColor: Color.fromARGB(66, 13, 13, 13),
+        shadowColor: const Color.fromARGB(66, 13, 13, 13),
         elevation: 10,
-        color: Color.fromARGB(255, 248, 245, 245),
+        color: const Color.fromARGB(255, 248, 245, 245),
         clipBehavior: Clip.antiAlias,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
         child: Container(
           width: MediaQuery.of(context).size.width * 0.94,
           height: MediaQuery.of(context).size.height * 0.5,
-          padding: EdgeInsets.all(16),
+          padding: const EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -44,29 +46,29 @@ class _CardhistoryState extends State<Cardhistory> {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(
+                const SizedBox(
                   height: 50,
                 ),
                 Center(
                   child: Container(
                     width: MediaQuery.of(context).size.width * 0.20,
                     height: MediaQuery.of(context).size.height * 0.1,
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       image: DecorationImage(
-                          image: AssetImage('assets/images/Card11.png'),
+                          image: AssetImage('assets/images/invoice.png'),
                           fit: BoxFit.fitWidth),
                     ),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
                 Center(
                     child: Container(
                         child: Transform.rotate(
                   angle: -1.2492672422141295e-13 * (math.pi / 180),
-                  child: Text(
-                    'لا يوجد سجل للنقاط',
+                  child: const Text(
+                    'لا يوجد فواتير سابقة ',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         color: Color.fromARGB(219, 100, 98, 98),
@@ -100,6 +102,7 @@ class _CardhistoryState extends State<Cardhistory> {
               duration: const Duration(milliseconds: 300),
               itemBuilder: (BuildContext context, DataSnapshot snapshot,
                   Animation<double> animation, int index) {
+                int numofItems = 0;
                 final map = snapshot.value as Map<dynamic, dynamic>;
                 String InvoiceNumber = snapshot.key.toString();
                 double total = 0;
@@ -110,6 +113,7 @@ class _CardhistoryState extends State<Cardhistory> {
                 bool NoPoints = false;
                 String timeBought = "";
                 map.forEach((key, value) {
+                  if (value['Name'] != null) numofItems++;
                   //Iterate through each cart product image
                   if (value['ImgUrl'] != null) {
                     for (int i = 0; i < ImagesofCart.length; i++) {
@@ -145,6 +149,32 @@ class _CardhistoryState extends State<Cardhistory> {
                                 height:
                                     MediaQuery.of(context).size.height * 0.1,
                                 child: ListTile(
+                                  onTap: () async {
+                                    // Navigator.push(
+                                    //     context,
+                                    //     MaterialPageRoute(
+                                    //         builder: (context) =>
+                                    //             NaviState().hh()));
+                                    showModalBottomSheet(
+                                        shape: const RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.vertical(
+                                                top: Radius.circular(30),
+                                                bottom: Radius.circular(30))),
+                                        isScrollControlled: true,
+                                        context: context,
+                                        useRootNavigator: true,
+                                        builder: ((context) {
+                                          return SingleChildScrollView(
+                                              child: invoice(
+                                                  InvoiceNumber,
+                                                  numofItems,
+                                                  total,
+                                                  datePlaced,
+                                                  timeBought,
+                                                  gainedPoints,
+                                                  usedPoints));
+                                        }));
+                                  },
                                   style: ListTileStyle.drawer,
                                   subtitle: SingleChildScrollView(
                                     dragStartBehavior: DragStartBehavior.start,
@@ -244,7 +274,7 @@ class _CardhistoryState extends State<Cardhistory> {
                                 ),
                               ),
                             ),
-                            Divider(thickness: 1),
+                            const Divider(thickness: 1),
                             //const SizedBox(height: 2)
                           ],
                         ),
@@ -255,5 +285,292 @@ class _CardhistoryState extends State<Cardhistory> {
                 return Container();
               }),
         ));
+  }
+
+  //Invoice page when an invoice is selected from list above
+  Widget invoice(String CartID, int numofProd, double total, String date,
+      String time, int gainedpoints, int usedpoints) {
+    return SizedBox(
+      height: MediaQuery.of(context).size.height * 0.8,
+      child: Center(
+        child: Column(
+          children: [
+            const Divider(
+              height: 20,
+              thickness: 4,
+              indent: 100,
+              endIndent: 100,
+              color: Color.fromARGB(255, 35, 61, 255),
+            ),
+            Row(
+              children: [
+                const SizedBox(
+                  width: 20,
+                ),
+                Image.asset(
+                  'assets/images/CartInvoice.png',
+                  fit: BoxFit.contain,
+                  height: 80,
+                  width: 80,
+                ),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.4,
+                ),
+                Text(
+                  CartID + "#",
+                  style: const TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.w600,
+                    color: Color.fromARGB(255, 35, 61, 255),
+                  ),
+                  textAlign: TextAlign.right,
+                  textDirection: TextDirection.rtl,
+                ),
+                const Text(
+                  "فاتورة رقم: ",
+                  style: TextStyle(
+                    fontSize: 21,
+                    fontWeight: FontWeight.w600,
+                  ),
+                  textAlign: TextAlign.right,
+                  textDirection: TextDirection.rtl,
+                ),
+              ],
+            ),
+            Directionality(
+              textDirection: TextDirection.rtl,
+              child: Row(
+                children: [
+                  const SizedBox(
+                    width: 20,
+                  ),
+                  const Text(
+                    " التاريخ والوقت: ",
+                    style: TextStyle(
+                      fontSize: 15,
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'CartToGo',
+                    ),
+                    textAlign: TextAlign.right,
+                    textDirection: TextDirection.rtl,
+                  ),
+                  Text(
+                    date + " - " + time,
+                    style: const TextStyle(
+                      fontSize: 17,
+                      color: Color.fromARGB(255, 148, 148, 148),
+                      fontFamily: 'CartToGo',
+                    ),
+                    textAlign: TextAlign.right,
+                    textDirection: TextDirection.rtl,
+                  ),
+                ],
+              ),
+            ),
+            Text(
+              "(" + numofProd.toString() + ") :عدد المنتجات",
+              style: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+              ),
+              textAlign: TextAlign.right,
+              textDirection: TextDirection.ltr,
+            ),
+            const SizedBox(
+              height: 5,
+            ),
+            SizedBox(
+              //Brings the products using the cartID
+              height: MediaQuery.of(context).size.height * 0.35,
+              child: FirebaseAnimatedList(
+                  query: _fb.ref().child(
+                      "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts/$CartID"),
+                  duration: const Duration(milliseconds: 500),
+                  itemBuilder: (BuildContext context, DataSnapshot snapshot,
+                      Animation<double> animation, int index) {
+                    String Brand = "";
+                    String Name = "";
+                    double Price = 0;
+                    bool HaveOffer = false;
+                    String imgURL = "";
+                    var map = snapshot.value as Map<dynamic, dynamic>;
+
+                    if (map['Paid'] == null) {
+                      //count all products in cart excluding the cartinfo child
+                      try {
+                        imgURL = map['ImgUrl'];
+                        Name = map['Name'];
+                        HaveOffer = map['Offer'];
+                        Brand = map['Brand'];
+                        HaveOffer
+                            ? Price =
+                                double.parse(map['PriceAfterOffer'].toString())
+                            : Price = double.parse(map['Price'].toString());
+                        // ignore: empty_catches
+                      } on Exception {}
+                      return Directionality(
+                        textDirection: TextDirection.rtl,
+                        child: ListTile(
+                          leading: Image.network(
+                            imgURL,
+                            fit: BoxFit.contain,
+                            width: 50,
+                            height: 50,
+                          ),
+                          title: Text(
+                            Name + " " + Brand,
+                          ),
+                          trailing: Text(
+                            Price.toString() + " ريال",
+                            textAlign: TextAlign.right,
+                            textDirection: TextDirection.rtl,
+                          ),
+                        ),
+                      );
+                    }
+                    return Container(); //If cart is not found
+                  }),
+            ),
+            usedpoints <=
+                    0 //either shows the used points or not if it is equal to 0
+                ? Container()
+                : Container(
+                    decoration: const BoxDecoration(
+                      color: Color.fromARGB(255, 242, 240, 240),
+                      //border: Border.all(color: Colors.black),
+                    ),
+                    height: MediaQuery.of(context).size.height * 0.06,
+                    width: MediaQuery.of(context).size.width * 1,
+                    child: Row(
+                      textDirection: TextDirection.rtl,
+                      children: <Widget>[
+                        const Text(
+                          "  النقاط المستخدمة  ",
+                          //textAlign: TextAlign.right,
+                          //textDirection: TextDirection.ltr,
+                          style: TextStyle(
+                              color: Color.fromRGBO(32, 26, 37, 1),
+                              fontSize: 20,
+                              letterSpacing:
+                                  0 /*percentages not used in flutter. defaulting to zero*/,
+                              fontWeight: FontWeight.w700,
+                              height: 0.9),
+                        ),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.4,
+                        ),
+                        Text(
+                          usedpoints.toString() + " - ",
+                          textAlign: TextAlign.right,
+                          textDirection: TextDirection.rtl,
+                          style: const TextStyle(
+                              color: Color.fromARGB(255, 235, 36, 36),
+                              fontSize: 20,
+                              fontWeight: FontWeight.w400,
+                              letterSpacing:
+                                  0 /*percentages not used in flutter. defaulting to zero*/,
+                              //fontWeight: FontWeight.w700,
+                              height: 0.9),
+                        ),
+                      ],
+                    ),
+                  ),
+            usedpoints <= 0
+                ? Container()
+                : const SizedBox(
+                    height: 10,
+                  ),
+            gainedpoints <=
+                    0 //either shows the gained points or not if it is equal to 0
+                ? Container()
+                : Container(
+                    decoration: const BoxDecoration(
+                      color: Color.fromARGB(255, 242, 240, 240),
+                      //border: Border.all(color: Colors.black),
+                    ),
+                    height: MediaQuery.of(context).size.height * 0.06,
+                    width: MediaQuery.of(context).size.width * 1,
+                    child: Row(
+                      textDirection: TextDirection.rtl,
+                      children: <Widget>[
+                        const Text(
+                          "  النقاط المكتسبة  ",
+                          //textAlign: TextAlign.right,
+                          //textDirection: TextDirection.ltr,
+                          style: TextStyle(
+                              color: Color.fromRGBO(32, 26, 37, 1),
+                              fontSize: 20,
+                              letterSpacing:
+                                  0 /*percentages not used in flutter. defaulting to zero*/,
+                              fontWeight: FontWeight.w700,
+                              height: 0.9),
+                        ),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.45,
+                        ),
+                        Text(
+                          gainedpoints.toString() + " + ",
+                          textAlign: TextAlign.right,
+                          textDirection: TextDirection.rtl,
+                          style: const TextStyle(
+                              color: Color.fromARGB(255, 75, 236, 43),
+                              fontSize: 20,
+                              fontWeight: FontWeight.w400,
+                              letterSpacing:
+                                  0 /*percentages not used in flutter. defaulting to zero*/,
+                              //fontWeight: FontWeight.w700,
+                              height: 0.9),
+                        ),
+                      ],
+                    ),
+                  ),
+            const SizedBox(
+              height: 10,
+            ),
+            Container(
+              decoration: const BoxDecoration(
+                color: Color.fromARGB(255, 242, 240, 240),
+                //border: Border.all(color: Colors.black),
+              ),
+              height: MediaQuery.of(context).size.height * 0.06,
+              width: MediaQuery.of(context).size.width * 1,
+              child: Row(
+                textDirection: TextDirection.rtl,
+                children: <Widget>[
+                  const Text(
+                    "  المجموع   ",
+                    //textAlign: TextAlign.right,
+                    //textDirection: TextDirection.ltr,
+                    style: TextStyle(
+                        color: Color.fromRGBO(32, 26, 37, 1),
+                        fontSize: 20,
+                        letterSpacing:
+                            0 /*percentages not used in flutter. defaulting to zero*/,
+                        fontWeight: FontWeight.w700,
+                        height: 0.9),
+                  ),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.54,
+                  ),
+                  Text(
+                    total.toString() + " ريال",
+                    textAlign: TextAlign.right,
+                    textDirection: TextDirection.rtl,
+                    style: const TextStyle(
+                        color: Color.fromARGB(255, 17, 18, 18),
+                        fontSize: 20,
+                        letterSpacing:
+                            0 /*percentages not used in flutter. defaulting to zero*/,
+                        //fontWeight: FontWeight.w700,
+                        height: 0.9),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

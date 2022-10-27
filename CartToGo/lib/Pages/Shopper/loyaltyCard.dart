@@ -145,8 +145,22 @@ class LoyaltyCard extends StatelessWidget {
                 )),
             Center(
               heightFactor: 1.04,
-              child: Cardhistory(),
-            )
+              child: Column(
+                children: [
+                  const Text(
+                    "الفواتير السابقة", // name of the product
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'CartToGo',
+                      fontSize: 16,
+                    ),
+                    textAlign: TextAlign.right,
+                  ),
+                  Cardhistory(),
+                ],
+              ),
+            ),
           ])
         ]));
   }
@@ -181,7 +195,7 @@ class LoyaltyCard extends StatelessWidget {
         ),
         child: Column(children: const [
           SizedBox(
-            height: 90,
+            height: 70,
           ),
           Text(
             "لكل 100 ريال تنفقها = تحصل على 10 نقاط",
@@ -195,6 +209,9 @@ class LoyaltyCard extends StatelessWidget {
                       offset: Offset(-5.0, 5.0),
                       blurRadius: 15)
                 ]),
+          ),
+          SizedBox(
+            height: 10,
           ),
           Text(
             "لكل 10 نقاط تستبدلها = تحصل على 1 ريال",
@@ -215,7 +232,7 @@ class LoyaltyCard extends StatelessWidget {
           Padding(
             padding: EdgeInsets.only(right: 300),
             child: Icon(
-              Icons.flip_to_back_rounded,
+              Icons.flip_to_front,
               size: 30,
               color: Colors.white,
             ),

@@ -1,3 +1,4 @@
+import 'package:carttogo/Pages/Shopper/InvoicePage.dart';
 import 'package:flutter/material.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'loyaltyCard.dart';
@@ -5,6 +6,8 @@ import 'offersList.dart';
 import 'shoppingCart.dart';
 import 'Lists.dart';
 import 'package:carttogo/Users/user.dart' as user;
+
+import 'package:carttogo/widgets/cardHistory.dart';
 
 class Navi extends StatefulWidget {
   const Navi({Key? key}) : super(key: key);

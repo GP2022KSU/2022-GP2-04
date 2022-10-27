@@ -312,7 +312,7 @@ class _OffersListState extends State<OffersList> {
                                           color: Colors.black,
                                           fontWeight: FontWeight.bold,
                                           fontFamily: 'CartToGo',
-                                          fontSize: 14,
+                                          fontSize: 15,
                                         ),
                                         textAlign: TextAlign.right,
                                       ),
@@ -323,7 +323,12 @@ class _OffersListState extends State<OffersList> {
                                               Icons.discount,
                                               color: Colors.red,
                                             )
-                                          : Image.network(imgUrl),
+                                          : Image.network(
+                                              imgUrl,
+                                              fit: BoxFit.contain,
+                                              width: 50,
+                                              height: 60,
+                                            ),
 
                                       //price for the products
                                       trailing: Column(
