@@ -4,6 +4,8 @@ import 'package:carttogo/Pages/welcomePage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:carttogo/widgets/shoppingListItem.dart';
 import 'package:carttogo/Componentss/item.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_database/ui/firebase_animated_list.dart';
 
 class Lists extends StatefulWidget {
   @override
@@ -12,10 +14,11 @@ class Lists extends StatefulWidget {
 
 class _ListsState extends State<Lists> with SingleTickerProviderStateMixin {
   @override
-  final ShoppingList = ShoppingItem.shoppingList();
+  //final ShoppingList = ShoppingItem.shoppingList();
   final _newProductController = TextEditingController();
   late TabController _tabController;
-
+  final ref = FirebaseDatabase.instance
+      .ref("Shopper/${FirebaseAuth.instance.currentUser?.uid}/ShoppingList");
   @override
   void initState() {
     _tabController = TabController(length: 2, vsync: this);
@@ -30,10 +33,11 @@ class _ListsState extends State<Lists> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    //print(ShoppingList.map((e) => print(e)));
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white24,
-        title: Text(
+        title: const Text(
           "القوائم",
           style: TextStyle(
             color: Colors.black,
@@ -88,7 +92,7 @@ class _ListsState extends State<Lists> with SingleTickerProviderStateMixin {
                 ),
                 labelColor: Colors.white,
                 unselectedLabelColor: Colors.black,
-                tabs: [
+                tabs: const [
                   Tab(
                     icon: Icon(Icons.list_outlined),
                     text: 'قائمة التسوق',
@@ -109,29 +113,38 @@ class _ListsState extends State<Lists> with SingleTickerProviderStateMixin {
                   Stack(
                     children: [
                       Container(
-                        padding: EdgeInsets.symmetric(
+                        padding: const EdgeInsets.symmetric(
                           horizontal: 20,
                           vertical: 15,
                         ),
                         child: Column(
                           children: [
-                            Expanded(
-                              child: ListView(
-                                children: [
-                                  Container(
-                                    margin: EdgeInsets.only(
-                                      bottom: 10,
-                                    ),
-                                  ),
-                                  for (ShoppingItem myItem in ShoppingList)
-                                    shoppingListItem(
-                                      item: myItem,
-                                      onItemChanged: _handleItemChange,
-                                      onDeleteItem: _deleteItem,
-                                    ),
-                                ],
-                              ),
-                            )
+                            SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.6,
+                                child: FirebaseAnimatedList(
+                                    query: ref,
+                                    duration: const Duration(milliseconds: 500),
+                                    itemBuilder: (BuildContext context,
+                                        DataSnapshot snapshot,
+                                        Animation<double> animation,
+                                        int index) {
+                                      final items = snapshot.value
+                                          as Map<dynamic, dynamic>;
+                                      final item = ShoppingItem.fromMap(items);
+                                      return Column(children: [
+                                        Container(
+                                          margin: const EdgeInsets.only(
+                                            bottom: 10,
+                                          ),
+                                        ),
+                                        shoppingListItem(
+                                          item: item,
+                                          onItemChanged: _handleItemChange,
+                                          onDeleteItem: _deleteItem,
+                                        ),
+                                      ]);
+                                    }))
                           ],
                         ),
                       ),
@@ -140,12 +153,12 @@ class _ListsState extends State<Lists> with SingleTickerProviderStateMixin {
                         child: Row(children: [
                           Expanded(
                             child: Container(
-                              margin: EdgeInsets.only(
+                              margin: const EdgeInsets.only(
                                 bottom: 85,
                                 right: 20,
                                 left: 20,
                               ),
-                              padding: EdgeInsets.symmetric(
+                              padding: const EdgeInsets.symmetric(
                                 horizontal: 20,
                                 vertical: 5,
                               ),
@@ -163,19 +176,19 @@ class _ListsState extends State<Lists> with SingleTickerProviderStateMixin {
                               ),
                               child: TextField(
                                 controller: _newProductController,
-                                decoration: InputDecoration(
+                                decoration: const InputDecoration(
                                     hintText: 'اضف منتج جديد',
                                     border: InputBorder.none),
                               ),
                             ),
                           ),
                           Container(
-                            margin: EdgeInsets.only(
+                            margin: const EdgeInsets.only(
                               bottom: 85,
                               right: 20,
                             ),
                             child: ElevatedButton(
-                              child: Text(
+                              child: const Text(
                                 '+',
                                 style: TextStyle(
                                   fontSize: 40,
@@ -186,7 +199,7 @@ class _ListsState extends State<Lists> with SingleTickerProviderStateMixin {
                               },
                               style: ElevatedButton.styleFrom(
                                 primary: appColor,
-                                minimumSize: Size(60, 60),
+                                minimumSize: const Size(60, 60),
                                 elevation: 10,
                               ),
                             ),
@@ -197,7 +210,7 @@ class _ListsState extends State<Lists> with SingleTickerProviderStateMixin {
                   ),
 
                   // Shopping list tab view
-                  Center(
+                  const Center(
                     child: Text(
                       'تجربة قائمة الأمنيات',
                       style: TextStyle(
@@ -215,25 +228,40 @@ class _ListsState extends State<Lists> with SingleTickerProviderStateMixin {
     );
   }
 
+//change from bought to donw
   void _handleItemChange(ShoppingItem item) {
     setState(() {
-      item.isBuyed = !item.isBuyed;
+      print(item.toString());
+      if (item.isBuyed == false) {
+        ref.child(item.id.toString()).update({"isBuyed": true});
+      } else if (item.isBuyed == true) {
+        ref.child(item.id.toString()).update({"isBuyed": false});
+      }
+      //item.isBuyed = !item.isBuyed;
     });
   }
 
+//delete item from database ShoppingList
   void _deleteItem(String id) {
     setState(() {
-      ShoppingList.removeWhere((item) => item.id == id);
+      ref.child(id).remove();
     });
   }
 
+  //add item to database ShoppingList
   void _addItem(String shoppingItem) {
-    setState(() {
-      ShoppingList.add(ShoppingItem(
-        id: DateTime.now().millisecondsSinceEpoch.toString(),
-        productName: shoppingItem,
-      ));
-    });
+    if (shoppingItem != "") {
+      String id = DateTime.now().millisecondsSinceEpoch.toString();
+      setState(() {
+        ref.update({
+          id: {
+            "ItemID": id,
+            "productName": shoppingItem,
+            "isBuyed": false,
+          }
+        });
+      });
+    }
     _newProductController.clear();
   }
 
@@ -247,21 +275,21 @@ class _ListsState extends State<Lists> with SingleTickerProviderStateMixin {
               textDirection: TextDirection.rtl,
               child: Dialog(
                   elevation: 0,
-                  backgroundColor: Color(0xffffffff),
+                  backgroundColor: const Color(0xffffffff),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15.0),
                   ),
                   child: Column(mainAxisSize: MainAxisSize.min, children: [
-                    SizedBox(height: 15),
-                    Text(
+                    const SizedBox(height: 15),
+                    const Text(
                       "هل تريد تسجيل الخروج؟",
                       style: TextStyle(
                         fontSize: 19,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    SizedBox(height: 15),
-                    Divider(
+                    const SizedBox(height: 15),
+                    const Divider(
                       height: 1,
                       color: Colors.black,
                     ),
@@ -277,23 +305,24 @@ class _ListsState extends State<Lists> with SingleTickerProviderStateMixin {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => WelcomePage()));
+                                      builder: (context) =>
+                                          const WelcomePage()));
                             },
-                            child: Center(
+                            child: const Center(
                                 child: Text("خروج",
                                     style: TextStyle(
                                       fontSize: 18.0,
                                       color: Color(0xFFFE4A49),
                                       fontWeight: FontWeight.bold,
                                     ))))),
-                    Divider(
+                    const Divider(
                       height: 1,
                     ),
                     Container(
                         width: MediaQuery.of(context).size.width,
                         height: 50,
                         child: InkWell(
-                            borderRadius: BorderRadius.only(
+                            borderRadius: const BorderRadius.only(
                               bottomLeft: Radius.circular(15.0),
                               bottomRight: Radius.circular(15.0),
                             ),
@@ -301,7 +330,7 @@ class _ListsState extends State<Lists> with SingleTickerProviderStateMixin {
                             onTap: () {
                               Navigator.of(context).pop();
                             },
-                            child: Center(
+                            child: const Center(
                                 child: Text("إلغاء",
                                     style: TextStyle(
                                       fontSize: 16.0,
