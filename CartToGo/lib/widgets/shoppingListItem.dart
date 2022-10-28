@@ -28,19 +28,22 @@ class shoppingListItem extends StatelessWidget {
         ),
         contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
         tileColor: Colors.white,
-        leading: Icon(
+        trailing: Icon(
           item.isBuyed ? Icons.check_box : Icons.check_box_outline_blank,
           color: appColor,
         ),
-        title: Text(
-          item.productName!,
-          style: TextStyle(
-            fontSize: 16,
-            color: Colors.black,
-            decoration: item.isBuyed ? TextDecoration.lineThrough : null,
+        title: Directionality(
+          textDirection: TextDirection.rtl,
+          child: Text(
+            item.productName!,
+            style: TextStyle(
+              fontSize: 16,
+              color: Colors.black,
+              decoration: item.isBuyed ? TextDecoration.lineThrough : null,
+            ),
           ),
         ),
-        trailing: Container(
+        leading: Container(
           padding: EdgeInsets.all(0),
           margin: EdgeInsets.symmetric(vertical: 12),
           height: 35,
