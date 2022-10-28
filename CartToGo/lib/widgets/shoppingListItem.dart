@@ -6,7 +6,7 @@ class shoppingListItem extends StatelessWidget {
   final ShoppingItem item;
   final onItemChanged;
   final onDeleteItem;
-  final myShoppingList = ShoppingItem.shoppingList();
+  //final myShoppingList = ShoppingItem.shoppingList();
 
   shoppingListItem({
     Key? key,
