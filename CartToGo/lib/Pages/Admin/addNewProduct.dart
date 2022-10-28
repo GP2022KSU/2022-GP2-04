@@ -1,11 +1,16 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:carttogo/main.dart';
 import 'package:flutter/services.dart';
 import 'package:carttogo/Pages/Admin/adminProductsList.dart';
 import 'package:carttogo/scanner_icons.dart'; // import custom icon
+import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart' as Path;
 import 'package:qr_code_scanner/qr_code_scanner.dart'; // A Flutter plugin by Julius Canute https://pub.dev/packages/qr_code_scanner
 import 'dart:developer';
+import 'package:image_picker/image_picker.dart';
+import 'package:carttogo/widgets/productImage.dart';
 
 class AddNewProduct extends StatefulWidget {
   String scanData;
@@ -15,6 +20,27 @@ class AddNewProduct extends StatefulWidget {
 }
 
 class AddNewProductState extends State<AddNewProduct> {
+  File? image;
+
+  Future pickImage(ImageSource source) async {
+    try {
+      final image = await ImagePicker().pickImage(source: source);
+      if (image == null) return;
+      final imagePath = File(image.path);
+      setState(() => this.image = imagePath);
+      final imageController = await saveImagePermanently(image.path);
+    } on PlatformException catch (e) {
+      print('filled pick iamge $e');
+    }
+  }
+
+  Future saveImagePermanently(String imagePath) async {
+    final directory = await getApplicationDocumentsDirectory();
+    final name = Path.basename(imagePath);
+    final image = File('${directory.path}/$name');
+    return File(imagePath).copy(image.path);
+  }
+
   // Locations list for the dropdown menue
   List<String> Locations = [
     'ممر 1',
@@ -167,7 +193,24 @@ class AddNewProductState extends State<AddNewProduct> {
                     child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-//here eill be the image
+                          image != null
+                              ? ImageWidget(
+                                  image: image!,
+                                  onClicked: (source) => pickImage(source),
+                                )
+                              : Image(
+                                  image:
+                                      AssetImage('assets/images/addImage.png')),
+                          const SizedBox(height: 5),
+
+                          // imageButton(
+                          //     icon: Icons.image_outlined,
+                          //     title: "الكاميرا",
+                          //     onClicked: () => pickImage(ImageSource.gallery)),
+                          // imageButton(
+                          //     icon: Icons.camera_alt_outlined,
+                          //     title: "آلبوم الصور",
+                          //     onClicked: () => pickImage(ImageSource.camera)),
 
                           // Product's barcode number
                           Directionality(
@@ -218,7 +261,7 @@ class AddNewProductState extends State<AddNewProduct> {
                                 },
                                 onChanged: (value) {}),
                           ),
-                          const SizedBox(height: 10),
+                          const SizedBox(height: 5),
 
                           // Product's name
                           Directionality(
@@ -250,7 +293,7 @@ class AddNewProductState extends State<AddNewProduct> {
                                 },
                                 onChanged: (value) {}),
                           ),
-                          const SizedBox(height: 10),
+                          const SizedBox(height: 5),
 
                           // Product's brand
                           Directionality(
@@ -291,7 +334,7 @@ class AddNewProductState extends State<AddNewProduct> {
                               },
                             ),
                           ),
-                          const SizedBox(height: 10),
+                          const SizedBox(height: 5),
 
                           // Product's location
                           Directionality(
@@ -331,7 +374,7 @@ class AddNewProductState extends State<AddNewProduct> {
                               },
                             ),
                           ),
-                          const SizedBox(height: 10),
+                          const SizedBox(height: 5),
 
                           // Product's sub category
                           Row(
@@ -376,7 +419,7 @@ class AddNewProductState extends State<AddNewProduct> {
                                   ),
                                 ),
                               ),
-
+                              const SizedBox(width: 10),
                               // Product's category
                               Directionality(
                                 textDirection: TextDirection.rtl,
@@ -420,7 +463,7 @@ class AddNewProductState extends State<AddNewProduct> {
                               ),
                             ],
                           ),
-                          const SizedBox(height: 10),
+                          const SizedBox(height: 5),
 
                           // Product's measuring unit
                           Row(
@@ -465,7 +508,7 @@ class AddNewProductState extends State<AddNewProduct> {
                                   ),
                                 ),
                               ),
-
+                              const SizedBox(width: 10),
                               // Product's size text field
                               Directionality(
                                 textDirection: TextDirection.rtl,
@@ -501,7 +544,7 @@ class AddNewProductState extends State<AddNewProduct> {
                               ),
                             ],
                           ),
-                          const SizedBox(height: 10),
+                          const SizedBox(height: 5),
 
                           // Product's quantity
                           Directionality(
@@ -537,7 +580,7 @@ class AddNewProductState extends State<AddNewProduct> {
                                 },
                                 onChanged: (value) {}),
                           ),
-                          const SizedBox(height: 10),
+                          const SizedBox(height: 5),
 
                           //Product's price
                           Directionality(
@@ -575,7 +618,7 @@ class AddNewProductState extends State<AddNewProduct> {
                                 },
                                 onChanged: (value) {}),
                           ),
-                          const SizedBox(height: 10),
+                          const SizedBox(height: 5),
 
                           // start of "add new product" button
                           ElevatedButton(
@@ -673,6 +716,28 @@ class AddNewProductState extends State<AddNewProduct> {
     pPriceController.clear();
   }
 }
+
+Widget imageButton({
+  required String title,
+  required IconData icon,
+  required VoidCallback onClicked,
+}) =>
+    ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        minimumSize: Size.fromHeight(56),
+        primary: Colors.white,
+        onPrimary: Colors.black,
+        textStyle: TextStyle(fontSize: 20),
+      ),
+      child: Row(
+        children: [
+          Icon(icon, size: 28),
+          const SizedBox(width: 16),
+          Text(title),
+        ],
+      ),
+      onPressed: onClicked,
+    );
 
 // This is a Flutter plugin by Julius Canute https://pub.dev/packages/qr_code_scanner
 class scanProductBarcode extends StatefulWidget {

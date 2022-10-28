@@ -1,6 +1,7 @@
 import 'package:firebase_database/firebase_database.dart';
 
 class Product {
+  final String imagePath;
   final String Name;
   final String Brand;
   final String Category;
@@ -10,6 +11,7 @@ class Product {
   final String Location;
 
   const Product({
+     required this.imagePath,
     required this.Name,
     required this.Brand,
     required this.Category,
@@ -22,6 +24,7 @@ class Product {
   //
   factory Product.fromMap(Map<dynamic, dynamic> map) {
     return Product(
+      imagePath: map['ImgeUrl:'] ?? '',
       Name: map['Name:'] ?? '',
       Brand: map['Brand:'] ?? '',
       Category: map['Category'] ?? '',
@@ -32,3 +35,4 @@ class Product {
     );
   }
 }
+
