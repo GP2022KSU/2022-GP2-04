@@ -32,8 +32,8 @@ class _RegisterPageState extends State<RegisterPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     const Image(
-                        width: 200,
-                        height: 200,
+                        width: 300,
+                        height: 300,
                         image: AssetImage('assets/images/blueCart.png')),
                     Center(
                       //username text feild
