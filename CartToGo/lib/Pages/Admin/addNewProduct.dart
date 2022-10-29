@@ -5,11 +5,11 @@ import 'package:carttogo/main.dart';
 import 'package:flutter/services.dart';
 import 'package:carttogo/Pages/Admin/adminProductsList.dart';
 import 'package:carttogo/scanner_icons.dart'; // import custom icon
+import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as Path;
 import 'package:qr_code_scanner/qr_code_scanner.dart'; // A Flutter plugin by Julius Canute https://pub.dev/packages/qr_code_scanner
 import 'dart:developer';
-import 'package:image_picker/image_picker.dart';
 import 'package:carttogo/widgets/productImage.dart';
 
 class AddNewProduct extends StatefulWidget {
@@ -21,7 +21,6 @@ class AddNewProduct extends StatefulWidget {
 
 class AddNewProductState extends State<AddNewProduct> {
   File? image;
-
   Future pickImage(ImageSource source) async {
     try {
       final image = await ImagePicker().pickImage(source: source);
@@ -38,6 +37,7 @@ class AddNewProductState extends State<AddNewProduct> {
     final directory = await getApplicationDocumentsDirectory();
     final name = Path.basename(imagePath);
     final image = File('${directory.path}/$name');
+    print(image.path);
     return File(imagePath).copy(image.path);
   }
 
@@ -198,9 +198,11 @@ class AddNewProductState extends State<AddNewProduct> {
                                   image: image!,
                                   onClicked: (source) => pickImage(source),
                                 )
-                              : Image(
-                                  image:
-                                      AssetImage('assets/images/addImage.png')),
+                              : ImageWidget(
+                                  image: File(
+                                      'CartToGo/assets/images/addImage.png'),
+                                  onClicked: (source) => pickImage(source),
+                                ),
                           const SizedBox(height: 5),
 
                           // imageButton(
