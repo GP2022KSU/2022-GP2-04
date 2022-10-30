@@ -38,21 +38,29 @@ class ImageWidget extends StatelessWidget {
         ? NetworkImage(imagePath)
         : FileImage(File(imagePath));
 
-    return ClipOval(
-        child: Material(
-            color: Colors.transparent,
-            child: Ink.image(
-                image: image as ImageProvider,
-                fit: BoxFit.cover,
-                width: 120,
-                height: 120,
-                child: InkWell(
-                  onTap: () async {
-                    final source = await showImageSource(context);
-                    if (source == null) return;
-                    onClicked(source);
-                  },
-                ))));
+    return buildCircle(
+      color: appColor,
+      all: 3,
+      child: buildCircle(
+        color: Colors.white,
+        all: 3,
+        child: ClipOval(
+            child: Material(
+                color: Colors.transparent,
+                child: Ink.image(
+                    image: image as ImageProvider,
+                    fit: BoxFit.cover,
+                    width: 120,
+                    height: 120,
+                    child: InkWell(
+                      onTap: () async {
+                        final source = await showImageSource(context);
+                        if (source == null) return;
+                        onClicked(source);
+                      },
+                    )))),
+      ),
+    );
   }
 
   Future<ImageSource?> showImageSource(BuildContext context) async {
@@ -101,7 +109,6 @@ class ImageWidget extends StatelessWidget {
             Icons.camera_alt_outlined,
             size: 20,
             color: Colors.white,
-            
           ),
         ),
       );
