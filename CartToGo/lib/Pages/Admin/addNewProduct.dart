@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:carttogo/main.dart';
@@ -20,24 +21,47 @@ class AddNewProduct extends StatefulWidget {
 }
 
 class AddNewProductState extends State<AddNewProduct> {
-  File? image;
+  File? pickedImage;
+
   Future pickImage(ImageSource source) async {
     try {
       final image = await ImagePicker().pickImage(source: source);
       if (image == null) return;
-      final imagePath = File(image.path);
-      setState(() => this.image = imagePath);
+       final imagePath = File(image.path);
+       print(imagePath.toString());
+      setState(() => pickedImage = File(image.path));
+
       final imageController = await saveImagePermanently(image.path);
     } on PlatformException catch (e) {
       print('filled pick iamge $e');
     }
   }
 
+  Future uploadImage() async {
+    final productImage = File(pickedImage!.path!);
+    final path = "ProductsImages/" + pbarcodeController.text + '.png';
+
+    //final path = "ProductsImages/${pickedImage!}"+pbarcodeController.text +'.png';
+    final ref = FirebaseStorage.instance.ref().child(path);
+    ref.putFile(productImage);
+  }
+
+  // try {
+  //   final image = await ImagePicker().pickImage(source: source);
+  //   if (image == null) return;
+  //   final ref = FirebaseStorage.instance.ref().child(path);
+  //   ref.putFile(imagePath);
+  //   setState(() => this.productImage = imagePath);
+  //   final imageController = await saveImagePermanently(image.path);
+  // } on PlatformException catch (e) {
+  //   print('filled pick iamge $e');
+  // }
+
   Future saveImagePermanently(String imagePath) async {
     final directory = await getApplicationDocumentsDirectory();
     final name = Path.basename(imagePath);
     final image = File('${directory.path}/$name');
-    print(image.path);
+    //print(image.path);
     return File(imagePath).copy(image.path);
   }
 
@@ -193,9 +217,9 @@ class AddNewProductState extends State<AddNewProduct> {
                     child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          image != null
+                          pickedImage != null
                               ? ImageWidget(
-                                  image: image!,
+                                  image: pickedImage!,
                                   onClicked: (source) => pickImage(source),
                                 )
                               : ImageWidget(
@@ -642,6 +666,9 @@ class AddNewProductState extends State<AddNewProduct> {
                                   foregroundColor:
                                       MaterialStateProperty.all(Colors.white)),
                               onPressed: () {
+//******************************************************* */
+//\//******************************************************* */
+
                                 if (_formKey.currentState!.validate()) {
                                   if (pbarcodeController.text.isNotEmpty &&
                                       pNameController.text.isNotEmpty &&
@@ -667,6 +694,7 @@ class AddNewProductState extends State<AddNewProduct> {
                                       pPriceController.text,
                                     );
                                   }
+                                  uploadImage();
                                   // if the form is filled correctly،
                                   //navigate to "ProductsListAdmin" to show the product in the products' list
                                   Navigator.push(context,
