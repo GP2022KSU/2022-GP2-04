@@ -115,18 +115,16 @@ class AdminSearch extends SearchDelegate<String> {
                       tooltip: "تعديل المنتج",
                       icon: Icon(
                         Icons.edit,
-                        color: Color.fromARGB(255, 94, 90, 90),
+                        color: appColor,
                       ),
                       onPressed: () async {
-                        //  Navigator.push(context,
-                        //               MaterialPageRoute(builder: (context) {
-                        //             var map = snapshot.value as Map<dynamic, dynamic>;
-
-                        //             return UpdateProduct(
-                        //                 map["SearchBarcode"].toString());
-                        //           }));
                         var splitted =
                             Suggestions.elementAt(index).split(" | ");
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) {
+                          return UpdateProduct(splitted[0].toString());
+                        }));
+
                         DatabaseReference ref = FirebaseDatabase.instance
                             .ref("Products/${splitted[0].toString()}");
                         DatabaseEvent quan = await ref.child("Quantity").once();
@@ -184,9 +182,6 @@ class AdminSearch extends SearchDelegate<String> {
                             ),
                           )
                         ])),
-                    SizedBox(
-                      width: 10,
-                    ),
                     Divider() // to arrange the products list
                   ]),
             ),
