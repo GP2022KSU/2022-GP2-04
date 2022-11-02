@@ -21,12 +21,12 @@ def nameRoute():
     #fetching the global response variable to manipulate inside the function
     global response
 
-    #checking the request type we get from the app
+    #checking the request type we get from the app 
     if(request.method == 'POST'):
         ProductsHistory = request.data #getting the response data
         print(request.data)
         ProductsHistory_data = json.loads(ProductsHistory.decode('utf-8')) #converting it from json to key value pair
-        JsonFileProducts = open('/Applications/2022-GP1-04/Python/Products.json',encoding="utf8")
+        JsonFileProducts = open('C:\\Users\\ABS\\Desktop\\2022-GP1-04\\Python\\Products.json',encoding="utf8")
 
     #/Users/haya/Documents/2022-GP1-04/Python/Products.json -Haya's path
     #C:\\Users\\reema\\Documents\\2022-GP1-04\\Python\\Products.json -Reema's path

@@ -10,18 +10,17 @@ class Product {
   final String Location;
   final String Subcategory;
 
-  const Product({
-    required this.Name,
-    required this.Brand,
-    required this.Category,
-    //required this.Price,
-    required this.Quantity,
-    required this.Size,
-    required this.Barcode,
-    required this.SearchBarcode,
-    required this.Location,
-    required this.Subcategory
-  });
+  const Product(
+      {required this.Name,
+      required this.Brand,
+      required this.Category,
+      //required this.Price,
+      required this.Quantity,
+      required this.Size,
+      required this.Barcode,
+      required this.SearchBarcode,
+      required this.Location,
+      required this.Subcategory});
 
   //
   factory Product.fromMap(Map<dynamic, dynamic> map) {
@@ -35,7 +34,7 @@ class Product {
       Barcode: map['SearchBarcode'].toString(),
       SearchBarcode: map['SearchBarcode'].toString(),
       Location: map['Location'] ?? '',
-      Subcategory: map['SubCategory'] ?? '',
+      Subcategory: map['SubCategory'].toString(),
     );
   }
 }

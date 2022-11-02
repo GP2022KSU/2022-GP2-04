@@ -4,8 +4,10 @@ import 'package:carttogo/Pages/welcomePage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:carttogo/widgets/shoppingListItem.dart';
 import 'package:carttogo/Componentss/item.dart';
+import 'package:carttogo/Componentss/WishListItems.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
+import 'package:carttogo/Users/user.dart' as user;
 
 class Lists extends StatefulWidget {
   @override
@@ -17,8 +19,10 @@ class _ListsState extends State<Lists> with SingleTickerProviderStateMixin {
   //final ShoppingList = ShoppingItem.shoppingList();
   final _newProductController = TextEditingController();
   late TabController _tabController;
-  final ref = FirebaseDatabase.instance
+  final refShoppingList = FirebaseDatabase.instance
       .ref("Shopper/${FirebaseAuth.instance.currentUser?.uid}/ShoppingList");
+  final refWishList = FirebaseDatabase.instance
+      .ref("Shopper/${FirebaseAuth.instance.currentUser?.uid}/WishList");
   @override
   void initState() {
     _tabController = TabController(length: 2, vsync: this);
@@ -33,7 +37,6 @@ class _ListsState extends State<Lists> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    //print(ShoppingList.map((e) => print(e)));
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white24,
@@ -98,7 +101,7 @@ class _ListsState extends State<Lists> with SingleTickerProviderStateMixin {
                     text: 'قائمة التسوق',
                   ),
                   Tab(
-                    icon: Icon(Icons.favorite_border_outlined),
+                    icon: Icon(Icons.favorite),
                     text: 'قائمة الأمنيات',
                   ),
                 ],
@@ -123,12 +126,13 @@ class _ListsState extends State<Lists> with SingleTickerProviderStateMixin {
                                 height:
                                     MediaQuery.of(context).size.height * 0.6,
                                 child: FirebaseAnimatedList(
-                                    query: ref,
+                                    query: refShoppingList,
                                     duration: const Duration(milliseconds: 500),
                                     itemBuilder: (BuildContext context,
                                         DataSnapshot snapshot,
                                         Animation<double> animation,
                                         int index) {
+                                      print(_tabController);
                                       final items = snapshot.value
                                           as Map<dynamic, dynamic>;
                                       final item = ShoppingItem.fromMap(items);
@@ -209,14 +213,144 @@ class _ListsState extends State<Lists> with SingleTickerProviderStateMixin {
                     ],
                   ),
 
-                  // Shopping list tab view
-                  const Center(
-                    child: Text(
-                      'تجربة قائمة الأمنيات',
-                      style: TextStyle(
-                        fontSize: 25,
-                        fontWeight: FontWeight.w600,
-                      ),
+                  // WishList tab view
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 20,
+                      vertical: 15,
+                    ),
+                    child: Column(
+                      children: [
+                        SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.69,
+                            child: FirebaseAnimatedList(
+                                query: refWishList,
+                                duration: const Duration(milliseconds: 500),
+                                itemBuilder: (BuildContext context,
+                                    DataSnapshot snapshot,
+                                    Animation<double> animation,
+                                    int index) {
+                                  if (snapshot != null) {
+                                    final items =
+                                        snapshot.value as Map<dynamic, dynamic>;
+                                    final wishItem = WishProduct.fromMap(items);
+                                    return Column(children: [
+                                      Container(
+                                        margin: const EdgeInsets.only(
+                                          bottom: 11,
+                                        ),
+                                      ),
+                                      Container(
+                                        margin:
+                                            const EdgeInsets.only(bottom: 5),
+                                        child: ListTile(
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(20),
+                                          ),
+                                          contentPadding:
+                                              const EdgeInsets.symmetric(
+                                                  horizontal: 20, vertical: 5),
+                                          tileColor: Colors.white,
+                                          trailing: Image.network(
+                                            wishItem.ImgUrl,
+                                            fit: BoxFit.contain,
+                                            width: 50,
+                                            height: 60,
+                                          ),
+                                          title: Container(
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.2,
+                                            padding: const EdgeInsets.all(0),
+                                            margin: const EdgeInsets.symmetric(
+                                                vertical: 12),
+                                            child: Directionality(
+                                              textDirection: TextDirection.rtl,
+                                              child: Text(
+                                                wishItem.Name +
+                                                    " " +
+                                                    wishItem.Brand,
+                                                style: const TextStyle(
+                                                  fontSize: 15,
+                                                  color: Colors.black,
+                                                  fontWeight: FontWeight.w600,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          leading: Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.end,
+                                            children: [
+                                              Container(
+                                                padding:
+                                                    const EdgeInsets.all(0),
+                                                margin:
+                                                    const EdgeInsets.symmetric(
+                                                        vertical: 12),
+                                                height: 60,
+                                                width: 35,
+                                                child: IconButton(
+                                                  color: Colors.red,
+                                                  iconSize: 20,
+                                                  icon: const Icon(
+                                                      Icons.favorite),
+                                                  onPressed: () async {
+                                                    // ignore: unrelated_type_equality_checks
+                                                    await user.BringConnectedToCart() ==
+                                                            true
+                                                        ? addToCart(
+                                                            wishItem.Barcode,
+                                                            snapshot.key
+                                                                .toString(),
+                                                            context)
+                                                        : _showNotConnectedToCart(
+                                                            context);
+                                                  },
+                                                ),
+                                              ),
+                                              const SizedBox(width: 4),
+                                              const Text(
+                                                'ريال',
+                                                textAlign: TextAlign.right,
+                                                style: TextStyle(
+                                                  color: Color.fromRGBO(
+                                                      91, 90, 91, 1),
+                                                  fontSize: 15,
+                                                  letterSpacing:
+                                                      0 /*percentages not used in flutter. defaulting to zero*/,
+                                                  height: -2,
+                                                ),
+                                              ),
+                                              const SizedBox(width: 4),
+                                              Text(
+                                                wishItem.Offer == true
+                                                    ? wishItem.PriceAfterOffer
+                                                        .toString()
+                                                    : wishItem.Price
+                                                        .toString(), //Product Price 2 android ios 5
+                                                textAlign: TextAlign.center,
+                                                style: const TextStyle(
+                                                    color: Color.fromRGBO(
+                                                        32, 26, 37, 1),
+                                                    fontSize: 15,
+                                                    letterSpacing:
+                                                        0 /*percentages not used in flutter. defaulting to zero*/,
+                                                    fontWeight: FontWeight.w600,
+                                                    height: -2),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ]);
+                                  }
+                                  return Container();
+                                }))
+                      ],
                     ),
                   ),
                 ],
@@ -228,14 +362,121 @@ class _ListsState extends State<Lists> with SingleTickerProviderStateMixin {
     );
   }
 
+  void addToCart(String Barcode, String id, BuildContext context) async {
+    final ref = FirebaseDatabase.instance.ref();
+    final CartsInfo = await ref
+        .child(
+            "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts/CartsStatus")
+        .get(); //brings the current cart info
+    final CartsInfoMap = CartsInfo.value as Map<dynamic, dynamic>;
+
+    final WishProduct productInfo = await user.BringProductInfo(
+        Barcode); //bring the latest product update from the database
+    print("Here" + productInfo.Barcode);
+    //Modify Cart Total
+
+    productInfo.Offer == true
+        ? CartsInfoMap['Total'] =
+            double.parse(CartsInfoMap['Total'].toString()) +
+                productInfo.PriceAfterOffer
+        : CartsInfoMap['Total'] =
+            double.parse(CartsInfoMap['Total'].toString()) + productInfo.Price;
+
+    //Modify Cart NumberOfitems
+
+    CartsInfoMap['NumOfProducts'] =
+        (int.parse(CartsInfoMap['NumOfProducts'].toString())) + 1;
+
+    await ref
+        .child(
+            "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts/CartsStatus")
+        .update({
+      'Total': (double.parse(CartsInfoMap['Total'].toStringAsFixed(2))),
+      'NumOfProducts': int.parse(CartsInfoMap['NumOfProducts'].toString()),
+    });
+
+    await ref
+        .child(
+            "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts/${user.getLastCartNum()}")
+        .push()
+        .update({
+      "Barcode": Barcode,
+      "Brand": productInfo.Brand,
+      "Category": productInfo.Category,
+      "ImgUrl": productInfo.ImgUrl,
+      "Name": productInfo.Name,
+      "Offer": productInfo.Offer == true ? true : false,
+      "Price": productInfo.Price,
+      "PriceAfterOffer": productInfo.PriceAfterOffer,
+      "Size": productInfo.Size,
+      "SubCategory": productInfo.Subcategory
+    });
+
+    int barcode = (int.parse(Barcode));
+    int newQuantity = await user.BringProductQuantity(barcode) + 1;
+    if (FirebaseAuth.instance.currentUser != null) {
+      final quannn = ref.child("Products/${barcode.toString()}");
+      await quannn.update({
+        "Quantity": newQuantity,
+      });
+    }
+
+    refWishList.child(id).remove(); //remove from wishlist
+
+    await ref
+        .child(
+            "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts/CartsStatus")
+        .update({
+      'DeletingProduct': true,
+    });
+    Future.delayed(const Duration(milliseconds: 2000), () async {
+      await ref
+          .child(
+              "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts/CartsStatus")
+          .update({
+        'DeletingProduct': false,
+      });
+    });
+  }
+
+  void _showNotConnectedToCart(BuildContext context) async {
+    return showDialog<void>(
+        context: context,
+        // user must tap button!
+        builder: (BuildContext context) {
+          return Directionality(
+              textDirection: TextDirection.rtl,
+              child: Dialog(
+                elevation: 0,
+                backgroundColor: const Color(0xffffffff),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15.0),
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: const [
+                    SizedBox(height: 15),
+                    Text(
+                      "لست متصل بالسلة",
+                      style: TextStyle(
+                        fontSize: 19,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(height: 15),
+                  ],
+                ),
+              ));
+        });
+  }
+
 //change from bought to donw
   void _handleItemChange(ShoppingItem item) {
     setState(() {
-      print(item.toString());
       if (item.isBuyed == false) {
-        ref.child(item.id.toString()).update({"isBuyed": true});
+        refShoppingList.child(item.id.toString()).update({"isBuyed": true});
       } else if (item.isBuyed == true) {
-        ref.child(item.id.toString()).update({"isBuyed": false});
+        refShoppingList.child(item.id.toString()).update({"isBuyed": false});
       }
       //item.isBuyed = !item.isBuyed;
     });
@@ -244,7 +485,7 @@ class _ListsState extends State<Lists> with SingleTickerProviderStateMixin {
 //delete item from database ShoppingList
   void _deleteItem(String id) {
     setState(() {
-      ref.child(id).remove();
+      refShoppingList.child(id).remove();
     });
   }
 
@@ -253,7 +494,7 @@ class _ListsState extends State<Lists> with SingleTickerProviderStateMixin {
     if (shoppingItem != "") {
       String id = DateTime.now().millisecondsSinceEpoch.toString();
       setState(() {
-        ref.update({
+        refShoppingList.update({
           id: {
             "ItemID": id,
             "productName": shoppingItem,

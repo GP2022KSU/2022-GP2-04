@@ -5,6 +5,7 @@ import 'dart:core';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../Pages/Product.dart';
+import 'package:carttogo/Componentss/WishListItems.dart';
 
 final bool check = false;
 void main() {
@@ -27,10 +28,29 @@ void main() {
   });
 }
 
+bool ConnectedToCart = false;
+
+bool getConnectedToCart() {
+  BringConnectedToCart();
+  return ConnectedToCart;
+}
+
+Future<bool> BringConnectedToCart() async {
+  if (FirebaseAuth.instance.currentUser != null) {
+    final ref = FirebaseDatabase.instance.ref();
+    final snapshot = await ref
+        .child(
+            "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts/CartsStatus/ConnectedToCart")
+        .get();
+    ConnectedToCart = await snapshot.value == true ? true : false;
+
+    return ConnectedToCart;
+  }
+  return ConnectedToCart;
+}
+
 Future<String> BringLoyaltyCardID() async {
   if (FirebaseAuth.instance.currentUser != null) {
-    print(FirebaseAuth.instance.currentUser?.uid);
-
     final ref = FirebaseDatabase.instance.ref();
     final snapshot = await ref
         .child(
@@ -85,7 +105,7 @@ Future<int> BringLastCartNumber() async {
         .child(
             "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts/CartsStatus/FutureCartNumber")
         .get();
-    print("Last Cart Number: $LastCartNumber");
+
     LastCartNumber = await (int.parse(snapshot.value.toString())) - 1;
     return LastCartNumber;
   }
@@ -204,6 +224,25 @@ Future<List<String>> BringProducts() async {
   return barcodes;
 }
 
+Future<WishProduct> BringProductInfo(String barcode) async {
+  final ref = FirebaseDatabase.instance.ref();
+  final snapshot = await ref.child("Products/$barcode").get();
+  final map = snapshot.value as Map<dynamic, dynamic>;
+  final product = WishProduct.fromMap(map);
+  return product;
+}
+
+//-----------Brings the quantity of the deleted product-----------//
+Future<int> BringProductQuantity(int barcode) async {
+  final _quanData =
+      FirebaseDatabase.instance.ref("Products/${barcode.toString()}/Quantity");
+  final snapshot = await _quanData.get();
+  if (snapshot.exists) {
+    return (int.parse(snapshot.value.toString()));
+  } else {}
+  return 0;
+}
+
 Future<double> BringTotalPrice() async {
   if (FirebaseAuth.instance.currentUser != null) {
     final ref = FirebaseDatabase.instance.ref();
@@ -226,7 +265,6 @@ Future<bool> BringPaid() async {
         .get();
     if (snapshot.value.toString() == "true") {
       Paid = true;
-      print("Paid" + Paid.toString());
     }
     return Paid;
   }
@@ -254,10 +292,8 @@ double totalPriceAfterPoints() {
     for (var i = 0; i < getPoints(); i++) {
       PointinRiyal += eachPointinRiyal;
     }
-    String inString = PointinRiyal.toStringAsFixed(2); // '2.35'
-    PointinRiyal = double.parse(inString); // 2.35
-    print("inRiyal: " + PointinRiyal.toString());
-    print("Total: " + Total.toString());
+    String inString = PointinRiyal.toStringAsFixed(2);
+    PointinRiyal = double.parse(inString);
     Total = getTotal();
     NewTotal = Total - PointinRiyal;
     inString = NewTotal.toStringAsFixed(2);

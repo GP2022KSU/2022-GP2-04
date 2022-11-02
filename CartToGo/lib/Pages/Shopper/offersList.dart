@@ -393,15 +393,15 @@ class _OffersListState extends State<OffersList> {
 
   Future<List<String>> _SeeAPI() async {
     //run python file
-    final url = 'http://192.168.0.220:5000/name'; //local python API
+    final url = 'http://192.168.0.211:5000/name'; //local python API
     var purchasehis = "";
     final response = await http.post(Uri.parse(url),
         body: json.encode(user.getPurchaseHistory()));
     final response1 = await http.get(Uri.parse(url));
 
     //converting the fetched data from json to key value pair that can be displayed on the screen
-    print(response.body);
-    print(response1.body);
+    // print(response.body);
+    // print(response1.body);
     List<String> RecomProductsBarcode =
         user.getRecomProducts(response1.body.toString());
     return RecomProductsBarcode;
@@ -439,8 +439,6 @@ class _OffersListState extends State<OffersList> {
                             highlightColor: Colors.grey[200],
                             onTap: () async {
                               await FirebaseAuth.instance.signOut();
-                              print(
-                                  "UID: ${FirebaseAuth.instance.currentUser?.uid}");
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(

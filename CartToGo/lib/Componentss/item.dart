@@ -1,8 +1,3 @@
-import 'package:firebase_database/firebase_database.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'dart:async';
-import 'dart:core';
-
 class ShoppingItem {
   String? id;
   String? productName;

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:carttogo/Pages/Shopper/checkOut.dart';
 import 'package:carttogo/Pages/Shopper/shoppingCart.dart';
 import 'package:carttogo/Pages/Cashier/Cashier.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
@@ -13,6 +14,7 @@ import 'package:flutter_scrolling_fab_animated/flutter_scrolling_fab_animated.da
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:carttogo/main.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 
 class ShoppingCartWidget extends StatefulWidget {
   const ShoppingCartWidget({Key? key}) : super(key: key);
@@ -275,7 +277,6 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
                       if (map["Paid"] == null) {
                         //if there is data
                         try {
-                          print(map);
                           if (map['ImgUrl'] == "") {
                             spaceForImage = 0;
                             Noimg = true;
@@ -333,7 +334,64 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
                               'DeletingProduct': false,
                             });
                           });
-                          print("Total after $total numOfProducts");
+                        }
+                        //-----------Removes the product from the shopping cart and put it in wishlist-----------//
+
+                        void addToWishList(
+                            var product, BuildContext context) async {
+                          final Carts = _fb.ref().child(
+                              "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts/CartsStatus");
+                          double price;
+                          if (HaveOffer) {
+                            price = PriceAfterOffer; //price for IOS 5 android 2
+                          } else {
+                            price = Price;
+                          }
+                          total = total - price;
+                          numOfProducts--;
+                          await Carts.update({
+                            'Total': (double.parse(total.toStringAsFixed(2))),
+                            'NumOfProducts': numOfProducts,
+                          });
+                          int barcode =
+                              (int.parse(Barcode)); //barcode android 3 , IOS 0
+                          int newQuantity =
+                              await BringProductQuantity(barcode) + 1;
+                          if (FirebaseAuth.instance.currentUser != null) {
+                            final quannn = _fb
+                                .ref()
+                                .child("Products/${barcode.toString()}");
+                            await quannn.update({
+                              "Quantity": newQuantity,
+                            });
+                          }
+
+                          final WishList = _fb.ref().child(
+                              "Shopper/${FirebaseAuth.instance.currentUser?.uid}/WishList");
+
+                          await WishList.push().update({
+                            "Barcode": barcode,
+                            "Name": Name,
+                            "Brand": Brand,
+                            "ImgUrl": imgUrl,
+                            "Category": map['Category'],
+                            "Offer": map['Offer'] == true ? true : false,
+                            "Price": Price,
+                            "PriceAfterOffer": PriceAfterOffer,
+                            "Size": Size,
+                            "SubCategory": map['SubCategory']
+                          });
+
+                          product.remove();
+                          await Carts.update({
+                            'DeletingProduct': true,
+                          });
+                          Future.delayed(const Duration(milliseconds: 2000),
+                              () async {
+                            await Carts.update({
+                              'DeletingProduct': false,
+                            });
+                          });
                         }
 
                         //-----------To confirm the deleted items-----------//
@@ -384,7 +442,6 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
                                               highlightColor: Colors.grey[200],
                                               onTap: () {
                                                 Navigator.of(context).pop();
-                                                print(ref.child(snapshot.key!));
                                                 deleteProduct(
                                                     ref.child(snapshot.key!));
                                               },
@@ -483,7 +540,21 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
                                                       Color(0xFFFE4A49),
                                                   foregroundColor: Colors.white,
                                                   icon: Icons.delete,
-                                                  label: 'حذف المنتج',
+                                                  label: 'حذف',
+                                                ),
+                                                SlidableAction(
+                                                  onPressed: (context) {
+                                                    addToWishList(
+                                                        (ref.child(
+                                                            snapshot.key!)),
+                                                        context);
+                                                  },
+                                                  backgroundColor:
+                                                      Color.fromARGB(
+                                                          255, 35, 61, 255),
+                                                  foregroundColor: Colors.white,
+                                                  icon: Icons.favorite,
+                                                  label: "الأمنيات",
                                                 ),
                                               ]),
                                           child: Stack(children: <Widget>[
@@ -517,21 +588,26 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
                                                                     spaceForImage
                                                                         .toString())),
                                                             Container(
+                                                              width: MediaQuery.of(
+                                                                          context)
+                                                                      .size
+                                                                      .width *
+                                                                  0.5,
                                                               decoration:
                                                                   BoxDecoration(),
                                                               padding: EdgeInsets
                                                                   .symmetric(
                                                                       horizontal:
-                                                                          0,
+                                                                          2,
                                                                       vertical:
-                                                                          0),
+                                                                          2),
                                                               child: Column(
                                                                 mainAxisSize:
                                                                     MainAxisSize
                                                                         .min,
                                                                 children: <
                                                                     Widget>[
-                                                                  Text(
+                                                                  AutoSizeText(
                                                                     Name +
                                                                         " " +
                                                                         Brand, //Product name 1 android 4 ios
@@ -545,7 +621,7 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
                                                                             37,
                                                                             1),
                                                                         fontSize:
-                                                                            20,
+                                                                            16,
                                                                         letterSpacing:
                                                                             0 /*percentages not used in flutter. defaulting to zero*/,
                                                                         fontWeight:
