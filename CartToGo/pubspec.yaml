@@ -39,7 +39,9 @@ dependencies:
   flip_card: ^0.6.0
   flutter_hooks: ^0.18.3
   image_picker: ^0.8.3+1
-
+  firebase_storage: ^10.2.9
+  firebase_core: ^1.13.1
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter

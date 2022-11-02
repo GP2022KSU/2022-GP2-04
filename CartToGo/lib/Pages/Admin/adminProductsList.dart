@@ -11,6 +11,7 @@ import 'adminSearch.dart';
 import 'package:carttogo/Users/user.dart' as user;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:carttogo/Pages/Admin/updateProduct.dart';
 
 class ProductsListAdmin extends StatefulWidget {
   @override
@@ -215,6 +216,14 @@ class ProductsListAdmins extends State<ProductsListAdmin> {
                                   color: appColor,
                                 ),
                                 onPressed: () async {
+                                  Navigator.push(context,
+                                      MaterialPageRoute(builder: (context) {
+                                    var map =
+                                        snapshot.value as Map<dynamic, dynamic>;
+                                    return UpdateProduct(
+                                        map["SearchBarcode"].toString());
+                                  }));
+
                                   setState(() {
                                     k = snapshot.key;
                                     var v = snapshot.value.toString();
@@ -235,14 +244,13 @@ class ProductsListAdmins extends State<ProductsListAdmin> {
                                     if (map['Offer'] == "true") isOffer = true;
                                   } on Exception {}
 
-                                  var QUANTITY = l[10]; //Quantity on IOS is 1
+                                  var QUANTITY = int.parse(map["Quantity"]
+                                      .toString()); //Quantity on IOS is 1
                                   var PRICE = l[7]; //Price on IOS is 8
                                   var LOCATION = l[3];
                                   var ONOFFER = l[8]; //offer on IOS is 7
                                   var NEWPRICE =
                                       l[11]; //PriceAfterOffer on IOS is 0
-                                  _UpdateOrNot(QUANTITY, PRICE, LOCATION,
-                                      ONOFFER, NEWPRICE, isOffer);
                                 },
                               ),
 
@@ -337,6 +345,14 @@ class ProductsListAdmins extends State<ProductsListAdmin> {
                                   color: appColor,
                                 ),
                                 onPressed: () async {
+                                  Navigator.push(context,
+                                      MaterialPageRoute(builder: (context) {
+                                    var map =
+                                        snapshot.value as Map<dynamic, dynamic>;
+                                    return UpdateProduct(
+                                        map["SearchBarcode"].toString());
+                                  }));
+
                                   setState(() {
                                     k = snapshot.key;
                                     var v = snapshot.value.toString();
@@ -361,8 +377,8 @@ class ProductsListAdmins extends State<ProductsListAdmin> {
                                   var ONOFFER = l[8]; //offer on IOS is 7
                                   var NEWPRICE =
                                       l[11]; //PriceAfterOffer on IOS is 0
-                                  _UpdateOrNot(QUANTITY, PRICE, LOCATION,
-                                      ONOFFER, NEWPRICE, isOffer);
+                                  // _UpdateOrNot(QUANTITY, PRICE, LOCATION,
+                                  //     ONOFFER, NEWPRICE, isOffer);
                                 },
                               ),
 
@@ -564,294 +580,6 @@ class ProductsListAdmins extends State<ProductsListAdmin> {
         });
   }
 
-// dialog to enter the new product info
-  void _UpdateOrNot(
-      QUANTITY, PRICE, LOCATION, ONOFFER, NEWPRICE, isOffer) async {
-    // controllers to take/save the new product's information
-    var quantityController = TextEditingController(text: QUANTITY);
-    var priceController = TextEditingController(text: PRICE);
-    var newPriceController = TextEditingController(text: NEWPRICE);
-
-    return showDialog<void>(
-        context: context,
-        builder: (BuildContext context) {
-          return Directionality(
-              textDirection: TextDirection.rtl,
-              child: Dialog(
-                  elevation: 0,
-                  backgroundColor: Color(0xffffffff),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15.0),
-                  ),
-                  child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Form(
-                          key: _formKey,
-                          child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Directionality(
-                                    textDirection: TextDirection.rtl,
-                                    child: Text("بيانات المنتج الجديدة",
-                                        style: TextStyle(
-                                          fontSize: 19,
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.bold,
-                                        ))),
-                                SizedBox(height: 15),
-                                Divider(
-                                  height: 1.5,
-                                ),
-                                const SizedBox(height: 15),
-
-                                // new product's price
-                                Directionality(
-                                  textDirection: TextDirection.rtl,
-                                  child: TextFormField(
-                                      keyboardType:
-                                          TextInputType.numberWithOptions(
-                                              decimal: true),
-                                      inputFormatters: <TextInputFormatter>[
-                                        FilteringTextInputFormatter.allow(
-                                            RegExp(r'(^\d*\.?\d*)'))
-                                      ], // Only numbers can be entered
-                                      controller: priceController,
-                                      decoration: const InputDecoration(
-                                        labelText: "السعر",
-                                        labelStyle: TextStyle(
-                                            fontSize: 16, color: Colors.black),
-                                        hintText: "أدخل سعر المنتج ",
-                                        hintStyle: TextStyle(fontSize: 14),
-                                        enabledBorder: OutlineInputBorder(
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(20.0)),
-                                          borderSide: BorderSide(
-                                              width: 2, color: appColor),
-                                        ),
-                                      ),
-                                      validator: (value) {
-                                        if (value == null || value.isEmpty) {
-                                          return 'الرجاء كتابة سعر المنتج';
-                                        }
-                                        if (value.contains(RegExp(r'[A-Z]')) &&
-                                            value.contains(RegExp(r'[a-z]'))) {
-                                          return 'سعر المنتج يجب ان لا يحتوي على احرف';
-                                        }
-                                        return null;
-                                      },
-                                      onChanged: (value) {}),
-                                ),
-                                const SizedBox(height: 15),
-
-                                // new product's quantity
-                                Directionality(
-                                  textDirection: TextDirection.rtl,
-                                  child: TextFormField(
-                                      keyboardType: TextInputType.number,
-                                      inputFormatters: <TextInputFormatter>[
-                                        FilteringTextInputFormatter.digitsOnly
-                                      ], // Only numbers can be entered
-                                      controller: quantityController,
-                                      decoration: const InputDecoration(
-                                        labelText: "الكمية",
-                                        labelStyle: TextStyle(
-                                            fontSize: 16, color: Colors.black),
-                                        hintText: "أدخل كمية المنتج ",
-                                        hintStyle: TextStyle(fontSize: 14),
-                                        enabledBorder: OutlineInputBorder(
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(20.0)),
-                                          borderSide: BorderSide(
-                                              width: 2, color: appColor),
-                                        ),
-                                      ),
-                                      validator: (value) {
-                                        if (value == null || value.isEmpty) {
-                                          return 'الرجاء كتابة كمية المنتج';
-                                        }
-                                        if (value.contains(RegExp(r'[A-Z]')) &&
-                                            value.contains(RegExp(r'[a-z]'))) {
-                                          return ' كمية المنتج يجب ان لا تحتوي على احرف';
-                                        }
-                                        return null;
-                                      },
-                                      onChanged: (value) {}),
-                                ),
-                                SizedBox(height: 15),
-
-                                // new product's location
-                                Directionality(
-                                  textDirection: TextDirection.rtl,
-                                  child: DropdownButtonFormField(
-                                    decoration: InputDecoration(
-                                      labelText: "الموقع",
-                                      labelStyle: TextStyle(
-                                          fontSize: 16, color: Colors.black),
-                                      hintStyle: TextStyle(fontSize: 14),
-                                      enabledBorder: OutlineInputBorder(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(20.0)),
-                                        borderSide: BorderSide(
-                                            width: 2, color: appColor),
-                                      ),
-                                    ),
-                                    isExpanded: true,
-                                    icon: const Icon(
-                                      Icons.keyboard_arrow_down,
-                                      color: appColor,
-                                    ),
-                                    // Array list of locations
-                                    items: Locations.map((String items) {
-                                      return DropdownMenuItem(
-                                        alignment: Alignment.topRight,
-                                        value: items,
-                                        child: Text(items),
-                                      );
-                                    }).toList(),
-                                    validator: (value) => value == null
-                                        ? 'الرجاء اختيار الموقع'
-                                        : null,
-                                    // After selecting the location ,it will
-                                    // change button value to selected location
-                                    onChanged: (String? newLocation) {
-                                      setState(() {
-                                        selectedLocation = newLocation!;
-                                      });
-                                    },
-                                  ),
-                                ),
-                                SizedBox(height: 15),
-
-                                // Ask Admin for Product Offers & Adding, Deleting it
-                                SwitchScreen(),
-                                SizedBox(height: 15),
-
-                                // will shown only if the product have an offer
-                                //if (isOffer || ShowOfferPrice)
-
-                                // price after offer
-                                Directionality(
-                                  textDirection: TextDirection.rtl,
-                                  child: TextFormField(
-                                      keyboardType:
-                                          TextInputType.numberWithOptions(
-                                              decimal: true),
-                                      inputFormatters: <TextInputFormatter>[
-                                        FilteringTextInputFormatter.allow(
-                                            RegExp(r'(^\d*\.?\d*)'))
-                                      ],
-                                      // Only numbers can be entered
-                                      controller: newPriceController,
-                                      decoration: const InputDecoration(
-                                        labelText: "السعر بعد العرض",
-                                        labelStyle: TextStyle(
-                                            fontSize: 16, color: Colors.black),
-                                        hintText: "أدخل سعر المنتج",
-                                        hintStyle: TextStyle(fontSize: 14),
-                                        enabledBorder: OutlineInputBorder(
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(20.0)),
-                                          borderSide: BorderSide(
-                                              width: 2, color: appColor),
-                                        ),
-                                      ),
-                                      validator: (value) {
-                                        if (value == null || value.isEmpty) {
-                                          return 'الرجاء كتابة سعر المنتج';
-                                        }
-                                        if (value.contains(RegExp(r'[A-Z]')) &&
-                                            value.contains(RegExp(r'[a-z]'))) {
-                                          return 'سعر المنتج يجب ان لا يحتوي على احرف';
-                                        }
-                                        return null;
-                                      },
-                                      onChanged: (value) {}),
-                                ),
-                                const SizedBox(height: 15),
-
-                                const SizedBox(height: 15),
-                                Divider(
-                                  height: 1,
-                                  color: Colors.black,
-                                ),
-                                Container(
-                                    width: MediaQuery.of(context).size.width,
-                                    height: 50,
-                                    child: InkWell(
-                                        highlightColor: Colors.grey[200],
-                                        onTap: () async {
-                                          if (_formKey.currentState!
-                                              .validate()) {
-                                            bool state = SwitchClass.Offerstate;
-                                            if (quantityController
-                                                    .text.isNotEmpty &&
-                                                priceController
-                                                    .text.isNotEmpty &&
-                                                selectedLocation!.isNotEmpty) {
-                                              updateProductInfo(
-                                                  quantityController,
-                                                  priceController,
-                                                  selectedLocation.toString(),
-                                                  newPriceController,
-                                                  state);
-                                            }
-                                            Navigator.push(context,
-                                                MaterialPageRoute(
-                                                    builder: (context) {
-                                              return ProductsListAdmin();
-                                            }));
-                                          }
-                                        },
-                                        child: Center(
-                                            child: Text("تحديث",
-                                                style: TextStyle(
-                                                  fontSize: 18.0,
-                                                  color: appColor,
-                                                  fontWeight: FontWeight.bold,
-                                                ))))),
-                                Divider(
-                                  height: 1,
-                                ),
-                                Container(
-                                    width: MediaQuery.of(context).size.width,
-                                    height: 50,
-                                    child: InkWell(
-                                        borderRadius: BorderRadius.only(
-                                          bottomLeft: Radius.circular(15.0),
-                                          bottomRight: Radius.circular(15.0),
-                                        ),
-                                        highlightColor: Colors.grey[200],
-                                        onTap: () {
-                                          Navigator.push(context,
-                                              MaterialPageRoute(
-                                                  builder: (context) {
-                                            return ProductsListAdmin();
-                                          }));
-                                        },
-                                        child: Center(
-                                            child: Text("إلغاء",
-                                                style: TextStyle(
-                                                  fontSize: 16.0,
-                                                  fontWeight: FontWeight.bold,
-                                                )))))
-                              ])))));
-        });
-  }
-
-// add the new product's info to the database
-  updateProductInfo(quantityController, priceController, selectedLocation,
-      newPriceController, state) async {
-    //selectedLocatio in arg
-    DatabaseReference ref1 = FirebaseDatabase.instance.ref("Products/$k");
-    await ref1.update({
-      "Quantity": int.tryParse(quantityController.text),
-      "Price": double.tryParse(priceController.text),
-      "Location": selectedLocation,
-      "Offer": state,
-      "PriceAfterOffer": double.tryParse(newPriceController.text),
-    });
-  }
-
   void _showDialog(String pass) async {
     return showDialog<void>(
         context: context,
@@ -896,74 +624,5 @@ class ProductsListAdmins extends State<ProductsListAdmin> {
                                         color: appColor)))))
                   ])));
         });
-  }
-}
-
-class SwitchScreen extends StatefulWidget {
-  // This class for asking the admin for offer
-  @override
-  SwitchClass createState() => new SwitchClass();
-}
-
-class SwitchClass extends State {
-  static bool Offerstate = false;
-
-  @override
-  Widget build(BuildContext context) {
-    return CupertinoPageScaffold(
-        child: Column(
-      children: [
-        Container(
-          child: Row(
-            children: [
-              Divider(
-                height: 1,
-              ),
-              SizedBox(
-                width: MediaQuery.of(context).size.width * 0.45,
-                child: Row(
-                  children: [
-                    Text(
-                      "لدى المنتج عرض  ؟",
-                      style: TextStyle(
-                          fontFamily: 'CartToGo',
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold),
-                    ),
-                    Text(
-                      Offerstate == true ? "   نعم   " : "   لا   ",
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontFamily: 'CartToGo',
-                          fontSize: 14,
-                          color: Offerstate == true
-                              ? CupertinoColors.activeGreen
-                              : CupertinoColors.destructiveRed),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(
-                width: MediaQuery.of(context).size.width * 0.3,
-                child: CupertinoSwitch(
-                  value: Offerstate,
-                  onChanged: (value) {
-                    //Offerstate = value;
-                    setState(() {
-                      ProductsListAdmins.ShowOfferPrice = value;
-                      print(ProductsListAdmins.ShowOfferPrice);
-                      Offerstate = value;
-                    });
-                  },
-                ),
-              ),
-              Divider(
-                height: 1,
-              ),
-            ],
-          ),
-        ),
-      ],
-    ));
   }
 }

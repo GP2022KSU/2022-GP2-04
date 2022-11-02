@@ -215,8 +215,11 @@ Future<List<String>> BringProducts() async {
     final map = snapshot.value as Map<dynamic, dynamic>;
     map.forEach((key, value) {
       final product = Product.fromMap(value);
-      barcodes.add(
-          product.SearchBarcode.toString() + " | " + product.Name.toString());
+      barcodes.add(product.SearchBarcode.toString() +
+          " | " +
+          product.Name.toString() +
+          " " +
+          product.Brand.toString());
     });
 
     return barcodes;
