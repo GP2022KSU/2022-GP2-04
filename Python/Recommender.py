@@ -24,18 +24,12 @@ def nameRoute():
     #checking the request type we get from the app 
     if(request.method == 'POST'):
         ProductsHistory = request.data #getting the response data
-        print(request.data)
+        
         ProductsHistory_data = json.loads(ProductsHistory.decode('utf-8')) #converting it from json to key value pair
-        JsonFileProducts = open('C:\\Users\\ABS\\Desktop\\2022-GP1-04\\Python\\Products.json',encoding="utf8")
-
-    #/Users/haya/Documents/2022-GP1-04/Python/Products.json -Haya's path
-    #C:\\Users\\reema\\Documents\\2022-GP1-04\\Python\\Products.json -Reema's path
-
-        dictProducts=json.load(JsonFileProducts)
 
 
-        DataFrameHistory = pd.DataFrame.from_dict(ProductsHistory_data, orient='index')
-        DataFrameProducts = pd.DataFrame.from_dict(dictProducts, orient='index')
+        DataFrameHistory = pd.DataFrame.from_dict(ProductsHistory_data['PurchaseHistory'], orient='index')
+        DataFrameProducts = pd.DataFrame.from_dict(ProductsHistory_data['Products'], orient='index')
 
         DataFrameHistory.reset_index(level=0, inplace=True)
         DataFrameProducts.reset_index(level=0, inplace=True)
@@ -51,10 +45,10 @@ def nameRoute():
         popular_products = pd.DataFrame(HistoryCart.groupby('SubCategory')['Count'].count())
         popular_products.reset_index(level=0, inplace=True)
 
-            #plt.figure(figsize=(9, 3))
+        # plt.figure(figsize=(9, 3))
 
-            #plt.bar(popular_products['SubCategory'], popular_products['Count'])
-            #plt.show()
+        # plt.bar(popular_products['SubCategory'], popular_products['Count'])
+        # plt.show()
 
 
         tfidf = TfidfVectorizer(stop_words='english')
@@ -76,7 +70,7 @@ def nameRoute():
         def recommend_Products(Products_SubCategory):
                 seen = set()
                 ProductIndex = []
-                for x in mapping["بقوليات معلبة"]:
+                for x in mapping[""]:
                     if x not in seen:
                         ProductIndex.append(x)
                         seen.add(x)

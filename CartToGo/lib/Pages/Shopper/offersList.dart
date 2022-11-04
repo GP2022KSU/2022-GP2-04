@@ -23,22 +23,27 @@ class _OffersListState extends State<OffersList> {
   late bool _isLoading;
   int count = 0;
   void initState() {
+    super.initState();
     _isLoading = true;
     _SeeAPI();
-    Future.delayed(const Duration(milliseconds: 800), () {
+    initCount();
+    Future.delayed(const Duration(milliseconds: 400), ()  async{
       if (mounted) {
         setState(() {
           _isLoading = false;
         });
       }
-      _SeeAPI();
     });
-
-    super.initState();
   }
 
+    initCount() async {
+    count=await user.BringNumberOfOffers();
+    return count;
+  }
+
+
   @override
-  Widget build(BuildContext context) {
+Widget build(BuildContext context) {
     final ref = fb.ref().child('Products');
     return Scaffold(
       backgroundColor: Colors.white,
@@ -79,15 +84,14 @@ class _OffersListState extends State<OffersList> {
       body: SingleChildScrollView(
         child: Column(
           children: [
+
             // if the shopper has previous purchases, and there are offers,
             // recommendations of the same product subcategory will appear
+             //count>0?
             FutureBuilder<List<String>>(
                 future: _SeeAPI(),
                 builder:
-                    (BuildContext context, AsyncSnapshot<List<String>> asyn) {
-                  if (asyn.data != null) {
-                    print(asyn.data!.isEmpty);
-                  }
+                    (BuildContext context, AsyncSnapshot<List<String>> asyn) {  
                   if (asyn.data != null && asyn.data!.isNotEmpty) {
                     Recommended = asyn.data as List<String>;
                     return Column(
@@ -514,46 +518,9 @@ class _OffersListState extends State<OffersList> {
                     );
                   }
                   return Container();
-                  //else if (countOffer <= 0) {
-                  //   return Column(
-                  //     crossAxisAlignment: CrossAxisAlignment.start,
-                  //     children: [
-                  //       const SizedBox(
-                  //         height: 50,
-                  //       ),
-                  //       Center(
-                  //         child: Container(
-                  //           width: MediaQuery.of(context).size.width * 0.20,
-                  //           height: MediaQuery.of(context).size.height * 0.1,
-                  //           decoration: const BoxDecoration(
-                  //             image: DecorationImage(
-                  //                 image: AssetImage('assets/images/invoice.png'),
-                  //                 fit: BoxFit.fitWidth),
-                  //           ),
-                  //         ),
-                  //       ),
-                  //       const SizedBox(
-                  //         height: 20,
-                  //       ),
-                  //       Center(
-                  //           child: Container(
-                  //               child: Transform.rotate(
-                  //         angle: -1.2492672422141295e-13,
-                  //         child: const Text(
-                  //           'لا يوجد فواتير سابقة ',
-                  //           textAlign: TextAlign.center,
-                  //           style: TextStyle(
-                  //               color: Color.fromARGB(219, 100, 98, 98),
-                  //               fontFamily: 'CartToGo',
-                  //               fontSize: 26,
-                  //               fontWeight: FontWeight.w800,
-                  //               height: 1),
-                  //         ),
-                  //       ))),
-                  //     ],
-                  //   );
-                  // }
-                }),
+                })
+                
+                //:Container(),
           ],
         ),
       ),
@@ -562,17 +529,18 @@ class _OffersListState extends State<OffersList> {
 
   Future<List<String>> _SeeAPI() async {
     //run python file
-    final url = 'http://192.168.0.211:5000/name'; //local python API
+    final url = 'http://172.20.10.4:5000/name'; //local python API
     var purchasehis = "";
     final response = await http.post(Uri.parse(url),
-        body: json.encode(user.getPurchaseHistory()));
+        body: json.encode({"PurchaseHistory":user.getPurchaseHistory(),"Products":await user.bringAllProducts()}));
     final response1 = await http.get(Uri.parse(url));
 
     //converting the fetched data from json to key value pair that can be displayed on the screen
     // print(response.body);
     // print(response1.body);
+
     List<String> RecomProductsBarcode =
-        user.getRecomProducts(response1.body.toString());
+        await user.BringRecommendProducts(response1.body.toString());
     return RecomProductsBarcode;
   }
 
