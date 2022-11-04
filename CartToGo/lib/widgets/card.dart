@@ -2,10 +2,12 @@
 
 import 'dart:async';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:flip_card/flip_card.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:carttogo/Users/user.dart' as user;
 import 'package:carttogo/Pages/Shopper/loyaltyCard.dart';
+import 'package:carttogo/flip_card_icon_icons.dart'; // import custom icon
 
 class CardWidget extends StatefulWidget {
   @override
@@ -260,13 +262,13 @@ class CardWidgetState extends State<CardWidget> {
                 },
               )),
           Positioned(
-              top: 170,
+              top: 180,
               left: 27,
-              child:Icon(
-                    Icons.flip_to_back,
-                    size: 30,
-                    color: Colors.white,
-                  )),
+              child: Icon(
+                FlipCardIcon.flipcard,
+                size: 30,
+                color: Colors.white,
+              )),
         ],
       ),
     );

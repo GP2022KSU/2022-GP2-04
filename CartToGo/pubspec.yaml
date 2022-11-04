@@ -79,12 +79,19 @@ dev_dependencies:
 # The following section is specific to Flutter.
 flutter:
   fonts:
+
     - family: CartToGo
       fonts:
         - asset: assets/fonts/CartToGo.ttf
+
     - family: Scanner
       fonts:
         - asset: assets/fonts/Scanner.ttf
+
+    - family:  FlipCardIcon
+      fonts:
+        - asset: assets/fonts/FlipCardIcon.ttf
+
   uses-material-design: true
   assets:
     - assets/images/
