@@ -13,6 +13,7 @@ import 'package:path/path.dart' as Path;
 import 'package:qr_code_scanner/qr_code_scanner.dart'; // A Flutter plugin by Julius Canute https://pub.dev/packages/qr_code_scanner
 import 'dart:developer';
 import 'package:carttogo/widgets/productImage.dart';
+import 'package:dropdown_search/dropdown_search.dart';
 
 class AddNewProduct extends StatefulWidget {
   String scanData;
@@ -88,6 +89,7 @@ class AddNewProductState extends State<AddNewProduct> {
   List<String> Brands = [
     'أبو كأس',
     'السعودية',
+    'الوها',
     'المراعي',
     'الصافي',
     'البطل',
@@ -103,9 +105,13 @@ class AddNewProductState extends State<AddNewProduct> {
     'ديتول',
     'دايجستف',
     'سانيتا',
+    'سفن اب',
+    'سيزر',
     'سولين',
     'غارنييه',
     'فاين',
+    'فانتا',
+    'قودي',
     'كوكاكولا',
     'كادينا',
     'كيندر',
@@ -148,8 +154,10 @@ class AddNewProductState extends State<AddNewProduct> {
     'أسماك معلبة',
     'بقوليات معلبة',
     'بسكويت',
+    'جبن',
     'حليب',
     'خبز',
+    'زبادي',
     'شوكولاته',
     'شاي',
     'شامبو',
@@ -176,6 +184,7 @@ class AddNewProductState extends State<AddNewProduct> {
     'كيس',
     'رول',
     'كيلو',
+    'قطعة',
   ];
   String? selectedSize; // to save the value of chosen size
 
@@ -417,7 +426,6 @@ class AddNewProductState extends State<AddNewProduct> {
                                 textDirection: TextDirection.rtl,
                                 child: Flexible(
                                   child: DropdownButtonFormField(
-                                     
                                     decoration: InputDecoration(
                                         enabledBorder: OutlineInputBorder(
                                           borderRadius: BorderRadius.all(
@@ -676,8 +684,6 @@ class AddNewProductState extends State<AddNewProduct> {
                                   foregroundColor:
                                       MaterialStateProperty.all(Colors.white)),
                               onPressed: () {
-//******************************************************* */
-//\//******************************************************* */
                                 if (pickedImage?.path == null) {
                                   setState(() {
                                     imgEmpty = true;

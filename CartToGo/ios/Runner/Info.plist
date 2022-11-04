@@ -29,7 +29,7 @@
 	<key>NSCameraUsageDescription</key>
 	<string>This app needs camera access to scan QR codes and take product photo</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<key>NSMicrophoneUsageDescription</key>
+	<string>NSMicrophoneUsageDescription</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>

@@ -82,6 +82,7 @@ class ProductsListAdmins extends State<ProductsListAdmin> {
 
       backgroundColor: Colors.white,
       appBar: AppBar(
+        automaticallyImplyLeading : false,
         backgroundColor: Colors.white24,
         centerTitle: true,
         elevation: 0,
