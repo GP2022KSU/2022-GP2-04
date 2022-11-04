@@ -39,6 +39,8 @@ dependencies:
   flip_card: ^0.6.0
   flutter_hooks: ^0.18.3
   image_picker: ^0.8.3+1
+  textfield_search: ^0.10.0
+  dropdown_search: ^5.0.3
 
   
 dev_dependencies:

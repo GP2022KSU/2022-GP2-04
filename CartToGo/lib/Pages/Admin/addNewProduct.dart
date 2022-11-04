@@ -13,6 +13,7 @@ import 'package:path/path.dart' as Path;
 import 'package:qr_code_scanner/qr_code_scanner.dart'; // A Flutter plugin by Julius Canute https://pub.dev/packages/qr_code_scanner
 import 'dart:developer';
 import 'package:carttogo/widgets/productImage.dart';
+import 'package:dropdown_search/dropdown_search.dart';
 
 class AddNewProduct extends StatefulWidget {
   String scanData;
@@ -683,8 +684,6 @@ class AddNewProductState extends State<AddNewProduct> {
                                   foregroundColor:
                                       MaterialStateProperty.all(Colors.white)),
                               onPressed: () {
-//******************************************************* */
-//\//******************************************************* */
                                 if (pickedImage?.path == null) {
                                   setState(() {
                                     imgEmpty = true;

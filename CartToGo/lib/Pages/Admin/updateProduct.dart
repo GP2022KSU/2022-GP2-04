@@ -64,7 +64,7 @@ class UpdateProductState extends State<UpdateProduct> {
                       Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            SizedBox(height: 150),
+                            SizedBox(height: 40),
 
                             // new product's price
                             Directionality(
