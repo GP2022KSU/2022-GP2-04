@@ -94,11 +94,8 @@ class CardhistoryState extends State<Cardhistory> {
         child: Container(
           height: MediaQuery.of(context).size.height * 0.9,
           child: FirebaseAnimatedList(
-              query: _fb
-                  .ref()
-                  .child(
-                      "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts")
-                  .limitToFirst(user.getPaidCarts()),
+              query: _fb.ref().child(
+                  "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts"),
               duration: const Duration(milliseconds: 300),
               itemBuilder: (BuildContext context, DataSnapshot snapshot,
                   Animation<double> animation, int index) {
@@ -112,29 +109,40 @@ class CardhistoryState extends State<Cardhistory> {
                 List<String> ImagesofCart = [];
                 bool NoPoints = false;
                 String timeBought = "";
-                map.forEach((key, value) {
-                  if (value['Name'] != null) numofItems++;
-                  //Iterate through each cart product image
-                  if (value['ImgUrl'] != null) {
-                    for (int i = 0; i < ImagesofCart.length; i++) {
-                      // to check img duplicates
-                      if (value['ImgUrl'] == ImagesofCart[i]) {
-                        ImagesofCart.removeAt(i);
+                bool checkIfPaid = false;
+                print("Test " + snapshot.key.toString());
+                if (snapshot.key.toString() != "CartsStatus") {
+                  map.forEach((key, value) {
+                    //print("Test " + key);
+                    if (key != "NumOfProducts") {
+                      if (value['Name'] != null) numofItems++;
+                      //Iterate through each cart product image
+                      if (value['ImgUrl'] != null) {
+                        for (int i = 0; i < ImagesofCart.length; i++) {
+                          // to check img duplicates
+                          if (value['ImgUrl'] == ImagesofCart[i]) {
+                            ImagesofCart.removeAt(i);
+                          }
+                        }
+                        ImagesofCart.add(value['ImgUrl']);
+                      }
+                      if (key == "CartInfo") {
+                        if (value['Paid'] == true) {
+                          checkIfPaid = true;
+                          total = double.parse(value['Total'].toString());
+                          gainedPoints =
+                              int.parse(value['GainedPoints'].toString());
+                          usedPoints =
+                              int.parse(value['UsedPoints'].toString());
+                          datePlaced = value['Date'].toString();
+                          timeBought = value['Time'].toString();
+                        }
                       }
                     }
-                    ImagesofCart.add(value['ImgUrl']);
-                  }
-                  if (key == "CartInfo") {
-                    total = double.parse(value['Total'].toString());
-                    gainedPoints = int.parse(value['GainedPoints'].toString());
-                    usedPoints = int.parse(value['UsedPoints'].toString());
-                    datePlaced = value['Date'].toString();
-                    timeBought = value['Time'].toString();
-                  }
-                });
+                  });
+                }
                 if (gainedPoints > 0) NoPoints = true;
-
-                if (map['NumOfProducts'] == null) {
+                if (map['NumOfProducts'] == null && checkIfPaid) {
                   return AnimationConfiguration.staggeredList(
                     position: index,
                     duration: const Duration(milliseconds: 200),

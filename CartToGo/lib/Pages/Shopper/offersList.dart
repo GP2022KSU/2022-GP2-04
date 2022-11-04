@@ -27,7 +27,7 @@ class _OffersListState extends State<OffersList> {
     _isLoading = true;
     _SeeAPI();
     initCount();
-    Future.delayed(const Duration(milliseconds: 400), ()  async{
+    Future.delayed(const Duration(milliseconds: 400), () async {
       if (mounted) {
         setState(() {
           _isLoading = false;
@@ -36,14 +36,13 @@ class _OffersListState extends State<OffersList> {
     });
   }
 
-    initCount() async {
-    count=await user.BringNumberOfOffers();
+  initCount() async {
+    count = await user.BringNumberOfOffers();
     return count;
   }
 
-
   @override
-Widget build(BuildContext context) {
+  Widget build(BuildContext context) {
     final ref = fb.ref().child('Products');
     return Scaffold(
       backgroundColor: Colors.white,
@@ -84,14 +83,13 @@ Widget build(BuildContext context) {
       body: SingleChildScrollView(
         child: Column(
           children: [
-
             // if the shopper has previous purchases, and there are offers,
             // recommendations of the same product subcategory will appear
-             //count>0?
+            //count>0?
             FutureBuilder<List<String>>(
                 future: _SeeAPI(),
                 builder:
-                    (BuildContext context, AsyncSnapshot<List<String>> asyn) {  
+                    (BuildContext context, AsyncSnapshot<List<String>> asyn) {
                   if (asyn.data != null && asyn.data!.isNotEmpty) {
                     Recommended = asyn.data as List<String>;
                     return Column(
@@ -519,8 +517,8 @@ Widget build(BuildContext context) {
                   }
                   return Container();
                 })
-                
-                //:Container(),
+
+            //:Container(),
           ],
         ),
       ),
@@ -529,10 +527,13 @@ Widget build(BuildContext context) {
 
   Future<List<String>> _SeeAPI() async {
     //run python file
-    final url = 'http://172.20.10.4:5000/name'; //local python API
+    final url = 'http://192.168.0.211:5000/name'; //local python API
     var purchasehis = "";
     final response = await http.post(Uri.parse(url),
-        body: json.encode({"PurchaseHistory":user.getPurchaseHistory(),"Products":await user.bringAllProducts()}));
+        body: json.encode({
+          "PurchaseHistory": user.getPurchaseHistory(),
+          "Products": user.getAllProducts()
+        }));
     final response1 = await http.get(Uri.parse(url));
 
     //converting the fetched data from json to key value pair that can be displayed on the screen

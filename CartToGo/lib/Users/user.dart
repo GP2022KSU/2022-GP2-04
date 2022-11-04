@@ -126,17 +126,16 @@ Future<int> BringNumOfProducts() async {
 }
 
 Future<int> BringNumberOfOffers() async {
-  int countOffers=0;
+  int countOffers = 0;
   if (FirebaseAuth.instance.currentUser != null) {
     final ref = FirebaseDatabase.instance.ref();
-    final snapshot = await ref
-        .child("Products").get();
-      final product = snapshot.value as Map<dynamic, dynamic>;
-      product.forEach((key, value) {
-      if(value['Offer']==true){
+    final snapshot = await ref.child("Products").get();
+    final product = snapshot.value as Map<dynamic, dynamic>;
+    product.forEach((key, value) {
+      if (value['Offer'] == true) {
         countOffers++;
       }
-      });
+    });
 
     return countOffers;
   }
@@ -376,6 +375,11 @@ String getUsername() {
 Map<dynamic, dynamic> getPurchaseHistory() {
   BringPurchaseHistory();
   return Purchasehis;
+}
+
+Map<dynamic, dynamic> getAllProducts() {
+  bringAllProducts();
+  return allProducts;
 }
 
 List<String> getNames() {
