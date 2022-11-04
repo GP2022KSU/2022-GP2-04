@@ -6,6 +6,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:carttogo/Users/user.dart' as user;
 import 'package:flip_card/flip_card.dart';
 
+import '../../flip_card_icon_icons.dart';
+
 class LoyaltyCard extends StatelessWidget {
   GlobalKey<FlipCardState> cardKey = GlobalKey<FlipCardState>();
   String checkPointText() {
@@ -227,12 +229,12 @@ class LoyaltyCard extends StatelessWidget {
                 ]),
           ),
           SizedBox(
-            height: 25,
+            height: 40,
           ),
           Padding(
             padding: EdgeInsets.only(right: 300),
             child: Icon(
-              Icons.flip_to_front,
+              FlipCardIcon.flipcard,
               size: 30,
               color: Colors.white,
             ),

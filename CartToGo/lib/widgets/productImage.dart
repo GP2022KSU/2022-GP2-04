@@ -42,7 +42,7 @@ class ImageWidget extends StatelessWidget {
       color: appColor,
       all: 3,
       child: buildCircle(
-        color: Colors.white,
+        color: Color.fromARGB(255, 207, 207, 207),
         all: 3,
         child: ClipOval(
             child: Material(

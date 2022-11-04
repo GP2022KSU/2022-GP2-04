@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -416,6 +417,7 @@ class AddNewProductState extends State<AddNewProduct> {
                                 textDirection: TextDirection.rtl,
                                 child: Flexible(
                                   child: DropdownButtonFormField(
+                                     
                                     decoration: InputDecoration(
                                         enabledBorder: OutlineInputBorder(
                                           borderRadius: BorderRadius.all(
@@ -434,7 +436,7 @@ class AddNewProductState extends State<AddNewProduct> {
                                     // Array list of sub categories
                                     items: SubCategories.map((String items) {
                                       return DropdownMenuItem(
-                                        alignment: Alignment.topRight,
+                                        alignment: Alignment.center,
                                         value: items,
                                         child: Text(items),
                                       );
@@ -458,6 +460,7 @@ class AddNewProductState extends State<AddNewProduct> {
                                 textDirection: TextDirection.rtl,
                                 child: Flexible(
                                   child: DropdownButtonFormField(
+                                    alignment: AlignmentDirectional.center,
                                     decoration: InputDecoration(
                                         enabledBorder: OutlineInputBorder(
                                           borderRadius: BorderRadius.all(
@@ -476,7 +479,7 @@ class AddNewProductState extends State<AddNewProduct> {
                                     // Array list of categories
                                     items: Categories.map((String items) {
                                       return DropdownMenuItem(
-                                        alignment: Alignment.topRight,
+                                        alignment: Alignment.center,
                                         value: items,
                                         child: Text(items),
                                       );
@@ -523,7 +526,7 @@ class AddNewProductState extends State<AddNewProduct> {
                                     // Array list of units
                                     items: Sizes.map((String items) {
                                       return DropdownMenuItem(
-                                        alignment: Alignment.topRight,
+                                        alignment: Alignment.center,
                                         value: items,
                                         child: Text(items),
                                       );
