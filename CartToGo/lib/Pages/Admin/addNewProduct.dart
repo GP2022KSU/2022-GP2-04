@@ -22,13 +22,13 @@ class AddNewProduct extends StatefulWidget {
 
 class AddNewProductState extends State<AddNewProduct> {
   File? pickedImage;
-
+  bool imgEmpty = false;
   Future pickImage(ImageSource source) async {
     try {
       final image = await ImagePicker().pickImage(source: source);
       if (image == null) return;
-       final imagePath = File(image.path);
-       print(imagePath.toString());
+      final imagePath = File(image.path);
+      print(imagePath.toString());
       setState(() => pickedImage = File(image.path));
 
       final imageController = await saveImagePermanently(image.path);
@@ -37,13 +37,14 @@ class AddNewProductState extends State<AddNewProduct> {
     }
   }
 
-  Future uploadImage() async {
-    final productImage = File(pickedImage!.path!);
+  Future<String> uploadImage() async {
+    final productImage = File(pickedImage!.path);
     final path = "ProductsImages/" + pbarcodeController.text + '.png';
-
-    //final path = "ProductsImages/${pickedImage!}"+pbarcodeController.text +'.png';
     final ref = FirebaseStorage.instance.ref().child(path);
-    ref.putFile(productImage);
+    await ref.putFile(productImage);
+    final imageUrl = ref.getDownloadURL();
+
+    return imageUrl;
   }
 
   // try {
@@ -228,7 +229,13 @@ class AddNewProductState extends State<AddNewProduct> {
                                   onClicked: (source) => pickImage(source),
                                 ),
                           const SizedBox(height: 5),
-
+                          Visibility(
+                              visible: imgEmpty,
+                              child: const Text(
+                                "الرجاء إضافة صورة",
+                                style: TextStyle(
+                                    color: Color.fromARGB(255, 225, 48, 48)),
+                              )),
                           // imageButton(
                           //     icon: Icons.image_outlined,
                           //     title: "الكاميرا",
@@ -668,7 +675,15 @@ class AddNewProductState extends State<AddNewProduct> {
                               onPressed: () {
 //******************************************************* */
 //\//******************************************************* */
-
+                                if (pickedImage?.path == null) {
+                                  setState(() {
+                                    imgEmpty = true;
+                                  });
+                                } else {
+                                  setState(() {
+                                    imgEmpty = false;
+                                  });
+                                }
                                 if (_formKey.currentState!.validate()) {
                                   if (pbarcodeController.text.isNotEmpty &&
                                       pNameController.text.isNotEmpty &&
@@ -679,7 +694,8 @@ class AddNewProductState extends State<AddNewProduct> {
                                       selectedSize!.isNotEmpty &&
                                       pSizeController.text.isNotEmpty &&
                                       pQuantityController.text.isNotEmpty &&
-                                      pPriceController.text.isNotEmpty) {
+                                      pPriceController.text.isNotEmpty &&
+                                      pickedImage!.path.isNotEmpty) {
                                     addProduct(
                                       pbarcodeController.text,
                                       pbarcodeController.text,
@@ -711,7 +727,7 @@ class AddNewProductState extends State<AddNewProduct> {
   }
 
 // add new product to the database/stock
-  void addProduct(
+  Future<void> addProduct(
       String barcode,
       String searchBarcode,
       String name,
@@ -722,11 +738,11 @@ class AddNewProductState extends State<AddNewProduct> {
       String selectedSize,
       String size,
       String quantity,
-      String price) {
+      String price) async {
     var intBarcode = int.tryParse(barcode);
-
+    String imgurl = await uploadImage();
 // insert into database
-    databaseRef.child("Products").child("$intBarcode").set({
+    databaseRef.child("Products").child("${intBarcode}").set({
       'SearchBarcode': searchBarcode,
       'Name': name,
       'Brand': selectedBrand,
@@ -738,6 +754,7 @@ class AddNewProductState extends State<AddNewProduct> {
       'Price': double.tryParse(price),
       "Offer": false,
       "PriceAfterOffer": 0,
+      "ImgUrl": imgurl
     });
     pbarcodeController.clear();
     pNameController.clear();
