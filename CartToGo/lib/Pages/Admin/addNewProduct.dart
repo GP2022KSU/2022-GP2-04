@@ -88,6 +88,7 @@ class AddNewProductState extends State<AddNewProduct> {
   List<String> Brands = [
     'أبو كأس',
     'السعودية',
+    'الوها',
     'المراعي',
     'الصافي',
     'البطل',
@@ -103,9 +104,13 @@ class AddNewProductState extends State<AddNewProduct> {
     'ديتول',
     'دايجستف',
     'سانيتا',
+    'سفن اب',
+    'سيزر',
     'سولين',
     'غارنييه',
     'فاين',
+    'فانتا',
+    'قودي',
     'كوكاكولا',
     'كادينا',
     'كيندر',
@@ -148,8 +153,10 @@ class AddNewProductState extends State<AddNewProduct> {
     'أسماك معلبة',
     'بقوليات معلبة',
     'بسكويت',
+    'جبن',
     'حليب',
     'خبز',
+    'زبادي',
     'شوكولاته',
     'شاي',
     'شامبو',
@@ -176,6 +183,7 @@ class AddNewProductState extends State<AddNewProduct> {
     'كيس',
     'رول',
     'كيلو',
+    'قطعة',
   ];
   String? selectedSize; // to save the value of chosen size
 
@@ -417,7 +425,6 @@ class AddNewProductState extends State<AddNewProduct> {
                                 textDirection: TextDirection.rtl,
                                 child: Flexible(
                                   child: DropdownButtonFormField(
-                                     
                                     decoration: InputDecoration(
                                         enabledBorder: OutlineInputBorder(
                                           borderRadius: BorderRadius.all(

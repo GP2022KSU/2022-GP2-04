@@ -529,7 +529,7 @@ Widget build(BuildContext context) {
 
   Future<List<String>> _SeeAPI() async {
     //run python file
-    final url = 'http://172.20.10.4:5000/name'; //local python API
+    final url = 'http://172.20.10.5:5000/name'; //local python API
     var purchasehis = "";
     final response = await http.post(Uri.parse(url),
         body: json.encode({"PurchaseHistory":user.getPurchaseHistory(),"Products":await user.bringAllProducts()}));
