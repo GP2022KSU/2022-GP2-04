@@ -49,17 +49,6 @@ class AddNewProductState extends State<AddNewProduct> {
     return imageUrl;
   }
 
-  // try {
-  //   final image = await ImagePicker().pickImage(source: source);
-  //   if (image == null) return;
-  //   final ref = FirebaseStorage.instance.ref().child(path);
-  //   ref.putFile(imagePath);
-  //   setState(() => this.productImage = imagePath);
-  //   final imageController = await saveImagePermanently(image.path);
-  // } on PlatformException catch (e) {
-  //   print('filled pick iamge $e');
-  // }
-
   Future saveImagePermanently(String imagePath) async {
     final directory = await getApplicationDocumentsDirectory();
     final name = Path.basename(imagePath);
@@ -224,515 +213,491 @@ class AddNewProductState extends State<AddNewProduct> {
             child: Padding(
                 padding: const EdgeInsets.all(30.0),
                 child: Form(
-                    key: _formKey,
-                    child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          pickedImage != null
-                              ? ImageWidget(
-                                  image: pickedImage!,
-                                  onClicked: (source) => pickImage(source),
-                                )
-                              : ImageWidget(
-                                  image: File(
-                                      'CartToGo/assets/images/addImage.png'),
-                                  onClicked: (source) => pickImage(source),
-                                ),
-                          const SizedBox(height: 5),
-                          Visibility(
-                              visible: imgEmpty,
-                              child: const Text(
-                                "الرجاء إضافة صورة",
-                                style: TextStyle(
-                                    color: Color.fromARGB(255, 225, 48, 48)),
-                              )),
-                          // imageButton(
-                          //     icon: Icons.image_outlined,
-                          //     title: "الكاميرا",
-                          //     onClicked: () => pickImage(ImageSource.gallery)),
-                          // imageButton(
-                          //     icon: Icons.camera_alt_outlined,
-                          //     title: "آلبوم الصور",
-                          //     onClicked: () => pickImage(ImageSource.camera)),
+                  key: _formKey,
+                  child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        pickedImage != null
+                            ? ImageWidget(
+                                image: pickedImage!,
+                                onClicked: (source) => pickImage(source),
+                              )
+                            : ImageWidget(
+                                image:
+                                    File('CartToGo/assets/images/addImage.png'),
+                                onClicked: (source) => pickImage(source),
+                              ),
+                        const SizedBox(height: 5),
+                        Visibility(
+                            visible: imgEmpty,
+                            child: const Text(
+                              "الرجاء إضافة صورة",
+                              style: TextStyle(
+                                  color: Color.fromARGB(255, 225, 48, 48)),
+                            )),
 
-                          // Product's barcode number
-                          Directionality(
-                            textDirection: TextDirection.rtl,
-                            child: TextFormField(
-                                // #1 the barcode number can be added by typing
-                                keyboardType: TextInputType.number,
-                                inputFormatters: <TextInputFormatter>[
-                                  FilteringTextInputFormatter.digitsOnly
-                                ], // numbers keyboard to ensure only numbers can be entered
-                                controller: pbarcodeController,
-                                decoration: InputDecoration(
-                                  labelText: "الرمز الشريطي",
-                                  labelStyle: TextStyle(
-                                      fontSize: 20, color: Colors.black),
-                                  hintText: "أدخل الرمز الشريطي للمنتج ",
-                                  hintStyle: TextStyle(fontSize: 18),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(20.0)),
-                                    borderSide:
-                                        BorderSide(width: 2, color: appColor),
-                                  ),
+                        // Product's barcode number
+                        Directionality(
+                          textDirection: TextDirection.rtl,
+                          child: TextFormField(
 
-                                  // #2 the barcode number can be added by scanning
-                                  // click on the scan icon to open the scanner to scan the product's barcode
-                                  suffixIcon: IconButton(
-                                    onPressed: () {
-                                      Navigator.of(context)
-                                          .push(MaterialPageRoute(
-                                        builder: (context) =>
-                                            const scanProductBarcode(),
-                                      ));
-                                    },
-                                    icon: const Icon(Scanner.scanner),
-                                    color: appColor,
-                                  ),
-                                ),
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return 'الرجاء كتابة الرمز الشريطي للمنتج';
-                                  }
-                                  if (value.contains(RegExp(r'[A-Z]')) &&
-                                      value.contains(RegExp(r'[a-z]'))) {
-                                    return 'الرمز الشريطي للمنتج يجب ان لا يحتوي على احرف';
-                                  }
-                                  return null;
-                                },
-                                onChanged: (value) {}),
-                          ),
-                          const SizedBox(height: 5),
-
-                          // Product's name
-                          Directionality(
-                            textDirection: TextDirection.rtl,
-                            child: TextFormField(
-                                keyboardType: TextInputType.text,
-                                controller: pNameController,
-                                decoration: const InputDecoration(
-                                  labelText: "الإسم",
-                                  labelStyle: TextStyle(
-                                      fontSize: 20, color: Colors.black),
-                                  hintText: "أدخل إسم المنتج",
-                                  hintStyle: TextStyle(fontSize: 18),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(20.0)),
-                                    borderSide:
-                                        BorderSide(width: 2, color: appColor),
-                                  ),
-                                ),
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return 'الرجاء كتابة إسم المنتج';
-                                  }
-                                  if (value.contains(RegExp(r'[0-9]'))) {
-                                    return 'اسم المنتج يجب ان لا يحتوي على ارقام';
-                                  }
-                                  return null;
-                                },
-                                onChanged: (value) {}),
-                          ),
-                          const SizedBox(height: 5),
-
-                          // Product's brand
-                          Directionality(
-                            textDirection: TextDirection.rtl,
-                            child: DropdownButtonFormField<String>(
-                              isExpanded: true,
+                              // #1 the barcode number can be added by typing
+                              keyboardType: TextInputType.number,
+                              inputFormatters: <TextInputFormatter>[
+                                FilteringTextInputFormatter.digitsOnly
+                              ], // numbers keyboard to ensure only numbers can be entered
+                              controller: pbarcodeController,
                               decoration: InputDecoration(
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(20.0)),
-                                    borderSide:
-                                        BorderSide(width: 2, color: appColor),
-                                  ),
-                                  labelText: 'العلامة التجارية',
-                                  labelStyle: TextStyle(
-                                      fontSize: 20, color: Colors.black)),
-                              icon: const Icon(
-                                Icons.keyboard_arrow_down,
-                                color: appColor,
+                                labelText: "الرمز الشريطي",
+                                labelStyle: TextStyle(
+                                    fontSize: 20, color: Colors.black),
+                                hintText: "أدخل الرمز الشريطي للمنتج ",
+                                hintStyle: TextStyle(fontSize: 18),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(20.0)),
+                                  borderSide:
+                                      BorderSide(width: 2, color: appColor),
+                                ),
+
+                                // #2 the barcode number can be added by scanning
+                                // click on the scan icon to open the scanner to scan the product's barcode
+                                suffixIcon: IconButton(
+                                  onPressed: () {
+                                    Navigator.of(context)
+                                        .push(MaterialPageRoute(
+                                      builder: (context) =>
+                                          const scanProductBarcode(),
+                                    ));
+                                  },
+                                  icon: const Icon(Scanner.scanner),
+                                  color: appColor,
+                                ),
                               ),
-                              // Array list of brands names
-                              items: Brands.map((String items) {
-                                return DropdownMenuItem(
-                                  alignment: Alignment.topRight,
-                                  value: items,
-                                  child: Text(items),
-                                );
-                              }).toList(),
-                              validator: (value) => value == null
-                                  ? 'الرجاء اختيار العلامة التجارية'
-                                  : null,
-                              // After selecting the brand name ,it will
-                              // change button value to selected brand name
-                              onChanged: (String? newBrand) {
-                                setState(() {
-                                  selectedBrand = newBrand!;
-                                });
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'الرجاء كتابة الرمز الشريطي للمنتج';
+                                }
+                                if (value.contains(RegExp(r'[A-Z]')) &&
+                                    value.contains(RegExp(r'[a-z]'))) {
+                                  return 'الرمز الشريطي للمنتج يجب ان لا يحتوي على احرف';
+                                }
+                                return null;
                               },
-                            ),
-                          ),
-                          const SizedBox(height: 5),
+                              onChanged: (value) {}),
+                        ),
+                        const SizedBox(height: 5),
 
-                          // Product's location
-                          Directionality(
-                            textDirection: TextDirection.rtl,
-                            child: DropdownButtonFormField(
-                              decoration: InputDecoration(
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(20.0)),
-                                    borderSide:
-                                        BorderSide(width: 2, color: appColor),
-                                  ),
-                                  labelText: 'الموقع',
-                                  labelStyle: TextStyle(
-                                      fontSize: 20, color: Colors.black)),
-                              isExpanded: true,
-                              icon: const Icon(
-                                Icons.keyboard_arrow_down,
-                                color: appColor,
+                        // Product's name
+                        Directionality(
+                          textDirection: TextDirection.rtl,
+                          child: TextFormField(
+                              keyboardType: TextInputType.text,
+                              controller: pNameController,
+                              decoration: const InputDecoration(
+                                labelText: "الإسم",
+                                labelStyle: TextStyle(
+                                    fontSize: 20, color: Colors.black),
+                                hintText: "أدخل إسم المنتج",
+                                hintStyle: TextStyle(fontSize: 18),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(20.0)),
+                                  borderSide:
+                                      BorderSide(width: 2, color: appColor),
+                                ),
                               ),
-                              // Array list of locations
-                              items: Locations.map((String items) {
-                                return DropdownMenuItem(
-                                  alignment: Alignment.topRight,
-                                  value: items,
-                                  child: Text(items),
-                                );
-                              }).toList(),
-                              validator: (value) =>
-                                  value == null ? 'الرجاء اختيار الموقع' : null,
-                              // After selecting the location ,it will
-                              // change button value to selected location
-                              onChanged: (String? newLocation) {
-                                setState(() {
-                                  selectedLocation = newLocation!;
-                                });
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'الرجاء كتابة إسم المنتج';
+                                }
+                                if (value.contains(RegExp(r'[0-9]'))) {
+                                  return 'اسم المنتج يجب ان لا يحتوي على ارقام';
+                                }
+                                return null;
                               },
+                              onChanged: (value) {}),
+                        ),
+                        const SizedBox(height: 5),
+
+                        Directionality(
+                          textDirection: TextDirection.rtl,
+                          child: DropdownSearch<String>(
+                            popupProps: PopupProps.menu(
+                              showSearchBox: true,
+                              showSelectedItems: true,
                             ),
+                            //  list of brands names
+                            items: Brands,
+                            dropdownDecoratorProps: DropDownDecoratorProps(
+                              dropdownSearchDecoration: InputDecoration(
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(20.0)),
+                                  borderSide:
+                                      BorderSide(width: 2, color: appColor),
+                                ),
+                                labelText: 'العلامة التجارية',
+                                labelStyle: TextStyle(
+                                    fontSize: 20, color: Colors.black),
+                              ),
+                            ),
+                            // After selecting the brand name ,it will
+                            // change button value to selected brand name
+                            onChanged: (String? newBrand) {
+                              setState(() {
+                                selectedBrand = newBrand!;
+                              });
+                            },
+                            validator: (items) => items == null
+                                ? 'الرجاء اختيار العلامة التجارية'
+                                : null,
                           ),
-                          const SizedBox(height: 5),
+                        ),
+                        const SizedBox(height: 5),
 
-                          // Product's sub category
-                          Row(
-                            children: [
-                              Directionality(
-                                textDirection: TextDirection.rtl,
-                                child: Flexible(
-                                  child: DropdownButtonFormField(
-                                    decoration: InputDecoration(
-                                        enabledBorder: OutlineInputBorder(
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(20.0)),
-                                          borderSide: BorderSide(
-                                              width: 2, color: appColor),
-                                        ),
-                                        labelText: 'الفئة الفرعية',
-                                        labelStyle: TextStyle(
-                                            fontSize: 20, color: Colors.black)),
-                                    isExpanded: true,
-                                    icon: const Icon(
-                                      Icons.keyboard_arrow_down,
-                                      color: appColor,
-                                    ),
-                                    // Array list of sub categories
-                                    items: SubCategories.map((String items) {
-                                      return DropdownMenuItem(
-                                        alignment: Alignment.center,
-                                        value: items,
-                                        child: Text(items),
-                                      );
-                                    }).toList(),
-                                    validator: (value) => value == null
-                                        ? 'الرجاء اختيار الفئة الفرعية'
-                                        : null,
-                                    // After selecting the sub category ,it will
-                                    // change button value to selected sub category
-                                    onChanged: (String? newSubCategory) {
-                                      setState(() {
-                                        selectedSubCategory = newSubCategory!;
-                                      });
-                                    },
-                                  ),
+                        // Product's location
+                        Directionality(
+                          textDirection: TextDirection.rtl,
+                          child: DropdownSearch<String>(
+                            popupProps: PopupProps.menu(
+                              showSearchBox: true,
+                              showSelectedItems: true,
+                            ),
+                            //  list of products' location
+                            items: Locations,
+                            dropdownDecoratorProps: DropDownDecoratorProps(
+                              dropdownSearchDecoration: InputDecoration(
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(20.0)),
+                                  borderSide:
+                                      BorderSide(width: 2, color: appColor),
                                 ),
+                                labelText: 'الموقع',
+                                labelStyle: TextStyle(
+                                    fontSize: 20, color: Colors.black),
                               ),
-                              const SizedBox(width: 10),
-                              // Product's category
-                              Directionality(
-                                textDirection: TextDirection.rtl,
-                                child: Flexible(
-                                  child: DropdownButtonFormField(
-                                    alignment: AlignmentDirectional.center,
-                                    decoration: InputDecoration(
-                                        enabledBorder: OutlineInputBorder(
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(20.0)),
-                                          borderSide: BorderSide(
-                                              width: 2, color: appColor),
-                                        ),
-                                        labelText: 'الفئه',
-                                        labelStyle: TextStyle(
-                                            fontSize: 20, color: Colors.black)),
-                                    isExpanded: true,
-                                    icon: const Icon(
-                                      Icons.keyboard_arrow_down,
-                                      color: appColor,
-                                    ),
-                                    // Array list of categories
-                                    items: Categories.map((String items) {
-                                      return DropdownMenuItem(
-                                        alignment: Alignment.center,
-                                        value: items,
-                                        child: Text(items),
-                                      );
-                                    }).toList(),
-                                    validator: (value) => value == null
-                                        ? 'الرجاء اختيار الفئة'
-                                        : null,
-                                    // After selecting the category ,it will
-                                    // change button value to selected category
-                                    onChanged: (String? newCategory) {
-                                      setState(() {
-                                        selectedCategory = newCategory!;
-                                      });
-                                    },
-                                  ),
-                                ),
-                              ),
-                            ],
+                            ),
+                            // After selecting the location ,it will
+                            // change button value to selected location
+                            onChanged: (String? newLocation) {
+                              setState(() {
+                                selectedLocation = newLocation!;
+                              });
+                            },
+                            validator: (value) =>
+                                value == null ? 'الرجاء اختيار الموقع' : null,
                           ),
-                          const SizedBox(height: 5),
+                        ),
+                        const SizedBox(height: 5),
 
-                          // Product's measuring unit
-                          Row(
-                            children: [
-                              Directionality(
-                                textDirection: TextDirection.rtl,
-                                child: Flexible(
-                                  child: DropdownButtonFormField(
-                                    decoration: InputDecoration(
-                                        enabledBorder: OutlineInputBorder(
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(20.0)),
-                                          borderSide: BorderSide(
-                                              width: 2, color: appColor),
-                                        ),
-                                        labelText: 'وحدة القياس',
-                                        labelStyle: TextStyle(
-                                            fontSize: 20, color: Colors.black)),
-                                    isExpanded: true,
-                                    icon: const Icon(
-                                      Icons.keyboard_arrow_down,
-                                      color: appColor,
-                                    ),
-                                    // Array list of units
-                                    items: Sizes.map((String items) {
-                                      return DropdownMenuItem(
-                                        alignment: Alignment.center,
-                                        value: items,
-                                        child: Text(items),
-                                      );
-                                    }).toList(),
-                                    validator: (value) => value == null
-                                        ? 'الرجاء اختيار وحدة قياس الحجم'
-                                        : null,
-                                    // After selecting the unit ,it will
-                                    // change button value to selected unit
-                                    onChanged: (String? newSize) {
-                                      setState(() {
-                                        selectedSize = newSize!;
-                                      });
-                                    },
+                        // Product's sub category
+                        Row(
+                          children: [
+                            Directionality(
+                              textDirection: TextDirection.rtl,
+                              child: Flexible(
+                                child: DropdownSearch<String>(
+                                  popupProps: PopupProps.menu(
+                                    showSearchBox: true,
+                                    showSelectedItems: true,
                                   ),
-                                ),
-                              ),
-                              const SizedBox(width: 10),
-                              // Product's size text field
-                              Directionality(
-                                textDirection: TextDirection.rtl,
-                                child: Flexible(
-                                  child: TextFormField(
-                                      keyboardType: TextInputType.number,
-                                      inputFormatters: <TextInputFormatter>[
-                                        FilteringTextInputFormatter.allow(
-                                            RegExp(r'(^\d*\.?\d*)'))
-                                      ], // Only numbers can be entered
-                                      controller: pSizeController,
-                                      decoration: const InputDecoration(
-                                        labelText: "الحجم",
-                                        labelStyle: TextStyle(
-                                            fontSize: 20, color: Colors.black),
-                                        hintText: "أدخل حجم/وزن المنتج ",
-                                        hintStyle: TextStyle(fontSize: 13),
-                                        enabledBorder: OutlineInputBorder(
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(20.0)),
-                                          borderSide: BorderSide(
-                                              width: 2, color: appColor),
-                                        ),
+                                  //  list of products' sub categories
+                                  items: SubCategories,
+                                  dropdownDecoratorProps:
+                                      DropDownDecoratorProps(
+                                    dropdownSearchDecoration: InputDecoration(
+                                      enabledBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(20.0)),
+                                        borderSide: BorderSide(
+                                            width: 2, color: appColor),
                                       ),
-                                      validator: (value) {
-                                        if (value == null || value.isEmpty) {
-                                          return 'الرجاء كتابة حجم/وزن المنتج';
-                                        }
-                                        return null;
-                                      },
-                                      onChanged: (value) {}),
+                                      labelText: 'الفئة الفرعية',
+                                      labelStyle: TextStyle(
+                                          fontSize: 18, color: Colors.black),
+                                    ),
+                                  ),
+                                  // After selecting the sub category ,it will
+                                  // change value to selected sub category
+                                  onChanged: (String? newSubCategory) {
+                                    setState(() {
+                                      selectedSubCategory = newSubCategory!;
+                                    });
+                                  },
+                                  validator: (value) => value == null
+                                      ? 'الرجاء اختيار الفئة الفرعية'
+                                      : null,
                                 ),
                               ),
-                            ],
-                          ),
-                          const SizedBox(height: 5),
+                            ),
+                            const SizedBox(width: 5),
 
-                          // Product's quantity
-                          Directionality(
-                            textDirection: TextDirection.rtl,
-                            child: TextFormField(
-                                keyboardType: TextInputType.number,
-                                inputFormatters: <TextInputFormatter>[
-                                  FilteringTextInputFormatter.digitsOnly
-                                ], // Only numbers can be entered
-                                controller: pQuantityController,
-                                decoration: const InputDecoration(
-                                  labelText: "الكمية",
-                                  labelStyle: TextStyle(
-                                      fontSize: 20, color: Colors.black),
-                                  hintText: "أدخل كمية المنتج ",
-                                  hintStyle: TextStyle(fontSize: 18),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(20.0)),
-                                    borderSide:
-                                        BorderSide(width: 2, color: appColor),
+                            // Product's categoryس
+                            Directionality(
+                              textDirection: TextDirection.rtl,
+                              child: Flexible(
+                                child: DropdownSearch<String>(
+                                  popupProps: PopupProps.menu(
+                                    showSearchBox: true,
+                                    showSelectedItems: true,
                                   ),
-                                ),
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return 'الرجاء كتابة كمية المنتج';
-                                  }
-                                  if (value.contains(RegExp(r'[A-Z]')) &&
-                                      value.contains(RegExp(r'[a-z]'))) {
-                                    return 'كمية المنتج يجب ان لا تحتوي على احرف';
-                                  }
-                                  return null;
-                                },
-                                onChanged: (value) {}),
-                          ),
-                          const SizedBox(height: 5),
-
-                          //Product's price
-                          Directionality(
-                            textDirection: TextDirection.rtl,
-                            child: TextFormField(
-                                keyboardType: TextInputType.numberWithOptions(
-                                    decimal: true),
-                                inputFormatters: <TextInputFormatter>[
-                                  FilteringTextInputFormatter.allow(
-                                      RegExp(r'(^\d*\.?\d*)'))
-                                ], // Only numbers can be entered
-                                controller: pPriceController,
-                                decoration: const InputDecoration(
-                                  labelText: "السعر",
-                                  labelStyle: TextStyle(
-                                      fontSize: 20, color: Colors.black),
-                                  hintText: "أدخل سعر المنتج ",
-                                  hintStyle: TextStyle(fontSize: 18),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(20.0)),
-                                    borderSide:
-                                        BorderSide(width: 2, color: appColor),
+                                  //  list of products' categories
+                                  items: Categories,
+                                  dropdownDecoratorProps:
+                                      DropDownDecoratorProps(
+                                    dropdownSearchDecoration: InputDecoration(
+                                      enabledBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(20.0)),
+                                        borderSide: BorderSide(
+                                            width: 2, color: appColor),
+                                      ),
+                                      labelText: 'الفئة ',
+                                      labelStyle: TextStyle(
+                                          fontSize: 18, color: Colors.black),
+                                    ),
                                   ),
+                                  // After selecting the category ,it will
+                                  // change value to selected category
+                                  onChanged: (String? newCategory) {
+                                    setState(() {
+                                      selectedCategory = newCategory!;
+                                    });
+                                  },
+                                  validator: (value) => value == null
+                                      ? 'الرجاء اختيار الفئة'
+                                      : null,
                                 ),
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return 'الرجاء كتابة سعر المنتج';
-                                  }
-                                  if (value.contains(RegExp(r'[A-Z]')) &&
-                                      value.contains(RegExp(r'[a-z]'))) {
-                                    return 'سعر المنتج يجب ان لا يحتوي على احرف';
-                                  }
-                                  return null;
-                                },
-                                onChanged: (value) {}),
-                          ),
-                          const SizedBox(height: 5),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 5),
 
-                          // start of "add new product" button
-                          ElevatedButton(
-                              style: ButtonStyle(
-                                  elevation: MaterialStateProperty.all(8.0),
-                                  textStyle: MaterialStateProperty.all(
-                                      const TextStyle(
-                                          fontSize: 20,
-                                          fontFamily: 'CartToGo')),
-                                  fixedSize: MaterialStateProperty.all(
-                                      const Size(270, 50)),
-                                  shape: MaterialStateProperty.all<
-                                          RoundedRectangleBorder>(
-                                      RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(90.0))),
-                                  backgroundColor:
-                                      MaterialStateProperty.all(appColor),
-                                  foregroundColor:
-                                      MaterialStateProperty.all(Colors.white)),
-                              onPressed: () {
-                                if (pickedImage?.path == null) {
-                                  setState(() {
-                                    imgEmpty = true;
-                                  });
-                                } else {
-                                  setState(() {
-                                    imgEmpty = false;
-                                  });
+                        // Product's sub category
+                        Row(
+                          children: [
+                            Directionality(
+                              textDirection: TextDirection.rtl,
+                              child: Flexible(
+                                child: DropdownSearch<String>(
+                                  popupProps: PopupProps.menu(
+                                    showSearchBox: true,
+                                    showSelectedItems: true,
+                                  ),
+                                  //  list of products' sub categories
+                                  items: Sizes,
+                                  dropdownDecoratorProps:
+                                      DropDownDecoratorProps(
+                                    dropdownSearchDecoration: InputDecoration(
+                                      enabledBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(20.0)),
+                                        borderSide: BorderSide(
+                                            width: 2, color: appColor),
+                                      ),
+                                      labelText: 'وحدة القياس',
+                                      labelStyle: TextStyle(
+                                          fontSize: 18, color: Colors.black),
+                                    ),
+                                  ),
+                                  // After selecting the sub category ,it will
+                                  // change value to selected sub category
+                                  onChanged: (String? newUnitMeasure) {
+                                    setState(() {
+                                      selectedSize = newUnitMeasure!;
+                                    });
+                                  },
+                                  validator: (value) => value == null
+                                      ? 'الرجاء اختيار وحدة قياس الحجم'
+                                      : null,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 5),
+
+                            // Product's size text field
+                            Directionality(
+                              textDirection: TextDirection.rtl,
+                              child: Flexible(
+                                child: TextFormField(
+                                    keyboardType: TextInputType.number,
+                                    inputFormatters: <TextInputFormatter>[
+                                      FilteringTextInputFormatter.allow(
+                                          RegExp(r'(^\d*\.?\d*)'))
+                                    ], // Only numbers can be entered
+                                    controller: pSizeController,
+                                    decoration: const InputDecoration(
+                                      labelText: "الحجم",
+                                      labelStyle: TextStyle(
+                                          fontSize: 20, color: Colors.black),
+                                      hintText: "أدخل حجم/وزن المنتج ",
+                                      hintStyle: TextStyle(fontSize: 13),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(20.0)),
+                                        borderSide: BorderSide(
+                                            width: 2, color: appColor),
+                                      ),
+                                    ),
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty) {
+                                        return 'الرجاء كتابة حجم/وزن المنتج';
+                                      }
+                                      return null;
+                                    },
+                                    onChanged: (value) {}),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 5),
+
+                        // Product's quantity
+                        Directionality(
+                          textDirection: TextDirection.rtl,
+                          child: TextFormField(
+                              keyboardType: TextInputType.number,
+                              inputFormatters: <TextInputFormatter>[
+                                FilteringTextInputFormatter.digitsOnly
+                              ], // Only numbers can be entered
+                              controller: pQuantityController,
+                              decoration: const InputDecoration(
+                                labelText: "الكمية",
+                                labelStyle: TextStyle(
+                                    fontSize: 20, color: Colors.black),
+                                hintText: "أدخل كمية المنتج ",
+                                hintStyle: TextStyle(fontSize: 18),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(20.0)),
+                                  borderSide:
+                                      BorderSide(width: 2, color: appColor),
+                                ),
+                              ),
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'الرجاء كتابة كمية المنتج';
                                 }
-                                if (_formKey.currentState!.validate()) {
-                                  if (pbarcodeController.text.isNotEmpty &&
-                                      pNameController.text.isNotEmpty &&
-                                      selectedBrand!.isNotEmpty &&
-                                      selectedLocation!.isNotEmpty &&
-                                      selectedSubCategory!.isNotEmpty &&
-                                      selectedCategory!.isNotEmpty &&
-                                      selectedSize!.isNotEmpty &&
-                                      pSizeController.text.isNotEmpty &&
-                                      pQuantityController.text.isNotEmpty &&
-                                      pPriceController.text.isNotEmpty &&
-                                      pickedImage!.path.isNotEmpty) {
-                                    addProduct(
-                                      pbarcodeController.text,
-                                      pbarcodeController.text,
-                                      pNameController.text,
-                                      selectedBrand.toString(),
-                                      selectedLocation.toString(),
-                                      selectedSubCategory.toString(),
-                                      selectedCategory.toString(),
-                                      selectedSize.toString(),
-                                      pSizeController.text,
-                                      pQuantityController.text,
-                                      pPriceController.text,
-                                    );
-                                  }
-                                  uploadImage();
-                                  // if the form is filled correctly،
-                                  //navigate to "ProductsListAdmin" to show the product in the products' list
-                                  Navigator.push(context,
-                                      MaterialPageRoute(builder: (context) {
-                                    return ProductsListAdmin();
-                                  }));
+                                if (value.contains(RegExp(r'[A-Z]')) &&
+                                    value.contains(RegExp(r'[a-z]'))) {
+                                  return 'كمية المنتج يجب ان لا تحتوي على احرف';
                                 }
+                                return null;
                               },
-                              child: const Text('إضافة المنتج')),
-                          // end of "add new product" button
-                        ]))
-                // end of add new product form
-                )));
+                              onChanged: (value) {}),
+                        ),
+                        const SizedBox(height: 5),
+
+                        //Product's price
+                        Directionality(
+                          textDirection: TextDirection.rtl,
+                          child: TextFormField(
+                              keyboardType: TextInputType.numberWithOptions(
+                                  decimal: true),
+                              inputFormatters: <TextInputFormatter>[
+                                FilteringTextInputFormatter.allow(
+                                    RegExp(r'(^\d*\.?\d*)'))
+                              ], // Only numbers can be entered
+                              controller: pPriceController,
+                              decoration: const InputDecoration(
+                                labelText: "السعر",
+                                labelStyle: TextStyle(
+                                    fontSize: 20, color: Colors.black),
+                                hintText: "أدخل سعر المنتج ",
+                                hintStyle: TextStyle(fontSize: 18),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(20.0)),
+                                  borderSide:
+                                      BorderSide(width: 2, color: appColor),
+                                ),
+                              ),
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'الرجاء كتابة سعر المنتج';
+                                }
+                                if (value.contains(RegExp(r'[A-Z]')) &&
+                                    value.contains(RegExp(r'[a-z]'))) {
+                                  return 'سعر المنتج يجب ان لا يحتوي على احرف';
+                                }
+                                return null;
+                              },
+                              onChanged: (value) {}),
+                        ),
+                        const SizedBox(height: 5),
+
+                        // start of "add new product" button
+                        ElevatedButton(
+                            style: ButtonStyle(
+                                elevation: MaterialStateProperty.all(8.0),
+                                textStyle: MaterialStateProperty.all(
+                                    const TextStyle(
+                                        fontSize: 20, fontFamily: 'CartToGo')),
+                                fixedSize: MaterialStateProperty.all(
+                                    const Size(270, 50)),
+                                shape: MaterialStateProperty.all<
+                                        RoundedRectangleBorder>(
+                                    RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(90.0))),
+                                backgroundColor:
+                                    MaterialStateProperty.all(appColor),
+                                foregroundColor:
+                                    MaterialStateProperty.all(Colors.white)),
+                            onPressed: () {
+                              if (pickedImage?.path == null) {
+                                setState(() {
+                                  imgEmpty = true;
+                                });
+                              } else {
+                                setState(() {
+                                  imgEmpty = false;
+                                });
+                              }
+                              if (_formKey.currentState!.validate()) {
+                                if (pbarcodeController.text.isNotEmpty &&
+                                    pNameController.text.isNotEmpty &&
+                                    selectedBrand!.isNotEmpty &&
+                                    selectedLocation!.isNotEmpty &&
+                                    selectedSubCategory!.isNotEmpty &&
+                                    selectedCategory!.isNotEmpty &&
+                                    selectedSize!.isNotEmpty &&
+                                    pSizeController.text.isNotEmpty &&
+                                    pQuantityController.text.isNotEmpty &&
+                                    pPriceController.text.isNotEmpty &&
+                                    pickedImage!.path.isNotEmpty) {
+                                  addProduct(
+                                    pbarcodeController.text,
+                                    pbarcodeController.text,
+                                    pNameController.text,
+                                    selectedBrand.toString(),
+                                    selectedLocation.toString(),
+                                    selectedSubCategory.toString(),
+                                    selectedCategory.toString(),
+                                    selectedSize.toString(),
+                                    pSizeController.text,
+                                    pQuantityController.text,
+                                    pPriceController.text,
+                                  );
+                                }
+                                uploadImage();
+                                // if the form is filled correctly،
+                                //navigate to "ProductsListAdmin" to show the product in the products' list
+                                Navigator.push(context,
+                                    MaterialPageRoute(builder: (context) {
+                                  return ProductsListAdmin();
+                                }));
+                              }
+                            },
+                            child: const Text('إضافة المنتج')),
+                        // end of "add new product" button
+                      ]),
+                ))
+            // end of add new product form
+            ));
   }
 
 // add new product to the database/stock

@@ -4,6 +4,7 @@ import 'package:carttogo/main.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:carttogo/Pages/Admin/adminProductsList.dart';
+import 'package:dropdown_search/dropdown_search.dart';
 
 class UpdateProduct extends StatefulWidget {
   String SearchBarcode;
@@ -143,35 +144,26 @@ class UpdateProductState extends State<UpdateProduct> {
                             // new product's location
                             Directionality(
                               textDirection: TextDirection.rtl,
-                              child: DropdownButtonFormField(
-                                decoration: InputDecoration(
-                                  labelText: "الموقع",
-                                  labelStyle: TextStyle(
-                                      fontSize: 16, color: Colors.black),
-                                  hintStyle: TextStyle(fontSize: 14),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(20.0)),
-                                    borderSide:
-                                        BorderSide(width: 2, color: appColor),
+                              child: DropdownSearch<String>(
+                                popupProps: PopupProps.menu(
+                                  showSearchBox: true,
+                                  showSelectedItems: true,
+                                ),
+                                //  list of products' location
+                                items: Locations,
+                                dropdownDecoratorProps: DropDownDecoratorProps(
+                                  dropdownSearchDecoration: InputDecoration(
+                                    enabledBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(20.0)),
+                                      borderSide:
+                                          BorderSide(width: 2, color: appColor),
+                                    ),
+                                    labelText: 'الموقع',
+                                    labelStyle: TextStyle(
+                                        fontSize: 20, color: Colors.black),
                                   ),
                                 ),
-                                isExpanded: true,
-                                icon: const Icon(
-                                  Icons.keyboard_arrow_down,
-                                  color: appColor,
-                                ),
-                                // Array list of locations
-                                items: Locations.map((String items) {
-                                  return DropdownMenuItem(
-                                    alignment: Alignment.topRight,
-                                    value: items,
-                                    child: Text(items),
-                                  );
-                                }).toList(),
-                                validator: (value) => value == null
-                                    ? 'الرجاء اختيار الموقع'
-                                    : null,
                                 // After selecting the location ,it will
                                 // change button value to selected location
                                 onChanged: (String? newLocation) {
@@ -179,6 +171,9 @@ class UpdateProductState extends State<UpdateProduct> {
                                     selectedLocation = newLocation!;
                                   });
                                 },
+                                validator: (value) => value == null
+                                    ? 'الرجاء اختيار الموقع'
+                                    : null,
                               ),
                             ),
                             SizedBox(height: 15),

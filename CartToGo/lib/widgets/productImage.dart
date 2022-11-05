@@ -50,8 +50,8 @@ class ImageWidget extends StatelessWidget {
                 child: Ink.image(
                     image: image as ImageProvider,
                     fit: BoxFit.cover,
-                    width: 120,
-                    height: 120,
+                    width: 100,
+                    height: 100,
                     child: InkWell(
                       onTap: () async {
                         final source = await showImageSource(context);
