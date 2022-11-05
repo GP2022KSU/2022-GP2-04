@@ -250,7 +250,7 @@ class AddNewProductState extends State<AddNewProduct> {
                               decoration: InputDecoration(
                                 labelText: "الرمز الشريطي",
                                 labelStyle: TextStyle(
-                                    fontSize: 20, color: Colors.black),
+                                    fontSize: 18, color: Colors.black),
                                 hintText: "أدخل الرمز الشريطي للمنتج ",
                                 hintStyle: TextStyle(fontSize: 18),
                                 enabledBorder: OutlineInputBorder(
@@ -297,7 +297,7 @@ class AddNewProductState extends State<AddNewProduct> {
                               decoration: const InputDecoration(
                                 labelText: "الإسم",
                                 labelStyle: TextStyle(
-                                    fontSize: 20, color: Colors.black),
+                                    fontSize: 18, color: Colors.black),
                                 hintText: "أدخل إسم المنتج",
                                 hintStyle: TextStyle(fontSize: 18),
                                 enabledBorder: OutlineInputBorder(
@@ -339,7 +339,7 @@ class AddNewProductState extends State<AddNewProduct> {
                                 ),
                                 labelText: 'العلامة التجارية',
                                 labelStyle: TextStyle(
-                                    fontSize: 20, color: Colors.black),
+                                    fontSize: 18, color: Colors.black),
                               ),
                             ),
                             // After selecting the brand name ,it will
@@ -376,7 +376,7 @@ class AddNewProductState extends State<AddNewProduct> {
                                 ),
                                 labelText: 'الموقع',
                                 labelStyle: TextStyle(
-                                    fontSize: 20, color: Colors.black),
+                                    fontSize: 18, color: Colors.black),
                               ),
                             ),
                             // After selecting the location ,it will
@@ -532,7 +532,7 @@ class AddNewProductState extends State<AddNewProduct> {
                                     decoration: const InputDecoration(
                                       labelText: "الحجم",
                                       labelStyle: TextStyle(
-                                          fontSize: 20, color: Colors.black),
+                                          fontSize: 18, color: Colors.black),
                                       hintText: "أدخل حجم/وزن المنتج ",
                                       hintStyle: TextStyle(fontSize: 13),
                                       enabledBorder: OutlineInputBorder(
@@ -567,7 +567,7 @@ class AddNewProductState extends State<AddNewProduct> {
                               decoration: const InputDecoration(
                                 labelText: "الكمية",
                                 labelStyle: TextStyle(
-                                    fontSize: 20, color: Colors.black),
+                                    fontSize: 18, color: Colors.black),
                                 hintText: "أدخل كمية المنتج ",
                                 hintStyle: TextStyle(fontSize: 18),
                                 enabledBorder: OutlineInputBorder(
@@ -605,7 +605,7 @@ class AddNewProductState extends State<AddNewProduct> {
                               decoration: const InputDecoration(
                                 labelText: "السعر",
                                 labelStyle: TextStyle(
-                                    fontSize: 20, color: Colors.black),
+                                    fontSize: 18, color: Colors.black),
                                 hintText: "أدخل سعر المنتج ",
                                 hintStyle: TextStyle(fontSize: 18),
                                 enabledBorder: OutlineInputBorder(
