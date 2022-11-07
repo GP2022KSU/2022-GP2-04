@@ -8,20 +8,32 @@ import 'package:dropdown_search/dropdown_search.dart';
 
 class UpdateProduct extends StatefulWidget {
   String SearchBarcode;
-  UpdateProduct(this.SearchBarcode);
+  int quantity = 0;
+  double price;
+  double priceAfterOffer;
+  bool onOffer;
+  UpdateProduct(this.SearchBarcode, this.quantity, this.price,
+      this.priceAfterOffer, this.onOffer);
 
   @override
-  State<UpdateProduct> createState() => UpdateProductState(SearchBarcode);
+  State<UpdateProduct> createState() => UpdateProductState(
+      SearchBarcode, quantity, price, priceAfterOffer, onOffer);
 }
 
 class UpdateProductState extends State<UpdateProduct> {
   String SearchBarcode;
-  UpdateProductState(this.SearchBarcode);
+  static int quantity = 0;
+  static double price = 0;
+  static double priceAfterOffer = 0;
+  static bool onOffer = false;
+  UpdateProductState(
+      this.SearchBarcode, quantity, price, priceAfterOffer, onOffer);
 
   final _formKey = GlobalKey<FormState>();
-  var quantityController = TextEditingController();
-  var priceController = TextEditingController();
-  var newPriceController = TextEditingController();
+  var quantityController = TextEditingController(text: quantity.toString());
+  var priceController = TextEditingController(text: price.toString());
+  var newPriceController =
+      TextEditingController(text: priceAfterOffer.toString());
   bool isOffer = true;
   List<String> Locations = [
     'ممر 1',

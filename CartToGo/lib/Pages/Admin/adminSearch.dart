@@ -120,11 +120,6 @@ class AdminSearch extends SearchDelegate<String> {
                       onPressed: () async {
                         var splitted =
                             Suggestions.elementAt(index).split(" | ");
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) {
-                          return UpdateProduct(splitted[0].toString());
-                        }));
-
                         DatabaseReference ref = FirebaseDatabase.instance
                             .ref("Products/${splitted[0].toString()}");
                         DatabaseEvent quan = await ref.child("Quantity").once();
@@ -143,6 +138,11 @@ class AdminSearch extends SearchDelegate<String> {
                         var OFFER = offer.snapshot.value.toString();
                         var NEWPRICE =
                             double.parse(nprice.snapshot.value.toString());
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) {
+                          return UpdateProduct(splitted[0].toString(), QUANTITY,
+                              PRICE, NEWPRICE, OFFER == true ? true : false);
+                        }));
                       },
                     ),
                     IconButton(

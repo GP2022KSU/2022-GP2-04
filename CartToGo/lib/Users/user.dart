@@ -126,7 +126,6 @@ Future<int> BringNumOfProducts() async {
 }
 
 Future<int> BringNumberOfOffers() async {
-  int countOffers = 0;
   if (FirebaseAuth.instance.currentUser != null) {
     final ref = FirebaseDatabase.instance.ref();
     final snapshot = await ref.child("Products").get();
@@ -139,6 +138,11 @@ Future<int> BringNumberOfOffers() async {
 
     return countOffers;
   }
+  return countOffers;
+}
+
+int getNumofOffer() {
+  BringNumberOfOffers();
   return countOffers;
 }
 
@@ -457,3 +461,4 @@ List<String> barcodes = [];
 List<String> RecommendPro = [];
 late Map<dynamic, dynamic> Purchasehis = {};
 late Map<dynamic, dynamic> allProducts = {};
+int countOffers = 0;

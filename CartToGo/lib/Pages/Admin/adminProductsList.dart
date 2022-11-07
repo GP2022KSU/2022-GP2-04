@@ -82,7 +82,7 @@ class ProductsListAdmins extends State<ProductsListAdmin> {
 
       backgroundColor: Colors.white,
       appBar: AppBar(
-        automaticallyImplyLeading : false,
+        automaticallyImplyLeading: false,
         backgroundColor: Colors.white24,
         centerTitle: true,
         elevation: 0,
@@ -222,7 +222,12 @@ class ProductsListAdmins extends State<ProductsListAdmin> {
                                     var map =
                                         snapshot.value as Map<dynamic, dynamic>;
                                     return UpdateProduct(
-                                        map["SearchBarcode"].toString());
+                                        map["SearchBarcode"].toString(),
+                                        int.parse(map['Quantity'].toString()),
+                                        double.parse(map['Price'].toString()),
+                                        double.parse(
+                                            map['PriceAfterOffer'].toString()),
+                                        map['Offer'] == true ? true : false);
                                   }));
 
                                   setState(() {
@@ -236,12 +241,8 @@ class ProductsListAdmins extends State<ProductsListAdmin> {
                                   g.trim();
                                   l = g.split(',');
 
-                                  var map;
                                   bool isOffer = false;
-
                                   try {
-                                    var map =
-                                        snapshot.value as Map<dynamic, dynamic>;
                                     if (map['Offer'] == "true") isOffer = true;
                                   } on Exception {}
 
@@ -351,7 +352,11 @@ class ProductsListAdmins extends State<ProductsListAdmin> {
                                     var map =
                                         snapshot.value as Map<dynamic, dynamic>;
                                     return UpdateProduct(
-                                        map["SearchBarcode"].toString());
+                                        map["SearchBarcode"].toString(),
+                                        int.parse(map['Quantity'].toString()),
+                                        double.parse(map['Price']),
+                                        double.parse(map['PriceAfterOffer']),
+                                        map['Offer'] == true ? true : false);
                                   }));
 
                                   setState(() {
@@ -364,11 +369,7 @@ class ProductsListAdmins extends State<ProductsListAdmin> {
                                       "");
                                   g.trim();
                                   l = g.split(',');
-
-                                  var map;
                                   try {
-                                    var map =
-                                        snapshot.value as Map<dynamic, dynamic>;
                                     if (map['Offer'] == "true") isOffer = true;
                                   } on Exception {}
 
