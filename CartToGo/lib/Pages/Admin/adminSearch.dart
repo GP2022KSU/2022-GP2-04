@@ -141,7 +141,7 @@ class AdminSearch extends SearchDelegate<String> {
                         Navigator.push(context,
                             MaterialPageRoute(builder: (context) {
                           return UpdateProduct(splitted[0].toString(), QUANTITY,
-                              PRICE, NEWPRICE, OFFER == true ? true : false);
+                              PRICE, NEWPRICE, OFFER == true ? true : false,LOCATION);
                         }));
                       },
                     ),

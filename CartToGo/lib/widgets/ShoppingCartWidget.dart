@@ -21,7 +21,6 @@ class ShoppingCartWidget extends StatefulWidget {
   @override
   State<ShoppingCartWidget> createState() => ShoppingCartWidgetState();
 }
-
 class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
   ScrollController _scrollController = ScrollController();
   late double total = 0.0;
@@ -38,10 +37,11 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
   late StreamSubscription _streamSubscription2;
   late double TotalInCart = 0;
   late bool _isLoading;
+   late Timer _timer;
   @override
   void initState() {
     _isLoading = true;
-
+    super.initState();
     Future.delayed(const Duration(milliseconds: 500), () {
       if (mounted) {
         setState(() {
@@ -66,7 +66,6 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
     _activateListeners();
     _CheckLastnumOfProd();
     _getTotal();
-    super.initState();
   }
 
 //-----------Listens for ConnectedToCart to show the cart-----------//
@@ -544,10 +543,14 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
                                                 ),
                                                 SlidableAction(
                                                   onPressed: (context) {
+                                                     showThatAppeardInWishList();
+                                                     
+                                                    
                                                     addToWishList(
                                                         (ref.child(
                                                             snapshot.key!)),
                                                         context);
+                                                        
                                                   },
                                                   backgroundColor:
                                                       Color.fromARGB(
@@ -833,6 +836,46 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
         ],
       ),
     );
+  }
+
+  Object showThatAppeardInWishList(){
+    if(true){
+    return showDialog<void>(
+        context: context,
+        // user must tap button!
+        builder: (BuildContext context) {
+                                      _timer = Timer(const Duration(milliseconds: 1750), () {
+          Navigator.of(context).pop();    // == First dialog closed
+        });
+          return Directionality(
+              textDirection: TextDirection.rtl,
+              child: Dialog(
+                elevation: 0,
+                backgroundColor: const Color(0xffffffff),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15.0),
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: const [
+                    SizedBox(height: 15),
+                    Text(
+                      "تمت اضافة المنتج لقائمة الامنيات",
+                      style: TextStyle(
+                        fontSize: 19,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(height: 15),
+                  ],
+                ),
+              ));
+        }).then((val) {
+    if (_timer.isActive) {
+      _timer.cancel();
+    }
+  });
+    }
   }
 
   /* //-----------For future code-----------//

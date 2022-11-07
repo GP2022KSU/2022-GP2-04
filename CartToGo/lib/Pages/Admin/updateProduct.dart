@@ -12,28 +12,38 @@ class UpdateProduct extends StatefulWidget {
   double price;
   double priceAfterOffer;
   bool onOffer;
-  UpdateProduct(this.SearchBarcode, this.quantity, this.price,
-      this.priceAfterOffer, this.onOffer);
+  String location;
+  UpdateProduct( this.SearchBarcode, this.quantity, this.price,
+      this.priceAfterOffer, this.onOffer, this.location,{Key? key}) : super(key: key);
 
   @override
   State<UpdateProduct> createState() => UpdateProductState(
-      SearchBarcode, quantity, price, priceAfterOffer, onOffer);
+      SearchBarcode, quantity, price, priceAfterOffer, onOffer,location);
 }
 
 class UpdateProductState extends State<UpdateProduct> {
-  String SearchBarcode;
-  static int quantity = 0;
-  static double price = 0;
-  static double priceAfterOffer = 0;
-  static bool onOffer = false;
-  UpdateProductState(
-      this.SearchBarcode, quantity, price, priceAfterOffer, onOffer);
+         UpdateProductState(searchBarcode, int quantity, double price, double priceAfterOffer, onOffer, String location) {
+    quantityController.text = quantity.toString();
+    priceController.text = price.toString();
+    newPriceController.text=priceAfterOffer.toString();
+    Location.text=location;
+    offer.text=onOffer.toString();
+    barcode.text=searchBarcode;
+    print(offer.text);
 
+  }
+  
   final _formKey = GlobalKey<FormState>();
-  var quantityController = TextEditingController(text: quantity.toString());
-  var priceController = TextEditingController(text: price.toString());
+  var quantityController = TextEditingController();
+  var priceController = TextEditingController();
   var newPriceController =
-      TextEditingController(text: priceAfterOffer.toString());
+      TextEditingController();
+        var Location =
+      TextEditingController();
+              var offer =
+      TextEditingController();
+                    var barcode =
+      TextEditingController();
   bool isOffer = true;
   List<String> Locations = [
     'ممر 1',
@@ -201,11 +211,11 @@ class UpdateProductState extends State<UpdateProduct> {
                                     inactiveThumbColor:
                                         Color.fromARGB(255, 169, 44, 35),
                                     inactiveTrackColor: Colors.red,
-                                    value: isOffer,
+                                    value: offer.text=="true"?true:false,
                                     onChanged: (value) {
                                       setState(() {
-                                        isOffer = value;
-                                        print(isOffer.toString());
+                                        offer.text = value.toString();
+                                        print(offer.text);
                                       });
                                     }),
                                 SizedBox(
@@ -228,7 +238,7 @@ class UpdateProductState extends State<UpdateProduct> {
                       Column(
                         children: [
                           Visibility(
-                            visible: isOffer,
+                            visible: offer.text == "true"? true:false,
                             child: Directionality(
                               textDirection: TextDirection.rtl,
                               child: TextFormField(
@@ -287,9 +297,9 @@ class UpdateProductState extends State<UpdateProduct> {
                                     updateProductInfo(
                                         quantityController,
                                         priceController,
-                                        selectedLocation.toString(),
+                                        selectedLocation,
                                         newPriceController,
-                                        isOffer);
+                                        offer.text);
                                   }
 
                                   Navigator.of(context).pop();
@@ -332,13 +342,15 @@ class UpdateProductState extends State<UpdateProduct> {
       newPriceControlle, state) async {
     //selectedLocatio in arg
     DatabaseReference ref1 =
-        FirebaseDatabase.instance.ref("Products/$SearchBarcode");
+        FirebaseDatabase.instance.ref("Products/${barcode.text}");
+        String loc=Location.text;
     await ref1.update({
       "Quantity": int.tryParse(quantityController.text),
       "Price": double.tryParse(priceController.text),
-      "Location": selectedLocation,
-      "Offer": state,
-      if (state) "PriceAfterOffer": double.tryParse(newPriceController.text)
+      "Location":selectedLocation,
+      "Offer": state.toString()=="true"?true:false,
+      if (state.toString()=="true") "PriceAfterOffer": double.tryParse(newPriceController.text)
+      else "PriceAfterOffer": 0
     });
   }
 }

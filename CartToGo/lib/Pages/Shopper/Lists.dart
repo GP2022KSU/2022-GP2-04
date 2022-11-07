@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:carttogo/main.dart';
 import 'package:flutter/material.dart';
 import 'package:carttogo/Pages/welcomePage.dart';
@@ -17,6 +19,7 @@ class Lists extends StatefulWidget {
 class _ListsState extends State<Lists> with SingleTickerProviderStateMixin {
   @override
   //final ShoppingList = ShoppingItem.shoppingList();
+  late Timer _timer;
   final _newProductController = TextEditingController();
   late TabController _tabController;
   final refShoppingList = FirebaseDatabase.instance
@@ -294,15 +297,15 @@ class _ListsState extends State<Lists> with SingleTickerProviderStateMixin {
                                                 height: 60,
                                                 width: 35,
                                                 child: IconButton(
-                                                  color: Colors.red,
+                                                  color: appColor,
                                                   iconSize: 20,
                                                   icon: const Icon(
-                                                      Icons.favorite),
+                                                      Icons.shopping_cart),
                                                   onPressed: () async {
                                                     // ignore: unrelated_type_equality_checks
                                                     await user.BringConnectedToCart() ==
                                                             true
-                                                        ? addToCart(
+                                                        ? showThatAppeardInShoppingList(
                                                             wishItem.Barcode,
                                                             snapshot.key
                                                                 .toString(),
@@ -439,11 +442,56 @@ class _ListsState extends State<Lists> with SingleTickerProviderStateMixin {
     });
   }
 
+  Object showThatAppeardInShoppingList(
+      String Barcode, String id, BuildContext context) {
+    addToCart(Barcode, id, context);
+    if (true) {
+      return showDialog<void>(
+          context: context,
+          // user must tap button!
+          builder: (BuildContext context) {
+            _timer = Timer(const Duration(milliseconds: 1750), () {
+              Navigator.of(context).pop(); // == First dialog closed
+            });
+            return Directionality(
+                textDirection: TextDirection.rtl,
+                child: Dialog(
+                  elevation: 0,
+                  backgroundColor: const Color(0xffffffff),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15.0),
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: const [
+                      SizedBox(height: 15),
+                      Text(
+                        "تمت اضافة المنتج لسلة التسوق",
+                        style: TextStyle(
+                          fontSize: 19,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      SizedBox(height: 15),
+                    ],
+                  ),
+                ));
+          }).then((val) {
+        if (_timer.isActive) {
+          _timer.cancel();
+        }
+      });
+    }
+  }
+
   void _showNotConnectedToCart(BuildContext context) async {
     return showDialog<void>(
         context: context,
         // user must tap button!
         builder: (BuildContext context) {
+          _timer = Timer(const Duration(milliseconds: 1750), () {
+            Navigator.of(context).pop(); // == First dialog closed
+          });
           return Directionality(
               textDirection: TextDirection.rtl,
               child: Dialog(
@@ -467,7 +515,11 @@ class _ListsState extends State<Lists> with SingleTickerProviderStateMixin {
                   ],
                 ),
               ));
-        });
+        }).then((val) {
+      if (_timer.isActive) {
+        _timer.cancel();
+      }
+    });
   }
 
 //change from bought to donw

@@ -227,7 +227,7 @@ class ProductsListAdmins extends State<ProductsListAdmin> {
                                         double.parse(map['Price'].toString()),
                                         double.parse(
                                             map['PriceAfterOffer'].toString()),
-                                        map['Offer'] == true ? true : false);
+                                        map['Offer'] == true ? true : false,map['Location'].toString());
                                   }));
 
                                   setState(() {
@@ -349,14 +349,12 @@ class ProductsListAdmins extends State<ProductsListAdmin> {
                                 onPressed: () async {
                                   Navigator.push(context,
                                       MaterialPageRoute(builder: (context) {
-                                    var map =
-                                        snapshot.value as Map<dynamic, dynamic>;
                                     return UpdateProduct(
                                         map["SearchBarcode"].toString(),
                                         int.parse(map['Quantity'].toString()),
-                                        double.parse(map['Price']),
-                                        double.parse(map['PriceAfterOffer']),
-                                        map['Offer'] == true ? true : false);
+                                        double.parse(map['Price'].toString()),
+                                        double.parse(map['PriceAfterOffer'].toString()),
+                                        map['Offer'] == true ? true : false,map['Location'].toString());
                                   }));
 
                                   setState(() {
