@@ -71,6 +71,19 @@ flutter pub get
 flutter run
 ```
 
+### Application login credentials 
+### Admin
+adm1.carttogo@hotmail.com
+Admin1234
+ 
+### Cashier
+Cashier1@hotmail.com
+Haya079135
+
+### Shopper
+reester3@gmail.com 
+Rere1234
+
 
 ## 🎯 Features
 
