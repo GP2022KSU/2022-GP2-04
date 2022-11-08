@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
@@ -51,6 +53,7 @@ class ProductsListAdmins extends State<ProductsListAdmin> {
   var l;
   var g;
   var k;
+  late Timer _timer;
 
   @override
   Widget build(BuildContext context) {
@@ -91,7 +94,7 @@ class ProductsListAdmins extends State<ProductsListAdmin> {
             onPressed: () async {
               final result = await showSearch<String>(
                 context: context,
-                delegate: AdminSearch(user.getBarcode()),
+                delegate: AdminSearch(await user.BringProducts()),
               );
             },
             icon: Icon(
@@ -227,7 +230,8 @@ class ProductsListAdmins extends State<ProductsListAdmin> {
                                         double.parse(map['Price'].toString()),
                                         double.parse(
                                             map['PriceAfterOffer'].toString()),
-                                        map['Offer'] == true ? true : false,map['Location'].toString());
+                                        map['Offer'] == true ? true : false,
+                                        map['Location'].toString());
                                   }));
 
                                   setState(() {
@@ -353,8 +357,10 @@ class ProductsListAdmins extends State<ProductsListAdmin> {
                                         map["SearchBarcode"].toString(),
                                         int.parse(map['Quantity'].toString()),
                                         double.parse(map['Price'].toString()),
-                                        double.parse(map['PriceAfterOffer'].toString()),
-                                        map['Offer'] == true ? true : false,map['Location'].toString());
+                                        double.parse(
+                                            map['PriceAfterOffer'].toString()),
+                                        map['Offer'] == true ? true : false,
+                                        map['Location'].toString());
                                   }));
 
                                   setState(() {

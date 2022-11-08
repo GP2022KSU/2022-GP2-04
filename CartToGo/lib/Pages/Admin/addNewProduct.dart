@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -25,6 +26,7 @@ class AddNewProduct extends StatefulWidget {
 class AddNewProductState extends State<AddNewProduct> {
   File? pickedImage;
   bool imgEmpty = false;
+  late Timer _timer;
   Future pickImage(ImageSource source) async {
     try {
       final image = await ImagePicker().pickImage(source: source);
@@ -686,10 +688,7 @@ class AddNewProductState extends State<AddNewProduct> {
                                 uploadImage();
                                 // if the form is filled correctly،
                                 //navigate to "ProductsListAdmin" to show the product in the products' list
-                                Navigator.push(context,
-                                    MaterialPageRoute(builder: (context) {
-                                  return ProductsListAdmin();
-                                }));
+                                _showProductAdded(context);
                               }
                             },
                             child: const Text('إضافة المنتج')),
@@ -698,6 +697,46 @@ class AddNewProductState extends State<AddNewProduct> {
                 ))
             // end of add new product form
             ));
+  }
+
+  void _showProductAdded(BuildContext context) async {
+    return showDialog<void>(
+        context: context,
+        // user must tap button!
+        builder: (BuildContext context) {
+          _timer = Timer(const Duration(milliseconds: 1750), () {
+            Navigator.push(context, MaterialPageRoute(builder: (context) {
+              return ProductsListAdmin();
+            }));
+          });
+          return Directionality(
+              textDirection: TextDirection.rtl,
+              child: Dialog(
+                elevation: 0,
+                backgroundColor: const Color(0xffffffff),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15.0),
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: const [
+                    SizedBox(height: 15),
+                    Text(
+                      "تمت اضافة المنتج",
+                      style: TextStyle(
+                        fontSize: 19,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(height: 15),
+                  ],
+                ),
+              ));
+        }).then((val) {
+      if (_timer.isActive) {
+        _timer.cancel();
+      }
+    });
   }
 
 // add new product to the database/stock

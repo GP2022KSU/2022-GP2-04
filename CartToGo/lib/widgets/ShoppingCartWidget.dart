@@ -21,6 +21,7 @@ class ShoppingCartWidget extends StatefulWidget {
   @override
   State<ShoppingCartWidget> createState() => ShoppingCartWidgetState();
 }
+
 class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
   ScrollController _scrollController = ScrollController();
   late double total = 0.0;
@@ -37,7 +38,10 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
   late StreamSubscription _streamSubscription2;
   late double TotalInCart = 0;
   late bool _isLoading;
-   late Timer _timer;
+  late Timer _timer;
+  late Timer _timerinactivity;
+  bool checkTimer = false;
+  int checkAlertCount = 0;
   @override
   void initState() {
     _isLoading = true;
@@ -45,6 +49,8 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
     Future.delayed(const Duration(milliseconds: 500), () {
       if (mounted) {
         setState(() {
+          _timerinactivity =
+              Timer(const Duration(seconds: 30), () => _handleInactivity());
           _isLoading = false;
           /*
           _streamSubscription1 = _database
@@ -68,6 +74,24 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
     _getTotal();
   }
 
+  void _handleInactivity() async {
+    _timerinactivity.cancel();
+    // if (checkTimer) {
+    //   print("Inactive");
+    //   DatabaseReference ref2 = FirebaseDatabase.instance.ref(
+    //       "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts/CartsStatus");
+    //   await ref2.update({
+    //     "ConnectedToCart": false,
+    //     "Total": 0,
+    //     "NumOfProducts": 0,
+    //     "TotalAfterPoints": 0,
+    //   });
+    //   setState(() {
+    //     checkTimer = false;
+    //   });
+    // }
+  }
+
 //-----------Listens for ConnectedToCart to show the cart-----------//
   void _activateListeners() {
     /*
@@ -82,6 +106,7 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
       });
     });
     */
+
     if (FirebaseAuth.instance.currentUser != null) {
       _streamSubscription = _database
           .child(
@@ -100,6 +125,16 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
         });
       });
     }
+    _streamSubscription = _database
+        .child(
+            "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts/CartsStatus/CheckAlert")
+        .onValue
+        .listen((event) {
+      var snapshot = event.snapshot.value;
+      if (checkAlertCount++ == 0 && snapshot == true) {
+        if (checkAlertCount == 1) AlertShopperdisconnection(context);
+      }
+    });
   }
 
   /* //-----------For Future Code-----------//
@@ -543,14 +578,12 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
                                                 ),
                                                 SlidableAction(
                                                   onPressed: (context) {
-                                                     showThatAppeardInWishList();
-                                                     
-                                                    
+                                                    showThatAppeardInWishList();
+
                                                     addToWishList(
                                                         (ref.child(
                                                             snapshot.key!)),
                                                         context);
-                                                        
                                                   },
                                                   backgroundColor:
                                                       Color.fromARGB(
@@ -612,7 +645,7 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
                                                                     Widget>[
                                                                   AutoSizeText(
                                                                     Name +
-                                                                        " " +
+                                                                        " - " +
                                                                         Brand, //Product name 1 android 4 ios
                                                                     textAlign:
                                                                         TextAlign
@@ -838,44 +871,134 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
     );
   }
 
-  Object showThatAppeardInWishList(){
-    if(true){
+  Object showThatAppeardInWishList() {
+    if (true) {
+      return showDialog<void>(
+          context: context,
+          // user must tap button!
+          builder: (BuildContext context) {
+            _timer = Timer(const Duration(milliseconds: 1750), () {
+              Navigator.of(context).pop(); // == First dialog closed
+            });
+            return Directionality(
+                textDirection: TextDirection.rtl,
+                child: Dialog(
+                  elevation: 0,
+                  backgroundColor: const Color(0xffffffff),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15.0),
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: const [
+                      SizedBox(height: 15),
+                      Text(
+                        "تمت اضافة المنتج لقائمة الامنيات",
+                        style: TextStyle(
+                          fontSize: 19,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      SizedBox(height: 15),
+                    ],
+                  ),
+                ));
+          }).then((val) {
+        if (_timer.isActive) {
+          _timer.cancel();
+        }
+      });
+    }
+  }
+
+  void AlertShopperdisconnection(BuildContext context) async {
     return showDialog<void>(
         context: context,
         // user must tap button!
         builder: (BuildContext context) {
-                                      _timer = Timer(const Duration(milliseconds: 1750), () {
-          Navigator.of(context).pop();    // == First dialog closed
-        });
+          _timer = Timer(const Duration(seconds: 20), () async {
+            setState(() {
+              checkAlertCount = 0;
+            });
+            DatabaseReference ref2 = FirebaseDatabase.instance.ref(
+                "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts/CartsStatus");
+            await ref2.update({
+              "CheckAlert": false,
+              "ConnectedToCart": false,
+              "Total": 0,
+              "NumOfProducts": 0,
+              "TotalAfterPoints": 0,
+            });
+            Navigator.of(context).pop(); // == First dialog closed
+          });
           return Directionality(
               textDirection: TextDirection.rtl,
               child: Dialog(
                 elevation: 0,
-                backgroundColor: const Color(0xffffffff),
+                backgroundColor: Color(0xffffffff),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(15.0),
                 ),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
-                  children: const [
+                  children: [
                     SizedBox(height: 15),
                     Text(
-                      "تمت اضافة المنتج لقائمة الامنيات",
+                      "تنبيه",
                       style: TextStyle(
                         fontSize: 19,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     SizedBox(height: 15),
+                    Text(
+                      "سيتم الغاء الاتصال بالسلة في حال لم تقم باضافة اي منتج جديد خلال 5 دقايق", //Product name for IOS 4 android 1
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                    SizedBox(height: 20),
+                    Divider(
+                      height: 1,
+                    ),
+                    Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: 50,
+                      child: InkWell(
+                        highlightColor: Colors.grey[200],
+                        onTap: () async {
+                          DatabaseReference ref2 = FirebaseDatabase.instance.ref(
+                              "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts/CartsStatus");
+                          await ref2.update({"CheckAlert": false});
+                          setState(() {
+                            checkAlertCount = 0;
+                          });
+                          Navigator.of(context).pop();
+                        },
+                        child: Center(
+                          child: Text(
+                            "نعم",
+                            style: TextStyle(
+                              fontSize: 18.0,
+                              color: Color.fromARGB(255, 4, 238, 101),
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Divider(
+                      height: 1,
+                    ),
                   ],
                 ),
               ));
-        }).then((val) {
-    if (_timer.isActive) {
-      _timer.cancel();
-    }
-  });
-    }
+        }).then((val) async {
+      if (_timer.isActive) {
+        _timer.cancel();
+      }
+    });
   }
 
   /* //-----------For future code-----------//
@@ -956,7 +1079,7 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
   */
   @override
   void deactivate() {
-    _streamSubscription.cancel();
     super.deactivate();
+    _streamSubscription.cancel();
   }
 }

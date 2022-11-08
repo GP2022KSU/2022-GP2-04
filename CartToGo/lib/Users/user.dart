@@ -147,6 +147,7 @@ int getNumofOffer() {
 }
 
 Future<List<String>> BringNames() async {
+  names = [];
   if (FirebaseAuth.instance.currentUser != null) {
     final ref = FirebaseDatabase.instance.ref();
     final snapshot = await ref.child("Products").get();
@@ -241,6 +242,7 @@ Future<List<String>> BringRecommendProducts(String RecProduct) async {
 
 //admin search to edit or delete
 Future<List<String>> BringProducts() async {
+  barcodes = [];
   if (FirebaseAuth.instance.currentUser != null) {
     final ref = FirebaseDatabase.instance.ref();
     final snapshot = await ref.child("Products").get();
@@ -273,18 +275,17 @@ Future<int> BringProductQuantity(int barcode) async {
       FirebaseDatabase.instance.ref("Products/${barcode.toString()}/Quantity");
   final snapshot = await _quanData.get();
   if (snapshot.exists) {
-    quan=(int.parse(snapshot.value.toString()));
+    quan = (int.parse(snapshot.value.toString()));
     return (int.parse(snapshot.value.toString()));
   } else {}
   return 0;
 }
-int quan=0;
-int getProductQuantity(String barcode){
-  BringProductQuantity(int.parse(barcode)) ;
+
+int quan = 0;
+int getProductQuantity(String barcode) {
+  BringProductQuantity(int.parse(barcode));
   return quan;
 }
-
-
 
 Future<double> BringTotalPrice() async {
   if (FirebaseAuth.instance.currentUser != null) {

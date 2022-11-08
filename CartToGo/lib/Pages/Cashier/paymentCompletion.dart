@@ -34,7 +34,9 @@ class PaymentCompletionState extends State<PaymentCompletion> {
   late StreamSubscription _streamSubscription;
   late double TotalInCart = 0;
 
+  @override
   void initState() {
+    super.initState();
     _isLoading1 = true;
 
     Future.delayed(const Duration(milliseconds: 600), () {
@@ -54,7 +56,6 @@ class PaymentCompletionState extends State<PaymentCompletion> {
       }
     });
     //_activateListeners();
-    super.initState();
   }
 
 /*
@@ -74,8 +75,9 @@ class PaymentCompletionState extends State<PaymentCompletion> {
   Widget build(BuildContext context) {
     setState(() {
       splitted = scanData.split(' - ');
-      uid = cashier.getUID(splitted[0]);
-      TotalBefore = cashier.getTotalAfterPoints(uid, int.parse(splitted[1]));
+      uid = cashier.BringUID(splitted[0]) as String;
+      TotalBefore =
+          cashier.BringTotalAfterPoints(uid, int.parse(splitted[1])) as double;
     });
     return Scaffold(
         backgroundColor: Colors.white,

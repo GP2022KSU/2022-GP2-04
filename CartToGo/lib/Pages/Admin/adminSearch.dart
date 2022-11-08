@@ -5,8 +5,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:carttogo/Pages/Admin/updateProduct.dart';
 
+import 'adminProductsList.dart';
+
 class AdminSearch extends SearchDelegate<String> {
-  final List<String> barcodes;
+  List<String> barcodes;
   var splitted;
   List<String> Locations = [
     'ممر 1',
@@ -82,8 +84,8 @@ class AdminSearch extends SearchDelegate<String> {
 // suggestions for products when searching for a product
   @override
   Widget buildSuggestions(BuildContext context) {
-    final Suggestions = query.isEmpty
-        ? barcodes
+    var Suggestions = query.isEmpty
+        ? []
         : barcodes.where((p) => p.startsWith(query)).toList();
     return Suggestions.isEmpty && query.isNotEmpty
         ? Center(
@@ -135,13 +137,18 @@ class AdminSearch extends SearchDelegate<String> {
                         var PRICE =
                             double.parse(price.snapshot.value.toString());
                         var LOCATION = location.snapshot.value.toString();
-                        var OFFER = offer.snapshot.value.toString();
+                        var OFFER = offer.snapshot.value;
                         var NEWPRICE =
                             double.parse(nprice.snapshot.value.toString());
                         Navigator.push(context,
                             MaterialPageRoute(builder: (context) {
-                          return UpdateProduct(splitted[0].toString(), QUANTITY,
-                              PRICE, NEWPRICE, OFFER == true ? true : false,LOCATION);
+                          return UpdateProduct(
+                              splitted[0].toString(),
+                              QUANTITY,
+                              PRICE,
+                              NEWPRICE,
+                              OFFER == true ? true : false,
+                              LOCATION);
                         }));
                       },
                     ),
@@ -151,12 +158,11 @@ class AdminSearch extends SearchDelegate<String> {
                         Icons.delete,
                         color: Color.fromARGB(255, 255, 0, 0),
                       ),
-                      onPressed: () {
+                      onPressed: () async {
                         var splitted =
                             Suggestions.elementAt(index).split(" | ");
-                        print(splitted[0]);
+
                         _DeleteOrNot(splitted[0].toString(), context);
-                        barcodes.removeAt(index); //عشان يشيل من اللست ما ضبط
                       },
                     ),
 
@@ -223,7 +229,11 @@ class AdminSearch extends SearchDelegate<String> {
                             highlightColor: Colors.grey[200],
                             onTap: () async {
                               await ref.remove();
-                              Navigator.of(context).pop();
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          ProductsListAdmin()));
                             },
                             child: Center(
                                 child: Text("نعم",

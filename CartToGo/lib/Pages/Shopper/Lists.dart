@@ -400,7 +400,7 @@ class _ListsState extends State<Lists> with SingleTickerProviderStateMixin {
 
     await ref
         .child(
-            "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts/${user.getLastCartNum()}")
+            "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts/${await user.BringLastCartNumber()}")
         .push()
         .update({
       "Barcode": Barcode,

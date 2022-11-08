@@ -23,12 +23,12 @@ class CheckOut extends StatefulWidget {
 }
 
 class _CheckOutState extends State<CheckOut> {
-  int pointsChange = user.getPoints();
+  late int pointsChange;
   int GainedPoints = 0;
   int countBarcodes = 0;
   bool checkPay = false;
   bool vis = false;
-  double Total = user.getTotal();
+  late double Total;
   late double TotalInCart = 0;
   late double PriceAfterPoin;
   late bool _isLoading;
@@ -37,21 +37,22 @@ class _CheckOutState extends State<CheckOut> {
   final _database = FirebaseDatabase.instance.ref();
 
   void initState() {
+    super.initState();
+    _activateListeners();
+    user.getPoints();
+    pointsChange = user.getPoints();
+    user.getTotal();
     _isLoading = true;
 
-    Future.delayed(const Duration(milliseconds: 800), () {
+    Future.delayed(const Duration(milliseconds: 200), () async {
+      pointsChange = await user.BringPoints();
+      Total = await user.BringTotalPrice();
       if (mounted) {
         setState(() {
           _isLoading = false;
         });
       }
     });
-
-    _activateListeners();
-    user.getPoints();
-    pointsChange = user.getPoints();
-    user.getTotal();
-    super.initState();
   }
 
   Future<void> _showMyDialog(BuildContext context) async {
@@ -188,7 +189,7 @@ class _CheckOutState extends State<CheckOut> {
                                     final ref = FirebaseDatabase.instance.ref();
                                     final snapshot = await ref
                                         .child(
-                                            "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts/${user.getLastCartNum()}")
+                                            "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts/${await user.BringLastCartNumber()}")
                                         .get();
                                     print(snapshot.value);
                                     final map =
@@ -262,7 +263,7 @@ class _CheckOutState extends State<CheckOut> {
                                           TotalInCart.toString());
                                       double dpoints = 0;
                                       for (var i = 0;
-                                          i < user.getTotal();
+                                          i < await user.BringTotalPrice();
                                           i++) {
                                         dpoints += 0.1;
                                       }
@@ -287,6 +288,7 @@ class _CheckOutState extends State<CheckOut> {
 
   Future<void> _showMyDialogShowPoints(BuildContext context) async {
     showDialog(
+        barrierDismissible: false,
         context: context,
         builder: (BuildContext context) =>
             StatefulBuilder(builder: (context, setState) {
@@ -379,10 +381,10 @@ class _CheckOutState extends State<CheckOut> {
                                         time + ':' + currDt.minute.toString();
                                   DatabaseReference ref3 =
                                       FirebaseDatabase.instance.ref(
-                                          "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts/${user.getLastCartNum()}/CartInfo");
+                                          "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts/${await user.BringLastCartNumber()}/CartInfo");
                                   await ref3.update({
                                     "Total": vis
-                                        ? user.getTotalAfterPoints()
+                                        ? await user.getTotalAfterPoints()
                                         : Total,
                                     "Date": date,
                                     "Time": time,
@@ -395,7 +397,8 @@ class _CheckOutState extends State<CheckOut> {
                                   await ref7.update({
                                     "Points": vis
                                         ? GainedPoints
-                                        : GainedPoints + user.getPoints(),
+                                        : GainedPoints +
+                                            await user.BringPoints(),
                                   });
                                   DatabaseReference ref2 =
                                       FirebaseDatabase.instance.ref(
@@ -405,7 +408,8 @@ class _CheckOutState extends State<CheckOut> {
                                     "Total": 0,
                                     "NumOfProducts": 0,
                                     "TotalAfterPoints": 0,
-                                    "PaidCarts": user.getPaidCarts() + 1,
+                                    "PaidCarts":
+                                        await user.BringPaidCarts() + 1,
                                   });
                                   if (checkPay) {
                                     Navigator.push(
@@ -471,7 +475,6 @@ class _CheckOutState extends State<CheckOut> {
 
   Widget build(BuildContext context) {
     //final checkpay = Provider.of<Navi>(context, listen: true);
-
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
@@ -515,71 +518,74 @@ class _CheckOutState extends State<CheckOut> {
                 const SizedBox(
                   height: 15,
                 ),
-                Container(
-                  decoration: const BoxDecoration(
-                    color: Color.fromARGB(255, 242, 240, 240),
-                    //border: Border.all(color: Colors.black),
-                  ),
-                  height: MediaQuery.of(context).size.height * 0.06,
-                  width: MediaQuery.of(context).size.width * 1,
-                  child: Row(
-                    textDirection: TextDirection.rtl,
-                    children: <Widget>[
-                      const Text(
-                        "  استخدام النقاط    ",
-                        //textAlign: TextAlign.right,
-                        //textDirection: TextDirection.ltr,
-                        style: const TextStyle(
-                            color: Color.fromRGBO(32, 26, 37, 1),
-                            fontSize: 20,
-                            letterSpacing:
-                                0 /*percentages not used in flutter. defaulting to zero*/,
-                            fontWeight: FontWeight.w700,
-                            height: 0.9),
-                      ),
-                      Text(
-                        "(" + user.getPoints().toString() + ")",
-                        style: const TextStyle(
-                            color: Color.fromARGB(255, 101, 204, 140),
-                            fontSize: 20,
-                            letterSpacing:
-                                0 /*percentages not used in flutter. defaulting to zero*/,
-                            fontWeight: FontWeight.w700,
-                            height: 0.9),
-                      ),
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.3,
-                      ),
-                      Padding(
-                          padding: const EdgeInsets.only(top: 6, bottom: 10),
-                          child: LiteRollingSwitch(
-                            animationDuration:
-                                const Duration(milliseconds: 200),
-                            width: 80,
-                            value: false,
-                            textOn: "نعم",
-                            textOff: "لا",
-                            colorOn: Colors.greenAccent,
-                            colorOff: Colors.redAccent,
-                            textSize: 10,
-                            iconOn: Icons.circle_sharp,
-                            iconOff: Icons.circle_sharp,
-                            onChanged: (bool postion) {
-                              if (user.getPoints() > 0) {
-                                setState(() {
-                                  if (postion == true) {
-                                    _changed(true, postion);
-                                  } else {
-                                    _changed(false, postion);
-                                  }
-                                });
-                              }
-                            },
-                            onDoubleTap: () {},
-                            onSwipe: () {},
-                            onTap: () {},
-                          )),
-                    ],
+                Visibility(
+                  visible: pointsChange > 0,
+                  child: Container(
+                    decoration: const BoxDecoration(
+                      color: Color.fromARGB(255, 242, 240, 240),
+                      //border: Border.all(color: Colors.black),
+                    ),
+                    height: MediaQuery.of(context).size.height * 0.06,
+                    width: MediaQuery.of(context).size.width * 1,
+                    child: Row(
+                      textDirection: TextDirection.rtl,
+                      children: <Widget>[
+                        const Text(
+                          "  استخدام النقاط    ",
+                          //textAlign: TextAlign.right,
+                          //textDirection: TextDirection.ltr,
+                          style: const TextStyle(
+                              color: Color.fromRGBO(32, 26, 37, 1),
+                              fontSize: 20,
+                              letterSpacing:
+                                  0 /*percentages not used in flutter. defaulting to zero*/,
+                              fontWeight: FontWeight.w700,
+                              height: 0.9),
+                        ),
+                        Text(
+                          "(" + user.getPoints().toString() + ")",
+                          style: const TextStyle(
+                              color: Color.fromARGB(255, 101, 204, 140),
+                              fontSize: 20,
+                              letterSpacing:
+                                  0 /*percentages not used in flutter. defaulting to zero*/,
+                              fontWeight: FontWeight.w700,
+                              height: 0.9),
+                        ),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.3,
+                        ),
+                        Padding(
+                            padding: const EdgeInsets.only(top: 6, bottom: 10),
+                            child: LiteRollingSwitch(
+                              animationDuration:
+                                  const Duration(milliseconds: 200),
+                              width: 80,
+                              value: false,
+                              textOn: "نعم",
+                              textOff: "لا",
+                              colorOn: Colors.greenAccent,
+                              colorOff: Colors.redAccent,
+                              textSize: 10,
+                              iconOn: Icons.circle_sharp,
+                              iconOff: Icons.circle_sharp,
+                              onChanged: (bool postion) {
+                                if (user.getPoints() > 0) {
+                                  setState(() {
+                                    if (postion == true) {
+                                      _changed(true, postion);
+                                    } else {
+                                      _changed(false, postion);
+                                    }
+                                  });
+                                }
+                              },
+                              onDoubleTap: () {},
+                              onSwipe: () {},
+                              onTap: () {},
+                            )),
+                      ],
+                    ),
                   ),
                 ),
                 const SizedBox(
@@ -694,7 +700,7 @@ class _CheckOutState extends State<CheckOut> {
                       await ref3.update({
                         "TotalAfterPoints": vis
                             ? await user.getTotalAfterPoints()
-                            : await user.getTotal(),
+                            : await user.BringTotalPrice(),
                       });
                       await _showMyDialog(context);
                     },

@@ -271,6 +271,7 @@ class _RegisterPageState extends State<RegisterPage> {
           "TotalAfterPoints": 0,
           "NumOfProducts": 0, //always 0
           "PaidCarts": 0,
+          "CheckAlert": false
         }
       },
       "PurchaseHistory": {
