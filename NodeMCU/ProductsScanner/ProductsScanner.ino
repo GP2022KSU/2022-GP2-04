@@ -258,8 +258,6 @@ boolean LoyaltyCardConnection() {
       }
     }
   }
-  lcd.clear();
-  lcd.print("Connected");
   return true;
 }
 FirebaseJsonData Carts;
@@ -306,7 +304,10 @@ int count = 0;
 int countProducts = 0;
 int NumOfProducts = 0;
 bool checkDelete = false;
+bool checkAlert = false;
 float lastPrice = 0.0;
+long timeInSeconds = 1800; //How long the time starts off at.
+
 void loop()
 {
   String cartsPath = "/Shopper/" + UID.to<String>() + "/Carts";
@@ -317,6 +318,8 @@ void loop()
   FirebaseJsonData price;
   FirebaseJsonData HasOffer;
   FirebaseJsonData name1;
+  static unsigned long prevTime = millis();
+  unsigned long milliseconds = millis();
   if (WiFi.status() != 3) { //If WiFi Disconnected
     WiFiConnection(); //Begin WiFi Connection
     FirebaseConnection();//Connect and authorize to access firebase
@@ -325,6 +328,7 @@ void loop()
   if (Firebase.ready() == 1 && signupOK && WiFi.status() == 3) {
     String cartsPath = "/Shopper/" + UID.to<String>() + "/Carts";
     if (Firebase.getBool(fbdo, cartsPath + "/CartsStatus/DeletingProduct")) checkDelete = fbdo.to<bool>();
+    if (Firebase.getBool(fbdo, cartsPath + "/CartsStatus/CheckAlert")) checkAlert = fbdo.to<bool>();
     if (Firebase.getBool(fbdo, cartsPath + "/CartsStatus/ConnectedToCart")) ConnectedToCart = fbdo.to<bool>();
     if (countProducts >= 1 && CartConnection != false && checkDelete == true) {
       if (Firebase.getFloat(fbdo, cartsPath + "/CartsStatus/Total")) total = fbdo.to<float>();
@@ -333,10 +337,31 @@ void loop()
       checkTotalAndCount(total);
     }
     if (!(ConnectedToCart)) {
+      timeInSeconds = 1800;
       LoyaltyCardConnection();
+      DisplayStartScanning();
     }
+    if ((milliseconds - prevTime) >= 1000) // 1000 = 1 second
+    {
+
+      timeInSeconds--;
+      Serial.println(timeInSeconds);
+      if (timeInSeconds < 0)
+        timeInSeconds = 0;
+
+      prevTime = milliseconds;
+    }
+
+    if (timeInSeconds <= 0) {
+      if (Firebase.setBool(fbdo, cartsPath + "/CartsStatus/CheckAlert", true));
+    }
+    if (timeInSeconds <= 0 && checkAlert == false) {
+      timeInSeconds = 1800;
+    }
+
     if (Gm66Scan.available() && CartConnection != false) { //Check if there is Incoming Data in the Serial Buffer
 
+      timeInSeconds = 1800;
       while (Gm66Scan.available() && CartConnection != false) {  //Keep reading Byte by Byte from the Buffer till the Buffer is empty
 
         readBarcode = Gm66Scan.read(); //Read 1 Byte of data and store it in a character variable
@@ -360,7 +385,7 @@ void loop()
         else {
           json.get(price, "/Price");
         }
-        Serial.println("Price is after checking Offer: "+String(price.to<float>()));
+        Serial.println("Price is after checking Offer: " + String(price.to<float>()));
         json.get(name1, "/Name");
         json.get(getQuan, "/Quantity");
         Qunatity = getQuan.to<int>();
