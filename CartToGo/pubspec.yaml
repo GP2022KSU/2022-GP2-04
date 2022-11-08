@@ -34,13 +34,13 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
-  qr_code_scanner: ^1.0.0
+  qr_code_scanner: ^0.7.0
   font_awesome_flutter: ^10.2.1
   flip_card: ^0.6.0
   flutter_hooks: ^0.18.3
   image_picker: ^0.8.3+1
   textfield_search: ^0.10.0
-  dropdown_search: ^5.0.3
+  
 
   
 dev_dependencies:
@@ -73,6 +73,7 @@ dev_dependencies:
   lite_rolling_switch: ^1.0.0
   provider: ^6.0.3
   auto_size_text: ^3.0.0
+  dropdown_search: ^3.0.0
   
 
 # For information on the generic Dart part of this file, see the

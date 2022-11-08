@@ -13,37 +13,35 @@ class UpdateProduct extends StatefulWidget {
   double priceAfterOffer;
   bool onOffer;
   String location;
-  UpdateProduct( this.SearchBarcode, this.quantity, this.price,
-      this.priceAfterOffer, this.onOffer, this.location,{Key? key}) : super(key: key);
+  UpdateProduct(this.SearchBarcode, this.quantity, this.price,
+      this.priceAfterOffer, this.onOffer, this.location,
+      {Key? key})
+      : super(key: key);
 
   @override
   State<UpdateProduct> createState() => UpdateProductState(
-      SearchBarcode, quantity, price, priceAfterOffer, onOffer,location);
+      SearchBarcode, quantity, price, priceAfterOffer, onOffer, location);
 }
 
 class UpdateProductState extends State<UpdateProduct> {
-         UpdateProductState(searchBarcode, int quantity, double price, double priceAfterOffer, onOffer, String location) {
+  UpdateProductState(searchBarcode, int quantity, double price,
+      double priceAfterOffer, onOffer, String location) {
     quantityController.text = quantity.toString();
     priceController.text = price.toString();
-    newPriceController.text=priceAfterOffer.toString();
-    Location.text=location;
-    offer.text=onOffer.toString();
-    barcode.text=searchBarcode;
+    newPriceController.text = priceAfterOffer.toString();
+    Location.text = location;
+    offer.text = onOffer.toString();
+    barcode.text = searchBarcode;
     print(offer.text);
-
   }
-  
+
   final _formKey = GlobalKey<FormState>();
   var quantityController = TextEditingController();
   var priceController = TextEditingController();
-  var newPriceController =
-      TextEditingController();
-        var Location =
-      TextEditingController();
-              var offer =
-      TextEditingController();
-                    var barcode =
-      TextEditingController();
+  var newPriceController = TextEditingController();
+  var Location = TextEditingController();
+  var offer = TextEditingController();
+  var barcode = TextEditingController();
   bool isOffer = true;
   List<String> Locations = [
     'ممر 1',
@@ -167,25 +165,23 @@ class UpdateProductState extends State<UpdateProduct> {
                             Directionality(
                               textDirection: TextDirection.rtl,
                               child: DropdownSearch<String>(
-                                popupProps: PopupProps.menu(
-                                  showSearchBox: true,
-                                  showSelectedItems: true,
-                                ),
+                                mode: Mode.MENU,
+                                showSearchBox: true,
+                                showSelectedItems: true,
                                 //  list of products' location
                                 items: Locations,
-                                dropdownDecoratorProps: DropDownDecoratorProps(
-                                  dropdownSearchDecoration: InputDecoration(
-                                    enabledBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(20.0)),
-                                      borderSide:
-                                          BorderSide(width: 2, color: appColor),
-                                    ),
-                                    labelText: 'الموقع',
-                                    labelStyle: TextStyle(
-                                        fontSize: 20, color: Colors.black),
+                                dropdownSearchDecoration: const InputDecoration(
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(20.0)),
+                                    borderSide:
+                                        BorderSide(width: 2, color: appColor),
                                   ),
+                                  labelText: 'الموقع',
+                                  labelStyle: TextStyle(
+                                      fontSize: 20, color: Colors.black),
                                 ),
+
                                 // After selecting the location ,it will
                                 // change button value to selected location
                                 onChanged: (String? newLocation) {
@@ -211,7 +207,7 @@ class UpdateProductState extends State<UpdateProduct> {
                                     inactiveThumbColor:
                                         Color.fromARGB(255, 169, 44, 35),
                                     inactiveTrackColor: Colors.red,
-                                    value: offer.text=="true"?true:false,
+                                    value: offer.text == "true" ? true : false,
                                     onChanged: (value) {
                                       setState(() {
                                         offer.text = value.toString();
@@ -238,7 +234,7 @@ class UpdateProductState extends State<UpdateProduct> {
                       Column(
                         children: [
                           Visibility(
-                            visible: offer.text == "true"? true:false,
+                            visible: offer.text == "true" ? true : false,
                             child: Directionality(
                               textDirection: TextDirection.rtl,
                               child: TextFormField(
@@ -343,14 +339,16 @@ class UpdateProductState extends State<UpdateProduct> {
     //selectedLocatio in arg
     DatabaseReference ref1 =
         FirebaseDatabase.instance.ref("Products/${barcode.text}");
-        String loc=Location.text;
+    String loc = Location.text;
     await ref1.update({
       "Quantity": int.tryParse(quantityController.text),
       "Price": double.tryParse(priceController.text),
-      "Location":selectedLocation,
-      "Offer": state.toString()=="true"?true:false,
-      if (state.toString()=="true") "PriceAfterOffer": double.tryParse(newPriceController.text)
-      else "PriceAfterOffer": 0
+      "Location": selectedLocation,
+      "Offer": state.toString() == "true" ? true : false,
+      if (state.toString() == "true")
+        "PriceAfterOffer": double.tryParse(newPriceController.text)
+      else
+        "PriceAfterOffer": 0
     });
   }
 }

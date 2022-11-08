@@ -325,24 +325,21 @@ class AddNewProductState extends State<AddNewProduct> {
                         Directionality(
                           textDirection: TextDirection.rtl,
                           child: DropdownSearch<String>(
-                            popupProps: PopupProps.menu(
-                              showSearchBox: true,
-                              showSelectedItems: true,
-                            ),
+                            mode: Mode.MENU,
+                            showSearchBox: true,
+                            showSelectedItems: true,
                             //  list of brands names
                             items: Brands,
-                            dropdownDecoratorProps: DropDownDecoratorProps(
-                              dropdownSearchDecoration: InputDecoration(
-                                enabledBorder: OutlineInputBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(20.0)),
-                                  borderSide:
-                                      BorderSide(width: 2, color: appColor),
-                                ),
-                                labelText: 'العلامة التجارية',
-                                labelStyle: TextStyle(
-                                    fontSize: 18, color: Colors.black),
+                            dropdownSearchDecoration: InputDecoration(
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(20.0)),
+                                borderSide:
+                                    BorderSide(width: 2, color: appColor),
                               ),
+                              labelText: 'العلامة التجارية',
+                              labelStyle:
+                                  TextStyle(fontSize: 18, color: Colors.black),
                             ),
                             // After selecting the brand name ,it will
                             // change button value to selected brand name
@@ -362,24 +359,21 @@ class AddNewProductState extends State<AddNewProduct> {
                         Directionality(
                           textDirection: TextDirection.rtl,
                           child: DropdownSearch<String>(
-                            popupProps: PopupProps.menu(
-                              showSearchBox: true,
-                              showSelectedItems: true,
-                            ),
+                            mode: Mode.MENU,
+                            showSearchBox: true,
+                            showSelectedItems: true,
                             //  list of products' location
                             items: Locations,
-                            dropdownDecoratorProps: DropDownDecoratorProps(
-                              dropdownSearchDecoration: InputDecoration(
-                                enabledBorder: OutlineInputBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(20.0)),
-                                  borderSide:
-                                      BorderSide(width: 2, color: appColor),
-                                ),
-                                labelText: 'الموقع',
-                                labelStyle: TextStyle(
-                                    fontSize: 18, color: Colors.black),
+                            dropdownSearchDecoration: InputDecoration(
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(20.0)),
+                                borderSide:
+                                    BorderSide(width: 2, color: appColor),
                               ),
+                              labelText: 'الموقع',
+                              labelStyle:
+                                  TextStyle(fontSize: 18, color: Colors.black),
                             ),
                             // After selecting the location ,it will
                             // change button value to selected location
@@ -401,25 +395,22 @@ class AddNewProductState extends State<AddNewProduct> {
                               textDirection: TextDirection.rtl,
                               child: Flexible(
                                 child: DropdownSearch<String>(
-                                  popupProps: PopupProps.menu(
-                                    showSearchBox: true,
-                                    showSelectedItems: true,
-                                  ),
+                                  mode: Mode.MENU,
+                                  showSearchBox: true,
+                                  showSelectedItems: true,
                                   //  list of products' sub categories
                                   items: SubCategories,
-                                  dropdownDecoratorProps:
-                                      DropDownDecoratorProps(
-                                    dropdownSearchDecoration: InputDecoration(
-                                      enabledBorder: OutlineInputBorder(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(20.0)),
-                                        borderSide: BorderSide(
-                                            width: 2, color: appColor),
-                                      ),
-                                      labelText: 'الفئة الفرعية',
-                                      labelStyle: TextStyle(
-                                          fontSize: 18, color: Colors.black),
+
+                                  dropdownSearchDecoration: InputDecoration(
+                                    enabledBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(20.0)),
+                                      borderSide:
+                                          BorderSide(width: 2, color: appColor),
                                     ),
+                                    labelText: 'الفئة الفرعية',
+                                    labelStyle: TextStyle(
+                                        fontSize: 18, color: Colors.black),
                                   ),
                                   // After selecting the sub category ,it will
                                   // change value to selected sub category
@@ -441,26 +432,24 @@ class AddNewProductState extends State<AddNewProduct> {
                               textDirection: TextDirection.rtl,
                               child: Flexible(
                                 child: DropdownSearch<String>(
-                                  popupProps: PopupProps.menu(
-                                    showSearchBox: true,
-                                    showSelectedItems: true,
-                                  ),
+                                  mode: Mode.MENU,
+                                  showSearchBox: true,
+                                  showSelectedItems: true,
                                   //  list of products' categories
                                   items: Categories,
-                                  dropdownDecoratorProps:
-                                      DropDownDecoratorProps(
-                                    dropdownSearchDecoration: InputDecoration(
-                                      enabledBorder: OutlineInputBorder(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(20.0)),
-                                        borderSide: BorderSide(
-                                            width: 2, color: appColor),
-                                      ),
-                                      labelText: 'الفئة ',
-                                      labelStyle: TextStyle(
-                                          fontSize: 18, color: Colors.black),
+
+                                  dropdownSearchDecoration: InputDecoration(
+                                    enabledBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(20.0)),
+                                      borderSide:
+                                          BorderSide(width: 2, color: appColor),
                                     ),
+                                    labelText: 'الفئة ',
+                                    labelStyle: TextStyle(
+                                        fontSize: 18, color: Colors.black),
                                   ),
+
                                   // After selecting the category ,it will
                                   // change value to selected category
                                   onChanged: (String? newCategory) {
@@ -485,26 +474,24 @@ class AddNewProductState extends State<AddNewProduct> {
                               textDirection: TextDirection.rtl,
                               child: Flexible(
                                 child: DropdownSearch<String>(
-                                  popupProps: PopupProps.menu(
-                                    showSearchBox: true,
-                                    showSelectedItems: true,
-                                  ),
+                                  mode: Mode.MENU,
+                                  showSearchBox: true,
+                                  showSelectedItems: true,
                                   //  list of products' sub categories
                                   items: Sizes,
-                                  dropdownDecoratorProps:
-                                      DropDownDecoratorProps(
-                                    dropdownSearchDecoration: InputDecoration(
-                                      enabledBorder: OutlineInputBorder(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(20.0)),
-                                        borderSide: BorderSide(
-                                            width: 2, color: appColor),
-                                      ),
-                                      labelText: 'وحدة القياس',
-                                      labelStyle: TextStyle(
-                                          fontSize: 18, color: Colors.black),
+
+                                  dropdownSearchDecoration: InputDecoration(
+                                    enabledBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(20.0)),
+                                      borderSide:
+                                          BorderSide(width: 2, color: appColor),
                                     ),
+                                    labelText: 'وحدة القياس',
+                                    labelStyle: TextStyle(
+                                        fontSize: 18, color: Colors.black),
                                   ),
+
                                   // After selecting the sub category ,it will
                                   // change value to selected sub category
                                   onChanged: (String? newUnitMeasure) {
