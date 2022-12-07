@@ -120,47 +120,48 @@ class Cashier extends StatelessWidget {
         ),
 
         // instruction to the cashier to scan the invoice
-        body: Column(mainAxisAlignment: MainAxisAlignment.center, children: <
-            Widget>[
-          Text(
-            'لاتمام عملية الدفع',
-            style: TextStyle(
-              fontSize: 22,
-              fontWeight: FontWeight.bold,
-              color: Color.fromARGB(255, 42, 41, 41),
-            ),
-          ),
-          Text(
-            'قم بمسح الرمز الشريطي للفاتورة',
-            style: TextStyle(
-              fontSize: 22,
-              fontWeight: FontWeight.bold,
-              color: Color.fromARGB(255, 42, 41, 41),
-            ),
-          ),
-          Image(image: AssetImage('assets/images/barcode.png')),
+        body: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text(
+                'لاتمام عملية الدفع',
+                style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                  color: Color.fromARGB(255, 42, 41, 41),
+                ),
+              ),
+              Text(
+                'قم بمسح الرمز الشريطي للفاتورة',
+                style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                  color: Color.fromARGB(255, 42, 41, 41),
+                ),
+              ),
+              Image(image: AssetImage('assets/images/barcode.png')),
 
-          //start scanning invoice butoon
-          ElevatedButton(
-              style: ButtonStyle(
-                  elevation: MaterialStateProperty.all(8.0),
-                  textStyle: MaterialStateProperty.all(
-                      const TextStyle(fontSize: 23, fontFamily: 'CartToGo')),
-                  fixedSize: MaterialStateProperty.all(const Size(270, 45)),
-                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                      RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30.0))),
-                  backgroundColor: MaterialStateProperty.all(appColor),
-                  foregroundColor: MaterialStateProperty.all(Colors.white)),
-              onPressed: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                  //builder: (context) => const scanInovice(),
-                  builder: (context) => PaymentCompletion("320767939S - 44"),
-                ));
-              },
-              child: const Text('البدأ بدفع الفاتورة')),
-          //end of start scanning invoice button
-        ]));
+              //start scanning invoice butoon
+              ElevatedButton(
+                  style: ButtonStyle(
+                      elevation: MaterialStateProperty.all(8.0),
+                      textStyle: MaterialStateProperty.all(const TextStyle(
+                          fontSize: 23, fontFamily: 'CartToGo')),
+                      fixedSize: MaterialStateProperty.all(const Size(270, 45)),
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30.0))),
+                      backgroundColor: MaterialStateProperty.all(appColor),
+                      foregroundColor: MaterialStateProperty.all(Colors.white)),
+                  onPressed: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => const scanInovice(),
+                      //builder: (context) => PaymentCompletion("320767939S - 44"),
+                    ));
+                  },
+                  child: const Text('البدأ بدفع الفاتورة')),
+              //end of start scanning invoice button
+            ]));
   }
 }
 
