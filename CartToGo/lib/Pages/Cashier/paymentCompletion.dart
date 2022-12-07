@@ -75,9 +75,8 @@ class PaymentCompletionState extends State<PaymentCompletion> {
   Widget build(BuildContext context) {
     setState(() {
       splitted = scanData.split(' - ');
-      uid = cashier.BringUID(splitted[0]) as String;
-      TotalBefore =
-          cashier.BringTotalAfterPoints(uid, int.parse(splitted[1])) as double;
+      uid = cashier.getUID(splitted[0]);
+      TotalBefore = cashier.getTotalAfterPoints(uid, int.parse(splitted[1]));
     });
     return Scaffold(
         backgroundColor: Colors.white,
@@ -248,6 +247,10 @@ class PaymentCompletionState extends State<PaymentCompletion> {
                             DataSnapshot snapshot,
                             Animation<double> animation,
                             int index) {
+                          splitted = scanData.split(' - ');
+                          uid = cashier.getUID(splitted[0]);
+                          TotalBefore = cashier.getTotalAfterPoints(
+                              uid, int.parse(splitted[1]));
                           //numOfProducts = user.getnumOfProducts();
                           var v = snapshot.value
                               .toString(); //Gets the scanned product and store it in a var

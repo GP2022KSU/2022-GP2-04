@@ -41,7 +41,7 @@ Future<int> BringNumOfProducts(String uid2) async {
     numOfProducts = await (int.parse(snapshot.value.toString()));
     return numOfProducts;
   }
-  return numOfProducts;
+  return 0;
 }
 
 /*
@@ -61,11 +61,18 @@ Future<double> BringTotalAfterPoints(String uid3, int cartNumber) async {
   if (FirebaseAuth.instance.currentUser != null) {
     final ref = FirebaseDatabase.instance.ref();
     final snapshot = await ref
-        .child("Shopper/${uid3}/Carts/CartsStatus/TotalAfterPoints")
+        .child("Shopper/$uid3/Carts/CartsStatus/TotalAfterPoints")
         .get();
-    TotalAfterPoints = (double.parse(snapshot.value.toString()));
+    // ignore: unnecessary_null_comparison
+    print(snapshot.value);
+    if (snapshot.value != null) {
+      TotalAfterPoints = (double.parse(snapshot.value.toString()));
+      return TotalAfterPoints;
+    }
+    TotalAfterPoints = 0;
     return TotalAfterPoints;
   }
+  TotalAfterPoints = 0;
   return TotalAfterPoints;
 }
 
