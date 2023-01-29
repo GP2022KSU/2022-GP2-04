@@ -53,8 +53,8 @@ SoftwareSerial Gm66Scan(14, 12); // RX, TX for Scanner numbers on the breadboard
 
 LiquidCrystal_I2C lcd(0x27, 16, 2);
 
-TinyGPSPlus gps;
-SoftwareSerial SerialGPS(D8, D7); //tx,rx
+//TinyGPSPlus gps;
+//SoftwareSerial SerialGPS(D8, D7); //tx,rx
 float lat = 0;
 float lng = 0;
 float Latitude , Longitude;
@@ -70,8 +70,8 @@ WiFiClient espClient;
 PubSubClient client(espClient);
 
 void setup() {
-  Serial.begin(115200); //To display prininting in laptop on Serial Monitor number 9600
-  Gm66Scan.begin(115200);
+  Serial.begin(9600); //To display prininting in laptop on Serial Monitor number 9600
+  Gm66Scan.begin(9600);
   //SerialGPS.begin(115200);
   Wire.begin(D2, D1); //For the LCD display
   lcd.begin();
@@ -92,12 +92,12 @@ void setup() {
   }
   //Begin WiFi Connection
   FirebaseConnection();//Connect and authorize to access firebase
-  //    CartConnection = LoyaltyCardConnection();
-  //    lcd.clear();
-  //    if (CartConnection != false) {
-  //      DisplayStartScanning();
-  //      Serial.println("\nConnection: " + CartConnection);
-  //    }
+      CartConnection = LoyaltyCardConnection();
+      lcd.clear();
+      if (CartConnection != false) {
+        DisplayStartScanning();
+        Serial.println("\nConnection: " + CartConnection);
+      }
 } //end setup
 
 
@@ -338,15 +338,20 @@ boolean LoyaltyCardConnectionFirebase(String QRid) {
               if (Firebase.setInt(fbdo, GetUid + "/CartsStatus/NumOfProducts", 0 ));
               if (Firebase.setInt(fbdo, GetUid + "/CartsStatus/Total", 0.0)) { //Set a new total variable for the cart
                 if (Firebase.getInt(fbdo, "/Con&DisCarts/ConCart")) {
+                  delay(200);
                   int ConCarts = fbdo.to<int>();
                   Firebase.setInt(fbdo, "/Con&DisCarts/ConCart", ConCarts + 1);
                   String conn = "200,conCarts,n," + String(ConCarts + 1);
                   client.publish(topic, conn.c_str());
+                  delay(200);
                   if (Firebase.getInt(fbdo, "/Con&DisCarts/DisCart")) {
+                    delay(200);
                     int DisCarts = fbdo.to<int>();
-                    Firebase.setInt(fbdo, "/Con&DisCarts/ConCart", DisCarts - 1);
-                    String diss = "200,disCarts,n," + String(DisCarts - 1);
+                    Firebase.setInt(fbdo, "/Con&DisCarts/DisCarts", DisCarts - 1);
+                    String diss = "200,disCarts,T," + String(DisCarts - 1);
                     client.publish(topic, diss.c_str());
+                    delay(300);
+                    client.publish(topic, "304,Cart_status,Cart 1 is connected");
                     return true;
                   }
 
@@ -381,12 +386,12 @@ void reconnect() {
     if (client.connect(clientidpart, fullusername, mqttPassword)) {
       Serial.println("connected");
 
-      client.publish("s/us", "100,C MQTT,c8y_MQTTDevice", true);
-      //set hardware information
-      client.publish("s/us", "110,S124,MQTT test model,Rev0.1");
+//      client.publish("s/us", "100,C MQTT,c8y_MQTTDevice", true);
+//      //set hardware information
+//      client.publish("s/us", "110,S124,MQTT test model,Rev0.1");
       Serial.println("okkey");
-      client.subscribe("s/ds");
-      client.subscribe("s/e");
+//      client.subscribe("s/ds");
+//      client.subscribe("s/e");
 
     } else {
       Serial.print("failed, rc=");
@@ -431,7 +436,7 @@ void loop()
     client.publish(topic, "301,Scanner_status,'Scanner disconnected'");
   }
   if (analogInPin < 100) {
-    client.publish(topic, "301,Battary_status,'Battary disconnected'");
+    client.publish(topic, "301,Battary_status,Battary disconnected");
   }
 
   if (Wire.available() > 0) {
@@ -440,7 +445,7 @@ void loop()
   if (Gm66Scan.available() > 0) {
     client.publish(topic, "400,Scanner_status,Scanner connected");
   }
-  if (analogInPin > 100) {
+  if (analogRead(analogInPin) > 100) {
     client.publish(topic, "400,Battary_status,Battary connected");
   }
 
@@ -465,7 +470,7 @@ void loop()
   //        client.publish(topic, tobeSentLocation.c_str());
   //      }
   //    }
-
+  //gpss();
   battary();
 
   // ------------------- Starting Scanning --------------
@@ -489,15 +494,20 @@ void loop()
     }
     if (!(ConnectedToCart)) {
       if (Firebase.getInt(fbdo, "/Con&DisCarts/ConCart")) {
+        delay(200);
         int ConCarts = fbdo.to<int>();
+        delay(200);
         Firebase.setInt(fbdo, "/Con&DisCarts/ConCart", ConCarts - 1);
         String conn = "200,usedCarts,n," + String(ConCarts - 1);
         client.publish(topic, conn.c_str());
         if (Firebase.getInt(fbdo, "/Con&DisCarts/DisCart")) {
+          delay(200);
           int DisCarts = fbdo.to<int>();
-          Firebase.setInt(fbdo, "/Con&DisCarts/ConCart", DisCarts + 1);
+          delay(200);
+          Firebase.setInt(fbdo, "/Con&DisCarts/DisCarts", DisCarts + 1);
           String diss = "200,available,n," + String(DisCarts + 1);
           client.publish(topic, diss.c_str());
+          client.publish(topic, "304,Cart_status,Cart 1 is disconnected");
         }
       }
       timeInSeconds = 1800;
@@ -684,8 +694,8 @@ void battary() {
 
   sensorValue = analogRead(analogInPin);
   Serial.println(sensorValue);
-  float voltage = (((sensorValue * 3.7) / 1024) * 2 + calibration); //multiply by two as voltage divider network is 100K & 100K Resistor
-  bat_percentage = mapfloat(voltage, 2.8, 3.7, 0, 100); //2.8V as Battery Cut off Voltage & 4.2V as Maximum Voltage
+  float voltage = (((sensorValue * 3.3) / 1024) * 2 + calibration); //multiply by two as voltage divider network is 100K & 100K Resistor
+  bat_percentage = mapfloat(voltage, 2.8, 4.2, 0, 100); //2.8V as Battery Cut off Voltage & 4.2V as Maximum Voltage
   if (bat_percentage >= 100) {
     bat_percentage = 100;
   }
