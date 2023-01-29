@@ -347,7 +347,7 @@ boolean LoyaltyCardConnectionFirebase(String QRid) {
                   if (Firebase.getInt(fbdo, "/Con&DisCarts/DisCart")) {
                     delay(200);
                     int DisCarts = fbdo.to<int>();
-                    Firebase.setInt(fbdo, "/Con&DisCarts/DisCarts", DisCarts - 1);
+                    Firebase.setInt(fbdo, "/Con&DisCarts/DisCart", DisCarts - 1);
                     String diss = "200,disCarts,T," + String(DisCarts - 1);
                     client.publish(topic, diss.c_str());
                     delay(300);
@@ -498,14 +498,14 @@ void loop()
         int ConCarts = fbdo.to<int>();
         delay(200);
         Firebase.setInt(fbdo, "/Con&DisCarts/ConCart", ConCarts - 1);
-        String conn = "200,usedCarts,n," + String(ConCarts - 1);
+        String conn = "200,conCarts,n," + String(ConCarts - 1);
         client.publish(topic, conn.c_str());
         if (Firebase.getInt(fbdo, "/Con&DisCarts/DisCart")) {
           delay(200);
           int DisCarts = fbdo.to<int>();
           delay(200);
-          Firebase.setInt(fbdo, "/Con&DisCarts/DisCarts", DisCarts + 1);
-          String diss = "200,available,n," + String(DisCarts + 1);
+          Firebase.setInt(fbdo, "/Con&DisCarts/DisCart", DisCarts + 1);
+          String diss = "200,disCarts,n," + String(DisCarts + 1);
           client.publish(topic, diss.c_str());
           client.publish(topic, "304,Cart_status,Cart 1 is disconnected");
         }
