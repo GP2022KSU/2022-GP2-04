@@ -229,7 +229,7 @@ class LoyaltyCard extends StatelessWidget {
                 ]),
           ),
           SizedBox(
-            height: 40,
+            height: 30,
           ),
           Padding(
             padding: EdgeInsets.only(right: 300),

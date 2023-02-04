@@ -262,8 +262,8 @@ class CardWidgetState extends State<CardWidget> {
                 },
               )),
           Positioned(
-              top: 180,
-              left: 27,
+              top: 165,
+              left: 18,
               child: Icon(
                 FlipCardIcon.flipcard,
                 size: 30,
