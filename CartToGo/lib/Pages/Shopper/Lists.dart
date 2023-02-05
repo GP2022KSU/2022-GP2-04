@@ -432,7 +432,7 @@ class _ListsState extends State<Lists> with SingleTickerProviderStateMixin {
         .update({
       'DeletingProduct': true,
     });
-    Future.delayed(const Duration(milliseconds: 2000), () async {
+    Future.delayed(const Duration(milliseconds: 8000), () async {
       await ref
           .child(
               "Shopper/${FirebaseAuth.instance.currentUser?.uid}/Carts/CartsStatus")

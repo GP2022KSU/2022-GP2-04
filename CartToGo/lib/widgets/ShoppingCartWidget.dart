@@ -420,7 +420,7 @@ class ShoppingCartWidgetState extends State<ShoppingCartWidget> {
                           await Carts.update({
                             'DeletingProduct': true,
                           });
-                          Future.delayed(const Duration(milliseconds: 2000),
+                          Future.delayed(const Duration(milliseconds: 8000),
                               () async {
                             await Carts.update({
                               'DeletingProduct': false,
